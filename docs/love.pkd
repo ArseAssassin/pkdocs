@@ -3,7 +3,6 @@ name: love
 text_format: markdown
 generator: src:devdocs
 version: null
-hash: b48a45f8680b4a14344fa49d5b56f1ce
 copyright: |-
   © 2006–2020 LÖVE Development Team
   Licensed under the GNU Free Documentation License, Version 1.3.

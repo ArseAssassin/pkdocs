@@ -3,7 +3,6 @@ name: ramda
 text_format: markdown
 generator: src:devdocs
 version: null
-hash: 14ab0f1de2e6c185d8a60659030576ce
 copyright: |-
   © 2013–2020 Scott Sauyet and Michael Hurley
   Licensed under the MIT License.

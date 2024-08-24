@@ -3,7 +3,6 @@ name: html
 text_format: markdown
 generator: src:devdocs
 version: null
-hash: 7a3235d6cbd2513960f5665a6e7f3e17
 copyright: |-
   © 2005–2023 MDN contributors.
   Licensed under the Creative Commons Attribution-ShareAlike License v2.5

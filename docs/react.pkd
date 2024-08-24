@@ -3,7 +3,6 @@ name: react
 text_format: markdown
 generator: src:devdocs
 version: null
-hash: c3c980736e72948d2002dcc033673f80
 copyright: |-
   © 2013–present Facebook Inc.
   Licensed under the Creative Commons Attribution 4.0 International Public

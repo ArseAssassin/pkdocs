@@ -1,60 +1,50 @@
-- name: html
-  text_format: markdown
-  generator: src:devdocs
-  version: null
-  hash: 7a3235d6cbd2513960f5665a6e7f3e17
-  copyright: |-
-    © 2005–2023 MDN contributors.
-    Licensed under the Creative Commons Attribution-ShareAlike License v2.5
-    or later.
-    https://developer.mozilla.org/en-US/docs/Web/HTML
-  homepage: https://developer.mozilla.org/en-US/docs/Web/HTML
-
-- name: javascript
-  text_format: markdown
-  generator: src:devdocs
-  version: null
-  hash: 19040cf9c740e8aadefd9a9e0bdd133a
-  copyright: |-
-    © 2005–2023 MDN contributors.
-    Licensed under the Creative Commons Attribution-ShareAlike License v2.5
-    or later.
-    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference
-  homepage: https://developer.mozilla.org/en-US/docs/Web/JavaScript
-
 - name: css
   text_format: markdown
   generator: src:devdocs
   version: null
-  hash: 6377fad747bd143da82ade491afc1926
   copyright: |-
     © 2005–2024 MDN contributors.
     Licensed under the Creative Commons Attribution-ShareAlike License v2.5
     or later.
     https://developer.mozilla.org/en-US/docs/Web/CSS/Reference
   homepage: https://developer.mozilla.org/en-US/docs/Web/CSS
-
-- name: nushell
+- name: godot~4.2
   text_format: markdown
   generator: src:devdocs
-  version: ''
+  version: '4.2'
   copyright: |-
-    Copyright © 2019–2023 The Nushell Project Developers
-    Licensed under the
-    MIT License.
-    https://www.nushell.sh/commands/
-  homepage: https://www.nushell.sh/
-
-- name: nix
+    © 2014–present Juan Linietsky, Ariel Manzur and the Godot community
+    Licensed under the Creative Commons Attribution Unported License v3.0.
+    https://docs.godotengine.org/en/4.2/
+  homepage: https://godotengine.org/
+- name: html
   text_format: markdown
   generator: src:devdocs
   version: null
   copyright: |-
-    © 2022 NixOS Contributors
-    Licensed under the LGPL License.
-    https://nixos.org/manual/nix/stable/expressions/builtins.html
-  homepage: https://nixos.org/
-
+    © 2005–2023 MDN contributors.
+    Licensed under the Creative Commons Attribution-ShareAlike License v2.5
+    or later.
+    https://developer.mozilla.org/en-US/docs/Web/HTML
+  homepage: https://developer.mozilla.org/en-US/docs/Web/HTML
+- name: i3
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 2009, Michael Stapelberg and contributors
+    https://i3wm.org/docs/userguide.html
+  homepage: https://i3wm.org/
+- name: javascript
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 2005–2023 MDN contributors.
+    Licensed under the Creative Commons Attribution-ShareAlike License v2.5
+    or later.
+    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference
+  homepage: https://developer.mozilla.org/en-US/docs/Web/JavaScript
 - name: jq
   text_format: markdown
   generator: src:devdocs
@@ -64,7 +54,88 @@
     Licensed under the Creative Commons Attribution 3.0 license
     https://jqlang.github.io/jq/manual/v1.7/index.html
   homepage: https://jqlang.github.io/jq/
-
+- name: love
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 2006–2020 LÖVE Development Team
+    Licensed under the GNU Free Documentation License, Version 1.3.
+    https://love2d.org/wiki/Main_Page
+  homepage: https://love2d.org/
+- name: lua~5.1
+  text_format: markdown
+  generator: src:devdocs
+  version: '5.1'
+  copyright: |-
+    © 1994–2017 Lua.org, PUC-Rio.
+    Licensed under the MIT License.
+    https://www.lua.org/manual/5.1/manual.html
+  homepage: null
+- name: lua~5.2
+  text_format: markdown
+  generator: src:devdocs
+  version: '5.2'
+  copyright: |-
+    © 1994–2017 Lua.org, PUC-Rio.
+    Licensed under the MIT License.
+    https://www.lua.org/manual/5.2/manual.html
+  homepage: null
+- name: lua~5.3
+  text_format: markdown
+  generator: src:devdocs
+  version: '5.3'
+  copyright: |-
+    © 1994–2020 Lua.org, PUC-Rio.
+    Licensed under the MIT License.
+    https://www.lua.org/manual/5.3/manual.html
+  homepage: null
+- name: lua~5.4
+  text_format: markdown
+  generator: src:devdocs
+  version: '5.4'
+  copyright: |-
+    © 1994–2020 Lua.org, PUC-Rio.
+    Licensed under the MIT License.
+    https://www.lua.org/manual/5.4/manual.html
+  homepage: null
+- name: nix
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 2022 NixOS Contributors
+    Licensed under the LGPL License.
+    https://nixos.org/manual/nix/stable/expressions/builtins.html
+  homepage: https://nixos.org/
+- name: nushell
+  text_format: markdown
+  generator: src:devdocs
+  version: ''
+  copyright: |-
+    Copyright © 2019–2023 The Nushell Project DevelopersLicensed under the
+    MIT License.
+    https://www.nushell.sh/commands/
+  homepage: https://www.nushell.sh/
+- name: ramda
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 2013–2020 Scott Sauyet and Michael Hurley
+    Licensed under the MIT License.
+    https://ramdajs.com/0.27.0/docs/
+  homepage: http://ramdajs.com/
+- name: react
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 2013–present Facebook Inc.
+    Licensed under the Creative Commons Attribution 4.0 International Public
+    License.
+    https://reactjs.org/docs/hello-world.html
+  homepage: https://reactjs.org/
 - name: sqlite
   text_format: markdown
   generator: src:devdocs
@@ -73,92 +144,3 @@
     SQLite is in the Public Domain.
     https://sqlite.org/docs.html
   homepage: https://sqlite.org/
-
-- name: i3
-  text_format: markdown
-  generator: src:devdocs
-  version: null
-  hash: f1ce67872c14975494b41662c26c5b43
-  copyright: |-
-    © 2009, Michael Stapelberg and contributors
-    https://i3wm.org/docs/userguide.html
-  homepage: https://i3wm.org/
-
-- name: lua~5.4
-  text_format: markdown
-  generator: src:devdocs
-  version: '5.4'
-  hash: 49c7762d76ed000b0beeb6cdffcc9e53
-  copyright: |-
-    © 1994–2020 Lua.org, PUC-Rio.
-    Licensed under the MIT License.
-    https://www.lua.org/manual/5.4/manual.html
-  homepage: null
-
-- name: lua~5.3
-  text_format: markdown
-  generator: src:devdocs
-  version: '5.3'
-  hash: 9b09e8e22c8eeb213ef1dde192200e4b
-  copyright: |-
-    © 1994–2020 Lua.org, PUC-Rio.
-    Licensed under the MIT License.
-    https://www.lua.org/manual/5.3/manual.html
-  homepage: null
-
-- name: lua~5.2
-  text_format: markdown
-  generator: src:devdocs
-  version: '5.2'
-  hash: a411febe2f25c77dd5c54d40985583de
-  copyright: |-
-    © 1994–2017 Lua.org, PUC-Rio.
-    Licensed under the MIT License.
-    https://www.lua.org/manual/5.2/manual.html
-  homepage: null
-
-- name: lua~5.1
-  text_format: markdown
-  generator: src:devdocs
-  version: '5.1'
-  hash: b40e447d71313cf2a7692dca4e562b73
-  copyright: |-
-    © 1994–2017 Lua.org, PUC-Rio.
-    Licensed under the MIT License.
-    https://www.lua.org/manual/5.1/manual.html
-  homepage: null
-
-- name: love
-  text_format: markdown
-  generator: src:devdocs
-  version: null
-  hash: b48a45f8680b4a14344fa49d5b56f1ce
-  copyright: |-
-    © 2006–2020 LÖVE Development Team
-    Licensed under the GNU Free Documentation License, Version 1.3.
-    https://love2d.org/wiki/Main_Page
-  homepage: https://love2d.org/
-
-- name: ramda
-  text_format: markdown
-  generator: src:devdocs
-  version: null
-  hash: 14ab0f1de2e6c185d8a60659030576ce
-  copyright: |-
-    © 2013–2020 Scott Sauyet and Michael Hurley
-    Licensed under the MIT License.
-    https://ramdajs.com/0.27.0/docs/
-  homepage: http://ramdajs.com/
-
-- name: react
-  text_format: markdown
-  generator: src:devdocs
-  version: null
-  hash: c3c980736e72948d2002dcc033673f80
-  copyright: |-
-    © 2013–present Facebook Inc.
-    Licensed under the Creative Commons Attribution 4.0 International Public
-    License.
-    https://reactjs.org/docs/hello-world.html
-  homepage: https://reactjs.org/
-

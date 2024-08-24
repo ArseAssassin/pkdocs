@@ -3,7 +3,6 @@ name: lua~5.3
 text_format: markdown
 generator: src:devdocs
 version: '5.3'
-hash: 9b09e8e22c8eeb213ef1dde192200e4b
 copyright: |-
   © 1994–2020 Lua.org, PUC-Rio.
   Licensed under the MIT License.

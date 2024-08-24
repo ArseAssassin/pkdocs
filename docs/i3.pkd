@@ -3,7 +3,6 @@ name: i3
 text_format: markdown
 generator: src:devdocs
 version: null
-hash: f1ce67872c14975494b41662c26c5b43
 copyright: |-
   © 2009, Michael Stapelberg and contributors
   https://i3wm.org/docs/userguide.html
