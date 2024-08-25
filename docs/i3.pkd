@@ -1,5 +1,6 @@
 ---
 name: i3
+slug: i3
 text_format: markdown
 generator: src:devdocs
 version: null

@@ -1,4 +1,5 @@
 ---
+slug: Lua
 name: lua~5.2
 text_format: markdown
 generator: src:devdocs

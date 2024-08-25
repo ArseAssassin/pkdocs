@@ -1,5 +1,6 @@
 ---
-name: lua~5.3
+name: Lua
+slug: lua~5.3
 text_format: markdown
 generator: src:devdocs
 version: '5.3'

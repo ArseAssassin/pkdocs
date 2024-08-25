@@ -1,5 +1,6 @@
 ---
-name: ramda
+name: Ramda.js
+slug: ramda
 text_format: markdown
 generator: src:devdocs
 version: null

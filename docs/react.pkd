@@ -1,5 +1,6 @@
 ---
-name: react
+name: React
+slug: react
 text_format: markdown
 generator: src:devdocs
 version: null

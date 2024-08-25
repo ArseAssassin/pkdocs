@@ -1,5 +1,6 @@
 ---
-name: html
+name: HTML
+slug: html
 text_format: markdown
 generator: src:devdocs
 version: null

@@ -1,5 +1,6 @@
 ---
 name: jq
+slug: jq
 text_format: markdown
 generator: src:devdocs
 version: null

@@ -1,5 +1,6 @@
 ---
-name: love
+name: LÖVE
+slug: love
 text_format: markdown
 generator: src:devdocs
 version: null

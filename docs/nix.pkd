@@ -1,5 +1,6 @@
 ---
-name: nix
+name: Nix
+slug: nix
 text_format: markdown
 generator: src:devdocs
 version: null
