@@ -19,7 +19,8 @@
     License v3.0.
     https://en.cppreference.com/w/c/header
   homepage: null
-- name: cpp
+- name: C++
+  slug: cpp
   text_format: markdown
   generator: src:devdocs
   version: null
@@ -222,6 +223,17 @@
     License.
     https://reactjs.org/docs/hello-world.html
   homepage: https://reactjs.org/
+- name: Ruby
+  slug: ruby~3.3
+  text_format: markdown
+  generator: src:devdocs
+  version: '3.3'
+  copyright: |-
+    Ruby Core © 1993–2022 Yukihiro Matsumoto
+    Licensed under the Ruby License.
+    Ruby Standard Library © contributors
+    Licensed under their own licenses.
+  homepage: https://www.ruby-lang.org/
 - name: SQLite
   slug: sqlite
   text_format: markdown
