@@ -263,3 +263,14 @@
     Licensed under the MIT License.
     https://vitejs.dev/
   homepage: https://vitejs.dev/
+- name: XSLT & XPath
+  slug: xslt_xpath
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 2005–2022 MDN contributors.
+    Licensed under the Creative Commons Attribution-ShareAlike License v2.5
+    or later.
+    https://developer.mozilla.org/en-US/docs/Web/XSLT
+  homepage: null
