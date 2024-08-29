@@ -1,3 +1,5 @@
 - name: SQLite
   cmd: |
     src:devdocs use sqlite {stripElements: "//*[@class='fancy_toc']"}
+- cmd: |
+    src:devdocs use clojure~1.11 {stripElements: '//*[@class="type"]'}

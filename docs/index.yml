@@ -19,6 +19,16 @@
     License v3.0.
     https://en.cppreference.com/w/c/header
   homepage: null
+- name: Clojure
+  slug: clojure~1.11
+  text_format: markdown
+  generator: src:devdocs
+  version: '1.11'
+  copyright: |-
+    © Rich Hickey
+    Licensed under the Eclipse Public License 1.0.
+    https://clojure.github.io/clojure/api-index.html
+  homepage: https://clojure.org
 - name: C++
   slug: cpp
   text_format: markdown
@@ -41,6 +51,17 @@
     or later.
     https://developer.mozilla.org/en-US/docs/Web/CSS/Reference
   homepage: https://developer.mozilla.org/en-US/docs/Web/CSS
+- name: Web APIs
+  slug: dom
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 2005–2023 MDN contributors.
+    Licensed under the Creative Commons Attribution-ShareAlike License v2.5
+    or later.
+    https://developer.mozilla.org/en-US/docs/Web/API
+  homepage: https://developer.mozilla.org/en-US/docs/Web/API
 - name: Fish
   slug: fish~3.7
   text_format: markdown
