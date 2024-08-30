@@ -1,5 +1,5 @@
 ---
-name: Ramda.js
+name: Ramda
 slug: ramda
 text_format: markdown
 generator: src:devdocs
@@ -12,6 +12,7 @@ homepage: http://ramdajs.com/
 
 ---
 - name: R.__
+  id: index#__
   summary: A special placeholder value used to specify "gaps" within curried functions, allowing partial application of any combination of arguments, regardless of their positions
   description: |-
     ### \_\_ Added in v0.6.0
@@ -29,11 +30,12 @@ homepage: http://ramdajs.com/
     - `g(_, 2)(1, 3)`
     - `g(_, 2)(_, 3)(1)`
 
-    ```
+    ``` javascript
     const greet = R.replace('{name}', R.__, 'Hello, {name}!');
     greet('Alice'); //=> 'Hello, Alice!'
     ```
 - name: R.add
+  id: index#add
   summary: Adds two values
   description: |-
     ### add Added in v0.1.0
@@ -53,12 +55,13 @@ homepage: http://ramdajs.com/
 
     See also [`subtract`](#subtract).
 
-    ```
+    ``` javascript
     R.add(2, 3);       //=>  5
     R.add(7)(10);      //=> 17
     ```
 - name: R.addIndex
-  summary: A list iteration function that does not pass index or list to its callback
+  id: index#addIndex
+  summary: 'Creates a new list iteration function from an existing one by adding two new parameters to its callback function: the current index, and the entire list'
   description: |-
     ### addIndex Added in v0.15.0
 
@@ -78,12 +81,13 @@ homepage: http://ramdajs.com/
 
     This would turn, for instance, [`R.map`](#map) function into one that more closely resembles `Array.prototype.map`. Note that this will only work for functions in which the iteration callback function is the first parameter, and where the list is the last parameter. (This latter might be unimportant if the list parameter is not used.)
 
-    ```
+    ``` javascript
     const mapIndexed = R.addIndex(R.map);
     mapIndexed((val, idx) => idx + '-' + val, ['f', 'o', 'o', 'b', 'a', 'r']);
     //=> ['0-f', '1-o', '2-o', '3-b', '4-a', '5-r']
     ```
 - name: R.adjust
+  id: index#adjust
   summary: The index
   description: |-
     ### adjust Added in v0.14.0
@@ -112,11 +116,12 @@ homepage: http://ramdajs.com/
 
     See also [`update`](#update).
 
-    ```
+    ``` javascript
     R.adjust(1, R.toUpper, ['a', 'b', 'c', 'd']);      //=> ['a', 'B', 'c', 'd']
     R.adjust(-1, R.toUpper, ['a', 'b', 'c', 'd']);     //=> ['a', 'b', 'c', 'D']
     ```
 - name: R.all
+  id: index#all
   summary: The predicate function
   description: |-
     ### all Added in v0.1.0
@@ -145,13 +150,14 @@ homepage: http://ramdajs.com/
 
     See also [`any`](#any), [`none`](#none), [`transduce`](#transduce).
 
-    ```
+    ``` javascript
     const equals3 = R.equals(3);
     R.all(equals3)([3, 3, 3, 3]); //=> true
     R.all(equals3)([3, 3, 1, 3]); //=> false
     ```
 - name: R.allPass
-  summary: An array of predicates to check
+  id: index#allPass
+  summary: Takes a list of predicates and returns a predicate that returns true for a given list of arguments if every one of the provided predicates is satisfied by those arguments
   description: |-
     ### allPass Added in v0.9.0
 
@@ -173,7 +179,7 @@ homepage: http://ramdajs.com/
 
     See also [`anyPass`](#anyPass).
 
-    ```
+    ``` javascript
     const isQueen = R.propEq('rank', 'Q');
     const isSpade = R.propEq('suit', '♠︎');
     const isQueenOfSpades = R.allPass([isQueen, isSpade]);
@@ -182,7 +188,8 @@ homepage: http://ramdajs.com/
     isQueenOfSpades({rank: 'Q', suit: '♠︎'}); //=> true
     ```
 - name: R.always
-  summary: The value to wrap in a function
+  id: index#always
+  summary: Returns a function that always returns the given value
   description: |-
     ### always Added in v0.1.0
 
@@ -202,11 +209,12 @@ homepage: http://ramdajs.com/
 
     This function is known as `const`, `constant`, or `K` (for K combinator) in other languages and libraries.
 
-    ```
+    ``` javascript
     const t = R.always('Tee');
     t(); //=> 'Tee'
     ```
 - name: R.and
+  id: index#and
   summary: Returns true if both arguments are true; false otherwise
   description: |-
     ### and Added in v0.1.0
@@ -226,13 +234,14 @@ homepage: http://ramdajs.com/
 
     See also [`both`](#both), [`xor`](#xor).
 
-    ```
+    ``` javascript
     R.and(true, true); //=> true
     R.and(true, false); //=> false
     R.and(false, true); //=> false
     R.and(false, false); //=> false
     ```
 - name: R.andThen
+  id: index#andThen
   summary: The function to apply
   description: |-
     ### andThen Added in v0.27.0
@@ -257,7 +266,7 @@ homepage: http://ramdajs.com/
 
     See also [`otherwise`](#otherwise).
 
-    ```
+    ``` javascript
     var makeQuery = (email) => ({ query: { email }});
 
     //getMemberName :: String -> Promise ({firstName, lastName})
@@ -268,6 +277,7 @@ homepage: http://ramdajs.com/
     );
     ```
 - name: R.any
+  id: index#any
   summary: The predicate function
   description: |-
     ### any Added in v0.1.0
@@ -296,14 +306,15 @@ homepage: http://ramdajs.com/
 
     See also [`all`](#all), [`none`](#none), [`transduce`](#transduce).
 
-    ```
+    ``` javascript
     const lessThan0 = R.flip(R.lt)(0);
     const lessThan2 = R.flip(R.lt)(2);
     R.any(lessThan0)([1, 2]); //=> false
     R.any(lessThan2)([1, 2]); //=> true
     ```
 - name: R.anyPass
-  summary: An array of predicates to check
+  id: index#anyPass
+  summary: Takes a list of predicates and returns a predicate that returns true for a given list of arguments if at least one of the provided predicates is satisfied by those arguments
   description: |-
     ### anyPass Added in v0.9.0
 
@@ -325,7 +336,7 @@ homepage: http://ramdajs.com/
 
     See also [`allPass`](#allPass).
 
-    ```
+    ``` javascript
     const isClub = R.propEq('suit', '♣');
     const isSpade = R.propEq('suit', '♠');
     const isBlackCard = R.anyPass([isClub, isSpade]);
@@ -335,6 +346,7 @@ homepage: http://ramdajs.com/
     isBlackCard({rank: 'Q', suit: '♦'}); //=> false
     ```
 - name: R.ap
+  id: index#ap
   summary: ap applies a list of functions to a list of values
   description: |-
     ### ap Added in v0.3.0
@@ -358,7 +370,7 @@ homepage: http://ramdajs.com/
 
     Dispatches to the `ap` method of the second argument, if present. Also treats curried functions as applicatives.
 
-    ```
+    ``` javascript
     R.ap([R.multiply(2), R.add(3)], [1,2,3]); //=> [2, 4, 6, 4, 5, 6]
     R.ap([R.concat('tasty '), R.toUpper], ['pizza', 'salad']); //=> ["tasty pizza", "tasty salad", "PIZZA", "SALAD"]
 
@@ -367,7 +379,8 @@ homepage: http://ramdajs.com/
     R.ap(R.concat, R.toUpper)('Ramda') //=> 'RamdaRAMDA'
     ```
 - name: R.aperture
-  summary: The size of the tuples to create
+  id: index#aperture
+  summary: Returns a new list, composed of n-tuples of consecutive elements
   description: |-
     ### aperture Added in v0.12.0
 
@@ -393,12 +406,13 @@ homepage: http://ramdajs.com/
 
     See also [`transduce`](#transduce).
 
-    ```
+    ``` javascript
     R.aperture(2, [1, 2, 3, 4, 5]); //=> [[1, 2], [2, 3], [3, 4], [4, 5]]
     R.aperture(3, [1, 2, 3, 4, 5]); //=> [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
     R.aperture(7, [1, 2, 3, 4, 5]); //=> []
     ```
 - name: R.append
+  id: index#append
   summary: The element to add to the end of the new list
   description: |-
     ### append Added in v0.1.0
@@ -423,13 +437,14 @@ homepage: http://ramdajs.com/
 
     See also [`prepend`](#prepend).
 
-    ```
+    ``` javascript
     R.append('tests', ['write', 'more']); //=> ['write', 'more', 'tests']
     R.append('tests', []); //=> ['tests']
     R.append(['tests'], ['write', 'more']); //=> ['write', 'more', ['tests']]
     ```
 - name: R.apply
-  summary: The function which will be called with args
+  id: index#apply
+  summary: Applies function fn to the argument list args
   description: |-
     ### apply Added in v0.7.0
 
@@ -453,11 +468,12 @@ homepage: http://ramdajs.com/
 
     See also [`call`](#call), [`unapply`](#unapply).
 
-    ```
+    ``` javascript
     const nums = [1, 2, 3, -99, 42, 6, 7];
     R.apply(Math.max, nums); //=> 42
     ```
 - name: R.applySpec
+  id: index#applySpec
   summary: an object recursively mapping properties to functions for producing the values for these properties
   description: |-
     ### applySpec Added in v0.20.0
@@ -478,7 +494,7 @@ homepage: http://ramdajs.com/
 
     See also [`converge`](#converge), [`juxt`](#juxt).
 
-    ```
+    ``` javascript
     const getMetrics = R.applySpec({
       sum: R.add,
       nested: { mul: R.multiply }
@@ -486,7 +502,8 @@ homepage: http://ramdajs.com/
     getMetrics(2, 4); // => { sum: 6, nested: { mul: 8 } }
     ```
 - name: R.applyTo
-  summary: The value
+  id: index#applyTo
+  summary: Takes a value and applies a function to it
   description: |-
     ### applyTo Added in v0.25.0
 
@@ -510,13 +527,14 @@ homepage: http://ramdajs.com/
 
     This function is also known as the `thrush` combinator.
 
-    ```
+    ``` javascript
     const t42 = R.applyTo(42);
     t42(R.identity); //=> 42
     t42(R.add(1)); //=> 43
     ```
 - name: R.ascend
-  summary: A function of arity one that returns a value that can be compared
+  id: index#ascend
+  summary: The first item to be compared
   description: |-
     ### ascend Added in v0.23.0
 
@@ -544,7 +562,7 @@ homepage: http://ramdajs.com/
 
     See also [`descend`](#descend).
 
-    ```
+    ``` javascript
     const byAge = R.ascend(R.prop('age'));
     const people = [
       { name: 'Emma', age: 70 },
@@ -555,7 +573,8 @@ homepage: http://ramdajs.com/
       //=> [{ name: 'Mikhail', age: 62 },{ name: 'Emma', age: 70 }, { name: 'Peter', age: 78 }]
     ```
 - name: R.assoc
-  summary: The property name to set
+  id: index#assoc
+  summary: Makes a shallow clone of an object, setting or overriding the specified property with the given value
   description: |-
     ### assoc Added in v0.8.0
 
@@ -583,11 +602,12 @@ homepage: http://ramdajs.com/
 
     See also [`dissoc`](#dissoc), [`pick`](#pick).
 
-    ```
+    ``` javascript
     R.assoc('c', 3, {a: 1, b: 2}); //=> {a: 1, b: 2, c: 3}
     ```
 - name: R.assocPath
-  summary: the path to set
+  id: index#assocPath
+  summary: Makes a shallow clone of an object, setting or overriding the nodes required to create the given path, and placing the specific value at the tail end of that path
   description: |-
     ### assocPath Added in v0.8.0
 
@@ -617,13 +637,14 @@ homepage: http://ramdajs.com/
 
     See also [`dissocPath`](#dissocPath).
 
-    ```
+    ``` javascript
     R.assocPath(['a', 'b', 'c'], 42, {a: {b: {c: 0}}}); //=> {a: {b: {c: 42}}}
 
     // Any missing or non-object keys in path will be overridden
     R.assocPath(['a', 'b', 'c'], 42, {a: 5}); //=> {a: {b: {c: 42}}}
     ```
 - name: R.binary
+  id: index#binary
   summary: The function to wrap
   description: |-
     ### binary Added in v0.2.0
@@ -644,7 +665,7 @@ homepage: http://ramdajs.com/
 
     See also [`nAry`](#nAry), [`unary`](#unary).
 
-    ```
+    ``` javascript
     const takesThreeArgs = function(a, b, c) {
       return [a, b, c];
     };
@@ -657,7 +678,8 @@ homepage: http://ramdajs.com/
     takesTwoArgs(1, 2, 3); //=> [1, 2, undefined]
     ```
 - name: R.bind
-  summary: The function to bind to context
+  id: index#bind
+  summary: Creates a function that is bound to a context
   description: |-
     ### bind Added in v0.6.0
 
@@ -681,13 +703,14 @@ homepage: http://ramdajs.com/
 
     See also [`partial`](#partial).
 
-    ```
+    ``` javascript
     const log = R.bind(console.log, console);
     R.pipe(R.assoc('a', 2), R.tap(log), R.assoc('a', 3))({a: 1}); //=> {a: 3}
     // logs {a: 2}
     ```
 - name: R.both
-  summary: A predicate
+  id: index#both
+  summary: A function which calls the two provided functions and returns the && of the results
   description: |-
     ### both Added in v0.12.0
 
@@ -713,7 +736,7 @@ homepage: http://ramdajs.com/
 
     See also [`and`](#and).
 
-    ```
+    ``` javascript
     const gt10 = R.gt(R.__, 10)
     const lt20 = R.lt(R.__, 20)
     const f = R.both(gt10, lt20);
@@ -724,6 +747,7 @@ homepage: http://ramdajs.com/
     R.both([false, false, 'a'], [11]); //=> [false, false, 11]
     ```
 - name: R.call
+  id: index#call
   summary: The function to apply to the remaining arguments
   description: |-
     ### call Added in v0.9.0
@@ -748,7 +772,7 @@ homepage: http://ramdajs.com/
 
     See also [`apply`](#apply).
 
-    ```
+    ``` javascript
     R.call(R.add, 1, 2); //=> 3
 
     const indentN = R.pipe(R.repeat(' '),
@@ -763,7 +787,8 @@ homepage: http://ramdajs.com/
     format({indent: 2, value: 'foo\nbar\nbaz\n'}); //=> '  foo\n  bar\n  baz\n'
     ```
 - name: R.chain
-  summary: The function to map with
+  id: index#chain
+  summary: chain maps a function over a list and concatenates the results
   description: |-
     ### chain Added in v0.3.0
 
@@ -791,14 +816,15 @@ homepage: http://ramdajs.com/
 
     Acts as a transducer if a transformer is given in list position.
 
-    ```
+    ``` javascript
     const duplicate = n => [n, n];
     R.chain(duplicate, [1, 2, 3]); //=> [1, 1, 2, 2, 3, 3]
 
     R.chain(R.append, R.head)([1, 2, 3]); //=> [1, 2, 3, 1]
     ```
 - name: R.clamp
-  summary: The lower limit of the clamp (inclusive)
+  id: index#clamp
+  summary: Restricts a number to be within a range
   description: |-
     ### clamp Added in v0.20.0
 
@@ -826,13 +852,14 @@ homepage: http://ramdajs.com/
 
     Also works for other ordered types such as Strings and Dates.
 
-    ```
+    ``` javascript
     R.clamp(1, 10, -5) // => 1
     R.clamp(1, 10, 15) // => 10
     R.clamp(1, 10, 4)  // => 4
     ```
 - name: R.clone
-  summary: The object or array to clone
+  id: index#clone
+  summary: Creates a deep copy of the value which may contain (nested) Arrays and Objects, Numbers, Strings, Booleans and Dates
   description: |-
     ### clone Added in v0.1.0
 
@@ -852,14 +879,15 @@ homepage: http://ramdajs.com/
 
     Dispatches to a `clone` method if present.
 
-    ```
+    ``` javascript
     const objects = [{}, {}, {}];
     const objectsClone = R.clone(objects);
     objects === objectsClone; //=> false
     objects[0] === objectsClone[0]; //=> false
     ```
 - name: R.comparator
-  summary: A predicate function of arity two which will return true if the first argument is less than the second, false otherwise
+  id: index#comparator
+  summary: Makes a comparator function out of a function that reports whether the first element is less than the second
   description: |-
     ### comparator Added in v0.1.0
 
@@ -877,7 +905,7 @@ homepage: http://ramdajs.com/
 
     Makes a comparator function out of a function that reports whether the first element is less than the second.
 
-    ```
+    ``` javascript
     const byAge = R.comparator((a, b) => a.age < b.age);
     const people = [
       { name: 'Emma', age: 70 },
@@ -888,6 +916,7 @@ homepage: http://ramdajs.com/
       //=> [{ name: 'Mikhail', age: 62 },{ name: 'Emma', age: 70 }, { name: 'Peter', age: 78 }]
     ```
 - name: R.complement
+  id: index#complement
   summary: Takes a function f and returns a function g such that if called with the same arguments when f returns a "truthy" value, g returns false and when f returns a "falsy" value g returns true
   description: |-
     ### complement Added in v0.12.0
@@ -908,7 +937,7 @@ homepage: http://ramdajs.com/
 
     See also [`not`](#not).
 
-    ```
+    ``` javascript
     const isNotNil = R.complement(R.isNil);
     isNil(null); //=> true
     isNotNil(null); //=> false
@@ -916,7 +945,8 @@ homepage: http://ramdajs.com/
     isNotNil(7); //=> true
     ```
 - name: R.compose
-  summary: The functions to compose
+  id: index#compose
+  summary: Performs right-to-left function composition
   description: |-
     ### compose Added in v0.1.0
 
@@ -938,7 +968,7 @@ homepage: http://ramdajs.com/
 
     See also [`pipe`](#pipe).
 
-    ```
+    ``` javascript
     const classyGreeting = (firstName, lastName) => "The name's " + lastName + ", " + firstName + " " + lastName
     const yellGreeting = R.compose(R.toUpper, classyGreeting);
     yellGreeting('James', 'Bond'); //=> "THE NAME'S BOND, JAMES BOND"
@@ -946,7 +976,8 @@ homepage: http://ramdajs.com/
     R.compose(Math.abs, R.add(1), R.multiply(2))(-4) //=> 7
     ```
 - name: R.composeK
-  summary: The functions to compose
+  id: index#composeK
+  summary: Returns the right-to-left Kleisli composition of the provided functions, each of which must return a value of a type supported by chain
   description: |-
     ### composeK Added in v0.16.0
 
@@ -970,7 +1001,7 @@ homepage: http://ramdajs.com/
 
     See also [`pipeK`](#pipeK).
 
-    ```
+    ``` javascript
     //  get :: String -> Object -> Maybe *
      const get = R.curry((propName, obj) => Maybe(obj[propName]))
 
@@ -985,7 +1016,8 @@ homepage: http://ramdajs.com/
      getStateCode({}); //=> Maybe.Nothing()
     ```
 - name: R.composeP
-  summary: The functions to compose
+  id: index#composeP
+  summary: Performs right-to-left composition of one or more Promise-returning functions
   description: |-
     ### composeP Added in v0.10.0
 
@@ -1007,7 +1039,7 @@ homepage: http://ramdajs.com/
 
     See also [`pipeP`](#pipeP).
 
-    ```
+    ``` javascript
     const db = {
       users: {
         JOE: {
@@ -1028,7 +1060,8 @@ homepage: http://ramdajs.com/
     // Followers: ["STEVE","SUZY"]
     ```
 - name: R.composeWith
-  summary: The functions to compose
+  id: index#composeWith
+  summary: Performs right-to-left function composition using transforming function
   description: |-
     ### composeWith Added in v0.26.0
 
@@ -1050,14 +1083,15 @@ homepage: http://ramdajs.com/
 
     See also [`compose`](#compose), [`pipeWith`](#pipeWith).
 
-    ```
+    ``` javascript
     const composeWhileNotNil = R.composeWith((f, res) => R.isNil(res) ? res : f(res));
 
     composeWhileNotNil([R.inc, R.prop('age')])({age: 1}) //=> 2
     composeWhileNotNil([R.inc, R.prop('age')])({}) //=> undefined
     ```
 - name: R.concat
-  summary: The first list
+  id: index#concat
+  summary: Returns the result of concatenating the given lists or strings
   description: |-
     ### concat Added in v0.1.0
 
@@ -1085,13 +1119,14 @@ homepage: http://ramdajs.com/
 
     Dispatches to the `concat` method of the first argument, if present. Can also concatenate two members of a [fantasy-land compatible semigroup](https://github.com/fantasyland/fantasy-land#semigroup).
 
-    ```
+    ``` javascript
     R.concat('ABC', 'DEF'); // 'ABCDEF'
     R.concat([4, 5, 6], [1, 2, 3]); //=> [4, 5, 6, 1, 2, 3]
     R.concat([], []); //=> []
     ```
 - name: R.cond
-  summary: A list of [predicate, transformer]
+  id: index#cond
+  summary: Returns a function, fn, which encapsulates if/else, if/else, ... logic
   description: |-
     ### cond Added in v0.6.0
 
@@ -1111,7 +1146,7 @@ homepage: http://ramdajs.com/
 
     See also [`ifElse`](#ifElse), [`unless`](#unless), [`when`](#when).
 
-    ```
+    ``` javascript
     const fn = R.cond([
       [R.equals(0),   R.always('water freezes at 0°C')],
       [R.equals(100), R.always('water boils at 100°C')],
@@ -1122,6 +1157,7 @@ homepage: http://ramdajs.com/
     fn(100); //=> 'water boils at 100°C'
     ```
 - name: R.construct
+  id: index#construct
   summary: The constructor function to wrap
   description: |-
     ### construct Added in v0.1.0
@@ -1142,7 +1178,7 @@ homepage: http://ramdajs.com/
 
     See also [`invoker`](#invoker).
 
-    ```
+    ``` javascript
     // Constructor function
     function Animal(kind) {
       this.kind = kind;
@@ -1162,6 +1198,7 @@ homepage: http://ramdajs.com/
     R.map(sightNewAnimal, animalTypes); //=> ["It's a Lion!", "It's a Tiger!", "It's a Bear!"]
     ```
 - name: R.constructN
+  id: index#constructN
   summary: The arity of the constructor function
   description: |-
     ### constructN Added in v0.4.0
@@ -1184,7 +1221,7 @@ homepage: http://ramdajs.com/
 
     Wraps a constructor function inside a curried function that can be called with the same arguments and returns the same type. The arity of the function returned is specified to allow using variadic constructor functions.
 
-    ```
+    ``` javascript
     // Variadic Constructor function
     function Salad() {
       this.ingredients = arguments;
@@ -1206,6 +1243,7 @@ homepage: http://ramdajs.com/
     // Add a dollop of Ketchup
     ```
 - name: R.contains
+  id: index#contains
   summary: The item to compare against
   description: |-
     ### contains Added in v0.1.0
@@ -1232,7 +1270,7 @@ homepage: http://ramdajs.com/
 
     See also [`includes`](#includes).
 
-    ```
+    ``` javascript
     R.contains(3, [1, 2, 3]); //=> true
     R.contains(4, [1, 2, 3]); //=> false
     R.contains({ name: 'Fred' }, [{ name: 'Fred' }]); //=> true
@@ -1240,6 +1278,7 @@ homepage: http://ramdajs.com/
     R.contains('ba', 'banana'); //=>true
     ```
 - name: R.converge
+  id: index#converge
   summary: A function
   description: |-
     ### converge Added in v0.4.2
@@ -1264,7 +1303,7 @@ homepage: http://ramdajs.com/
 
     See also [`useWith`](#useWith).
 
-    ```
+    ``` javascript
     const average = R.converge(R.divide, [R.sum, R.length])
     average([1, 2, 3, 4, 5, 6, 7]) //=> 4
 
@@ -1272,6 +1311,7 @@ homepage: http://ramdajs.com/
     strangeConcat("Yodel") //=> "YODELyodel"
     ```
 - name: R.countBy
+  id: index#countBy
   summary: The function used to map values to keys
   description: |-
     ### countBy Added in v0.1.0
@@ -1296,7 +1336,7 @@ homepage: http://ramdajs.com/
 
     Acts as a transducer if a transformer is given in list position.
 
-    ```
+    ``` javascript
     const numbers = [1.0, 1.1, 1.2, 2.0, 3.0, 2.2];
     R.countBy(Math.floor)(numbers);    //=> {'1': 3, '2': 2, '3': 1}
 
@@ -1304,6 +1344,7 @@ homepage: http://ramdajs.com/
     R.countBy(R.toLower)(letters);   //=> {'a': 3, 'b': 2, 'c': 1}
     ```
 - name: R.curry
+  id: index#curry
   summary: The function to curry
   description: |-
     ### curry Added in v0.1.0
@@ -1339,7 +1380,7 @@ homepage: http://ramdajs.com/
 
     See also [`curryN`](#curryN), [`partial`](#partial).
 
-    ```
+    ``` javascript
     const addFourNumbers = (a, b, c, d) => a + b + c + d;
 
     const curriedAddFourNumbers = R.curry(addFourNumbers);
@@ -1348,6 +1389,7 @@ homepage: http://ramdajs.com/
     g(4); //=> 10
     ```
 - name: R.curryN
+  id: index#curryN
   summary: The arity for the returned function
   description: |-
     ### curryN Added in v0.5.0
@@ -1387,7 +1429,7 @@ homepage: http://ramdajs.com/
 
     See also [`curry`](#curry).
 
-    ```
+    ``` javascript
     const sumArgs = (...args) => R.sum(args);
 
     const curriedAddFourNumbers = R.curryN(4, sumArgs);
@@ -1396,6 +1438,7 @@ homepage: http://ramdajs.com/
     g(4); //=> 10
     ```
 - name: R.dec
+  id: index#dec
   summary: Decrements its argument
   description: |-
     ### dec Added in v0.9.0
@@ -1414,10 +1457,11 @@ homepage: http://ramdajs.com/
 
     See also [`inc`](#inc).
 
-    ```
+    ``` javascript
     R.dec(42); //=> 41
     ```
 - name: R.defaultTo
+  id: index#defaultTo
   summary: The default value
   description: |-
     ### defaultTo Added in v0.10.0
@@ -1440,7 +1484,7 @@ homepage: http://ramdajs.com/
 
     Returns the second argument if it is not `null`, `undefined` or `NaN`; otherwise the first argument is returned.
 
-    ```
+    ``` javascript
     const defaultTo42 = R.defaultTo(42);
 
     defaultTo42(null);  //=> 42
@@ -1451,7 +1495,8 @@ homepage: http://ramdajs.com/
     defaultTo42(parseInt('string')); //=> 42
     ```
 - name: R.descend
-  summary: A function of arity one that returns a value that can be compared
+  id: index#descend
+  summary: The first item to be compared
   description: |-
     ### descend Added in v0.23.0
 
@@ -1479,7 +1524,7 @@ homepage: http://ramdajs.com/
 
     See also [`ascend`](#ascend).
 
-    ```
+    ``` javascript
     const byAge = R.descend(R.prop('age'));
     const people = [
       { name: 'Emma', age: 70 },
@@ -1490,6 +1535,7 @@ homepage: http://ramdajs.com/
       //=> [{ name: 'Peter', age: 78 }, { name: 'Emma', age: 70 }, { name: 'Mikhail', age: 62 }]
     ```
 - name: R.difference
+  id: index#difference
   summary: The first list
   description: |-
     ### difference Added in v0.1.0
@@ -1514,12 +1560,13 @@ homepage: http://ramdajs.com/
 
     See also [`differenceWith`](#differenceWith), [`symmetricDifference`](#symmetricDifference), [`symmetricDifferenceWith`](#symmetricDifferenceWith), [`without`](#without).
 
-    ```
+    ``` javascript
     R.difference([1,2,3,4], [7,6,5,4,3]); //=> [1,2]
     R.difference([7,6,5,4,3], [1,2,3,4]); //=> [7,6,5]
     R.difference([{a: 1}, {b: 2}], [{a: 1}, {c: 3}]) //=> [{b: 2}]
     ```
 - name: R.differenceWith
+  id: index#differenceWith
   summary: A predicate used to test whether two items are equal
   description: |-
     ### differenceWith Added in v0.1.0
@@ -1548,14 +1595,15 @@ homepage: http://ramdajs.com/
 
     See also [`difference`](#difference), [`symmetricDifference`](#symmetricDifference), [`symmetricDifferenceWith`](#symmetricDifferenceWith).
 
-    ```
+    ``` javascript
     const cmp = (x, y) => x.a === y.a;
     const l1 = [{a: 1}, {a: 2}, {a: 3}];
     const l2 = [{a: 3}, {a: 4}];
     R.differenceWith(cmp, l1, l2); //=> [{a: 1}, {a: 2}]
     ```
 - name: R.dissoc
-  summary: The name of the property to dissociate
+  id: index#dissoc
+  summary: Returns a new object that does not contain a prop property
   description: |-
     ### dissoc Added in v0.10.0
 
@@ -1579,11 +1627,12 @@ homepage: http://ramdajs.com/
 
     See also [`assoc`](#assoc), [`omit`](#omit).
 
-    ```
+    ``` javascript
     R.dissoc('b', {a: 1, b: 2, c: 3}); //=> {a: 1, c: 3}
     ```
 - name: R.dissocPath
-  summary: The path to the value to omit
+  id: index#dissocPath
+  summary: Makes a shallow clone of an object, omitting the property at the given path
   description: |-
     ### dissocPath Added in v0.11.0
 
@@ -1609,10 +1658,11 @@ homepage: http://ramdajs.com/
 
     See also [`assocPath`](#assocPath).
 
-    ```
+    ``` javascript
     R.dissocPath(['a', 'b', 'c'], {a: {b: {c: 42}}}); //=> {a: {b: {}}}
     ```
 - name: R.divide
+  id: index#divide
   summary: The first value
   description: |-
     ### divide Added in v0.1.0
@@ -1637,7 +1687,7 @@ homepage: http://ramdajs.com/
 
     See also [`multiply`](#multiply).
 
-    ```
+    ``` javascript
     R.divide(71, 100); //=> 0.71
 
     const half = R.divide(R.__, 2);
@@ -1647,7 +1697,8 @@ homepage: http://ramdajs.com/
     reciprocal(4);   //=> 0.25
     ```
 - name: R.drop
-  summary: Returns all but the first n elements of the given list, string, or transducer/transformer (or object with a drop method)
+  id: index#drop
+  summary: Dispatches to the drop method of the second argument, if present
   description: |-
     ### drop Added in v0.1.0
 
@@ -1670,7 +1721,7 @@ homepage: http://ramdajs.com/
 
     See also [`take`](#take), [`transduce`](#transduce), [`dropLast`](#dropLast), [`dropWhile`](#dropWhile).
 
-    ```
+    ``` javascript
     R.drop(1, ['foo', 'bar', 'baz']); //=> ['bar', 'baz']
     R.drop(2, ['foo', 'bar', 'baz']); //=> ['baz']
     R.drop(3, ['foo', 'bar', 'baz']); //=> []
@@ -1678,6 +1729,7 @@ homepage: http://ramdajs.com/
     R.drop(3, 'ramda');               //=> 'da'
     ```
 - name: R.dropLast
+  id: index#dropLast
   summary: The number of elements of list to skip
   description: |-
     ### dropLast Added in v0.16.0
@@ -1706,7 +1758,7 @@ homepage: http://ramdajs.com/
 
     See also [`takeLast`](#takeLast), [`drop`](#drop), [`dropWhile`](#dropWhile), [`dropLastWhile`](#dropLastWhile).
 
-    ```
+    ``` javascript
     R.dropLast(1, ['foo', 'bar', 'baz']); //=> ['foo', 'bar']
     R.dropLast(2, ['foo', 'bar', 'baz']); //=> ['foo']
     R.dropLast(3, ['foo', 'bar', 'baz']); //=> []
@@ -1714,7 +1766,8 @@ homepage: http://ramdajs.com/
     R.dropLast(3, 'ramda');               //=> 'ra'
     ```
 - name: R.dropLastWhile
-  summary: The function to be called on each element
+  id: index#dropLastWhile
+  summary: The collection to iterate over
   description: |-
     ### dropLastWhile Added in v0.16.0
 
@@ -1742,7 +1795,7 @@ homepage: http://ramdajs.com/
 
     See also [`takeLastWhile`](#takeLastWhile), [`addIndex`](#addIndex), [`drop`](#drop), [`dropWhile`](#dropWhile).
 
-    ```
+    ``` javascript
     const lteThree = x => x <= 3;
 
     R.dropLastWhile(lteThree, [1, 2, 3, 4, 3, 2, 1]); //=> [1, 2, 3, 4]
@@ -1750,6 +1803,7 @@ homepage: http://ramdajs.com/
     R.dropLastWhile(x => x !== 'd' , 'Ramda'); //=> 'Ramd'
     ```
 - name: R.dropRepeats
+  id: index#dropRepeats
   summary: The array to consider
   description: |-
     ### dropRepeats Added in v0.14.0
@@ -1772,10 +1826,11 @@ homepage: http://ramdajs.com/
 
     See also [`transduce`](#transduce).
 
-    ```
+    ``` javascript
     R.dropRepeats([1, 1, 1, 2, 3, 4, 4, 2, 2]); //=> [1, 2, 3, 4, 2]
     ```
 - name: R.dropRepeatsWith
+  id: index#dropRepeatsWith
   summary: A predicate used to test whether two items are equal
   description: |-
     ### dropRepeatsWith Added in v0.14.0
@@ -1802,11 +1857,12 @@ homepage: http://ramdajs.com/
 
     See also [`transduce`](#transduce).
 
-    ```
+    ``` javascript
     const l = [1, -1, 1, 3, 4, -4, -4, -5, 5, 3, 3];
     R.dropRepeatsWith(R.eqBy(Math.abs), l); //=> [1, 3, 4, -5, 3]
     ```
 - name: R.dropWhile
+  id: index#dropWhile
   summary: The function called per iteration
   description: |-
     ### dropWhile Added in v0.9.0
@@ -1837,7 +1893,7 @@ homepage: http://ramdajs.com/
 
     See also [`takeWhile`](#takeWhile), [`transduce`](#transduce), [`addIndex`](#addIndex).
 
-    ```
+    ``` javascript
     const lteTwo = x => x <= 2;
 
     R.dropWhile(lteTwo, [1, 2, 3, 4, 3, 2, 1]); //=> [3, 4, 3, 2, 1]
@@ -1845,7 +1901,8 @@ homepage: http://ramdajs.com/
     R.dropWhile(x => x !== 'd' , 'Ramda'); //=> 'da'
     ```
 - name: R.either
-  summary: a predicate
+  id: index#either
+  summary: A function wrapping calls to the two functions in an || operation, returning the result of the first function if it is truth-y and the result of the second function otherwise
   description: |-
     ### either Added in v0.12.0
 
@@ -1871,7 +1928,7 @@ homepage: http://ramdajs.com/
 
     See also [`or`](#or).
 
-    ```
+    ``` javascript
     const gt10 = x => x > 10;
     const even = x => x % 2 === 0;
     const f = R.either(gt10, even);
@@ -1882,6 +1939,7 @@ homepage: http://ramdajs.com/
     R.either([false, false, 'a'], [11]) // => [11, 11, "a"]
     ```
 - name: R.empty
+  id: index#empty
   summary: Returns the empty value of its argument's type
   description: |-
     ### empty Added in v0.3.0
@@ -1900,13 +1958,14 @@ homepage: http://ramdajs.com/
 
     Dispatches to the `empty` method of the first argument, if present.
 
-    ```
+    ``` javascript
     R.empty(Just(42));      //=> Nothing()
     R.empty([1, 2, 3]);     //=> []
     R.empty('unicorns');    //=> ''
     R.empty({x: 1, y: 2});  //=> {}
     ```
 - name: R.endsWith
+  id: index#endsWith
   summary: Checks if a list ends with the provided sublist
   description: |-
     ### endsWith Added in v0.24.0
@@ -1930,13 +1989,14 @@ homepage: http://ramdajs.com/
 
     See also [`startsWith`](#startsWith).
 
-    ```
+    ``` javascript
     R.endsWith('c', 'abc')                //=> true
     R.endsWith('b', 'abc')                //=> false
     R.endsWith(['c'], ['a', 'b', 'c'])    //=> true
     R.endsWith(['b'], ['a', 'b', 'c'])    //=> false
     ```
 - name: R.eqBy
+  id: index#eqBy
   summary: Takes a function and two values in its domain and returns true if the values map to the same value in the codomain; false otherwise
   description: |-
     ### eqBy Added in v0.18.0
@@ -1955,11 +2015,12 @@ homepage: http://ramdajs.com/
 
     Takes a function and two values in its domain and returns `true` if the values map to the same value in the codomain; `false` otherwise.
 
-    ```
+    ``` javascript
     R.eqBy(Math.abs, 5, -5); //=> true
     ```
 - name: R.eqProps
-  summary: The name of the property to compare
+  id: index#eqProps
+  summary: Reports whether two objects have the same value, in R.equals terms, for the specified property
   description: |-
     ### eqProps Added in v0.1.0
 
@@ -1981,13 +2042,14 @@ homepage: http://ramdajs.com/
 
     Reports whether two objects have the same value, in [`R.equals`](#equals) terms, for the specified property. Useful as a curried predicate.
 
-    ```
+    ``` javascript
     const o1 = { a: 1, b: 2, c: 3, d: 4 };
     const o2 = { a: 10, b: 20, c: 3, d: 40 };
     R.eqProps('a', o1, o2); //=> false
     R.eqProps('c', o1, o2); //=> true
     ```
 - name: R.equals
+  id: index#equals
   summary: Returns true if its arguments are equivalent, false otherwise
   description: |-
     ### equals Added in v0.15.0
@@ -2007,7 +2069,7 @@ homepage: http://ramdajs.com/
 
     Dispatches symmetrically to the `equals` methods of both arguments, if present.
 
-    ```
+    ``` javascript
     R.equals(1, 1); //=> true
     R.equals(1, '1'); //=> false
     R.equals([1, 2, 3], [1, 2, 3]); //=> true
@@ -2017,6 +2079,7 @@ homepage: http://ramdajs.com/
     R.equals(a, b); //=> true
     ```
 - name: R.evolve
+  id: index#evolve
   summary: The object specifying transformation functions to apply to the object
   description: |-
     ### evolve Added in v0.9.0
@@ -2041,7 +2104,7 @@ homepage: http://ramdajs.com/
 
     A `transformation` function will not be invoked if its corresponding key does not exist in the evolved object.
 
-    ```
+    ``` javascript
     const tomato = {firstName: '  Tomato ', data: {elapsed: 100, remaining: 1400}, id:123};
     const transformations = {
       firstName: R.trim,
@@ -2051,6 +2114,7 @@ homepage: http://ramdajs.com/
     R.evolve(transformations, tomato); //=> {firstName: 'Tomato', data: {elapsed: 101, remaining: 1399}, id:123}
     ```
 - name: R.F
+  id: index#F
   summary: A function that always returns false
   description: |-
     ### F Added in v0.9.0
@@ -2067,10 +2131,11 @@ homepage: http://ramdajs.com/
 
     See also [`T`](#T).
 
-    ```
+    ``` javascript
     R.F(); //=> false
     ```
 - name: R.filter
+  id: index#filter
   summary: Takes a predicate and a Filterable, and returns a new filterable of the same type containing the members of the given filterable which satisfy the given predicate
   description: |-
     ### filter Added in v0.1.0
@@ -2094,7 +2159,7 @@ homepage: http://ramdajs.com/
 
     See also [`reject`](#reject), [`transduce`](#transduce), [`addIndex`](#addIndex).
 
-    ```
+    ``` javascript
     const isEven = n => n % 2 === 0;
 
     R.filter(isEven, [1, 2, 3, 4]); //=> [2, 4]
@@ -2102,6 +2167,7 @@ homepage: http://ramdajs.com/
     R.filter(isEven, {a: 1, b: 2, c: 3, d: 4}); //=> {b: 2, d: 4}
     ```
 - name: R.find
+  id: index#find
   summary: The predicate function used to determine if the element is the desired one
   description: |-
     ### find Added in v0.1.0
@@ -2130,12 +2196,13 @@ homepage: http://ramdajs.com/
 
     See also [`transduce`](#transduce).
 
-    ```
+    ``` javascript
     const xs = [{a: 1}, {a: 2}, {a: 3}];
     R.find(R.propEq('a', 2))(xs); //=> {a: 2}
     R.find(R.propEq('a', 4))(xs); //=> undefined
     ```
 - name: R.findIndex
+  id: index#findIndex
   summary: The predicate function used to determine if the element is the desired one
   description: |-
     ### findIndex Added in v0.1.1
@@ -2162,12 +2229,13 @@ homepage: http://ramdajs.com/
 
     See also [`transduce`](#transduce).
 
-    ```
+    ``` javascript
     const xs = [{a: 1}, {a: 2}, {a: 3}];
     R.findIndex(R.propEq('a', 2))(xs); //=> 1
     R.findIndex(R.propEq('a', 4))(xs); //=> -1
     ```
 - name: R.findLast
+  id: index#findLast
   summary: The predicate function used to determine if the element is the desired one
   description: |-
     ### findLast Added in v0.1.1
@@ -2194,12 +2262,13 @@ homepage: http://ramdajs.com/
 
     See also [`transduce`](#transduce).
 
-    ```
+    ``` javascript
     const xs = [{a: 1, b: 0}, {a:1, b: 1}];
     R.findLast(R.propEq('a', 1))(xs); //=> {a: 1, b: 1}
     R.findLast(R.propEq('a', 4))(xs); //=> undefined
     ```
 - name: R.findLastIndex
+  id: index#findLastIndex
   summary: The predicate function used to determine if the element is the desired one
   description: |-
     ### findLastIndex Added in v0.1.1
@@ -2226,12 +2295,13 @@ homepage: http://ramdajs.com/
 
     See also [`transduce`](#transduce).
 
-    ```
+    ``` javascript
     const xs = [{a: 1, b: 0}, {a:1, b: 1}];
     R.findLastIndex(R.propEq('a', 1))(xs); //=> 1
     R.findLastIndex(R.propEq('a', 4))(xs); //=> -1
     ```
 - name: R.flatten
+  id: index#flatten
   summary: The array to consider
   description: |-
     ### flatten Added in v0.1.0
@@ -2252,11 +2322,12 @@ homepage: http://ramdajs.com/
 
     See also [`unnest`](#unnest).
 
-    ```
+    ``` javascript
     R.flatten([1, 2, [3, 4], 5, [6, [7, 8, [9, [10, 11], 12]]]]);
     //=> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     ```
 - name: R.flip
+  id: index#flip
   summary: The function to invoke with its first two parameters reversed
   description: |-
     ### flip Added in v0.1.0
@@ -2275,7 +2346,7 @@ homepage: http://ramdajs.com/
 
     Returns a new function much like the supplied one, except that the first two arguments' order is reversed.
 
-    ```
+    ``` javascript
     const mergeThree = (a, b, c) => [].concat(a, b, c);
 
     mergeThree(1, 2, 3); //=> [1, 2, 3]
@@ -2283,6 +2354,7 @@ homepage: http://ramdajs.com/
     R.flip(mergeThree)(1, 2, 3); //=> [2, 1, 3]
     ```
 - name: R.forEach
+  id: index#forEach
   summary: The function to invoke
   description: |-
     ### forEach Added in v0.1.1
@@ -2315,7 +2387,7 @@ homepage: http://ramdajs.com/
 
     See also [`addIndex`](#addIndex).
 
-    ```
+    ``` javascript
     const printXPlusFive = x => console.log(x + 5);
     R.forEach(printXPlusFive, [1, 2, 3]); //=> [1, 2, 3]
     // logs 6
@@ -2323,6 +2395,7 @@ homepage: http://ramdajs.com/
     // logs 8
     ```
 - name: R.forEachObjIndexed
+  id: index#forEachObjIndexed
   summary: The function to invoke
   description: |-
     ### forEachObjIndexed Added in v0.23.0
@@ -2347,13 +2420,14 @@ homepage: http://ramdajs.com/
 
     `fn` receives three argument: *(value, key, obj)*.
 
-    ```
+    ``` javascript
     const printKeyConcatValue = (value, key) => console.log(key + ':' + value);
     R.forEachObjIndexed(printKeyConcatValue, {x: 1, y: 2}); //=> {x: 1, y: 2}
     // logs x:1
     // logs y:2
     ```
 - name: R.fromPairs
+  id: index#fromPairs
   summary: An array of two-element arrays that will be the keys and values of the output object
   description: |-
     ### fromPairs Added in v0.3.0
@@ -2374,11 +2448,12 @@ homepage: http://ramdajs.com/
 
     See also [`toPairs`](#toPairs), [`pair`](#pair).
 
-    ```
+    ``` javascript
     R.fromPairs([['a', 1], ['b', 2], ['c', 3]]); //=> {a: 1, b: 2, c: 3}
     ```
 - name: R.groupBy
-  summary: 'Function :: a -> String'
+  id: index#groupBy
+  summary: Splits a list into sub-lists stored in an object, based on the result of calling a String-returning function on each element, and grouping the results according to values returned
   description: |-
     ### groupBy Added in v0.1.0
 
@@ -2406,7 +2481,7 @@ homepage: http://ramdajs.com/
 
     See also [`reduceBy`](#reduceBy), [`transduce`](#transduce).
 
-    ```
+    ``` javascript
     const byGrade = R.groupBy(function(student) {
       const score = student.score;
       return score < 65 ? 'F' :
@@ -2427,7 +2502,8 @@ homepage: http://ramdajs.com/
     // }
     ```
 - name: R.groupWith
-  summary: Function for determining whether two given (adjacent) elements should be in the same group
+  id: index#groupWith
+  summary: The array to group
   description: |-
     ### groupWith Added in v0.21.0
 
@@ -2449,7 +2525,7 @@ homepage: http://ramdajs.com/
 
     Takes a list and returns a list of lists where each sublist's elements are all satisfied pairwise comparison according to the provided function. Only adjacent elements are passed to the comparison function.
 
-    ```
+    ``` javascript
     R.groupWith(R.equals, [0, 1, 1, 2, 3, 5, 8, 13, 21])
     //=> [[0], [1, 1], [2], [3], [5], [8], [13], [21]]
 
@@ -2463,6 +2539,7 @@ homepage: http://ramdajs.com/
     //=> ['ae', 'st', 'iou']
     ```
 - name: R.gt
+  id: index#gt
   summary: Returns true if the first argument is greater than the second; false otherwise
   description: |-
     ### gt Added in v0.1.0
@@ -2482,7 +2559,7 @@ homepage: http://ramdajs.com/
 
     See also [`lt`](#lt).
 
-    ```
+    ``` javascript
     R.gt(2, 1); //=> true
     R.gt(2, 2); //=> false
     R.gt(2, 3); //=> false
@@ -2490,6 +2567,7 @@ homepage: http://ramdajs.com/
     R.gt('z', 'a'); //=> true
     ```
 - name: R.gte
+  id: index#gte
   summary: Returns true if the first argument is greater than or equal to the second; false otherwise
   description: |-
     ### gte Added in v0.1.0
@@ -2509,7 +2587,7 @@ homepage: http://ramdajs.com/
 
     See also [`lte`](#lte).
 
-    ```
+    ``` javascript
     R.gte(2, 1); //=> true
     R.gte(2, 2); //=> true
     R.gte(2, 3); //=> false
@@ -2517,6 +2595,7 @@ homepage: http://ramdajs.com/
     R.gte('z', 'a'); //=> true
     ```
 - name: R.has
+  id: index#has
   summary: The name of the property to check for
   description: |-
     ### has Added in v0.7.0
@@ -2539,7 +2618,7 @@ homepage: http://ramdajs.com/
 
     Returns whether or not an object has an own property with the specified name
 
-    ```
+    ``` javascript
     const hasName = R.has('name');
     hasName({name: 'alice'});   //=> true
     hasName({name: 'bob'});     //=> true
@@ -2552,6 +2631,7 @@ homepage: http://ramdajs.com/
     pointHas('z');  //=> false
     ```
 - name: R.hasIn
+  id: index#hasIn
   summary: The name of the property to check for
   description: |-
     ### hasIn Added in v0.7.0
@@ -2574,7 +2654,7 @@ homepage: http://ramdajs.com/
 
     Returns whether or not an object or its prototype chain has a property with the specified name
 
-    ```
+    ``` javascript
     function Rectangle(width, height) {
       this.width = width;
       this.height = height;
@@ -2588,6 +2668,7 @@ homepage: http://ramdajs.com/
     R.hasIn('area', square);  //=> true
     ```
 - name: R.hasPath
+  id: index#hasPath
   summary: The path to use
   description: |-
     ### hasPath Added in v0.26.0
@@ -2614,13 +2695,14 @@ homepage: http://ramdajs.com/
 
     See also [`has`](#has).
 
-    ```
+    ``` javascript
     R.hasPath(['a', 'b'], {a: {b: 2}});         // => true
     R.hasPath(['a', 'b'], {a: {b: undefined}}); // => true
     R.hasPath(['a', 'b'], {a: {c: 2}});         // => false
     R.hasPath(['a', 'b'], {});                  // => false
     ```
 - name: R.head
+  id: index#head
   summary: Returns the first element of the given list or string
   description: |-
     ### head Added in v0.1.0
@@ -2641,7 +2723,7 @@ homepage: http://ramdajs.com/
 
     See also [`tail`](#tail), [`init`](#init), [`last`](#last).
 
-    ```
+    ``` javascript
     R.head(['fi', 'fo', 'fum']); //=> 'fi'
     R.head([]); //=> undefined
 
@@ -2649,6 +2731,7 @@ homepage: http://ramdajs.com/
     R.head(''); //=> ''
     ```
 - name: R.identical
+  id: index#identical
   summary: Returns true if its arguments are identical, false otherwise
   description: |-
     ### identical Added in v0.15.0
@@ -2668,7 +2751,7 @@ homepage: http://ramdajs.com/
 
     Note this is merely a curried version of ES6 `Object.is`.
 
-    ```
+    ``` javascript
     const o = {};
     R.identical(o, o); //=> true
     R.identical(1, 1); //=> true
@@ -2678,6 +2761,7 @@ homepage: http://ramdajs.com/
     R.identical(NaN, NaN); //=> true
     ```
 - name: R.identity
+  id: index#identity
   summary: The value to return
   description: |-
     ### identity Added in v0.1.0
@@ -2696,14 +2780,15 @@ homepage: http://ramdajs.com/
 
     A function that does nothing but return the parameter supplied to it. Good as a default or placeholder function.
 
-    ```
+    ``` javascript
     R.identity(1); //=> 1
 
     const obj = {};
     R.identity(obj) === obj; //=> true
     ```
 - name: R.ifElse
-  summary: A predicate function
+  id: index#ifElse
+  summary: A function to invoke when the condition evaluates to a truthy value
   description: |-
     ### ifElse Added in v0.8.0
 
@@ -2731,7 +2816,7 @@ homepage: http://ramdajs.com/
 
     See also [`unless`](#unless), [`when`](#when), [`cond`](#cond).
 
-    ```
+    ``` javascript
     const incCount = R.ifElse(
       R.has('count'),
       R.over(R.lensProp('count'), R.inc),
@@ -2741,6 +2826,7 @@ homepage: http://ramdajs.com/
     incCount({ count: 1 }); //=> { count: 2 }
     ```
 - name: R.inc
+  id: index#inc
   summary: Increments its argument
   description: |-
     ### inc Added in v0.9.0
@@ -2759,10 +2845,11 @@ homepage: http://ramdajs.com/
 
     See also [`dec`](#dec).
 
-    ```
+    ``` javascript
     R.inc(42); //=> 43
     ```
 - name: R.includes
+  id: index#includes
   summary: The item to compare against
   description: |-
     ### includes Added in v0.26.0
@@ -2787,7 +2874,7 @@ homepage: http://ramdajs.com/
 
     See also [`any`](#any).
 
-    ```
+    ``` javascript
     R.includes(3, [1, 2, 3]); //=> true
     R.includes(4, [1, 2, 3]); //=> false
     R.includes({ name: 'Fred' }, [{ name: 'Fred' }]); //=> true
@@ -2795,7 +2882,8 @@ homepage: http://ramdajs.com/
     R.includes('ba', 'banana'); //=>true
     ```
 - name: R.indexBy
-  summary: 'Function :: a -> String'
+  id: index#indexBy
+  summary: Given a function that generates a key, turns a list of objects into an object indexing the objects by the given key
   description: |-
     ### indexBy Added in v0.19.0
 
@@ -2819,12 +2907,13 @@ homepage: http://ramdajs.com/
 
     Acts as a transducer if a transformer is given in list position.
 
-    ```
+    ``` javascript
     const list = [{id: 'xyz', title: 'A'}, {id: 'abc', title: 'B'}];
     R.indexBy(R.prop('id'), list);
     //=> {abc: {id: 'abc', title: 'B'}, xyz: {id: 'xyz', title: 'A'}}
     ```
 - name: R.indexOf
+  id: index#indexOf
   summary: The item to find
   description: |-
     ### indexOf Added in v0.1.0
@@ -2849,11 +2938,12 @@ homepage: http://ramdajs.com/
 
     See also [`lastIndexOf`](#lastIndexOf).
 
-    ```
+    ``` javascript
     R.indexOf(3, [1,2,3,4]); //=> 2
     R.indexOf(10, [1,2,3,4]); //=> -1
     ```
 - name: R.init
+  id: index#init
   summary: Returns all but the last element of the given list or string
   description: |-
     ### init Added in v0.9.0
@@ -2874,7 +2964,7 @@ homepage: http://ramdajs.com/
 
     See also [`last`](#last), [`head`](#head), [`tail`](#tail).
 
-    ```
+    ``` javascript
     R.init([1, 2, 3]);  //=> [1, 2]
     R.init([1, 2]);     //=> [1]
     R.init([1]);        //=> []
@@ -2886,6 +2976,7 @@ homepage: http://ramdajs.com/
     R.init('');     //=> ''
     ```
 - name: R.innerJoin
+  id: index#innerJoin
   summary: Takes a predicate pred, a list xs, and a list ys, and returns a list xs' comprising each of the elements of xs which is equal to one or more elements of ys according to pred
   description: |-
     ### innerJoin Added in v0.24.0
@@ -2910,7 +3001,7 @@ homepage: http://ramdajs.com/
 
     See also [`intersection`](#intersection).
 
-    ```
+    ``` javascript
     R.innerJoin(
       (record, id) => record.id === id,
       [{id: 824, name: 'Richie Furay'},
@@ -2923,7 +3014,8 @@ homepage: http://ramdajs.com/
     //=> [{id: 456, name: 'Stephen Stills'}, {id: 177, name: 'Neil Young'}]
     ```
 - name: R.insert
-  summary: The position to insert the element
+  id: index#insert
+  summary: Inserts the supplied element into the list, at the specified index
   description: |-
     ### insert Added in v0.2.2
 
@@ -2949,11 +3041,12 @@ homepage: http://ramdajs.com/
 
     Inserts the supplied element into the list, at the specified `index`. *Note that this is not destructive*: it returns a copy of the list with the changes. No lists have been harmed in the application of this function.
 
-    ```
+    ``` javascript
     R.insert(2, 'x', [1,2,3,4]); //=> [1,2,'x',3,4]
     ```
 - name: R.insertAll
-  summary: The position to insert the sub-list
+  id: index#insertAll
+  summary: Inserts the sub-list into the list, at the specified index
   description: |-
     ### insertAll Added in v0.9.0
 
@@ -2979,10 +3072,11 @@ homepage: http://ramdajs.com/
 
     Inserts the sub-list into the list, at the specified `index`. *Note that this is not destructive*: it returns a copy of the list with the changes. No lists have been harmed in the application of this function.
 
-    ```
+    ``` javascript
     R.insertAll(2, ['x','y','z'], [1,2,3,4]); //=> [1,2,'x','y','z',3,4]
     ```
 - name: R.intersection
+  id: index#intersection
   summary: The first list
   description: |-
     ### intersection Added in v0.1.0
@@ -3007,10 +3101,11 @@ homepage: http://ramdajs.com/
 
     See also [`innerJoin`](#innerJoin).
 
-    ```
+    ``` javascript
     R.intersection([1,2,3,4], [7,6,5,4,3]); //=> [4, 3]
     ```
 - name: R.intersperse
+  id: index#intersperse
   summary: The element to add to the list
   description: |-
     ### intersperse Added in v0.14.0
@@ -3035,10 +3130,11 @@ homepage: http://ramdajs.com/
 
     Dispatches to the `intersperse` method of the second argument, if present.
 
-    ```
+    ``` javascript
     R.intersperse('a', ['b', 'n', 'n', 's']); //=> ['b', 'a', 'n', 'a', 'n', 'a', 's']
     ```
 - name: R.into
+  id: index#into
   summary: The initial accumulator value
   description: |-
     ### into Added in v0.12.0
@@ -3073,7 +3169,7 @@ homepage: http://ramdajs.com/
 
     See also [`transduce`](#transduce).
 
-    ```
+    ``` javascript
     const numbers = [1, 2, 3, 4];
     const transducer = R.compose(R.map(R.add(1)), R.take(2));
 
@@ -3083,7 +3179,8 @@ homepage: http://ramdajs.com/
     intoArray(transducer, numbers); //=> [2, 3]
     ```
 - name: R.invert
-  summary: The object or array to invert
+  id: index#invert
+  summary: Same as R.invertObj, however this accounts for objects with duplicate values by putting the values into an array
   description: |-
     ### invert Added in v0.9.0
 
@@ -3103,7 +3200,7 @@ homepage: http://ramdajs.com/
 
     See also [`invertObj`](#invertObj).
 
-    ```
+    ``` javascript
     const raceResultsByFirstName = {
       first: 'alice',
       second: 'jake',
@@ -3113,7 +3210,8 @@ homepage: http://ramdajs.com/
     //=> { 'alice': ['first', 'third'], 'jake':['second'] }
     ```
 - name: R.invertObj
-  summary: The object or array to invert
+  id: index#invertObj
+  summary: Returns a new object with the keys of the given object as values, and the values of the given object, which are coerced to strings, as keys
   description: |-
     ### invertObj Added in v0.9.0
 
@@ -3133,7 +3231,7 @@ homepage: http://ramdajs.com/
 
     See also [`invert`](#invert).
 
-    ```
+    ``` javascript
     const raceResults = {
       first: 'alice',
       second: 'jake'
@@ -3147,6 +3245,7 @@ homepage: http://ramdajs.com/
     //=> { 'alice': '0', 'jake':'1' }
     ```
 - name: R.invoker
+  id: index#invoker
   summary: Number of arguments the returned function should take before the target object
   description: |-
     ### invoker Added in v0.1.0
@@ -3173,7 +3272,7 @@ homepage: http://ramdajs.com/
 
     See also [`construct`](#construct).
 
-    ```
+    ``` javascript
     const sliceFrom = R.invoker(1, 'slice');
     sliceFrom(6, 'abcdefghijklm'); //=> 'ghijklm'
     const sliceFrom6 = R.invoker(2, 'slice')(6);
@@ -3186,7 +3285,8 @@ homepage: http://ramdajs.com/
     speak(dog).then(console.log) //~> 'Woof!'
     ```
 - name: R.is
-  summary: A constructor
+  id: index#is
+  summary: See if an object (val) is an instance of the supplied constructor
   description: |-
     ### is Added in v0.3.0
 
@@ -3208,7 +3308,7 @@ homepage: http://ramdajs.com/
 
     See if an object (`val`) is an instance of the supplied constructor. This function will check up the inheritance chain, if any.
 
-    ```
+    ``` javascript
     R.is(Object, {}); //=> true
     R.is(Number, 1); //=> true
     R.is(Object, 1); //=> false
@@ -3219,6 +3319,7 @@ homepage: http://ramdajs.com/
     R.is(Number, {}); //=> false
     ```
 - name: R.isEmpty
+  id: index#isEmpty
   summary: Returns true if the given value is its type's empty value; false otherwise
   description: |-
     ### isEmpty Added in v0.1.0
@@ -3237,7 +3338,7 @@ homepage: http://ramdajs.com/
 
     See also [`empty`](#empty).
 
-    ```
+    ``` javascript
     R.isEmpty([1, 2, 3]);   //=> false
     R.isEmpty([]);          //=> true
     R.isEmpty('');          //=> true
@@ -3246,6 +3347,7 @@ homepage: http://ramdajs.com/
     R.isEmpty({length: 0}); //=> false
     ```
 - name: R.isNil
+  id: index#isNil
   summary: The value to test
   description: |-
     ### isNil Added in v0.9.0
@@ -3264,13 +3366,14 @@ homepage: http://ramdajs.com/
 
     Checks if the input value is `null` or `undefined`.
 
-    ```
+    ``` javascript
     R.isNil(null); //=> true
     R.isNil(undefined); //=> true
     R.isNil(0); //=> false
     R.isNil([]); //=> false
     ```
 - name: R.join
+  id: index#join
   summary: The string used to separate the elements
   description: |-
     ### join Added in v0.1.0
@@ -3295,13 +3398,14 @@ homepage: http://ramdajs.com/
 
     See also [`split`](#split).
 
-    ```
+    ``` javascript
     const spacer = R.join(' ');
     spacer(['a', 2, 3.4]);   //=> 'a 2 3.4'
     R.join('|', [1, 2, 3]);    //=> '1|2|3'
     ```
 - name: R.juxt
-  summary: An array of functions
+  id: index#juxt
+  summary: juxt applies a list of functions to a list of values
   description: |-
     ### juxt Added in v0.19.0
 
@@ -3321,12 +3425,13 @@ homepage: http://ramdajs.com/
 
     See also [`applySpec`](#applySpec).
 
-    ```
+    ``` javascript
     const getRange = R.juxt([Math.min, Math.max]);
     getRange(3, 4, 9, -3); //=> [-3, 9]
     ```
 - name: R.keys
-  summary: The object to extract properties from
+  id: index#keys
+  summary: Returns a list containing the names of all the enumerable own properties of the supplied object
   description: |-
     ### keys Added in v0.1.0
 
@@ -3346,11 +3451,12 @@ homepage: http://ramdajs.com/
 
     See also [`keysIn`](#keysIn), [`values`](#values).
 
-    ```
+    ``` javascript
     R.keys({a: 1, b: 2, c: 3}); //=> ['a', 'b', 'c']
     ```
 - name: R.keysIn
-  summary: The object to extract properties from
+  id: index#keysIn
+  summary: Returns a list containing the names of all the properties of the supplied object, including prototype properties
   description: |-
     ### keysIn Added in v0.2.0
 
@@ -3370,13 +3476,14 @@ homepage: http://ramdajs.com/
 
     See also [`keys`](#keys), [`valuesIn`](#valuesIn).
 
-    ```
+    ``` javascript
     const F = function() { this.x = 'X'; };
     F.prototype.y = 'Y';
     const f = new F();
     R.keysIn(f); //=> ['x', 'y']
     ```
 - name: R.last
+  id: index#last
   summary: Returns the last element of the given list or string
   description: |-
     ### last Added in v0.1.4
@@ -3397,7 +3504,7 @@ homepage: http://ramdajs.com/
 
     See also [`init`](#init), [`head`](#head), [`tail`](#tail).
 
-    ```
+    ``` javascript
     R.last(['fi', 'fo', 'fum']); //=> 'fum'
     R.last([]); //=> undefined
 
@@ -3405,6 +3512,7 @@ homepage: http://ramdajs.com/
     R.last(''); //=> ''
     ```
 - name: R.lastIndexOf
+  id: index#lastIndexOf
   summary: The item to find
   description: |-
     ### lastIndexOf Added in v0.1.0
@@ -3429,11 +3537,12 @@ homepage: http://ramdajs.com/
 
     See also [`indexOf`](#indexOf).
 
-    ```
+    ``` javascript
     R.lastIndexOf(3, [-1,3,3,0,1,2,3,4]); //=> 6
     R.lastIndexOf(10, [1,2,3,4]); //=> -1
     ```
 - name: R.length
+  id: index#length
   summary: The array to inspect
   description: |-
     ### length Added in v0.3.0
@@ -3452,11 +3561,12 @@ homepage: http://ramdajs.com/
 
     Returns the number of elements in the array by returning `list.length`.
 
-    ```
+    ``` javascript
     R.length([]); //=> 0
     R.length([1, 2, 3]); //=> 3
     ```
 - name: R.lens
+  id: index#lens
   summary: Returns a lens for the given getter and setter functions
   description: |-
     ### lens Added in v0.8.0
@@ -3478,7 +3588,7 @@ homepage: http://ramdajs.com/
 
     See also [`view`](#view), [`set`](#set), [`over`](#over), [`lensIndex`](#lensIndex), [`lensProp`](#lensProp).
 
-    ```
+    ``` javascript
     const xLens = R.lens(R.prop('x'), R.assoc('x'));
 
     R.view(xLens, {x: 1, y: 2});            //=> 1
@@ -3486,6 +3596,7 @@ homepage: http://ramdajs.com/
     R.over(xLens, R.negate, {x: 1, y: 2});  //=> {x: -1, y: 2}
     ```
 - name: R.lensIndex
+  id: index#lensIndex
   summary: Returns a lens whose focus is the specified index
   description: |-
     ### lensIndex Added in v0.14.0
@@ -3506,7 +3617,7 @@ homepage: http://ramdajs.com/
 
     See also [`view`](#view), [`set`](#set), [`over`](#over), [`nth`](#nth).
 
-    ```
+    ``` javascript
     const headLens = R.lensIndex(0);
 
     R.view(headLens, ['a', 'b', 'c']);            //=> 'a'
@@ -3514,6 +3625,7 @@ homepage: http://ramdajs.com/
     R.over(headLens, R.toUpper, ['a', 'b', 'c']); //=> ['A', 'b', 'c']
     ```
 - name: R.lensPath
+  id: index#lensPath
   summary: The path to use
   description: |-
     ### lensPath Added in v0.19.0
@@ -3538,7 +3650,7 @@ homepage: http://ramdajs.com/
 
     See also [`view`](#view), [`set`](#set), [`over`](#over).
 
-    ```
+    ``` javascript
     const xHeadYLens = R.lensPath(['x', 0, 'y']);
 
     R.view(xHeadYLens, {x: [{y: 2, z: 3}, {y: 4, z: 5}]});
@@ -3549,6 +3661,7 @@ homepage: http://ramdajs.com/
     //=> {x: [{y: -2, z: 3}, {y: 4, z: 5}]}
     ```
 - name: R.lensProp
+  id: index#lensProp
   summary: Returns a lens whose focus is the specified property
   description: |-
     ### lensProp Added in v0.14.0
@@ -3569,7 +3682,7 @@ homepage: http://ramdajs.com/
 
     See also [`view`](#view), [`set`](#set), [`over`](#over).
 
-    ```
+    ``` javascript
     const xLens = R.lensProp('x');
 
     R.view(xLens, {x: 1, y: 2});            //=> 1
@@ -3577,7 +3690,8 @@ homepage: http://ramdajs.com/
     R.over(xLens, R.negate, {x: 1, y: 2});  //=> {x: -1, y: 2}
     ```
 - name: R.lift
-  summary: The function to lift into higher context
+  id: index#lift
+  summary: '"lifts" a function of arity > 1 so that it may "map over" a list, Function or other object that satisfies the FantasyLand Apply spec'
   description: |-
     ### lift Added in v0.7.0
 
@@ -3597,7 +3711,7 @@ homepage: http://ramdajs.com/
 
     See also [`liftN`](#liftN).
 
-    ```
+    ``` javascript
     const madd3 = R.lift((a, b, c) => a + b + c);
 
     madd3([1,2,3], [1,2,3], [1]); //=> [3, 4, 5, 4, 5, 6, 5, 6, 7]
@@ -3607,7 +3721,8 @@ homepage: http://ramdajs.com/
     madd5([1,2], [3], [4, 5], [6], [7, 8]); //=> [21, 22, 22, 23, 22, 23, 23, 24]
     ```
 - name: R.liftN
-  summary: The function to lift into higher context
+  id: index#liftN
+  summary: '"lifts" a function to be the specified arity, so that it may "map over" that many lists, Functions or other objects that satisfy the FantasyLand Apply spec'
   description: |-
     ### liftN Added in v0.7.0
 
@@ -3627,11 +3742,12 @@ homepage: http://ramdajs.com/
 
     See also [`lift`](#lift), [`ap`](#ap).
 
-    ```
+    ``` javascript
     const madd3 = R.liftN(3, (...args) => R.sum(args));
     madd3([1,2,3], [1,2,3], [1]); //=> [3, 4, 5, 4, 5, 6, 5, 6, 7]
     ```
 - name: R.lt
+  id: index#lt
   summary: Returns true if the first argument is less than the second; false otherwise
   description: |-
     ### lt Added in v0.1.0
@@ -3651,7 +3767,7 @@ homepage: http://ramdajs.com/
 
     See also [`gt`](#gt).
 
-    ```
+    ``` javascript
     R.lt(2, 1); //=> false
     R.lt(2, 2); //=> false
     R.lt(2, 3); //=> true
@@ -3659,6 +3775,7 @@ homepage: http://ramdajs.com/
     R.lt('z', 'a'); //=> false
     ```
 - name: R.lte
+  id: index#lte
   summary: Returns true if the first argument is less than or equal to the second; false otherwise
   description: |-
     ### lte Added in v0.1.0
@@ -3678,7 +3795,7 @@ homepage: http://ramdajs.com/
 
     See also [`gte`](#gte).
 
-    ```
+    ``` javascript
     R.lte(2, 1); //=> false
     R.lte(2, 2); //=> true
     R.lte(2, 3); //=> true
@@ -3686,6 +3803,7 @@ homepage: http://ramdajs.com/
     R.lte('z', 'a'); //=> false
     ```
 - name: R.map
+  id: index#map
   summary: The function to be called on every element of the input list
   description: |-
     ### map Added in v0.1.0
@@ -3718,7 +3836,7 @@ homepage: http://ramdajs.com/
 
     See also [`transduce`](#transduce), [`addIndex`](#addIndex).
 
-    ```
+    ``` javascript
     const double = x => x * 2;
 
     R.map(double, [1, 2, 3]); //=> [2, 4, 6]
@@ -3726,6 +3844,7 @@ homepage: http://ramdajs.com/
     R.map(double, {x: 1, y: 2, z: 3}); //=> {x: 2, y: 4, z: 6}
     ```
 - name: R.mapAccum
+  id: index#mapAccum
   summary: The function to be called on every element of the input list
   description: |-
     ### mapAccum Added in v0.10.0
@@ -3756,13 +3875,14 @@ homepage: http://ramdajs.com/
 
     See also [`scan`](#scan), [`addIndex`](#addIndex), [`mapAccumRight`](#mapAccumRight).
 
-    ```
+    ``` javascript
     const digits = ['1', '2', '3', '4'];
     const appender = (a, b) => [a + b, a + b];
 
     R.mapAccum(appender, 0, digits); //=> ['01234', ['01', '012', '0123', '01234']]
     ```
 - name: R.mapAccumRight
+  id: index#mapAccumRight
   summary: The function to be called on every element of the input list
   description: |-
     ### mapAccumRight Added in v0.10.0
@@ -3795,13 +3915,14 @@ homepage: http://ramdajs.com/
 
     See also [`addIndex`](#addIndex), [`mapAccum`](#mapAccum).
 
-    ```
+    ``` javascript
     const digits = ['1', '2', '3', '4'];
     const appender = (a, b) => [b + a, b + a];
 
     R.mapAccumRight(appender, 5, digits); //=> ['12345', ['12345', '2345', '345', '45']]
     ```
 - name: R.mapObjIndexed
+  id: index#mapObjIndexed
   summary: An Object-specific version of map
   description: |-
     ### mapObjIndexed Added in v0.9.0
@@ -3821,13 +3942,14 @@ homepage: http://ramdajs.com/
 
     See also [`map`](#map).
 
-    ```
+    ``` javascript
     const xyz = { x: 1, y: 2, z: 3 };
     const prependKeyAndDouble = (num, key, obj) => key + (num * 2);
 
     R.mapObjIndexed(prependKeyAndDouble, xyz); //=> { x: 'x2', y: 'y4', z: 'z6' }
     ```
 - name: R.match
+  id: index#match
   summary: A regular expression
   description: |-
     ### match Added in v0.1.0
@@ -3852,12 +3974,13 @@ homepage: http://ramdajs.com/
 
     See also [`test`](#test).
 
-    ```
+    ``` javascript
     R.match(/([a-z]a)/g, 'bananas'); //=> ['ba', 'na', 'na']
     R.match(/a/, 'b'); //=> []
     R.match(/a/, null); //=> TypeError: null does not have a method named "match"
     ```
 - name: R.mathMod
+  id: index#mathMod
   summary: The dividend
   description: |-
     ### mathMod Added in v0.3.0
@@ -3882,7 +4005,7 @@ homepage: http://ramdajs.com/
 
     See also [`modulo`](#modulo).
 
-    ```
+    ``` javascript
     R.mathMod(-17, 5);  //=> 3
     R.mathMod(17, 5);   //=> 2
     R.mathMod(17, -5);  //=> NaN
@@ -3900,6 +4023,7 @@ homepage: http://ramdajs.com/
     seventeenMod(10); //=> 7
     ```
 - name: R.max
+  id: index#max
   summary: Returns the larger of its two arguments
   description: |-
     ### max Added in v0.1.0
@@ -3919,11 +4043,12 @@ homepage: http://ramdajs.com/
 
     See also [`maxBy`](#maxBy), [`min`](#min).
 
-    ```
+    ``` javascript
     R.max(789, 123); //=> 789
     R.max('a', 'b'); //=> 'b'
     ```
 - name: R.maxBy
+  id: index#maxBy
   summary: Takes a function and two values, and returns whichever value produces the larger result when passed to the provided function
   description: |-
     ### maxBy Added in v0.8.0
@@ -3944,7 +4069,7 @@ homepage: http://ramdajs.com/
 
     See also [`max`](#max), [`minBy`](#minBy).
 
-    ```
+    ``` javascript
     //  square :: Number -> Number
     const square = n => n * n;
 
@@ -3954,6 +4079,7 @@ homepage: http://ramdajs.com/
     R.reduce(R.maxBy(square), 0, []); //=> 0
     ```
 - name: R.mean
+  id: index#mean
   summary: Returns the mean of the given list of numbers
   description: |-
     ### mean Added in v0.14.0
@@ -3972,11 +4098,12 @@ homepage: http://ramdajs.com/
 
     See also [`median`](#median).
 
-    ```
+    ``` javascript
     R.mean([2, 7, 9]); //=> 6
     R.mean([]); //=> NaN
     ```
 - name: R.median
+  id: index#median
   summary: Returns the median of the given list of numbers
   description: |-
     ### median Added in v0.14.0
@@ -3995,12 +4122,13 @@ homepage: http://ramdajs.com/
 
     See also [`mean`](#mean).
 
-    ```
+    ``` javascript
     R.median([2, 9, 7]); //=> 7
     R.median([7, 2, 10, 9]); //=> 8
     R.median([]); //=> NaN
     ```
 - name: R.memoizeWith
+  id: index#memoizeWith
   summary: The function to generate the cache key
   description: |-
     ### memoizeWith Added in v0.24.0
@@ -4023,7 +4151,7 @@ homepage: http://ramdajs.com/
 
     Creates a new function that, when invoked, caches the result of calling `fn` for a given argument set and returns the result. Subsequent calls to the memoized `fn` with the same argument set will not result in an additional call to `fn`; instead, the cached result for that set of arguments will be returned.
 
-    ```
+    ``` javascript
     let count = 0;
     const factorial = R.memoizeWith(R.identity, n => {
       count += 1;
@@ -4035,6 +4163,7 @@ homepage: http://ramdajs.com/
     count; //=> 1
     ```
 - name: R.merge
+  id: index#merge
   summary: Create a new object with the own properties of the first object merged with the own properties of the second object
   description: |-
     ### merge Added in v0.1.0
@@ -4056,7 +4185,7 @@ homepage: http://ramdajs.com/
 
     See also [`mergeRight`](#mergeRight), [`mergeDeepRight`](#mergeDeepRight), [`mergeWith`](#mergeWith), [`mergeWithKey`](#mergeWithKey).
 
-    ```
+    ``` javascript
     R.merge({ 'name': 'fred', 'age': 10 }, { 'age': 40 });
     //=> { 'name': 'fred', 'age': 40 }
 
@@ -4064,7 +4193,8 @@ homepage: http://ramdajs.com/
     withDefaults({y: 2}); //=> {x: 0, y: 2}
     ```
 - name: R.mergeAll
-  summary: An array of objects
+  id: index#mergeAll
+  summary: Merges a list of objects together into one object
   description: |-
     ### mergeAll Added in v0.10.0
 
@@ -4084,11 +4214,12 @@ homepage: http://ramdajs.com/
 
     See also [`reduce`](#reduce).
 
-    ```
+    ``` javascript
     R.mergeAll([{foo:1},{bar:2},{baz:3}]); //=> {foo:1,bar:2,baz:3}
     R.mergeAll([{foo:1},{foo:2},{bar:2}]); //=> {foo:2,bar:2}
     ```
 - name: R.mergeDeepLeft
+  id: index#mergeDeepLeft
   summary: Creates a new object with the own properties of the first object merged with the own properties of the second object
   description: |-
     ### mergeDeepLeft Added in v0.24.0
@@ -4111,12 +4242,13 @@ homepage: http://ramdajs.com/
 
     See also [`merge`](#merge), [`mergeDeepRight`](#mergeDeepRight), [`mergeDeepWith`](#mergeDeepWith), [`mergeDeepWithKey`](#mergeDeepWithKey).
 
-    ```
+    ``` javascript
     R.mergeDeepLeft({ name: 'fred', age: 10, contact: { email: 'moo@example.com' }},
                     { age: 40, contact: { email: 'baa@example.com' }});
     //=> { name: 'fred', age: 10, contact: { email: 'moo@example.com' }}
     ```
 - name: R.mergeDeepRight
+  id: index#mergeDeepRight
   summary: Creates a new object with the own properties of the first object merged with the own properties of the second object
   description: |-
     ### mergeDeepRight Added in v0.24.0
@@ -4139,12 +4271,13 @@ homepage: http://ramdajs.com/
 
     See also [`merge`](#merge), [`mergeDeepLeft`](#mergeDeepLeft), [`mergeDeepWith`](#mergeDeepWith), [`mergeDeepWithKey`](#mergeDeepWithKey).
 
-    ```
+    ``` javascript
     R.mergeDeepRight({ name: 'fred', age: 10, contact: { email: 'moo@example.com' }},
                      { age: 40, contact: { email: 'baa@example.com' }});
     //=> { name: 'fred', age: 40, contact: { email: 'baa@example.com' }}
     ```
 - name: R.mergeDeepWith
+  id: index#mergeDeepWith
   summary: Creates a new object with the own properties of the two provided objects
   description: |-
     ### mergeDeepWith Added in v0.24.0
@@ -4168,13 +4301,14 @@ homepage: http://ramdajs.com/
 
     See also [`mergeWith`](#mergeWith), [`mergeDeepWithKey`](#mergeDeepWithKey).
 
-    ```
+    ``` javascript
     R.mergeDeepWith(R.concat,
                     { a: true, c: { values: [10, 20] }},
                     { b: true, c: { values: [15, 35] }});
     //=> { a: true, b: true, c: { values: [10, 20, 15, 35] }}
     ```
 - name: R.mergeDeepWithKey
+  id: index#mergeDeepWithKey
   summary: Creates a new object with the own properties of the two provided objects
   description: |-
     ### mergeDeepWithKey Added in v0.24.0
@@ -4198,7 +4332,7 @@ homepage: http://ramdajs.com/
 
     See also [`mergeWithKey`](#mergeWithKey), [`mergeDeepWith`](#mergeDeepWith).
 
-    ```
+    ``` javascript
     let concatValues = (k, l, r) => k == 'values' ? R.concat(l, r) : r
     R.mergeDeepWithKey(concatValues,
                        { a: true, c: { thing: 'foo', values: [10, 20] }},
@@ -4206,6 +4340,7 @@ homepage: http://ramdajs.com/
     //=> { a: true, b: true, c: { thing: 'bar', values: [10, 20, 15, 35] }}
     ```
 - name: R.mergeLeft
+  id: index#mergeLeft
   summary: Create a new object with the own properties of the first object merged with the own properties of the second object
   description: |-
     ### mergeLeft Added in v0.26.0
@@ -4225,7 +4360,7 @@ homepage: http://ramdajs.com/
 
     See also [`mergeRight`](#mergeRight), [`mergeDeepLeft`](#mergeDeepLeft), [`mergeWith`](#mergeWith), [`mergeWithKey`](#mergeWithKey).
 
-    ```
+    ``` javascript
     R.mergeLeft({ 'age': 40 }, { 'name': 'fred', 'age': 10 });
     //=> { 'name': 'fred', 'age': 40 }
 
@@ -4233,6 +4368,7 @@ homepage: http://ramdajs.com/
     resetToDefault({x: 5, y: 2}); //=> {x: 0, y: 2}
     ```
 - name: R.mergeRight
+  id: index#mergeRight
   summary: Create a new object with the own properties of the first object merged with the own properties of the second object
   description: |-
     ### mergeRight Added in v0.26.0
@@ -4252,7 +4388,7 @@ homepage: http://ramdajs.com/
 
     See also [`mergeLeft`](#mergeLeft), [`mergeDeepRight`](#mergeDeepRight), [`mergeWith`](#mergeWith), [`mergeWithKey`](#mergeWithKey).
 
-    ```
+    ``` javascript
     R.mergeRight({ 'name': 'fred', 'age': 10 }, { 'age': 40 });
     //=> { 'name': 'fred', 'age': 40 }
 
@@ -4260,6 +4396,7 @@ homepage: http://ramdajs.com/
     withDefaults({y: 2}); //=> {x: 0, y: 2}
     ```
 - name: R.mergeWith
+  id: index#mergeWith
   summary: Creates a new object with the own properties of the two provided objects
   description: |-
     ### mergeWith Added in v0.19.0
@@ -4280,13 +4417,14 @@ homepage: http://ramdajs.com/
 
     See also [`mergeDeepWith`](#mergeDeepWith), [`merge`](#merge), [`mergeWithKey`](#mergeWithKey).
 
-    ```
+    ``` javascript
     R.mergeWith(R.concat,
                 { a: true, values: [10, 20] },
                 { b: true, values: [15, 35] });
     //=> { a: true, b: true, values: [10, 20, 15, 35] }
     ```
 - name: R.mergeWithKey
+  id: index#mergeWithKey
   summary: Creates a new object with the own properties of the two provided objects
   description: |-
     ### mergeWithKey Added in v0.19.0
@@ -4307,7 +4445,7 @@ homepage: http://ramdajs.com/
 
     See also [`mergeDeepWithKey`](#mergeDeepWithKey), [`merge`](#merge), [`mergeWith`](#mergeWith).
 
-    ```
+    ``` javascript
     let concatValues = (k, l, r) => k == 'values' ? R.concat(l, r) : r
     R.mergeWithKey(concatValues,
                    { a: true, thing: 'foo', values: [10, 20] },
@@ -4315,6 +4453,7 @@ homepage: http://ramdajs.com/
     //=> { a: true, b: true, thing: 'bar', values: [10, 20, 15, 35] }
     ```
 - name: R.min
+  id: index#min
   summary: Returns the smaller of its two arguments
   description: |-
     ### min Added in v0.1.0
@@ -4334,11 +4473,12 @@ homepage: http://ramdajs.com/
 
     See also [`minBy`](#minBy), [`max`](#max).
 
-    ```
+    ``` javascript
     R.min(789, 123); //=> 123
     R.min('a', 'b'); //=> 'a'
     ```
 - name: R.minBy
+  id: index#minBy
   summary: Takes a function and two values, and returns whichever value produces the smaller result when passed to the provided function
   description: |-
     ### minBy Added in v0.8.0
@@ -4359,7 +4499,7 @@ homepage: http://ramdajs.com/
 
     See also [`min`](#min), [`maxBy`](#maxBy).
 
-    ```
+    ``` javascript
     //  square :: Number -> Number
     const square = n => n * n;
 
@@ -4369,6 +4509,7 @@ homepage: http://ramdajs.com/
     R.reduce(R.minBy(square), Infinity, []); //=> Infinity
     ```
 - name: R.modulo
+  id: index#modulo
   summary: The value to the divide
   description: |-
     ### modulo Added in v0.1.1
@@ -4393,7 +4534,7 @@ homepage: http://ramdajs.com/
 
     See also [`mathMod`](#mathMod).
 
-    ```
+    ``` javascript
     R.modulo(17, 3); //=> 2
     // JS behavior:
     R.modulo(-17, 3); //=> -2
@@ -4404,7 +4545,8 @@ homepage: http://ramdajs.com/
     isOdd(21); //=> 1
     ```
 - name: R.move
-  summary: The source index
+  id: index#move
+  summary: Move an item, at index from, to index to, in a list of elements
   description: |-
     ### move Added in v0.27.0
 
@@ -4430,11 +4572,12 @@ homepage: http://ramdajs.com/
 
     Move an item, at index `from`, to index `to`, in a list of elements. A new list will be created containing the new elements order.
 
-    ```
+    ``` javascript
     R.move(0, 2, ['a', 'b', 'c', 'd', 'e', 'f']); //=> ['b', 'c', 'a', 'd', 'e', 'f']
     R.move(-1, 0, ['a', 'b', 'c', 'd', 'e', 'f']); //=> ['f', 'a', 'b', 'c', 'd', 'e'] list rotation
     ```
 - name: R.multiply
+  id: index#multiply
   summary: The first value
   description: |-
     ### multiply Added in v0.1.0
@@ -4459,7 +4602,7 @@ homepage: http://ramdajs.com/
 
     See also [`divide`](#divide).
 
-    ```
+    ``` javascript
     const double = R.multiply(2);
     const triple = R.multiply(3);
     double(3);       //=>  6
@@ -4467,6 +4610,7 @@ homepage: http://ramdajs.com/
     R.multiply(2, 5);  //=> 10
     ```
 - name: R.nAry
+  id: index#nAry
   summary: The desired arity of the new function
   description: |-
     ### nAry Added in v0.1.0
@@ -4491,7 +4635,7 @@ homepage: http://ramdajs.com/
 
     See also [`binary`](#binary), [`unary`](#unary).
 
-    ```
+    ``` javascript
     const takesTwoArgs = (a, b) => [a, b];
 
     takesTwoArgs.length; //=> 2
@@ -4503,6 +4647,7 @@ homepage: http://ramdajs.com/
     takesOneArg(1, 2); //=> [1, undefined]
     ```
 - name: R.negate
+  id: index#negate
   summary: Negates its argument
   description: |-
     ### negate Added in v0.9.0
@@ -4519,10 +4664,11 @@ homepage: http://ramdajs.com/
 
     Negates its argument.
 
-    ```
+    ``` javascript
     R.negate(42); //=> -42
     ```
 - name: R.none
+  id: index#none
   summary: The predicate function
   description: |-
     ### none Added in v0.12.0
@@ -4551,7 +4697,7 @@ homepage: http://ramdajs.com/
 
     See also [`all`](#all), [`any`](#any).
 
-    ```
+    ``` javascript
     const isEven = n => n % 2 === 0;
     const isOdd = n => n % 2 === 1;
 
@@ -4559,7 +4705,8 @@ homepage: http://ramdajs.com/
     R.none(isOdd, [1, 3, 5, 7, 8, 11]); //=> false
     ```
 - name: R.not
-  summary: any value
+  id: index#not
+  summary: A function that returns the ! of its argument
   description: |-
     ### not Added in v0.1.0
 
@@ -4579,13 +4726,14 @@ homepage: http://ramdajs.com/
 
     See also [`complement`](#complement).
 
-    ```
+    ``` javascript
     R.not(true); //=> false
     R.not(false); //=> true
     R.not(0); //=> true
     R.not(1); //=> false
     ```
 - name: R.nth
+  id: index#nth
   summary: Returns the nth element of the given list or string
   description: |-
     ### nth Added in v0.1.0
@@ -4605,7 +4753,7 @@ homepage: http://ramdajs.com/
 
     Returns the nth element of the given list or string. If n is negative the element at index length + n is returned.
 
-    ```
+    ``` javascript
     const list = ['foo', 'bar', 'baz', 'quux'];
     R.nth(1, list); //=> 'bar'
     R.nth(-1, list); //=> 'quux'
@@ -4615,6 +4763,7 @@ homepage: http://ramdajs.com/
     R.nth(3, 'abc'); //=> ''
     ```
 - name: R.nthArg
+  id: index#nthArg
   summary: Returns a function which returns its nth argument
   description: |-
     ### nthArg Added in v0.9.0
@@ -4631,11 +4780,12 @@ homepage: http://ramdajs.com/
 
     Returns a function which returns its nth argument.
 
-    ```
+    ``` javascript
     R.nthArg(1)('a', 'b', 'c'); //=> 'b'
     R.nthArg(-1)('a', 'b', 'c'); //=> 'c'
     ```
 - name: R.o
+  id: index#o
   summary: o is a curried composition function that returns a unary function
   description: |-
     ### o Added in v0.24.0
@@ -4655,7 +4805,7 @@ homepage: http://ramdajs.com/
 
     See also [`compose`](#compose), [`pipe`](#pipe).
 
-    ```
+    ``` javascript
     const classyGreeting = name => "The name's " + name.last + ", " + name.first + " " + name.last
     const yellGreeting = R.o(R.toUpper, classyGreeting);
     yellGreeting({first: 'James', last: 'Bond'}); //=> "THE NAME'S BOND, JAMES BOND"
@@ -4663,6 +4813,7 @@ homepage: http://ramdajs.com/
     R.o(R.multiply(10), R.add(10))(-4) //=> 60
     ```
 - name: R.objOf
+  id: index#objOf
   summary: Creates an object containing a single key:value pair
   description: |-
     ### objOf Added in v0.18.0
@@ -4682,7 +4833,7 @@ homepage: http://ramdajs.com/
 
     See also [`pair`](#pair).
 
-    ```
+    ``` javascript
     const matchPhrases = R.compose(
       R.objOf('must'),
       R.map(R.objOf('match_phrase'))
@@ -4690,7 +4841,8 @@ homepage: http://ramdajs.com/
     matchPhrases(['foo', 'bar', 'baz']); //=> {must: [{match_phrase: 'foo'}, {match_phrase: 'bar'}, {match_phrase: 'baz'}]}
     ```
 - name: R.of
-  summary: any value
+  id: index#of
+  summary: Returns a singleton array containing the value provided
   description: |-
     ### of Added in v0.3.0
 
@@ -4710,12 +4862,13 @@ homepage: http://ramdajs.com/
 
     Note this `of` is different from the ES6 `of`; See <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/of>
 
-    ```
+    ``` javascript
     R.of(null); //=> [null]
     R.of([42]); //=> [[42]]
     ```
 - name: R.omit
-  summary: an array of String property names to omit from the new object
+  id: index#omit
+  summary: Returns a partial copy of an object omitting the keys specified
   description: |-
     ### omit Added in v0.1.0
 
@@ -4739,10 +4892,11 @@ homepage: http://ramdajs.com/
 
     See also [`pick`](#pick).
 
-    ```
+    ``` javascript
     R.omit(['a', 'd'], {a: 1, b: 2, c: 3, d: 4}); //=> {b: 2, c: 3}
     ```
 - name: R.once
+  id: index#once
   summary: The function to wrap in a call-only-once wrapper
   description: |-
     ### once Added in v0.1.0
@@ -4761,12 +4915,13 @@ homepage: http://ramdajs.com/
 
     Accepts a function `fn` and returns a function that guards invocation of `fn` such that `fn` can only ever be called once, no matter how many times the returned function is invoked. The first value calculated is returned in subsequent invocations.
 
-    ```
+    ``` javascript
     const addOneOnce = R.once(x => x + 1);
     addOneOnce(10); //=> 11
     addOneOnce(addOneOnce(50)); //=> 11
     ```
 - name: R.or
+  id: index#or
   summary: Returns true if one or both of its arguments are true
   description: |-
     ### or Added in v0.1.0
@@ -4786,13 +4941,14 @@ homepage: http://ramdajs.com/
 
     See also [`either`](#either), [`xor`](#xor).
 
-    ```
+    ``` javascript
     R.or(true, true); //=> true
     R.or(true, false); //=> true
     R.or(false, true); //=> true
     R.or(false, false); //=> false
     ```
 - name: R.otherwise
+  id: index#otherwise
   summary: The function to apply
   description: |-
     ### otherwise Added in v0.26.0
@@ -4817,7 +4973,7 @@ homepage: http://ramdajs.com/
 
     See also [`andThen`](#andThen).
 
-    ```
+    ``` javascript
     var failedFetch = (id) => Promise.reject('bad ID');
     var useDefault = () => ({ firstName: 'Bob', lastName: 'Loblaw' })
 
@@ -4830,6 +4986,7 @@ homepage: http://ramdajs.com/
     recoverFromFailure(12345).then(console.log)
     ```
 - name: R.over
+  id: index#over
   summary: Returns the result of "setting" the portion of the given data structure focused by the given lens to the result of applying the given function to the focused value
   description: |-
     ### over Added in v0.16.0
@@ -4852,13 +5009,14 @@ homepage: http://ramdajs.com/
 
     See also [`prop`](#prop), [`lensIndex`](#lensIndex), [`lensProp`](#lensProp).
 
-    ```
+    ``` javascript
     const headLens = R.lensIndex(0);
 
     R.over(headLens, R.toUpper, ['foo', 'bar', 'baz']); //=> ['FOO', 'bar', 'baz']
     ```
 - name: R.pair
-  summary: Takes two arguments, fst and snd, and returns [fst, snd]
+  id: index#pair
+  summary: See also objOf, of
   description: |-
     ### pair Added in v0.18.0
 
@@ -4877,10 +5035,11 @@ homepage: http://ramdajs.com/
 
     See also [`objOf`](#objOf), [`of`](#of).
 
-    ```
+    ``` javascript
     R.pair('foo', 'bar'); //=> ['foo', 'bar']
     ```
 - name: R.partial
+  id: index#partial
   summary: Takes a function f and a list of arguments, and returns a function g
   description: |-
     ### partial Added in v0.10.0
@@ -4900,7 +5059,7 @@ homepage: http://ramdajs.com/
 
     See also [`partialRight`](#partialRight), [`curry`](#curry).
 
-    ```
+    ``` javascript
     const multiply2 = (a, b) => a * b;
     const double = R.partial(multiply2, [2]);
     double(2); //=> 4
@@ -4913,6 +5072,7 @@ homepage: http://ramdajs.com/
     sayHelloToMs('Jane', 'Jones'); //=> 'Hello, Ms. Jane Jones!'
     ```
 - name: R.partialRight
+  id: index#partialRight
   summary: Takes a function f and a list of arguments, and returns a function g
   description: |-
     ### partialRight Added in v0.10.0
@@ -4932,7 +5092,7 @@ homepage: http://ramdajs.com/
 
     See also [`partial`](#partial).
 
-    ```
+    ``` javascript
     const greet = (salutation, title, firstName, lastName) =>
       salutation + ', ' + title + ' ' + firstName + ' ' + lastName + '!';
 
@@ -4941,6 +5101,7 @@ homepage: http://ramdajs.com/
     greetMsJaneJones('Hello'); //=> 'Hello, Ms. Jane Jones!'
     ```
 - name: R.partition
+  id: index#partition
   summary: A predicate to determine which side the element belongs to
   description: |-
     ### partition Added in v0.1.4
@@ -4965,7 +5126,7 @@ homepage: http://ramdajs.com/
 
     See also [`filter`](#filter), [`reject`](#reject).
 
-    ```
+    ``` javascript
     R.partition(R.includes('s'), ['sss', 'ttt', 'foo', 'bars']);
     // => [ [ 'sss', 'bars' ],  [ 'ttt', 'foo' ] ]
 
@@ -4973,6 +5134,7 @@ homepage: http://ramdajs.com/
     // => [ { a: 'sss', foo: 'bars' }, { b: 'ttt' }  ]
     ```
 - name: R.path
+  id: index#path
   summary: The path to use
   description: |-
     ### path Added in v0.2.0
@@ -4999,14 +5161,15 @@ homepage: http://ramdajs.com/
 
     See also [`prop`](#prop), [`nth`](#nth).
 
-    ```
+    ``` javascript
     R.path(['a', 'b'], {a: {b: 2}}); //=> 2
     R.path(['a', 'b'], {c: {b: 2}}); //=> undefined
     R.path(['a', 'b', 0], {a: {b: [1, 2, 3]}}); //=> 1
     R.path(['a', 'b', -2], {a: {b: [1, 2, 3]}}); //=> 2
     ```
 - name: R.pathEq
-  summary: The path of the nested property to use
+  id: index#pathEq
+  summary: Determines whether a nested path on an object has a specific value, in R.equals terms
   description: |-
     ### pathEq Added in v0.7.0
 
@@ -5034,7 +5197,7 @@ homepage: http://ramdajs.com/
 
     Determines whether a nested path on an object has a specific value, in [`R.equals`](#equals) terms. Most likely used to filter a list.
 
-    ```
+    ``` javascript
     const user1 = { address: { zipCode: 90210 } };
     const user2 = { address: { zipCode: 55555 } };
     const user3 = { name: 'Bob' };
@@ -5043,6 +5206,7 @@ homepage: http://ramdajs.com/
     R.filter(isFamous, users); //=> [ user1 ]
     ```
 - name: R.pathOr
+  id: index#pathOr
   summary: The default value
   description: |-
     ### pathOr Added in v0.18.0
@@ -5071,11 +5235,12 @@ homepage: http://ramdajs.com/
 
     If the given, non-null object has a value at the given path, returns the value at that path. Otherwise returns the provided default value.
 
-    ```
+    ``` javascript
     R.pathOr('N/A', ['a', 'b'], {a: {b: 2}}); //=> 2
     R.pathOr('N/A', ['a', 'b'], {c: {b: 2}}); //=> "N/A"
     ```
 - name: R.paths
+  id: index#paths
   summary: The array of paths to be fetched
   description: |-
     ### paths Added in v0.27.0
@@ -5102,11 +5267,12 @@ homepage: http://ramdajs.com/
 
     See also [`path`](#path).
 
-    ```
+    ``` javascript
     R.paths([['a', 'b'], ['p', 0, 'q']], {a: {b: 2}, p: [{q: 3}]}); //=> [2, 3]
     R.paths([['a', 'b'], ['p', 'r']], {a: {b: 2}, p: [{q: 3}]}); //=> [2, undefined]
     ```
 - name: R.pathSatisfies
+  id: index#pathSatisfies
   summary: Returns true if the specified object property at given path satisfies the given predicate; false otherwise
   description: |-
     ### pathSatisfies Added in v0.19.0
@@ -5129,12 +5295,13 @@ homepage: http://ramdajs.com/
 
     See also [`propSatisfies`](#propSatisfies), [`path`](#path).
 
-    ```
+    ``` javascript
     R.pathSatisfies(y => y > 0, ['x', 'y'], {x: {y: 2}}); //=> true
     R.pathSatisfies(R.is(Object), [], {x: {y: 2}}); //=> true
     ```
 - name: R.pick
-  summary: an array of String property names to copy onto a new object
+  id: index#pick
+  summary: Returns a partial copy of an object containing only the keys specified
   description: |-
     ### pick Added in v0.1.0
 
@@ -5158,12 +5325,13 @@ homepage: http://ramdajs.com/
 
     See also [`omit`](#omit), [`props`](#props).
 
-    ```
+    ``` javascript
     R.pick(['a', 'd'], {a: 1, b: 2, c: 3, d: 4}); //=> {a: 1, d: 4}
     R.pick(['a', 'e', 'f'], {a: 1, b: 2, c: 3, d: 4}); //=> {a: 1}
     ```
 - name: R.pickAll
-  summary: an array of String property names to copy onto a new object
+  id: index#pickAll
+  summary: 'Similar to pick except that this one includes a key: undefined pair for properties that don''t exist'
   description: |-
     ### pickAll Added in v0.1.0
 
@@ -5187,11 +5355,12 @@ homepage: http://ramdajs.com/
 
     See also [`pick`](#pick).
 
-    ```
+    ``` javascript
     R.pickAll(['a', 'd'], {a: 1, b: 2, c: 3, d: 4}); //=> {a: 1, d: 4}
     R.pickAll(['a', 'e', 'f'], {a: 1, b: 2, c: 3, d: 4}); //=> {a: 1, e: undefined, f: undefined}
     ```
 - name: R.pickBy
+  id: index#pickBy
   summary: A predicate to determine whether or not a key should be included on the output object
   description: |-
     ### pickBy Added in v0.8.0
@@ -5216,11 +5385,12 @@ homepage: http://ramdajs.com/
 
     See also [`pick`](#pick), [`filter`](#filter).
 
-    ```
+    ``` javascript
     const isUpperCase = (val, key) => key.toUpperCase() === key;
     R.pickBy(isUpperCase, {a: 1, b: 2, A: 3, B: 4}); //=> {A: 3, B: 4}
     ```
 - name: R.pipe
+  id: index#pipe
   summary: Performs left-to-right function composition
   description: |-
     ### pipe Added in v0.1.0
@@ -5243,12 +5413,13 @@ homepage: http://ramdajs.com/
 
     See also [`compose`](#compose).
 
-    ```
+    ``` javascript
     const f = R.pipe(Math.pow, R.negate, R.inc);
 
     f(3, 4); // -(3^4) + 1
     ```
 - name: R.pipeK
+  id: index#pipeK
   summary: Returns the left-to-right Kleisli composition of the provided functions, each of which must return a value of a type supported by chain
   description: |-
     ### pipeK Added in v0.16.0
@@ -5269,7 +5440,7 @@ homepage: http://ramdajs.com/
 
     See also [`composeK`](#composeK).
 
-    ```
+    ``` javascript
     //  parseJson :: String -> Maybe *
     //  get :: String -> Object -> Maybe *
 
@@ -5288,6 +5459,7 @@ homepage: http://ramdajs.com/
     //=> Nothing()
     ```
 - name: R.pipeP
+  id: index#pipeP
   summary: Performs left-to-right composition of one or more Promise-returning functions
   description: |-
     ### pipeP Added in v0.10.0
@@ -5308,11 +5480,12 @@ homepage: http://ramdajs.com/
 
     See also [`composeP`](#composeP).
 
-    ```
+    ``` javascript
     //  followersForUser :: String -> Promise [User]
     const followersForUser = R.pipeP(db.getUserById, db.getFollowers);
     ```
 - name: R.pipeWith
+  id: index#pipeWith
   summary: Performs left-to-right function composition using transforming function
   description: |-
     ### pipeWith Added in v0.26.0
@@ -5333,13 +5506,14 @@ homepage: http://ramdajs.com/
 
     See also [`composeWith`](#composeWith), [`pipe`](#pipe).
 
-    ```
+    ``` javascript
     const pipeWhileNotNil = R.pipeWith((f, res) => R.isNil(res) ? res : f(res));
     const f = pipeWhileNotNil([Math.pow, R.negate, R.inc])
 
     f(3, 4); // -(3^4) + 1
     ```
 - name: R.pluck
+  id: index#pluck
   summary: The key name to pluck off of each object
   description: |-
     ### pluck Added in v0.1.0
@@ -5366,7 +5540,7 @@ homepage: http://ramdajs.com/
 
     See also [`props`](#props).
 
-    ```
+    ``` javascript
     var getAges = R.pluck('age');
     getAges([{name: 'fred', age: 29}, {name: 'wilma', age: 27}]); //=> [29, 27]
 
@@ -5374,6 +5548,7 @@ homepage: http://ramdajs.com/
     R.pluck('val', {a: {val: 3}, b: {val: 5}}); //=> {a: 3, b: 5}
     ```
 - name: R.prepend
+  id: index#prepend
   summary: The item to add to the head of the output list
   description: |-
     ### prepend Added in v0.1.0
@@ -5398,11 +5573,12 @@ homepage: http://ramdajs.com/
 
     See also [`append`](#append).
 
-    ```
+    ``` javascript
     R.prepend('fee', ['fi', 'fo', 'fum']); //=> ['fee', 'fi', 'fo', 'fum']
     ```
 - name: R.product
-  summary: An array of numbers
+  id: index#product
+  summary: Multiplies together all the elements of a list
   description: |-
     ### product Added in v0.1.0
 
@@ -5422,11 +5598,12 @@ homepage: http://ramdajs.com/
 
     See also [`reduce`](#reduce).
 
-    ```
+    ``` javascript
     R.product([2,4,6,8,100,1]); //=> 38400
     ```
 - name: R.project
-  summary: The property names to project
+  id: index#project
+  summary: Reasonable analog to SQL select statement
   description: |-
     ### project Added in v0.1.0
 
@@ -5448,14 +5625,15 @@ homepage: http://ramdajs.com/
 
     Reasonable analog to SQL `select` statement.
 
-    ```
+    ``` javascript
     const abby = {name: 'Abby', age: 7, hair: 'blond', grade: 2};
     const fred = {name: 'Fred', age: 12, hair: 'brown', grade: 7};
     const kids = [abby, fred];
     R.project(['name', 'grade'], kids); //=> [{name: 'Abby', grade: 2}, {name: 'Fred', grade: 7}]
     ```
 - name: R.prop
-  summary: The property name or array index
+  id: index#prop
+  summary: Returns a function that when supplied an object returns the indicated property of that object, if it exists
   description: |-
     ### prop Added in v0.1.0
 
@@ -5481,13 +5659,14 @@ homepage: http://ramdajs.com/
 
     See also [`path`](#path), [`nth`](#nth).
 
-    ```
+    ``` javascript
     R.prop('x', {x: 100}); //=> 100
     R.prop('x', {}); //=> undefined
     R.prop(0, [100]); //=> 100
     R.compose(R.inc, R.prop('x'))({ x: 3 }) //=> 4
     ```
 - name: R.propEq
+  id: index#propEq
   summary: Returns true if the specified object property is equal, in R.equals terms, to the given value; false otherwise
   description: |-
     ### propEq Added in v0.1.0
@@ -5508,7 +5687,7 @@ homepage: http://ramdajs.com/
 
     See also [`whereEq`](#whereEq), [`propSatisfies`](#propSatisfies), [`equals`](#equals).
 
-    ```
+    ``` javascript
     const abby = {name: 'Abby', age: 7, hair: 'blond'};
     const fred = {name: 'Fred', age: 12, hair: 'brown'};
     const rusty = {name: 'Rusty', age: 10, hair: 'brown'};
@@ -5518,6 +5697,7 @@ homepage: http://ramdajs.com/
     R.filter(hasBrownHair, kids); //=> [fred, rusty]
     ```
 - name: R.propIs
+  id: index#propIs
   summary: Returns true if the specified object property is of the given type; false otherwise
   description: |-
     ### propIs Added in v0.16.0
@@ -5538,12 +5718,13 @@ homepage: http://ramdajs.com/
 
     See also [`is`](#is), [`propSatisfies`](#propSatisfies).
 
-    ```
+    ``` javascript
     R.propIs(Number, 'x', {x: 1, y: 2});  //=> true
     R.propIs(Number, 'x', {x: 'foo'});    //=> false
     R.propIs(Number, 'x', {});            //=> false
     ```
 - name: R.propOr
+  id: index#propOr
   summary: The default value
   description: |-
     ### propOr Added in v0.6.0
@@ -5570,7 +5751,7 @@ homepage: http://ramdajs.com/
 
     If the given, non-null object has an own property with the specified name, returns the value of that property. Otherwise returns the provided default value.
 
-    ```
+    ``` javascript
     const alice = {
       name: 'ALICE',
       age: 101
@@ -5582,7 +5763,8 @@ homepage: http://ramdajs.com/
     favoriteWithDefault(alice);  //=> 'Ramda'
     ```
 - name: R.props
-  summary: The property names to fetch
+  id: index#props
+  summary: 'Acts as multiple prop: array of keys in, array of values out'
   description: |-
     ### props Added in v0.1.0
 
@@ -5604,7 +5786,7 @@ homepage: http://ramdajs.com/
 
     Acts as multiple `prop`: array of keys in, array of values out. Preserves order.
 
-    ```
+    ``` javascript
     R.props(['x', 'y'], {x: 1, y: 2}); //=> [1, 2]
     R.props(['c', 'a', 'b'], {b: 2, a: 1}); //=> [undefined, 1, 2]
 
@@ -5612,6 +5794,7 @@ homepage: http://ramdajs.com/
     fullName({last: 'Bullet-Tooth', age: 33, first: 'Tony'}); //=> 'Tony Bullet-Tooth'
     ```
 - name: R.propSatisfies
+  id: index#propSatisfies
   summary: Returns true if the specified object property satisfies the given predicate; false otherwise
   description: |-
     ### propSatisfies Added in v0.16.0
@@ -5632,10 +5815,11 @@ homepage: http://ramdajs.com/
 
     See also [`where`](#where), [`propEq`](#propEq), [`propIs`](#propIs).
 
-    ```
+    ``` javascript
     R.propSatisfies(x => x > 0, 'x', {x: 1, y: 2}); //=> true
     ```
 - name: R.range
+  id: index#range
   summary: The first number in the list
   description: |-
     ### range Added in v0.1.0
@@ -5658,11 +5842,12 @@ homepage: http://ramdajs.com/
 
     Returns a list of numbers from `from` (inclusive) to `to` (exclusive).
 
-    ```
+    ``` javascript
     R.range(1, 5);    //=> [1, 2, 3, 4]
     R.range(50, 53);  //=> [50, 51, 52]
     ```
 - name: R.reduce
+  id: index#reduce
   summary: The iterator function
   description: |-
     ### reduce Added in v0.1.0
@@ -5699,7 +5884,7 @@ homepage: http://ramdajs.com/
 
     See also [`reduced`](#reduced), [`addIndex`](#addIndex), [`reduceRight`](#reduceRight).
 
-    ```
+    ``` javascript
     R.reduce(R.subtract, 0, [1, 2, 3, 4]) // => ((((0 - 1) - 2) - 3) - 4) = -10
     //          -               -10
     //         / \              / \
@@ -5712,6 +5897,7 @@ homepage: http://ramdajs.com/
     //  0   1            0   1
     ```
 - name: R.reduceBy
+  id: index#reduceBy
   summary: The function that reduces the elements of each group to a single value
   description: |-
     ### reduceBy Added in v0.20.0
@@ -5748,7 +5934,7 @@ homepage: http://ramdajs.com/
 
     See also [`groupBy`](#groupBy), [`reduce`](#reduce).
 
-    ```
+    ``` javascript
     const groupNames = (acc, {name}) => acc.concat(name)
     const toGrade = ({score}) =>
       score < 65 ? 'F' :
@@ -5767,6 +5953,7 @@ homepage: http://ramdajs.com/
     //=> {"A": ["Dora"], "B": ["Abby", "Curt"], "F": ["Bart"]}
     ```
 - name: R.reduced
+  id: index#reduced
   summary: The final value of the reduce
   description: |-
     ### reduced Added in v0.15.0
@@ -5793,13 +5980,14 @@ homepage: http://ramdajs.com/
 
     See also [`reduce`](#reduce), [`reduceWhile`](#reduceWhile), [`transduce`](#transduce).
 
-    ```
+    ``` javascript
     R.reduce(
      (acc, item) => item > 3 ? R.reduced(acc) : acc.concat(item),
      [],
      [1, 2, 3, 4, 5]) // [1, 2, 3]
     ```
 - name: R.reduceRight
+  id: index#reduceRight
   summary: The iterator function
   description: |-
     ### reduceRight Added in v0.1.0
@@ -5834,7 +6022,7 @@ homepage: http://ramdajs.com/
 
     See also [`reduce`](#reduce), [`addIndex`](#addIndex).
 
-    ```
+    ``` javascript
     R.reduceRight(R.subtract, 0, [1, 2, 3, 4]) // => (1 - (2 - (3 - (4 - 0)))) = -2
     //    -               -2
     //   / \              / \
@@ -5847,6 +6035,7 @@ homepage: http://ramdajs.com/
     //        4   0            4   0
     ```
 - name: R.reduceWhile
+  id: index#reduceWhile
   summary: The predicate
   description: |-
     ### reduceWhile Added in v0.22.0
@@ -5879,7 +6068,7 @@ homepage: http://ramdajs.com/
 
     See also [`reduce`](#reduce), [`reduced`](#reduced).
 
-    ```
+    ``` javascript
     const isOdd = (acc, x) => x % 2 === 1;
     const xs = [1, 3, 5, 60, 777, 800];
     R.reduceWhile(isOdd, R.add, 0, xs); //=> 9
@@ -5888,6 +6077,7 @@ homepage: http://ramdajs.com/
     R.reduceWhile(isOdd, R.add, 111, ys); //=> 111
     ```
 - name: R.reject
+  id: index#reject
   summary: The complement of filter
   description: |-
     ### reject Added in v0.1.0
@@ -5909,7 +6099,7 @@ homepage: http://ramdajs.com/
 
     See also [`filter`](#filter), [`transduce`](#transduce), [`addIndex`](#addIndex).
 
-    ```
+    ``` javascript
     const isOdd = (n) => n % 2 === 1;
 
     R.reject(isOdd, [1, 2, 3, 4]); //=> [2, 4]
@@ -5917,7 +6107,8 @@ homepage: http://ramdajs.com/
     R.reject(isOdd, {a: 1, b: 2, c: 3, d: 4}); //=> {b: 2, d: 4}
     ```
 - name: R.remove
-  summary: The position to start removing elements
+  id: index#remove
+  summary: Removes the sub-list of list starting at index start and containing count elements
   description: |-
     ### remove Added in v0.2.2
 
@@ -5945,10 +6136,11 @@ homepage: http://ramdajs.com/
 
     See also [`without`](#without).
 
-    ```
+    ``` javascript
     R.remove(2, 3, [1,2,3,4,5,6,7,8]); //=> [1,2,6,7,8]
     ```
 - name: R.repeat
+  id: index#repeat
   summary: The value to repeat
   description: |-
     ### repeat Added in v0.1.1
@@ -5973,7 +6165,7 @@ homepage: http://ramdajs.com/
 
     See also [`times`](#times).
 
-    ```
+    ``` javascript
     R.repeat('hi', 5); //=> ['hi', 'hi', 'hi', 'hi', 'hi']
 
     const obj = {};
@@ -5981,6 +6173,7 @@ homepage: http://ramdajs.com/
     repeatedObjs[0] === repeatedObjs[1]; //=> true
     ```
 - name: R.replace
+  id: index#replace
   summary: A regular expression or a substring to match
   description: |-
     ### replace Added in v0.7.0
@@ -6009,7 +6202,7 @@ homepage: http://ramdajs.com/
 
     The first two parameters correspond to the parameters of the `String.prototype.replace()` function, so the second parameter can also be a function.
 
-    ```
+    ``` javascript
     R.replace('foo', 'bar', 'foo foo foo'); //=> 'bar foo foo'
     R.replace(/foo/, 'bar', 'foo foo foo'); //=> 'bar foo foo'
 
@@ -6017,6 +6210,7 @@ homepage: http://ramdajs.com/
     R.replace(/foo/g, 'bar', 'foo foo foo'); //=> 'bar bar bar'
     ```
 - name: R.reverse
+  id: index#reverse
   summary: Returns a new list or string with the elements or characters in reverse order
   description: |-
     ### reverse Added in v0.1.0
@@ -6035,7 +6229,7 @@ homepage: http://ramdajs.com/
 
     Returns a new list or string with the elements or characters in reverse order.
 
-    ```
+    ``` javascript
     R.reverse([1, 2, 3]);  //=> [3, 2, 1]
     R.reverse([1, 2]);     //=> [2, 1]
     R.reverse([1]);        //=> [1]
@@ -6047,6 +6241,7 @@ homepage: http://ramdajs.com/
     R.reverse('');         //=> ''
     ```
 - name: R.scan
+  id: index#scan
   summary: The iterator function
   description: |-
     ### scan Added in v0.10.0
@@ -6075,11 +6270,12 @@ homepage: http://ramdajs.com/
 
     See also [`reduce`](#reduce), [`mapAccum`](#mapAccum).
 
-    ```
+    ``` javascript
     const numbers = [1, 2, 3, 4];
     const factorials = R.scan(R.multiply, 1, numbers); //=> [1, 1, 2, 6, 24]
     ```
 - name: R.sequence
+  id: index#sequence
   summary: Transforms a Traversable of Applicative into an Applicative of Traversable
   description: |-
     ### sequence Added in v0.19.0
@@ -6101,7 +6297,7 @@ homepage: http://ramdajs.com/
 
     See also [`traverse`](#traverse).
 
-    ```
+    ``` javascript
     R.sequence(Maybe.of, [Just(1), Just(2), Just(3)]);   //=> Just([1, 2, 3])
     R.sequence(Maybe.of, [Just(1), Just(2), Nothing()]); //=> Nothing()
 
@@ -6109,6 +6305,7 @@ homepage: http://ramdajs.com/
     R.sequence(R.of, Nothing());       //=> [Nothing()]
     ```
 - name: R.set
+  id: index#set
   summary: Returns the result of "setting" the portion of the given data structure focused by the given lens to the given value
   description: |-
     ### set Added in v0.16.0
@@ -6131,14 +6328,15 @@ homepage: http://ramdajs.com/
 
     See also [`prop`](#prop), [`lensIndex`](#lensIndex), [`lensProp`](#lensProp).
 
-    ```
+    ``` javascript
     const xLens = R.lensProp('x');
 
     R.set(xLens, 4, {x: 1, y: 2});  //=> {x: 4, y: 2}
     R.set(xLens, 8, {x: 1, y: 2});  //=> {x: 8, y: 2}
     ```
 - name: R.slice
-  summary: The start index (inclusive)
+  id: index#slice
+  summary: Dispatches to the slice method of the third argument, if present
   description: |-
     ### slice Added in v0.1.4
 
@@ -6166,7 +6364,7 @@ homepage: http://ramdajs.com/
 
     Dispatches to the `slice` method of the third argument, if present.
 
-    ```
+    ``` javascript
     R.slice(1, 3, ['a', 'b', 'c', 'd']);        //=> ['b', 'c']
     R.slice(1, Infinity, ['a', 'b', 'c', 'd']); //=> ['b', 'c', 'd']
     R.slice(0, -1, ['a', 'b', 'c', 'd']);       //=> ['a', 'b', 'c']
@@ -6174,7 +6372,8 @@ homepage: http://ramdajs.com/
     R.slice(0, 3, 'ramda');                     //=> 'ram'
     ```
 - name: R.sort
-  summary: 'A sorting function :: a -> b -> Int'
+  id: index#sort
+  summary: Returns a copy of the list, sorted according to the comparator function, which should accept two values at a time and return a negative number if the first value is smaller, a positive number if it's larger, and zero if they are equal
   description: |-
     ### sort Added in v0.1.0
 
@@ -6196,11 +6395,12 @@ homepage: http://ramdajs.com/
 
     Returns a copy of the list, sorted according to the comparator function, which should accept two values at a time and return a negative number if the first value is smaller, a positive number if it's larger, and zero if they are equal. Please note that this is a **copy** of the list. It does not modify the original.
 
-    ```
+    ``` javascript
     const diff = function(a, b) { return a - b; };
     R.sort(diff, [4,2,7,5]); //=> [2, 4, 5, 7]
     ```
 - name: R.sortBy
+  id: index#sortBy
   summary: The list to sort
   description: |-
     ### sortBy Added in v0.1.0
@@ -6221,7 +6421,7 @@ homepage: http://ramdajs.com/
 
     Sorts the list according to the supplied function.
 
-    ```
+    ``` javascript
     const sortByFirstItem = R.sortBy(R.prop(0));
     const pairs = [[-1, 1], [-2, 2], [-3, 3]];
     sortByFirstItem(pairs); //=> [[-3, 3], [-2, 2], [-1, 1]]
@@ -6243,6 +6443,7 @@ homepage: http://ramdajs.com/
     sortByNameCaseInsensitive(people); //=> [alice, bob, clara]
     ```
 - name: R.sortWith
+  id: index#sortWith
   summary: A list of comparator functions
   description: |-
     ### sortWith Added in v0.23.0
@@ -6265,7 +6466,7 @@ homepage: http://ramdajs.com/
 
     Sorts a list according to a list of comparators.
 
-    ```
+    ``` javascript
     const alice = {
       name: 'alice',
       age: 40
@@ -6286,6 +6487,7 @@ homepage: http://ramdajs.com/
     ageNameSort(people); //=> [alice, clara, bob]
     ```
 - name: R.split
+  id: index#split
   summary: The pattern
   description: |-
     ### split Added in v0.1.0
@@ -6310,13 +6512,14 @@ homepage: http://ramdajs.com/
 
     See also [`join`](#join).
 
-    ```
+    ``` javascript
     const pathComponents = R.split('/');
     R.tail(pathComponents('/usr/local/bin/node')); //=> ['usr', 'local', 'bin', 'node']
 
     R.split('.', 'a.b.c.xyz.d'); //=> ['a', 'b', 'c', 'xyz', 'd']
     ```
 - name: R.splitAt
+  id: index#splitAt
   summary: The index where the array/string is split
   description: |-
     ### splitAt Added in v0.19.0
@@ -6341,12 +6544,13 @@ homepage: http://ramdajs.com/
 
     Splits a given list or string at a given index.
 
-    ```
+    ``` javascript
     R.splitAt(1, [1, 2, 3]);          //=> [[1], [2, 3]]
     R.splitAt(5, 'hello world');      //=> ['hello', ' world']
     R.splitAt(-1, 'foobar');          //=> ['fooba', 'r']
     ```
 - name: R.splitEvery
+  id: index#splitEvery
   summary: Splits a collection into slices of the specified length
   description: |-
     ### splitEvery Added in v0.16.0
@@ -6366,11 +6570,12 @@ homepage: http://ramdajs.com/
 
     Splits a collection into slices of the specified length.
 
-    ```
+    ``` javascript
     R.splitEvery(3, [1, 2, 3, 4, 5, 6, 7]); //=> [[1, 2, 3], [4, 5, 6], [7]]
     R.splitEvery(3, 'foobarbaz'); //=> ['foo', 'bar', 'baz']
     ```
 - name: R.splitWhen
+  id: index#splitWhen
   summary: The predicate that determines where the array is split
   description: |-
     ### splitWhen Added in v0.19.0
@@ -6397,10 +6602,11 @@ homepage: http://ramdajs.com/
     - none of the elements of the first output list satisfies the predicate; and
     - if the second output list is non-empty, its first element satisfies the predicate.
 
-    ```
+    ``` javascript
     R.splitWhen(R.equals(2), [1, 2, 3, 1, 2, 3]);   //=> [[1], [2, 3, 1, 2, 3]]
     ```
 - name: R.startsWith
+  id: index#startsWith
   summary: Checks if a list starts with the provided sublist
   description: |-
     ### startsWith Added in v0.24.0
@@ -6424,13 +6630,14 @@ homepage: http://ramdajs.com/
 
     See also [`endsWith`](#endsWith).
 
-    ```
+    ``` javascript
     R.startsWith('a', 'abc')                //=> true
     R.startsWith('b', 'abc')                //=> false
     R.startsWith(['a'], ['a', 'b', 'c'])    //=> true
     R.startsWith(['b'], ['a', 'b', 'c'])    //=> false
     ```
 - name: R.subtract
+  id: index#subtract
   summary: The first value
   description: |-
     ### subtract Added in v0.1.0
@@ -6455,7 +6662,7 @@ homepage: http://ramdajs.com/
 
     See also [`add`](#add).
 
-    ```
+    ``` javascript
     R.subtract(10, 8); //=> 2
 
     const minus5 = R.subtract(R.__, 5);
@@ -6466,7 +6673,8 @@ homepage: http://ramdajs.com/
     complementaryAngle(72); //=> 18
     ```
 - name: R.sum
-  summary: An array of numbers
+  id: index#sum
+  summary: Adds together all the elements of a list
   description: |-
     ### sum Added in v0.1.0
 
@@ -6486,10 +6694,11 @@ homepage: http://ramdajs.com/
 
     See also [`reduce`](#reduce).
 
-    ```
+    ``` javascript
     R.sum([2,4,6,8,100,1]); //=> 121
     ```
 - name: R.symmetricDifference
+  id: index#symmetricDifference
   summary: The first list
   description: |-
     ### symmetricDifference Added in v0.19.0
@@ -6514,11 +6723,12 @@ homepage: http://ramdajs.com/
 
     See also [`symmetricDifferenceWith`](#symmetricDifferenceWith), [`difference`](#difference), [`differenceWith`](#differenceWith).
 
-    ```
+    ``` javascript
     R.symmetricDifference([1,2,3,4], [7,6,5,4,3]); //=> [1,2,7,6,5]
     R.symmetricDifference([7,6,5,4,3], [1,2,3,4]); //=> [7,6,5,1,2]
     ```
 - name: R.symmetricDifferenceWith
+  id: index#symmetricDifferenceWith
   summary: A predicate used to test whether two items are equal
   description: |-
     ### symmetricDifferenceWith Added in v0.19.0
@@ -6547,13 +6757,14 @@ homepage: http://ramdajs.com/
 
     See also [`symmetricDifference`](#symmetricDifference), [`difference`](#difference), [`differenceWith`](#differenceWith).
 
-    ```
+    ``` javascript
     const eqA = R.eqBy(R.prop('a'));
     const l1 = [{a: 1}, {a: 2}, {a: 3}, {a: 4}];
     const l2 = [{a: 3}, {a: 4}, {a: 5}, {a: 6}];
     R.symmetricDifferenceWith(eqA, l1, l2); //=> [{a: 1}, {a: 2}, {a: 5}, {a: 6}]
     ```
 - name: R.T
+  id: index#T
   summary: A function that always returns true
   description: |-
     ### T Added in v0.9.0
@@ -6570,11 +6781,12 @@ homepage: http://ramdajs.com/
 
     See also [`F`](#F).
 
-    ```
+    ``` javascript
     R.T(); //=> true
     ```
 - name: R.tail
-  summary: Returns all but the first element of the given list or string (or object with a tail method)
+  id: index#tail
+  summary: Dispatches to the slice method of the first argument, if present
   description: |-
     ### tail Added in v0.1.0
 
@@ -6596,7 +6808,7 @@ homepage: http://ramdajs.com/
 
     See also [`head`](#head), [`init`](#init), [`last`](#last).
 
-    ```
+    ``` javascript
     R.tail([1, 2, 3]);  //=> [2, 3]
     R.tail([1, 2]);     //=> [2]
     R.tail([1]);        //=> []
@@ -6608,7 +6820,8 @@ homepage: http://ramdajs.com/
     R.tail('');     //=> ''
     ```
 - name: R.take
-  summary: Returns the first n elements of the given list, string, or transducer/transformer (or object with a take method)
+  id: index#take
+  summary: Dispatches to the take method of the second argument, if present
   description: |-
     ### take Added in v0.1.0
 
@@ -6631,7 +6844,7 @@ homepage: http://ramdajs.com/
 
     See also [`drop`](#drop).
 
-    ```
+    ``` javascript
     R.take(1, ['foo', 'bar', 'baz']); //=> ['foo']
     R.take(2, ['foo', 'bar', 'baz']); //=> ['foo', 'bar']
     R.take(3, ['foo', 'bar', 'baz']); //=> ['foo', 'bar', 'baz']
@@ -6654,6 +6867,7 @@ homepage: http://ramdajs.com/
     //=> ['Dave Brubeck', 'Paul Desmond', 'Eugene Wright', 'Joe Morello', 'Gerry Mulligan']
     ```
 - name: R.takeLast
+  id: index#takeLast
   summary: The number of elements to return
   description: |-
     ### takeLast Added in v0.16.0
@@ -6680,7 +6894,7 @@ homepage: http://ramdajs.com/
 
     See also [`dropLast`](#dropLast).
 
-    ```
+    ``` javascript
     R.takeLast(1, ['foo', 'bar', 'baz']); //=> ['baz']
     R.takeLast(2, ['foo', 'bar', 'baz']); //=> ['bar', 'baz']
     R.takeLast(3, ['foo', 'bar', 'baz']); //=> ['foo', 'bar', 'baz']
@@ -6688,6 +6902,7 @@ homepage: http://ramdajs.com/
     R.takeLast(3, 'ramda');               //=> 'mda'
     ```
 - name: R.takeLastWhile
+  id: index#takeLastWhile
   summary: The function called per iteration
   description: |-
     ### takeLastWhile Added in v0.16.0
@@ -6714,7 +6929,7 @@ homepage: http://ramdajs.com/
 
     See also [`dropLastWhile`](#dropLastWhile), [`addIndex`](#addIndex).
 
-    ```
+    ``` javascript
     const isNotOne = x => x !== 1;
 
     R.takeLastWhile(isNotOne, [1, 2, 3, 4]); //=> [2, 3, 4]
@@ -6722,6 +6937,7 @@ homepage: http://ramdajs.com/
     R.takeLastWhile(x => x !== 'R' , 'Ramda'); //=> 'amda'
     ```
 - name: R.takeWhile
+  id: index#takeWhile
   summary: The function called per iteration
   description: |-
     ### takeWhile Added in v0.1.0
@@ -6752,7 +6968,7 @@ homepage: http://ramdajs.com/
 
     See also [`dropWhile`](#dropWhile), [`transduce`](#transduce), [`addIndex`](#addIndex).
 
-    ```
+    ``` javascript
     const isNotFour = x => x !== 4;
 
     R.takeWhile(isNotFour, [1, 2, 3, 4, 3, 2, 1]); //=> [1, 2, 3]
@@ -6760,6 +6976,7 @@ homepage: http://ramdajs.com/
     R.takeWhile(x => x !== 'd' , 'Ramda'); //=> 'Ram'
     ```
 - name: R.tap
+  id: index#tap
   summary: The function to call with x
   description: |-
     ### tap Added in v0.1.0
@@ -6782,12 +6999,13 @@ homepage: http://ramdajs.com/
 
     Acts as a transducer if a transformer is given as second parameter.
 
-    ```
+    ``` javascript
     const sayX = x => console.log('x is ' + x);
     R.tap(sayX, 100); //=> 100
     // logs 'x is 100'
     ```
 - name: R.test
+  id: index#test
   summary: Determines whether a given string matches a given regular expression
   description: |-
     ### test Added in v0.12.0
@@ -6807,12 +7025,13 @@ homepage: http://ramdajs.com/
 
     See also [`match`](#match).
 
-    ```
+    ``` javascript
     R.test(/^x/, 'xyz'); //=> true
     R.test(/^y/, 'xyz'); //=> false
     ```
 - name: R.thunkify
-  summary: A function to wrap in a thunk
+  id: index#thunkify
+  summary: Creates a thunk out of a function
   description: |-
     ### thunkify Added in v0.26.0
 
@@ -6832,11 +7051,12 @@ homepage: http://ramdajs.com/
 
     See also [`partial`](#partial), [`partialRight`](#partialRight).
 
-    ```
+    ``` javascript
     R.thunkify(R.identity)(42)(); //=> 42
     R.thunkify((a, b) => a + b)(25, 17)(); //=> 42
     ```
 - name: R.times
+  id: index#times
   summary: The function to invoke
   description: |-
     ### times Added in v0.2.3
@@ -6863,10 +7083,11 @@ homepage: http://ramdajs.com/
 
     See also [`repeat`](#repeat).
 
-    ```
+    ``` javascript
     R.times(R.identity, 5); //=> [0, 1, 2, 3, 4]
     ```
 - name: R.toLower
+  id: index#toLower
   summary: The string to lower case
   description: |-
     ### toLower Added in v0.9.0
@@ -6887,11 +7108,12 @@ homepage: http://ramdajs.com/
 
     See also [`toUpper`](#toUpper).
 
-    ```
+    ``` javascript
     R.toLower('XYZ'); //=> 'xyz'
     ```
 - name: R.toPairs
-  summary: The object to extract from
+  id: index#toPairs
+  summary: Converts an object into an array of key, value arrays
   description: |-
     ### toPairs Added in v0.4.0
 
@@ -6911,11 +7133,12 @@ homepage: http://ramdajs.com/
 
     See also [`fromPairs`](#fromPairs).
 
-    ```
+    ``` javascript
     R.toPairs({a: 1, b: 2, c: 3}); //=> [['a', 1], ['b', 2], ['c', 3]]
     ```
 - name: R.toPairsIn
-  summary: The object to extract from
+  id: index#toPairsIn
+  summary: Converts an object into an array of key, value arrays
   description: |-
     ### toPairsIn Added in v0.4.0
 
@@ -6933,13 +7156,14 @@ homepage: http://ramdajs.com/
 
     Converts an object into an array of key, value arrays. The object's own properties and prototype properties are used. Note that the order of the output array is not guaranteed to be consistent across different JS platforms.
 
-    ```
+    ``` javascript
     const F = function() { this.x = 'X'; };
     F.prototype.y = 'Y';
     const f = new F();
     R.toPairsIn(f); //=> [['x','X'], ['y','Y']]
     ```
 - name: R.toString
+  id: index#toString
   summary: Returns the string representation of the given value
   description: |-
     ### toString Added in v0.14.0
@@ -6958,7 +7182,7 @@ homepage: http://ramdajs.com/
 
     If the given value is an `[object Object]` with a `toString` method other than `Object.prototype.toString`, this method is invoked with no arguments to produce the return value. This means user-defined constructor functions can provide a suitable `toString` method. For example:
 
-    ```
+    ``` javascript
     function Point(x, y) {
       this.x = x;
       this.y = y;
@@ -6971,7 +7195,7 @@ homepage: http://ramdajs.com/
     R.toString(new Point(1, 2)); //=> 'new Point(1, 2)'
     ```
 
-    ```
+    ``` javascript
     R.toString(42); //=> '42'
     R.toString('abc'); //=> '"abc"'
     R.toString([1, 2, 3]); //=> '[1, 2, 3]'
@@ -6979,6 +7203,7 @@ homepage: http://ramdajs.com/
     R.toString(new Date('2001-02-03T04:05:06Z')); //=> 'new Date("2001-02-03T04:05:06.000Z")'
     ```
 - name: R.toUpper
+  id: index#toUpper
   summary: The string to upper case
   description: |-
     ### toUpper Added in v0.9.0
@@ -6999,10 +7224,11 @@ homepage: http://ramdajs.com/
 
     See also [`toLower`](#toLower).
 
-    ```
+    ``` javascript
     R.toUpper('abc'); //=> 'ABC'
     ```
 - name: R.transduce
+  id: index#transduce
   summary: The transducer function
   description: |-
     ### transduce Added in v0.12.0
@@ -7043,7 +7269,7 @@ homepage: http://ramdajs.com/
 
     See also [`reduce`](#reduce), [`reduced`](#reduced), [`into`](#into).
 
-    ```
+    ``` javascript
     const numbers = [1, 2, 3, 4];
     const transducer = R.compose(R.map(R.add(1)), R.take(2));
     R.transduce(transducer, R.flip(R.append), [], numbers); //=> [2, 3]
@@ -7053,7 +7279,8 @@ homepage: http://ramdajs.com/
     R.transduce(firstOddTransducer, R.flip(R.append), [], R.range(0, 100)); //=> [1]
     ```
 - name: R.transpose
-  summary: A 2D list
+  id: index#transpose
+  summary: Transposes the rows and columns of a 2D list
   description: |-
     ### transpose Added in v0.19.0
 
@@ -7071,7 +7298,7 @@ homepage: http://ramdajs.com/
 
     Transposes the rows and columns of a 2D list. When passed a list of `n` lists of length `x`, returns a list of `x` lists of length `n`.
 
-    ```
+    ``` javascript
     R.transpose([[1, 'a'], [2, 'b'], [3, 'c']]) //=> [[1, 2, 3], ['a', 'b', 'c']]
     R.transpose([[1, 2, 3], ['a', 'b', 'c']]) //=> [[1, 'a'], [2, 'b'], [3, 'c']]
 
@@ -7079,6 +7306,7 @@ homepage: http://ramdajs.com/
     R.transpose([[10, 11], [20], [], [30, 31, 32]]) //=> [[10, 20, 30], [11, 31], [32]]
     ```
 - name: R.traverse
+  id: index#traverse
   summary: Maps an Applicative-returning function over a Traversable, then uses sequence to transform the resulting Traversable of Applicative into an Applicative of Traversable
   description: |-
     ### traverse Added in v0.19.0
@@ -7101,7 +7329,7 @@ homepage: http://ramdajs.com/
 
     See also [`sequence`](#sequence).
 
-    ```
+    ``` javascript
     // Returns `Maybe.Nothing` if the given divisor is `0`
     const safeDiv = n => d => d === 0 ? Maybe.Nothing() : Maybe.Just(n / d)
 
@@ -7109,6 +7337,7 @@ homepage: http://ramdajs.com/
     R.traverse(Maybe.of, safeDiv(10), [2, 0, 5]); //=> Maybe.Nothing
     ```
 - name: R.trim
+  id: index#trim
   summary: The string to trim
   description: |-
     ### trim Added in v0.6.0
@@ -7127,11 +7356,12 @@ homepage: http://ramdajs.com/
 
     Removes (strips) whitespace from both ends of the string.
 
-    ```
+    ``` javascript
     R.trim('   xyz  '); //=> 'xyz'
     R.map(R.trim, R.split(',', 'x, y, z')); //=> ['x', 'y', 'z']
     ```
 - name: R.tryCatch
+  id: index#tryCatch
   summary: The function that may throw
   description: |-
     ### tryCatch Added in v0.20.0
@@ -7154,14 +7384,15 @@ homepage: http://ramdajs.com/
 
     `tryCatch` takes two functions, a `tryer` and a `catcher`. The returned function evaluates the `tryer`; if it does not throw, it simply returns the result. If the `tryer` *does* throw, the returned function evaluates the `catcher` function and returns its result. Note that for effective composition with this function, both the `tryer` and `catcher` functions must return the same type of results.
 
-    ```
+    ``` javascript
     R.tryCatch(R.prop('x'), R.F)({x: true}); //=> true
     R.tryCatch(() => { throw 'foo'}, R.always('catched'))('bar') // => 'catched'
     R.tryCatch(R.times(R.identity), R.always([]))('s') // => []
     R.tryCatch(() => { throw 'this is not a valid value'}, (err, value)=>({error : err,  value }))('bar') // => {'error': 'this is not a valid value', 'value': 'bar'}
     ```
 - name: R.type
-  summary: The value to test
+  id: index#type
+  summary: null
   description: |-
     ### type Added in v0.8.0
 
@@ -7179,7 +7410,7 @@ homepage: http://ramdajs.com/
 
     Gives a single-word string description of the (native) type of a value, returning such answers as 'Object', 'Number', 'Array', or 'Null'. Does not attempt to distinguish user Object types any further, reporting them all as 'Object'.
 
-    ```
+    ``` javascript
     R.type({}); //=> "Object"
     R.type(1); //=> "Number"
     R.type(false); //=> "Boolean"
@@ -7191,7 +7422,8 @@ homepage: http://ramdajs.com/
     R.type(undefined); //=> "Undefined"
     ```
 - name: R.unapply
-  summary: 'Takes a function fn, which takes a single array argument, and returns a function which:'
+  id: index#unapply
+  summary: In other words, R.unapply derives a variadic function from a function which takes an array
   description: |-
     ### unapply Added in v0.8.0
 
@@ -7215,10 +7447,11 @@ homepage: http://ramdajs.com/
 
     See also [`apply`](#apply).
 
-    ```
+    ``` javascript
     R.unapply(JSON.stringify)(1, 2, 3); //=> '[1,2,3]'
     ```
 - name: R.unary
+  id: index#unary
   summary: The function to wrap
   description: |-
     ### unary Added in v0.2.0
@@ -7239,7 +7472,7 @@ homepage: http://ramdajs.com/
 
     See also [`binary`](#binary), [`nAry`](#nAry).
 
-    ```
+    ``` javascript
     const takesTwoArgs = function(a, b) {
       return [a, b];
     };
@@ -7252,6 +7485,7 @@ homepage: http://ramdajs.com/
     takesOneArg(1, 2); //=> [1, undefined]
     ```
 - name: R.uncurryN
+  id: index#uncurryN
   summary: The arity for the returned function
   description: |-
     ### uncurryN Added in v0.14.0
@@ -7276,13 +7510,14 @@ homepage: http://ramdajs.com/
 
     See also [`curry`](#curry).
 
-    ```
+    ``` javascript
     const addFour = a => b => c => d => a + b + c + d;
 
     const uncurriedAddFour = R.uncurryN(4, addFour);
     uncurriedAddFour(1, 2, 3, 4); //=> 10
     ```
 - name: R.unfold
+  id: index#unfold
   summary: The iterator function
   description: |-
     ### unfold Added in v0.10.0
@@ -7307,11 +7542,12 @@ homepage: http://ramdajs.com/
 
     The iterator function receives one argument: *(seed)*.
 
-    ```
+    ``` javascript
     const f = n => n > 50 ? false : [-n, n + 10];
     R.unfold(f, 10); //=> [-10, -20, -30, -40, -50]
     ```
 - name: R.union
+  id: index#union
   summary: The first list
   description: |-
     ### union Added in v0.1.0
@@ -7334,10 +7570,11 @@ homepage: http://ramdajs.com/
 
     Combines two lists into a set (i.e. no duplicates) composed of the elements of each list.
 
-    ```
+    ``` javascript
     R.union([1, 2, 3], [2, 3, 4]); //=> [1, 2, 3, 4]
     ```
 - name: R.unionWith
+  id: index#unionWith
   summary: A predicate used to test whether two items are equal
   description: |-
     ### unionWith Added in v0.1.0
@@ -7366,12 +7603,13 @@ homepage: http://ramdajs.com/
 
     See also [`union`](#union).
 
-    ```
+    ``` javascript
     const l1 = [{a: 1}, {a: 2}];
     const l2 = [{a: 1}, {a: 4}];
     R.unionWith(R.eqBy(R.prop('a')), l1, l2); //=> [{a: 1}, {a: 2}, {a: 4}]
     ```
 - name: R.uniq
+  id: index#uniq
   summary: The array to consider
   description: |-
     ### uniq Added in v0.1.0
@@ -7390,12 +7628,13 @@ homepage: http://ramdajs.com/
 
     Returns a new list containing only one copy of each element in the original list. [`R.equals`](#equals) is used to determine equality.
 
-    ```
+    ``` javascript
     R.uniq([1, 1, 2, 1]); //=> [1, 2]
     R.uniq([1, '1']);     //=> [1, '1']
     R.uniq([[42], [42]]); //=> [[42]]
     ```
 - name: R.uniqBy
+  id: index#uniqBy
   summary: A function used to produce a value to use during comparisons
   description: |-
     ### uniqBy Added in v0.16.0
@@ -7418,10 +7657,11 @@ homepage: http://ramdajs.com/
 
     Returns a new list containing only one copy of each element in the original list, based upon the value returned by applying the supplied function to each list element. Prefers the first item if the supplied function produces the same value on two items. [`R.equals`](#equals) is used for comparison.
 
-    ```
+    ``` javascript
     R.uniqBy(Math.abs, [-1, -5, 2, 10, 1, 2]); //=> [-1, -5, 2, 10]
     ```
 - name: R.uniqWith
+  id: index#uniqWith
   summary: A predicate used to test whether two items are equal
   description: |-
     ### uniqWith Added in v0.2.0
@@ -7444,7 +7684,7 @@ homepage: http://ramdajs.com/
 
     Returns a new list containing only one copy of each element in the original list, based upon the value returned by applying the supplied predicate to two list elements. Prefers the first item if two items compare equal based on the predicate.
 
-    ```
+    ``` javascript
     const strEq = R.eqBy(String);
     R.uniqWith(strEq)([1, '1', 2, 1]); //=> [1, 2]
     R.uniqWith(strEq)([{}, {}]);       //=> [{}]
@@ -7452,7 +7692,8 @@ homepage: http://ramdajs.com/
     R.uniqWith(strEq)(['1', 1, 1]);    //=> ['1']
     ```
 - name: R.unless
-  summary: A predicate function
+  id: index#unless
+  summary: A function to invoke when the pred evaluates to a falsy value
   description: |-
     ### unless Added in v0.18.0
 
@@ -7480,12 +7721,13 @@ homepage: http://ramdajs.com/
 
     See also [`ifElse`](#ifElse), [`when`](#when), [`cond`](#cond).
 
-    ```
+    ``` javascript
     let safeInc = R.unless(R.isNil, R.inc);
     safeInc(null); //=> null
     safeInc(1); //=> 2
     ```
 - name: R.unnest
+  id: index#unnest
   summary: Shorthand for R.chain(R.identity), which removes one level of nesting from any Chain
   description: |-
     ### unnest Added in v0.3.0
@@ -7504,12 +7746,13 @@ homepage: http://ramdajs.com/
 
     See also [`flatten`](#flatten), [`chain`](#chain).
 
-    ```
+    ``` javascript
     R.unnest([1, [2], [[3]]]); //=> [1, 2, [3]]
     R.unnest([[1, 2], [3, 4], [5, 6]]); //=> [1, 2, 3, 4, 5, 6]
     ```
 - name: R.until
-  summary: A predicate function
+  id: index#until
+  summary: Takes a predicate, a transformation function, and an initial value, and returns a value of the same type as the initial value
   description: |-
     ### until Added in v0.20.0
 
@@ -7535,10 +7778,11 @@ homepage: http://ramdajs.com/
 
     Takes a predicate, a transformation function, and an initial value, and returns a value of the same type as the initial value. It does so by applying the transformation until the predicate is satisfied, at which point it returns the satisfactory value.
 
-    ```
+    ``` javascript
     R.until(R.gt(R.__, 100), R.multiply(2))(1) // => 128
     ```
 - name: R.update
+  id: index#update
   summary: The index to update
   description: |-
     ### update Added in v0.14.0
@@ -7567,11 +7811,12 @@ homepage: http://ramdajs.com/
 
     See also [`adjust`](#adjust).
 
-    ```
+    ``` javascript
     R.update(1, '_', ['a', 'b', 'c']);      //=> ['a', '_', 'c']
     R.update(-1, '_', ['a', 'b', 'c']);     //=> ['a', 'b', '_']
     ```
 - name: R.useWith
+  id: index#useWith
   summary: The function to wrap
   description: |-
     ### useWith Added in v0.1.0
@@ -7598,14 +7843,15 @@ homepage: http://ramdajs.com/
 
     See also [`converge`](#converge).
 
-    ```
+    ``` javascript
     R.useWith(Math.pow, [R.identity, R.identity])(3, 4); //=> 81
     R.useWith(Math.pow, [R.identity, R.identity])(3)(4); //=> 81
     R.useWith(Math.pow, [R.dec, R.inc])(3, 4); //=> 32
     R.useWith(Math.pow, [R.dec, R.inc])(3)(4); //=> 32
     ```
 - name: R.values
-  summary: The object to extract values from
+  id: index#values
+  summary: Returns a list of all the enumerable own properties of the supplied object
   description: |-
     ### values Added in v0.1.0
 
@@ -7625,11 +7871,12 @@ homepage: http://ramdajs.com/
 
     See also [`valuesIn`](#valuesIn), [`keys`](#keys).
 
-    ```
+    ``` javascript
     R.values({a: 1, b: 2, c: 3}); //=> [1, 2, 3]
     ```
 - name: R.valuesIn
-  summary: The object to extract values from
+  id: index#valuesIn
+  summary: Returns a list of all the properties, including prototype properties, of the supplied object
   description: |-
     ### valuesIn Added in v0.2.0
 
@@ -7649,13 +7896,14 @@ homepage: http://ramdajs.com/
 
     See also [`values`](#values), [`keysIn`](#keysIn).
 
-    ```
+    ``` javascript
     const F = function() { this.x = 'X'; };
     F.prototype.y = 'Y';
     const f = new F();
     R.valuesIn(f); //=> ['X', 'Y']
     ```
 - name: R.view
+  id: index#view
   summary: Returns a "view" of the given data structure, determined by the given lens
   description: |-
     ### view Added in v0.16.0
@@ -7677,14 +7925,15 @@ homepage: http://ramdajs.com/
 
     See also [`prop`](#prop), [`lensIndex`](#lensIndex), [`lensProp`](#lensProp).
 
-    ```
+    ``` javascript
     const xLens = R.lensProp('x');
 
     R.view(xLens, {x: 1, y: 2});  //=> 1
     R.view(xLens, {x: 4, y: 2});  //=> 4
     ```
 - name: R.when
-  summary: A predicate function
+  id: index#when
+  summary: A function to invoke when the condition evaluates to a truthy value
   description: |-
     ### when Added in v0.18.0
 
@@ -7712,7 +7961,7 @@ homepage: http://ramdajs.com/
 
     See also [`ifElse`](#ifElse), [`unless`](#unless), [`cond`](#cond).
 
-    ```
+    ``` javascript
     // truncate :: String -> String
     const truncate = R.when(
       R.propSatisfies(R.gt(R.__, 10), 'length'),
@@ -7722,6 +7971,7 @@ homepage: http://ramdajs.com/
     truncate('0123456789ABC'); //=> '0123456789…'
     ```
 - name: R.where
+  id: index#where
   summary: Takes a spec object and a test object; returns true if the test satisfies the spec
   description: |-
     ### where Added in v0.1.1
@@ -7743,7 +7993,7 @@ homepage: http://ramdajs.com/
 
     See also [`propSatisfies`](#propSatisfies), [`whereEq`](#whereEq).
 
-    ```
+    ``` javascript
     // pred :: Object -> Boolean
     const pred = R.where({
       a: R.equals('foo'),
@@ -7759,6 +8009,7 @@ homepage: http://ramdajs.com/
     pred({a: 'foo', b: 'xxx', x: 11, y: 20}); //=> false
     ```
 - name: R.whereEq
+  id: index#whereEq
   summary: Takes a spec object and a test object; returns true if the test satisfies the spec, false otherwise
   description: |-
     ### whereEq Added in v0.14.0
@@ -7780,7 +8031,7 @@ homepage: http://ramdajs.com/
 
     See also [`propEq`](#propEq), [`where`](#where).
 
-    ```
+    ``` javascript
     // pred :: Object -> Boolean
     const pred = R.whereEq({a: 1, b: 2});
 
@@ -7790,6 +8041,7 @@ homepage: http://ramdajs.com/
     pred({a: 1, b: 1});        //=> false
     ```
 - name: R.without
+  id: index#without
   summary: The values to be removed from list2
   description: |-
     ### without Added in v0.19.0
@@ -7816,10 +8068,11 @@ homepage: http://ramdajs.com/
 
     See also [`transduce`](#transduce), [`difference`](#difference), [`remove`](#remove).
 
-    ```
+    ``` javascript
     R.without([1, 2], [1, 2, 1, 3, 4]); //=> [3, 4]
     ```
 - name: R.xor
+  id: index#xor
   summary: Exclusive disjunction logical operation
   description: |-
     ### xor Added in v0.27.0
@@ -7839,13 +8092,14 @@ homepage: http://ramdajs.com/
 
     See also [`or`](#or), [`and`](#and).
 
-    ```
+    ``` javascript
     R.xor(true, true); //=> false
     R.xor(true, false); //=> true
     R.xor(false, true); //=> true
     R.xor(false, false); //=> false
     ```
 - name: R.xprod
+  id: index#xprod
   summary: The first list
   description: |-
     ### xprod Added in v0.1.0
@@ -7868,10 +8122,11 @@ homepage: http://ramdajs.com/
 
     Creates a new list out of the two supplied by creating each possible pair from the lists.
 
-    ```
+    ``` javascript
     R.xprod([1, 2], ['a', 'b']); //=> [[1, 'a'], [1, 'b'], [2, 'a'], [2, 'b']]
     ```
 - name: R.zip
+  id: index#zip
   summary: The first array to consider
   description: |-
     ### zip Added in v0.1.0
@@ -7894,10 +8149,11 @@ homepage: http://ramdajs.com/
 
     Creates a new list out of the two supplied by pairing up equally-positioned items from both lists. The returned list is truncated to the length of the shorter of the two input lists. Note: `zip` is equivalent to `zipWith(function(a, b) { return [a, b] })`.
 
-    ```
+    ``` javascript
     R.zip([1, 2, 3], ['a', 'b', 'c']); //=> [[1, 'a'], [2, 'b'], [3, 'c']]
     ```
 - name: R.zipObj
+  id: index#zipObj
   summary: The array that will be properties on the output object
   description: |-
     ### zipObj Added in v0.3.0
@@ -7920,9 +8176,10 @@ homepage: http://ramdajs.com/
 
     Creates a new object out of a list of keys and a list of values. Key/value pairing is truncated to the length of the shorter of the two lists. Note: `zipObj` is equivalent to `pipe(zip, fromPairs)`.
 
-    ```
+    ``` javascript
     R.zipObj(['a', 'b', 'c'], [1, 2, 3]); //=> {a: 1, b: 2, c: 3}
     ```
 - name: R.zipWith
+  id: index#zipWith
   summary: The function used to combine the two elements into one value
-  description: "### zipWith Added in v0.1.0\n\n    ((a, b) → c) → [a] → [b] → [c]\n\n#### Parameters\n\n- `fn`\n\n  The function used to combine the two elements into one value.\n\n- `list1`\n\n  The first array to consider.\n\n- `list2`\n\n  The second array to consider.\n\n#### Returns\n\n- Array The list made by combining same-indexed elements of \\`list1\\` and \\`list2\\` using \\`fn\\`.\n\nCreates a new list out of the two supplied by applying the function to each equally-positioned pair in the lists. The returned list is truncated to the length of the shorter of the two input lists.\n\n```\nconst f = (x, y) => {\n  // ...\n};\nR.zipWith(f, [1, 2, 3], ['a', 'b', 'c']);\n//=> [f(1, 'a'), f(2, 'b'), f(3, 'c')]\n```\n\n© 2013–2020 Scott Sauyet and Michael Hurley  \nLicensed under the MIT License.  \n[https://ramdajs.com/0.27.0/docs/](https://ramdajs.com/0.27.0/docs/)"
+  description: "### zipWith Added in v0.1.0\n\n    ((a, b) → c) → [a] → [b] → [c]\n\n#### Parameters\n\n- `fn`\n\n  The function used to combine the two elements into one value.\n\n- `list1`\n\n  The first array to consider.\n\n- `list2`\n\n  The second array to consider.\n\n#### Returns\n\n- Array The list made by combining same-indexed elements of \\`list1\\` and \\`list2\\` using \\`fn\\`.\n\nCreates a new list out of the two supplied by applying the function to each equally-positioned pair in the lists. The returned list is truncated to the length of the shorter of the two input lists.\n\n``` javascript\nconst f = (x, y) => {\n  // ...\n};\nR.zipWith(f, [1, 2, 3], ['a', 'b', 'c']);\n//=> [f(1, 'a'), f(2, 'b'), f(3, 'c')]\n```\n\n© 2013–2020 Scott Sauyet and Michael Hurley  \nLicensed under the MIT License.  \n[https://ramdajs.com/0.27.0/docs/](https://ramdajs.com/0.27.0/docs/)"
