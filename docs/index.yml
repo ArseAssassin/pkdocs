@@ -143,8 +143,8 @@
     Licensed under the MIT License.
     https://www.lua.org/manual/5.1/manual.html
   homepage: null
-- slug: Lua
-  name: lua~5.2
+- name: Lua
+  slug: lua~5.2
   text_format: markdown
   generator: src:devdocs
   version: '5.2'
@@ -223,7 +223,7 @@
     Licensed under the PSF License.
     https://docs.python.org/3.13/index.html
   homepage: https://www.python.org/
-- name: Ramda.js
+- name: Ramda
   slug: ramda
   text_format: markdown
   generator: src:devdocs
