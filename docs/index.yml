@@ -19,6 +19,17 @@
     License v3.0.
     https://en.cppreference.com/w/c/header
   homepage: null
+- name: click
+  slug: click
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © Copyright 2014 Pallets.
+    Licensed under the BSD 3-Clause License.
+    We are not supported nor endorsed by Pallets.
+    https://click.palletsprojects.com/en/8.1.x/index.html
+  homepage: https://click.palletsprojects.com/
 - name: Clojure
   slug: clojure~1.11
   text_format: markdown
@@ -51,6 +62,30 @@
     or later.
     https://developer.mozilla.org/en-US/docs/Web/CSS/Reference
   homepage: https://developer.mozilla.org/en-US/docs/Web/CSS
+- name: Django
+  slug: django~5.1
+  text_format: markdown
+  generator: src:devdocs
+  version: '5.1'
+  copyright: |-
+    © Django Software Foundation and individual contributors
+    Licensed under the BSD License.
+    https://docs.djangoproject.com/en/5.1/index/
+  homepage: https://www.djangoproject.com/
+- name: Docker
+  slug: docker
+  text_format: markdown
+  generator: src:devdocs
+  version: ''
+  copyright: |-
+    © 2019 Docker, Inc.
+    Licensed under the Apache License, Version 2.0.
+    Docker and the Docker logo are trademarks or registered trademarks of
+    Docker, Inc. in the United States and/or other countries.
+    Docker, Inc. and other parties may also have trademark rights in other
+    terms used herein.
+    https://docs.docker.com/
+  homepage: https://docker.com/
 - name: Web APIs
   slug: dom
   text_format: markdown
@@ -62,6 +97,45 @@
     or later.
     https://developer.mozilla.org/en-US/docs/Web/API
   homepage: https://developer.mozilla.org/en-US/docs/Web/API
+- name: Elixir
+  slug: elixir~1.17
+  text_format: markdown
+  generator: src:devdocs
+  version: '1.17'
+  copyright: |-
+    © 2012-2024 The Elixir Team
+    Licensed under the Apache License, Version 2.0.
+    https://hexdocs.pm/elixir/1.17.2/introduction.html
+  homepage: https://elixir-lang.org/
+- name: Erlang
+  slug: erlang~26
+  text_format: markdown
+  generator: src:devdocs
+  version: '26'
+  copyright: |-
+    © 2010–2023 Ericsson AB
+    Licensed under the Apache License, Version 2.0.
+  homepage: https://www.erlang.org/
+- name: ESLint
+  slug: eslint
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © OpenJS Foundation and other contributors
+    Licensed under the MIT License.
+    https://eslint.org/docs/latest/user-guide/getting-started
+  homepage: https://eslint.org/
+- name: Express
+  slug: express
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 2017 StrongLoop, IBM, and other expressjs.com contributors.
+    Licensed under the Creative Commons Attribution-ShareAlike License v3.0.
+    https://expressjs.com/en/4x/api.html
+  homepage: https://expressjs.com/
 - name: Fish
   slug: fish~3.7
   text_format: markdown
@@ -72,6 +146,36 @@
     Licensed under the GNU General Public License, version 2.
     https://fishshell.com/docs/3.7/index.html
   homepage: https://fishshell.com/
+- name: Flask
+  slug: flask~3.0
+  text_format: markdown
+  generator: src:devdocs
+  version: '3.0'
+  copyright: |-
+    © 2010 Pallets
+    Licensed under the BSD 3-clause License.
+    https://flask.palletsprojects.com/en/3.0.x/index.html
+  homepage: https://palletsprojects.com/p/flask/
+- name: Git
+  slug: git
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 2005–2024 Linus Torvalds and others
+    Licensed under the GNU General Public License version 2.
+    https://git-scm.com/docs
+  homepage: https://git-scm.com/
+- name: Go
+  slug: go
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © Google, Inc.
+    Licensed under the Creative Commons Attribution License 3.0.
+    http://golang.org/pkg//
+  homepage: https://golang.org/
 - name: Godot
   slug: godot~4.2
   text_format: markdown
@@ -123,6 +227,16 @@
     Licensed under the Creative Commons Attribution 3.0 license
     https://jqlang.github.io/jq/manual/v1.7/index.html
   homepage: https://jqlang.github.io/jq/
+- name: Less
+  slug: less~4
+  text_format: markdown
+  generator: src:devdocs
+  version: '4'
+  copyright: |-
+    © 2009–2020 The Core Less Team
+    Licensed under the Creative Commons Attribution License 3.0.
+    http://lesscss.org/features
+  homepage: http://lesscss.org/
 - name: LÖVE
   slug: love
   text_format: markdown
@@ -193,6 +307,18 @@
     Licensed under the LGPL License.
     https://nixos.org/manual/nix/stable/expressions/builtins.html
   homepage: https://nixos.org/
+- name: Node.js
+  slug: node~20_lts
+  text_format: markdown
+  generator: src:devdocs
+  version: 20 LTS
+  copyright: |-
+    © Joyent, Inc. and other Node contributors
+    Licensed under the MIT License.
+    Node.js is a trademark of Joyent, Inc. and is used with its permission.
+    We are not endorsed by or affiliated with Joyent.
+    https://nodejs.org/dist/latest-v20.x/docs/api/
+  homepage: https://nodejs.org/
 - name: Nushell
   slug: nushell
   text_format: markdown
@@ -203,6 +329,25 @@
     MIT License.
     https://www.nushell.sh/commands/
   homepage: https://www.nushell.sh/
+- name: OCaml
+  slug: ocaml~4.14
+  text_format: markdown
+  generator: src:devdocs
+  version: '4.14'
+  copyright: |-
+    © 1995-2022 INRIA.
+    https://v2.ocaml.org/releases/4.14/htmlman/index.html
+  homepage: https://ocaml.org/
+- name: PHP
+  slug: php
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 1997–2023 The PHP Documentation Group
+    Licensed under the Creative Commons Attribution License v3.0 or later.
+    https://www.php.net/manual/en/
+  homepage: https://www.php.net/
 - name: PostgreSQL
   slug: postgresql~16
   text_format: markdown
@@ -223,6 +368,24 @@
     Licensed under the PSF License.
     https://docs.python.org/3.13/index.html
   homepage: https://www.python.org/
+- name: R
+  slug: r
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    Copyright (©) 1999–2012 R Foundation for Statistical Computing.
+    Licensed under the GNU General Public License.
+  homepage: https://www.r-project.org/
+- name: Ruby on Rails
+  slug: rails~7.1
+  text_format: markdown
+  generator: src:devdocs
+  version: '7.1'
+  copyright: |-
+    © 2004–2021 David Heinemeier Hansson
+    Licensed under the MIT License.
+  homepage: https://rubyonrails.org/
 - name: Ramda
   slug: ramda
   text_format: markdown
@@ -255,6 +418,17 @@
     Ruby Standard Library © contributors
     Licensed under their own licenses.
   homepage: https://www.ruby-lang.org/
+- name: Rust
+  slug: rust
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 2010 The Rust Project Developers
+    Licensed under the Apache License, Version 2.0 or the MIT license, at
+    your option.
+    https://doc.rust-lang.org/book/index.html
+  homepage: https://www.rust-lang.org/
 - name: SQLite
   slug: sqlite
   text_format: markdown
@@ -264,6 +438,46 @@
     SQLite is in the Public Domain.
     https://sqlite.org/docs.html
   homepage: https://sqlite.org/
+- name: SVG
+  slug: svg
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 2005–2024 MDN contributors.
+    Licensed under the Creative Commons Attribution-ShareAlike License v2.5
+    or later.
+    https://developer.mozilla.org/en-US/docs/Web/SVG
+  homepage: https://developer.mozilla.org/en-US/docs/Web/SVG
+- name: Tailwind CSS
+  slug: tailwindcss
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    © 2022 Tailwind Labs Inc.
+    https://tailwindcss.com/docs
+  homepage: tps://tailwindcss.com/
+- name: Tcl/Tk
+  slug: tcl_tk
+  text_format: markdown
+  generator: src:devdocs
+  version: null
+  copyright: |-
+    Licensed under Tcl/Tk terms
+    https://www.tcl.tk/man/tcl/contents.htm
+  homepage: null
+- name: TensorFlow
+  slug: tensorflow~2.9
+  text_format: markdown
+  generator: src:devdocs
+  version: '2.9'
+  copyright: |-
+    © 2022 The TensorFlow Authors. All rights reserved.
+    Licensed under the Creative Commons Attribution License 4.0.
+    Code samples licensed under the Apache 2.0 License.
+    https://www.tensorflow.org/versions/r2.9/api_docs/python/tf
+  homepage: https://www.tensorflow.org/
 - name: TypeScript
   slug: typescript
   text_format: markdown
@@ -284,6 +498,16 @@
     Licensed under the MIT License.
     https://vitejs.dev/
   homepage: https://vitejs.dev/
+- name: Vue
+  slug: vue~3
+  text_format: markdown
+  generator: src:devdocs
+  version: '3'
+  copyright: |-
+    © 2013–present Yuxi Evan You
+    Licensed under the MIT License.
+    https://vuejs.org/
+  homepage: https://vuejs.org/
 - name: XSLT & XPath
   slug: xslt_xpath
   text_format: markdown
