@@ -13,6 +13,7 @@ import './App.css'
 
 import SearchDropdown from './SearchDropdown.jsx'
 
+import { bem } from './helpers.js'
 
 const REPO = 'https://raw.githubusercontent.com/ArseAssassin/pkdocs/main/docs'
 
@@ -53,36 +54,56 @@ function useDocs(slug) {
 
   useEffect(() => {
     if (docs.body) {
-      let doc = parse(r.last(docs.body.split('\n---\n')))
+      let docParts = docs.body.split('\n---\n')
+      let doc = parse(r.last(docParts))
       let urlTable = r.fromPairs(doc.map((it, idx) => [it.id, idx]))
-      setParsed([doc, urlTable])
+      setParsed([parse(docParts[0]), doc, urlTable])
     }
   }, [docs.body])
 
   return parsed
 }
 
-function FrontPage() {
+function DoctableSearch({ selectedDoc }) {
+  let [folded, setFolded] = useState(false)
   let index = useGet(`${REPO}/index.yml`)
   let docs = parse(index.body || '[]')
 
-  return <div>
-    <SearchDropdown
-      placeholder='🔎  Search for languages/frameworks/libraries...'
-      getQueriedItems={ (query) =>
-        docs
-        .filter((it) =>
-          it.slug.toLowerCase().indexOf(query) > -1
-        )
-        .map((it) => ({ ...it, id: it.slug, url: `/${it.slug}` }))
-      }
-      renderListItem={ (it) =>
-        <>
-          <div>{ it.name }</div>
-        </>
-      }
-      />
+  return <div className={ bem("doctable-search", {
+     folded: folded || Boolean(selectedDoc)
+   }) }>
+    <div className="doctable-search__body">
+      <header>
+        <h1>pkDocs</h1>
+        <h4>Quick docs for your tech stack</h4>
+      </header>
+      <SearchDropdown
+        onFocus={ () => setFolded(true) }
+        placeholderValue= { selectedDoc }
+        placeholder='🔎  Search for languages/frameworks/libraries...'
+        getQueriedItems={ (query) =>
+          docs
+          .filter((it) =>
+            it.slug.toLowerCase().indexOf(query) > -1
+          )
+          .map((it) => ({ ...it, id: it.slug, url: `/pkdocs/${it.slug}` }))
+        }
+        renderListItem={ (it) =>
+          <div className='doctable-search__result'>
+            <div className='doctable-search__result-slug'>
+              { it.slug }
+            </div>
+            <div className='doctable-search__result-name'>
+              { it.name }
+            </div>
 
+            <div className='doctable-search__result-version'>
+              { it.version }
+            </div>
+          </div>
+        }
+        />
+    </div>
   </div>
 }
 
@@ -90,9 +111,28 @@ function ListSymbols({ doc, docs, autofocus }) {
   let [query, setQuery] = useState('')
   let [selected, _setSelected] = useState(0)
   let [resultsList, setResultsList] = useState()
+  let [searchInput, setSearchInput] = useState()
+
+  useEffect(() => {
+    if (searchInput) {
+      let focus = (e) => {
+        if (e.code === 'Digit7' && e.shiftKey) {
+          e.preventDefault()
+          let input = searchInput.querySelector('input')
+          input.focus()
+          input.select()
+        }
+      }
+      document.body.addEventListener('keydown', focus)
+
+      return () => {
+        document.body.removeEventListener('keydown', focus)
+      }
+    }
+  }, [searchInput])
 
   let docsWithIds = docs.map((it, idx) =>
-    ({ ...it, id: idx, url: `/${doc}/${idx}` })
+    ({ ...it, id: idx, url: `/pkdocs/${doc}/${idx}` })
   )
 
   let searchRanking = (it='') => {
@@ -107,13 +147,10 @@ function ListSymbols({ doc, docs, autofocus }) {
     }
   }
 
-  return <div>
+  return <div className='doc-search'>
     <SearchDropdown
-      ref={ (it) => {
-        if (it && autofocus) {
-          it.querySelector('input').focus()
-        }
-      } }
+      ref={ setSearchInput }
+
       getQueriedItems={ (query) => {
         return r.take(100, query === ''
           ? docsWithIds
@@ -140,15 +177,32 @@ function ListSymbols({ doc, docs, autofocus }) {
           { it.summary }
         </div>
       </>}
-      placeholder='🔎  Search for docs...'/>
+      placeholder='🔎  Search for docs... (Type /)'/>
+  </div>
+}
+
+function CopyrightNotice({ headers }) {
+  return <div className="doc-copyright">
+    { headers.name } documentation {'\n'}
+    { headers.copyright }
+  </div>
+}
+
+function Loader() {
+  return <div className="loader__wrapper">
+    <div className="loader"></div>
   </div>
 }
 
 function DocPage({ doc, symbolId }) {
-  let [docs, urlTable] = useDocs(doc)
+  let [headers, docs, urlTable] = useDocs(doc)
+
+  useEffect(() => {
+    document.title = `pkDocs - ${doc}`
+  }, [doc])
 
   if (!docs) {
-    return <div />
+    return <Loader />
   }
 
   let symbolSearch = <ListSymbols autofocus={ symbolId === undefined } doc={ doc } docs={ docs } />
@@ -156,6 +210,8 @@ function DocPage({ doc, symbolId }) {
   if (!symbolId) {
     return <div>
       {symbolSearch}
+
+      <CopyrightNotice headers={ headers } />
     </div>
   } else {
     let symbol = docs[parseInt(symbolId)]
@@ -171,7 +227,7 @@ function DocPage({ doc, symbolId }) {
                 if (isUrlAbsolute(props.href || '')) {
                   return <a {...props} />
                 } else if (urlTable[props.href] !== undefined) {
-                  return <Link {...props} href={ `/${doc}/${urlTable[props.href]}` } />
+                  return <Link {...props} href={ `/pkdocs/${doc}/${urlTable[props.href]}` } />
                 } else {
                   return props.children
                 }
@@ -196,19 +252,38 @@ function DocPage({ doc, symbolId }) {
             }}
             remarkPlugins={[remarkGfm]}>{symbol.description}</Markdown>
         </div>
+
+        <CopyrightNotice headers={ headers } />
       </div>
     </div>
   }
 }
 
+function FrontPage() {
+  return <div>
+
+  </div>
+}
+
 function App() {
+  let [ pathname ] = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return (
-    <Switch>
-      <Route path='/' component={ FrontPage } />
-      <Route path='/:doc/:symbol?'>
-        {(params) => <DocPage doc={ params.doc } symbolId={ params.symbol } />}
+    <div>
+      <Route path='/pkdocs/:doc?/:symbol?'>
+        {(params) => <DoctableSearch selectedDoc={ params.doc } />}
       </Route>
-    </Switch>
+      <Switch>
+        <Route path='/pkdocs/' component={ FrontPage } />
+        <Route path='/pkdocs/:doc/:symbol?'>
+          {(params) => <DocPage doc={ params.doc } symbolId={ params.symbol } />}
+        </Route>
+      </Switch>
+    </div>
   )
 }
 

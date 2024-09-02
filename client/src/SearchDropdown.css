@@ -1,9 +1,4 @@
 .search-dropdown {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  background-color: #fff;
   padding: 10px;
 }
 
@@ -13,6 +8,8 @@
   padding: 10px;
   border-radius: 20px;
   border: 1px solid #888;
+  width: 25em;
+  text-align: center;
 }
 
 .search-dropdown__results {

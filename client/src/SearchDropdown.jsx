@@ -2,45 +2,44 @@ import './SearchDropdown.css'
 import * as r from 'ramda'
 import { forwardRef, useState, useEffect } from 'react'
 import { Link, useLocation } from 'wouter'
+import { bem } from './helpers.js'
 
-function bem(className, modifiers) {
-  return (className + ' ' + r.pipe(
-    r.toPairs,
-    r.filter(r.last),
-    r.map(([element]) => `${className}--${element}`),
-    r.join(' ')
-  )(modifiers)).trim()
-}
-
-let SearchDropdown = forwardRef(({ placeholder, getQueriedItems, renderListItem }, ref ) => {
+let SearchDropdown = forwardRef(({ placeholderValue, placeholder, getQueriedItems, renderListItem, onFocus }, ref ) => {
   let [_, navigate] = useLocation()
   let [query, setQuery] = useState('')
   let [resultsList, setResultsList] = useState()
   let [selected, _setSelected] = useState(0)
+  let [isFocused, setIsFocused] = useState(0)
 
   let results = getQueriedItems(query)
 
   let setSelected = (idx, scrollToItem) => {
     _setSelected(idx)
 
-    if (scrollToItem) {
+    if (scrollToItem && resultsList) {
       resultsList.children[idx].scrollIntoView({ block: 'nearest' })
     }
   }
   let addSelected = (delta) => {
-    setSelected(Math.min(results.length, Math.max(0, selected + delta)), true)
+    setSelected(Math.min(results.length-1, Math.max(0, selected + delta)), true)
   }
 
   return (
-    <form ref={ ref } className="search-dropdown" onSubmit={ (e) => {
+    <form
+      ref={ ref }
+      className="search-dropdown"
+      onFocus={ () => { setIsFocused(true) }}
+      onBlur={ () => { setIsFocused(false) }}
+      onSubmit={ (e) => {
         e.preventDefault()
         navigate(results[selected].url)
         document.activeElement.blur()
       }}>
         <input
           className='search-dropdown__query'
+          onFocus={ onFocus }
           placeholder={ placeholder }
-          value={ query }
+          value={ isFocused ? query : placeholderValue || query }
           onKeyDown={ (e) => {
             let idx =
               e.key === 'ArrowUp' && addSelected(-1) ||

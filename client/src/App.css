@@ -5,16 +5,20 @@
   margin: 0 auto;
 }
 
-.doc-symbol__body h1 { font-size: 150%; }
+.doc-symbol > h1 {
+  margin: 10px 0;
+}
+
+.doc-symbol__body h1 { font-size: 150%; margin: 0 0 1em 0; }
 .doc-symbol__body h2 { font-size: 125%; margin: 0 0 1em 0; }
 .doc-symbol__body h3 { font-size: 100%; margin: 0 0 .5em 0; }
+.doc-symbol__body h4 { font-size: 90%; margin: 0 0 .5em 0; }
+.doc-symbol__body h5 { font-size: 85%; margin: 0 0 .5em 0; }
+.doc-symbol__body h6 { font-size: 80%; margin: 0 0 .5em 0; }
 
 .doc-symbol p code {
   color: #a44;
   font-weight: bold;
-}
-
-.doc-symbol a {
 }
 
 .doc-symbol td {
@@ -31,7 +35,7 @@
 
 .doc-symbol pre {
   padding: 10px 20px;
-  white-space: break-spaces;
+  overflow: auto;
 }
 
 .doc-symbol pre,
@@ -50,4 +54,100 @@
 
 .doc-symbol pre:has(> .doc-symbol__syntax-highlighter) {
   padding: 0;
+}
+
+.doc-copyright {
+  position: absolute;
+  bottom: 0;
+  white-space: pre;
+  text-align: center;
+  left: 0;
+  right: 0;
+  padding: 30px;
+  color: #777;
+
+  z-index: -1;
+  font-size: 85%;
+}
+
+.doc-symbol .doc-copyright {
+  position: static;
+  padding: 20px;
+}
+
+.doctable-search {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  transition: padding 1s ;
+  padding-top: 50%;
+}
+
+.doctable-search__body {
+  transition: transform 1s ease-in;
+  transform: translateY(-50%);
+}
+
+.doctable-search--folded .doctable-search__body {
+  transform: translateY(0%);
+}
+
+.doctable-search header {
+  transition: max-height 1s ease-in;
+  max-height: 100px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.doctable-search--folded {
+  padding: 0% 0;
+}
+
+.doctable-search--folded header {
+  max-height: 0px;
+}
+
+.doctable-search__result-version {
+  color: #999;
+  float: left;
+  font-size: 80%;
+}
+
+.search-dropdown__result--selected .doctable-search__result-version {
+  color: #fff;
+}
+
+.doctable-search__result-slug {
+  color: #999;
+  float: right;
+}
+
+.search-dropdown__result--selected .doctable-search__result-slug {
+  color: #fff;
+}
+
+.doctable-search__result {
+  overflow: auto;
+}
+
+.search-dropdown__result--selected .doc-search__result-summary {
+  color: #fff;
+}
+
+.doc-search__result-summary {
+  color: #666;
+  font-size: 90%;
+  max-width: 50em;
+}
+
+.loader__wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

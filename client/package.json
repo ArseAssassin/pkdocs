@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "npx vite",
-    "build": "npx vite build",
+    "dev": "npx vite --base /pkdocs",
+    "build": "npx vite build --outDir ../docs/ --emptyOutDir",
     "lint": "eslint .",
     "preview": "npx vite preview"
   },
@@ -14,7 +14,11 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-syntax-highlighter": "^15.5.0",
-    "wouter": "3.3.4"
+    "ramda": "0.30.1",
+    "react-markdown": "9.0.1",
+    "remark-gfm": "4.0.0",
+    "wouter": "3.3.4",
+    "yaml": "2.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
@@ -26,10 +30,6 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
-    "ramda": "0.30.1",
-    "react-markdown": "9.0.1",
-    "remark-gfm": "4.0.0",
-    "vite": "^5.4.1",
-    "yaml": "2.5.0"
+    "vite": "^5.4.1"
   }
 }
