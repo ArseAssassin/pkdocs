@@ -35,6 +35,7 @@
 
 .doc-symbol pre {
   padding: 10px 20px;
+  line-height: 1.5em;
   overflow: auto;
 }
 
@@ -81,7 +82,7 @@
   justify-content: center;
 
   transition: padding 1s ;
-  padding-top: 50%;
+  padding-top: 50vh;
 }
 
 .doctable-search__body {
@@ -101,7 +102,7 @@
 }
 
 .doctable-search--folded {
-  padding: 0% 0;
+  padding: 0vh;
 }
 
 .doctable-search--folded header {

@@ -1,7 +1,8 @@
 import * as r from 'ramda'
 import { parse, parseAllDocuments } from 'yaml'
 import { useState, useEffect } from 'react'
-import { Link, Route, Switch, useLocation } from 'wouter'
+import { Router, Link, Route, Switch, useLocation } from 'wouter'
+import { useHashLocation } from 'wouter/use-hash-location'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import levenshtein from 'js-levenshtein'
@@ -86,7 +87,7 @@ function DoctableSearch({ selectedDoc }) {
           .filter((it) =>
             it.slug.toLowerCase().indexOf(query) > -1
           )
-          .map((it) => ({ ...it, id: it.slug, url: `/pkdocs/${it.slug}` }))
+          .map((it) => ({ ...it, id: it.slug, url: `/${it.slug}` }))
         }
         renderListItem={ (it) =>
           <div className='doctable-search__result'>
@@ -132,7 +133,7 @@ function ListSymbols({ doc, docs, autofocus }) {
   }, [searchInput])
 
   let docsWithIds = docs.map((it, idx) =>
-    ({ ...it, id: idx, url: `/pkdocs/${doc}/${idx}` })
+    ({ ...it, id: idx, url: `/${doc}/${idx}` })
   )
 
   let searchRanking = (it='') => {
@@ -227,7 +228,7 @@ function DocPage({ doc, symbolId }) {
                 if (isUrlAbsolute(props.href || '')) {
                   return <a {...props} />
                 } else if (urlTable[props.href] !== undefined) {
-                  return <Link {...props} href={ `/pkdocs/${doc}/${urlTable[props.href]}` } />
+                  return <Link {...props} href={ `/${doc}/${urlTable[props.href]}` } />
                 } else {
                   return props.children
                 }
@@ -266,7 +267,7 @@ function FrontPage() {
 }
 
 function App() {
-  let [ pathname ] = useLocation();
+  let [ pathname ] = useHashLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -274,15 +275,17 @@ function App() {
 
   return (
     <div>
-      <Route path='/pkdocs/:doc?/:symbol?'>
-        {(params) => <DoctableSearch selectedDoc={ params.doc } />}
-      </Route>
-      <Switch>
-        <Route path='/pkdocs/' component={ FrontPage } />
-        <Route path='/pkdocs/:doc/:symbol?'>
-          {(params) => <DocPage doc={ params.doc } symbolId={ params.symbol } />}
+      <Router hook={ useHashLocation }>
+        <Route path='/:doc?/:symbol?'>
+          {(params) => <DoctableSearch selectedDoc={ params.doc } />}
         </Route>
-      </Switch>
+        <Switch>
+          <Route path='/' component={ FrontPage } />
+          <Route path='/:doc/:symbol?'>
+            {(params) => <DocPage doc={ params.doc } symbolId={ params.symbol } />}
+          </Route>
+        </Switch>
+      </Router>
     </div>
   )
 }
