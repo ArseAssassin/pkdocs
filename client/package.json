@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "npx vite --base /pkdocs",
-    "build": "npx vite build --outDir ../public/ --emptyOutDir",
+    "build": "npx vite build --outDir ../public/ --emptyOutDir --base /pkdocs",
     "lint": "eslint .",
     "preview": "npx vite preview"
   },
