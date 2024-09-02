@@ -81,7 +81,7 @@ function DoctableSearch({ selectedDoc }) {
       <SearchDropdown
         onFocus={ () => setFolded(true) }
         placeholderValue= { selectedDoc }
-        placeholder='🔎  Search for languages/frameworks/libraries...'
+        placeholder='🔎  Search for languages / libraries...'
         getQueriedItems={ (query) =>
           docs
           .filter((it) =>
