@@ -3,6 +3,7 @@ name: Nix
 slug: nix
 text_format: markdown
 generator: src:devdocs
+generator_command: doc src:devdocs use nix
 version: null
 copyright: |-
   © 2022 NixOS Contributors

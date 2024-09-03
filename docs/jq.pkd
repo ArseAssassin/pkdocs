@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the Creative Commons Attribution 3.0 license
   https://jqlang.github.io/jq/manual/v1.7/index.html
 homepage: https://jqlang.github.io/jq/
+generator_command: doc src:devdocs use jq
 
 ---
 - name: $__loc__

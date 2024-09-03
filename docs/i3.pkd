@@ -8,6 +8,7 @@ copyright: |-
   © 2009, Michael Stapelberg and contributors
   https://i3wm.org/docs/userguide.html
 homepage: https://i3wm.org/
+generator_command: doc src:devdocs use i3
 
 ---
 - name: 1. Default keybindings

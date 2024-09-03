@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the MIT License.
   https://vuejs.org/
 homepage: https://vuejs.org/
+generator_command: doc src:devdocs use vue~3
 
 ---
 - name: 1. Introduction  (Getting Started)

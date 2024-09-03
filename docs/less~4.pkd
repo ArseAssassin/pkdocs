@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the Creative Commons Attribution License 3.0.
   http://lesscss.org/features
 homepage: http://lesscss.org/
+generator_command: doc src:devdocs use less~4
 
 ---
 - name: '% format'

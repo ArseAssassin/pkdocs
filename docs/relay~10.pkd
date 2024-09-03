@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the BSD License.
   https://relay.dev/docs/en/introduction-to-relay
 homepage: https://relay.dev/
+generator_command: doc src:devdocs use relay~10
 
 ---
 - name: '@argumentDefinitions'

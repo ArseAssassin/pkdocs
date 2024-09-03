@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the GNU General Public License, version 2.
   https://fishshell.com/docs/3.7/index.html
 homepage: https://fishshell.com/
+generator_command: doc src:devdocs use fish~3.7
 
 ---
 - name: 1. Help

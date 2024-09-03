@@ -13,6 +13,7 @@ copyright: |-
   terms used herein.
   https://docs.docker.com/
 homepage: https://docker.com/
+generator_command: doc src:devdocs use docker
 
 ---
 - name: Access authorization plugin

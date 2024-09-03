@@ -10,6 +10,7 @@ copyright: |-
   License.
   https://reactjs.org/docs/hello-world.html
 homepage: https://reactjs.org/
+generator_command: doc src:devdocs use react
 
 ---
 - name: Accessibility

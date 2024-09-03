@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the GNU Free Documentation License, Version 1.3.
   https://love2d.org/wiki/Main_Page
 homepage: https://love2d.org/
+generator_command: doc src:devdocs use love
 
 ---
 - name: (File):close

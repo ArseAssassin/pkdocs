@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the GNU General Public License version 2.
   https://git-scm.com/docs
 homepage: https://git-scm.com/
+generator_command: doc src:devdocs use git
 
 ---
 - name: api index

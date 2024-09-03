@@ -8,6 +8,7 @@ copyright: |-
   Licensed under Tcl/Tk terms
   https://www.tcl.tk/man/tcl/contents.htm
 homepage: null
+generator_command: doc src:devdocs use tcl_tk
 
 ---
 - name: after

@@ -10,6 +10,7 @@ copyright: |-
   Copyright © 2022 The Linux Foundation ®. All rights reserved.
   https://v1-28.docs.kubernetes.io/docs/reference/kubernetes-api/
 homepage: https://kubernetes.io/
+generator_command: doc src:devdocs use kubernetes~1.28
 
 ---
 - name: allowWatchBookmarks

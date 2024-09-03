@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the Eclipse Public License 1.0.
   https://clojure.github.io/clojure/api-index.html
 homepage: https://clojure.org
+generator_command: doc src:devdocs use clojure~1.11
 
 ---
 - name: '&'

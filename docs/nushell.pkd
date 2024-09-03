@@ -9,6 +9,7 @@ copyright: |-
   MIT License.
   https://www.nushell.sh/commands/
 homepage: https://www.nushell.sh/
+generator_command: doc src:devdocs use nushell
 
 ---
 - name: alias

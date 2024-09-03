@@ -8,6 +8,7 @@ copyright: |-
   © 2022 Tailwind Labs Inc.
   https://tailwindcss.com/docs
 homepage: tps://tailwindcss.com/
+generator_command: doc src:devdocs use tailwindcss
 
 ---
 - name: Accent Color

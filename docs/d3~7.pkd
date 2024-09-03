@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the BSD License.
   https://github.com/d3/d3/blob/master/API.md
 homepage: https://d3js.org/
+generator_command: doc src:devdocs use d3~7
 
 ---
 - name: adder.add()

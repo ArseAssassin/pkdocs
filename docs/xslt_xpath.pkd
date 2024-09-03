@@ -10,6 +10,7 @@ copyright: |-
   or later.
   https://developer.mozilla.org/en-US/docs/Web/XSLT
 homepage: null
+generator_command: doc src:devdocs use xslt_xpath
 
 ---
 - name: ancestor

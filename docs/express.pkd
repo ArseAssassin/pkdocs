@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the Creative Commons Attribution-ShareAlike License v3.0.
   https://expressjs.com/en/4x/api.html
 homepage: https://expressjs.com/
+generator_command: doc src:devdocs use express
 
 ---
 - name: 1. Developing template engines for Express

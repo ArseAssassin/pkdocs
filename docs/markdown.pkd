@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the BSD License.
   https://daringfireball.net/projects/markdown/syntax
 homepage: null
+generator_command: doc src:devdocs use markdown
 
 ---
 - name: Automatic Links

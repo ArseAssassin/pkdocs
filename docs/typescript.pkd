@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the Apache License, Version 2.0.
   https://www.typescriptlang.org/docs/
 homepage: https://www.typescriptlang.org
+generator_command: doc src:devdocs use typescript
 
 ---
 - name: allowArbitraryExtensions

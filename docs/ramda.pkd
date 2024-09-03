@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the MIT License.
   https://ramdajs.com/0.27.0/docs/
 homepage: http://ramdajs.com/
+generator_command: doc src:devdocs use ramda
 
 ---
 - name: R.__

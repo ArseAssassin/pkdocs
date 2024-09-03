@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the MIT License.
   https://eslint.org/docs/latest/user-guide/getting-started
 homepage: https://eslint.org/
+generator_command: doc src:devdocs use eslint
 
 ---
 - name: accessor-pairs

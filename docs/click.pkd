@@ -10,6 +10,7 @@ copyright: |-
   We are not supported nor endorsed by Pallets.
   https://click.palletsprojects.com/en/8.1.x/index.html
 homepage: https://click.palletsprojects.com/
+generator_command: doc src:devdocs use click
 
 ---
 - name: Abort

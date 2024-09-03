@@ -9,6 +9,7 @@ copyright: |-
   Licensed under the MIT License.
   https://www.lua.org/manual/5.2/manual.html
 homepage: null
+generator_command: doc src:devdocs use lua~5.2
 
 ---
 - name: Arithmetic Operators
