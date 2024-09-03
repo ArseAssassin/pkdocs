@@ -1,0 +1,1269 @@
+---
+name: RequireJS
+slug: requirejs
+text_format: markdown
+generator: src:devdocs
+generator_command: src:devdocs
+version: null
+copyright: |-
+  © jQuery Foundation and other contributors
+  Licensed under the MIT License.
+  http://requirejs.org/docs/api.html
+homepage: http://requirejs.org/
+
+---
+- name: baseUrl
+  id: index#config-baseUrl
+  summary: 'baseUrl: the root path to use for all module lookups'
+  description: |-
+    **[baseUrl](#config-baseUrl)**: the root path to use for all module lookups. So in the above example, "my/module"'s script tag will have a src="/another/path/my/module.js". baseUrl is **not** used when loading plain .js files (indicated by a dependency string [starting with a slash, has a protocol, or ends in .js](#jsfiles)), those strings are used as-is, so a.js and b.js will be loaded from the same directory as the HTML page that contains the above snippet.
+
+    If no baseUrl is explicitly set in the configuration, the default value will be the location of the HTML page that loads require.js. If a **data-main** attribute is used, that path will become the baseUrl.
+
+    The baseUrl can be a URL on a different domain as the page that will load require.js. RequireJS script loading works across domains. The only restriction is on text content loaded by text! plugins: those paths should be on the same domain as the page, at least during development. The optimization tool will inline text! plugin resources so after using the optimization tool, you can use resources that reference text! plugin resources from another domain.
+- name: bundles
+  id: index#config-bundles
+  summary: 'bundles: Introduced in RequireJS 2.1.10: allows configuring multiple module IDs to be found in another script'
+  description: |-
+    **[bundles](#config-bundles)**: Introduced in RequireJS 2.1.10: allows configuring multiple module IDs to be found in another script. Example:
+
+    ``` javascript
+    requirejs.config({
+        bundles: {
+            'primary': ['main', 'util', 'text', 'text!template.html'],
+            'secondary': ['text!secondary.html']
+        }
+    });
+
+    require(['util', 'text'], function(util, text) {
+        //The script for module ID 'primary' was loaded,
+        //and that script included the define()'d
+        //modules for 'util' and 'text'
+    });
+    ```
+
+    That config states: modules 'main', 'util', 'text' and 'text!template.html' will be found by loading module ID 'primary'. Module 'text!secondary.html' can be found by loading module ID 'secondary'.
+
+    This only sets up where to find a module inside a script that has multiple define()'d modules in it. It does not automatically bind those modules to the bundle's module ID. The bundle's module ID is just used for locating the set of modules.
+
+    Something similar is possible with paths config, but it is much wordier, and the paths config route does not allow loader plugin resource IDs in its configuration, since the paths config values are path segments, not IDs.
+
+    bundles config is useful if doing a build and that build target was not an existing module ID, or if you have loader plugin resources in built JS files that should not be loaded by the loader plugin. **Note that the keys and values are module IDs**, not path segments. They are absolute module IDs, not a module ID prefix like [paths config](#config-paths) or [map config](#config-map). Also, bundle config is different from map config in that map config is a one-to-one module ID relationship, where bundle config is for pointing multiple module IDs to a bundle's module ID.
+
+    As of RequireJS 2.2.0, the optimizer can generate the bundles config and insert it into the top level requirejs.config() call. See the [bundlesConfigOutFile](https://github.com/requirejs/r.js/blob/98a9949480d68a781c8d6fc4ce0a07c16a2c8a2a/build/example.build.js#L641) build config option for more details.
+- name: callback
+  id: index#config-callback
+  summary: 'callback: A function to execute after deps have been loaded'
+  description: '**[callback](#config-callback)**: A function to execute after **deps** have been loaded. Useful when require is defined as a config object before require.js is loaded, and you want to specify a function to require after the configuration''s **deps** array has been loaded.'
+- name: Catching load failures in IE
+  id: index#ieloadfail
+  summary: So it is very difficult with IE to allow both anonymous AMD modules, which are a core benefit of AMD modules, and reliable detect errors
+  description: |-
+    #### Catching load failures in IE
+
+    Internet Explorer has a set of problems that make it difficult to detect load failures for errbacks/paths fallbacks:
+
+    - script.onerror does not work in IE 6-8. There is no way to know if loading a script generates a 404, worse, it triggers the onreadystatechange with a complete state even in a 404 case.
+    - script.onerror does work in IE 9+, but it has a bug where it does not fire script.onload event handlers right after execution of script, so it cannot support the standard method of allowing anonymous AMD modules. So script.onreadystatechange is still used. However, onreadystatechange fires with a complete state before the script.onerror function fires.
+
+    So it is very difficult with IE to allow both anonymous AMD modules, which are a core benefit of AMD modules, and reliable detect errors.
+
+    However, if you are in a project that you know uses define() to declare all of its modules, or it uses the [shim](#config-shim) config to specify string exports for anything that does not use define(), then if you set the [enforceDefine](#config-enforceDefine) config value to true, the loader can confirm if a script load by checking for the define() call or the existence of the shim's exports global value.
+
+    So if you want to support Internet Explorer, catch load errors, and have modular code either through direct define() calls or shim config, always set **enforceDefine** to be true. See the next section for an example.
+
+    **NOTE**: If you do set enforceDefine: true, and you use data-main="" to load your main JS module, then that main JS module **must call define()** instead of require() to load the code it needs. The main JS module can still call require/requirejs to set config values, but for loading modules it should use define().
+
+    If you then also use [almond](https://github.com/requirejs/almond) to build your code without require.js, be sure to use the [insertRequire](https://github.com/requirejs/r.js/blob/master/build/example.build.js#L413) build setting to insert a require call for the main module -- that serves the same purpose of the initial require() call that data-main does.
+- name: Circular Dependencies
+  id: index#circular
+  summary: Normally you should not need to use require() to fetch a module, but instead rely on the module being passed in to the function as an argument
+  description: |-
+    #### Circular Dependencies
+
+    If you define a circular dependency ("a" needs "b" and "b" needs "a"), then in this case when "b"'s module function is called, it will get an undefined value for "a". "b" can fetch "a" later after modules have been defined by using the require() method (be sure to specify require as a dependency so the right context is used to look up "a"):
+
+    ``` javascript
+    //Inside b.js:
+    define(["require", "a"],
+        function(require, a) {
+            //"a" in this case will be null if "a" also asked for "b",
+            //a circular dependency.
+            return function(title) {
+                return require("a").doSomething();
+            }
+        }
+    );
+    ```
+
+    Normally you should not need to use require() to fetch a module, but instead rely on the module being passed in to the function as an argument. Circular dependencies are rare, and usually a sign that you might want to rethink the design. However, sometimes they are needed, and in that case, use require() as specified above.
+
+    If you are familiar with CommonJS modules, you could instead use **exports** to create an empty object for the module that is available immediately for reference by other modules. By doing this on both sides of a circular dependency, you can then safely hold on to the the other module. This only works if each module is exporting an object for the module value, not a function:
+
+    ``` javascript
+    //Inside b.js:
+    define(function(require, exports, module) {
+        //If "a" has used exports, then we have a real
+        //object reference here. However, we cannot use
+        //any of "a"'s properties until after "b" returns a value.
+        var a = require("a");
+
+        exports.foo = function () {
+            return a.bar();
+        };
+    });
+    ```
+
+    Or, if you are using the dependency array approach, ask for the special ['exports' dependency:](https://github.com/requirejs/requirejs/wiki/Differences-between-the-simplified-CommonJS-wrapper-and-standard-AMD-define#wiki-magic)
+
+    ``` javascript
+    //Inside b.js:
+    define(['a', 'exports'], function(a, exports) {
+        //If "a" has used exports, then we have a real
+        //object reference here. However, we cannot use
+        //any of "a"'s properties until after "b" returns a value.
+
+        exports.foo = function () {
+            return a.bar();
+        };
+    });
+    ```
+- name: Common Errors
+  id: errors
+  summary: This page lists errors that are generated by RequireJS
+  description: "# Common Errors\n\n- [Mismatched anonymous define() modules ...](#mismatch)\n- [Load timeout for modules: ...](#timeout)\n- [Error evaluating module ...](#defineerror)\n- [Module name ... has not been loaded yet for context: ...](#notloaded)\n- [Invalid require call](#requireargs)\n- [No define call for ...](#nodefine)\n- [Script error](#scripterror)\n- [No matching script interactive for ...](#interactive)\n- [Path is not supported: ...](#pathnotsupported)\n- [Cannot use preserveLicenseComments and generateSourceMaps together](#sourcemapcomments)\n- [importScripts failed for ...](#importscripts)\n\nThis page lists errors that are generated by RequireJS. If the following information does not fix the problem, you can ask on the [RequireJS list](https://groups.google.com/group/requirejs) or [open an issue](https://github.com/requirejs/requirejs/issues). In either case it is best to have an example or detailed explanation of the problem, hopefully with steps to reproduce.\n\n## Mismatched anonymous define() modules ...\n\nIf you manually code a script tag in HTML to load a script with an anonymous define() call, this error can occur.\n\nIf you manually code a script tag in HTML to load a script that has a few named modules, but then try to load an anonymous module that ends up having the same name as one of the named modules in the script loaded by the manually coded script tag.\n\nIf you use the loader plugins or anonymous modules (modules that call define() with no string ID) but do not use the RequireJS optimizer to combine files together, this error can occur. The optimizer knows how to name anonymous modules correctly so that they can be combined with other modules in an optimized file.\n\nIf you use `var define;` at the top of your file for jshint/jslint purposes, this will cause a problem for the optimizer because it avoids parsing files that declare a `define` variable, since that may indicate a script that was created by a concatenation of some scripts that use a local define.\n\nTo avoid the error:\n\n- Be sure to load all scripts that call define() via the RequireJS API. Do not manually code script tags in HTML to load scripts that have define() calls in them.\n- If you manually code an HTML script tag, be sure it only includes named modules, and that an anonymous module that will have the same name as one of the modules in that file is not loaded.\n- If the problem is the use of loader plugins or anonymous modules but the RequireJS optimizer is not used for file bundling, use the RequireJS optimizer.\n- If the problem is the `var define` lint approach, use `/*global define */` (no space before \"global\") comment style instead.\n\n## Load timeout for modules: ...\n\nLikely causes and fixes:\n\n- There was a script error in one of the listed modules. If there is no script error in the browser's error console, and if you are using Firebug, try loading the page in another browser like Chrome or Safari. Sometimes script errors do not show up in Firebug.\n- The path configuration for a module is incorrect. Check the \"Net\" or \"Network\" tab in the browser's developer tools to see if there was a 404 for an URL that would map to the module name. Make sure the script file is in the right place. In some cases you may need to use the [paths configuration](api#config) to fix the URL resolution for the script.\n- The paths config was used to set two module IDs to the same file, and that file only has one anonymous module in it. If module IDs \"something\" and \"lib/something\" are both configured to point to the same \"scripts/libs/something.js\" file, and something.js only has one anonymous module in it, this kind of timeout error can occur. The fix is to make sure all module ID references use the same ID (either choose \"something\" or \"lib/something\" for all references), or use [map config](api#config-map).\n\n## Error evaluating module ...\n\nAn error occured when the define() function was called for the module given in the error message. It is an error with the code logic inside the define function. The error could happen inside a require callback.\n\nIn Firefox and WebKit browsers, a line number and file name will be indicated in the error. It can be used to locate the source of the problem. Better isolation of the error can be done by using a debugger to place a breakpoint in the file that contains the error.\n\n## Module name ... has not been loaded yet for context: ...\n\nThis occurs when there is a require('name') call, but the 'name' module has not been loaded yet.\n\nIf the error message includes **Use require(\\[\\])**, then it was a top-level require call (not a require call inside a define() call) that should be using the async, callback version of require to load the code:\n\n``` javascript\n//If this code is not in a define call,\n//DO NOT use require('foo'), but use the async\n//callback version:\nrequire(['foo'], function (foo) {\n    //foo is now loaded.\n});\n```\n\nIf you are using the simplified define wrapper, make sure you have **require** as the first argument to the definition function:\n\n``` javascript\ndefine(function (require) {\n    var namedModule = require('name');\n});\n```\n\nIf you are listing dependencies in the dependency array, make sure that **require** and **name** are in the dependency array:\n\n``` javascript\ndefine(['require', 'name'], function (require) {\n    var namedModule = require('name');\n});\n```\n\nIn particular, **the following will not work**:\n\n``` javascript\n//THIS WILL FAIL\ndefine(['require'], function (require) {\n    var namedModule = require('name');\n});\n```\n\nThis fails because requirejs needs to be sure to load and execute all dependencies before calling the factory function above. If a dependency array is given to define(), then requirejs assumes that all dependencies are listed in that array, and it will not scan the factory function for other dependencies. So, either do not pass in the dependency array, or if using the dependency array, list all the dependencies in it.\n\nIf part of a require() callback, all the dependencies need to be listed in the array:\n\n``` javascript\nrequire(['require', 'name'], function (require) {\n    var namedModule = require('name');\n});\n```\n\nBe sure that **require('name')** only occurs inside a define() definition function or a require() callback function, never in the global space by its own.\n\n**In the RequreJS 1.0.x releases**, there [is a bug](https://github.com/requirejs/requirejs/issues/265) with having a space between the require and parens in WebKit browsers when using the simplified CommonJS wrapping (no dependency array):\n\n``` javascript\ndefine(function (require) {\n    //Notice the space between require and the arguments.\n    var namedModule = require ('name');\n});\n```\n\nThe workaround is to just remove the space. This is fixed in the 2.0 code, and may be backported to the 1.0.x series if a 1.0.9 release is done.\n\n## Invalid require call\n\nThis occurs when there is a call like:\n\n``` javascript\nrequire('dependency', function (dependency) {});\n```\n\nAsynchronously loading dependencies should use an array to list the dependencies:\n\n``` javascript\nrequire(['dependency'], function (dependency) {});\n```\n\n## No define call for ...\n\nThis occurs when [enforceDefine is set to true](#), and a script that is loaded either:\n\n- Did not call define() to declare a module.\n- Or was part of a [shim config](api#config-shim) that specified a string `exports` property that can be checked to verify loading, and that check failed.\n- Or was part of a [shim config](api#config-shim) that did not set a string value for the `exports` config option.\n\nOr, if the error shows up only in IE and not in other browsers (which may generate a [Script error](#scripterror), the script probably:\n\n- Threw a JavaScript syntax/evaluation error.\n- Or there was a 404 error in IE where the script failed to load.\n\nThose IE behaviors result in [IE's quirks in detecting script errors](api#ieloadfail).\n\nTo fix it:\n\n- If the module calls define(), make sure the define call was reached by debugging in a script debugger.\n- If part of a shim config, make sure the shim config's exports check is correct.\n- If in IE, check for an HTTP 404 error or a JavaScript sytnax error by using a script debugger.\n\n## Script error\n\nThis occurs when the script.onerror function is triggered in a browser. This usually means there is a JavaScript syntax error or other execution problem running the script. To fix it, examine the script that generated the error in a script debugger.\n\nThis error may not show up in IE, just other browsers, and instead, in IE you may see the [No define call for ...](#nodefine) error when you see \"Script error\". This is due to [IE's quirks in detecting script errors](api#ieloadfail).\n\n## No matching script interactive for ...\n\nThis error only shows up in some IE browsers. Most likely caused by loading a script that calls define() but was loaded in a plain script tag or via some other call, like an eval() of a JavaScript string.\n\nTo avoid the error, be sure to load all scripts that call define via the RequireJS API.\n\n## Path is not supported: ...\n\nThis error occurs when the optimizer encounters a path to a module or script which is a network path. The optimizer only allows building with local resources. To fix it:\n\nMake sure you reference the network dependency as a module name, not as a full URL, so that it can be mapped to a different during the build:\n\n``` javascript\n//DO NOT DO THIS\nrequire(['http://some.domain.dom/path/to/dependency.js'],\nfunction (dependency) {});\n\n//Rather, do this:\nrequire.config({\n    paths: {\n        'dependency': 'http://some.domain.dom/path/to/dependency'\n    }\n});\n\nrequire(['dependency'], function (dependency) {});\n```\n\nIf you want to include this dependency in the built/optimized file, download the JS file and in the build profile for the optimizer, put in a paths config that points to that local file.\n\nIf you want to **exclude** that file from being included, and just need to map \"dependency\" for the build (otherwise it will not build), then use the special \"empty:\" paths config:\n\n``` javascript\n//Inside the build profile\n{\n    paths: {\n        'dependency': 'empty:'\n    }\n}\n```\n\n## Cannot use preserveLicenseComments and generateSourceMaps together\n\nIn the r.js optimizer, **preserveLicenseComments** works as a pre- and post-processing step on a JS file. Various kinds of license comments are found, pulled out of the JS source, then that modified source is passed to the minifier. When the minifier is done, the comments are added to the top of the file by the r.js optimizer.\n\nHowever, for the minifier to accurately construct a source map, the minified source cannot be modified in any way, so **preserveLicenseComments** is incompatible with **generateSourceMaps**. generateSourceMaps was introduced in version 2.1.2 of the optimizer.\n\nThe default for the optimizer is for **preserveLicenseComments** to be true. So if using **generateSourceMaps**, then explicitly set **preserveLicenseComments** to false. If you want to preserve some license comments, you can manually modify the license comments in the JS source to use the JSDoc-style `@license` comment. See \"[Annotating JavaScript for the Closure Compiler](https://developers.google.com/closure/compiler/docs/js-for-compiler#tag-license)\" for more information. That same format works for UglifyJS2.\n\n## importScripts failed for ...\n\nWhen RequireJS is used in a [Web Worker](https://developer.mozilla.org/en-US/docs/DOM/Using_web_workers), [importScripts](https://developer.mozilla.org/en-US/docs/DOM/Using_web_workers#Importing_scripts_and_libraries) is used to load modules. If that call failed for some reason, this error is generated.\n\n© jQuery Foundation and other contributors  \nLicensed under the MIT License.  \n[http://requirejs.org/docs/errors.html](http://requirejs.org/docs/errors.html)"
+- name: CommonJS Notes
+  id: commonjs
+  summary: CommonJS defines a module format
+  description: "# CommonJS Notes\n\n- [Introduction](#intro)\n- [Manual Conversion](#manualconversion)\n- [Conversion Tool](#autoconversion)\n- [Setting Exported Value](#exports)\n- [Alternative Syntax](#altsyntax)\n- [Loading Modules from CommonJS Packages](#packages)\n- [Optimization Tool](#optimize)\n\n## Introduction\n\n[CommonJS](http://www.commonjs.org/) defines [a module format](http://wiki.commonjs.org/wiki/Modules/1.1.1). Unfortunately, it was defined without giving browsers equal footing to other JavaScript environments. Because of that, there are CommonJS spec proposals for [Transport formats](http://wiki.commonjs.org/wiki/Modules/Transport) and an [asynchronous require](http://wiki.commonjs.org/wiki/Modules/Async/A).\n\nRequireJS tries to keep with the spirit of CommonJS, with using string names to refer to dependencies, and to avoid modules defining global objects, but still allow coding a module format that works well natively in the browser. RequireJS implements the [Asynchronous Module Definition](http://wiki.commonjs.org/wiki/Modules/AsynchronousDefinition) (formerly Transport/C) proposal.\n\nIf you have modules that are in the traditional CommonJS module format, then you can easily convert them to work with RequireJS. Not all modules will convert cleanly to the new format. Types of modules that may not convert well:\n\n- Modules that use conditional code to do a require call, like if(someCondition) require('a1') else require('a2');\n- Some types of circular dependencies.\n\n## Manual Conversion\n\nIf you just have a few modules to convert, then all you need to do is wrap the module in this code:\n\n``` javascript\ndefine(function(require, exports, module) {\n    //Put traditional CommonJS module content here\n});\n```\n\n**IMPORTANT**: The function arguments should always be listed as **require, exports, module**, with those exact names and in that exact order, otherwise chaos will ensue. You can leave off exports and module from the list, but if they are needed, they need to be specified in the exact order illustrated here.\n\n## Conversion Tool\n\nIf you have many modules to convert, the [r.js project](https://github.com/requirejs/r.js) has a converter tool built into the r.js file. Give it the path to the directory you want to convert and an output directory:\n\n``` javascript\nnode r.js -convert path/to/commonjs/modules/ path/to/output\n```\n\nThere are a small number of CommonJS modules do not work well as define()-wrapped modules. See the [r.js README](https://github.com/requirejs/r.js)\n\nfor more information.\n\n## Setting Exported Value\n\nThere are some CommonJS systems, mainly Node, that allow setting the exported value by assigning the exported value as module.exports. That idiom is supported by RequireJS, but there is another, easier way -- just return the value from the function passed to **define**:\n\n``` javascript\ndefine(function (require) {\n    var foo = require('foo');\n\n    //Define this module as exporting a function\n    return function () {\n        foo.doSomething();\n    };\n});\n```\n\nWith this approach, then you normally do not need the exports and module function arguments, so you can leave them off the module definition.\n\n## Alternative Syntax\n\nInstead of using require() to get dependencies inside the function passed to define(), you can also specify them via a dependency array argument to define(). The order of the names in the dependency array match the order of arguments passed to the definition function passed to define(). So the above example that uses the module **foo**:\n\n``` javascript\ndefine(['foo'], function (foo) {\n    return function () {\n        foo.doSomething();\n    };\n});\n```\n\nSee the [API docs](index) for more information on that syntax.\n\n## Loading Modules from CommonJS Packages\n\nModules in CommonJS packages can be loaded by RequireJS by setting up the RequireJS configuration to know about the location and package attributes. See the [packages API section](api#packages) for more information.\n\n## Optimization Tool\n\nRequireJS has an optimization tool that can combine module definitions together into optimized bundles for browser delivery. It works as a command-line tool that you use as part of code deployment. See the [optimization docs](optimization) for more information.\n\n© jQuery Foundation and other contributors  \nLicensed under the MIT License.  \n[http://requirejs.org/docs/commonjs.html](http://requirejs.org/docs/commonjs.html)"
+- name: config
+  id: index#config-moduleconfig
+  summary: 'config: There is a common need to pass configuration info to a module'
+  description: |-
+    **[config](#config-moduleconfig)**: There is a common need to pass configuration info to a module. That configuration info is usually known as part of the application, and there needs to be a way to pass that down to a module. In RequireJS, that is done with the **config** option for requirejs.config(). Modules can then read that info by asking for the special dependency "module" and calling **module.config()**. Example:
+
+    ``` javascript
+    requirejs.config({
+        config: {
+            'bar': {
+                size: 'large'
+            },
+            'baz': {
+                color: 'blue'
+            }
+        }
+    });
+
+    //bar.js, which uses simplified CJS wrapping:
+    //http://requirejs.org/docs/whyamd.html#sugar
+    define(function (require, exports, module) {
+        //Will be the value 'large'
+        var size = module.config().size;
+    });
+
+    //baz.js which uses a dependency array,
+    //it asks for the special module ID, 'module':
+    //https://github.com/requirejs/requirejs/wiki/Differences-between-the-simplified-CommonJS-wrapper-and-standard-AMD-define#wiki-magic
+    define(['module'], function (module) {
+        //Will be the value 'blue'
+        var color = module.config().color;
+    });
+    ```
+
+    For passing config to a [package](#packages), target the main module in the package, not the package ID:
+
+    ``` javascript
+    requirejs.config({
+        //Pass an API key for use in the pixie package's
+        //main module.
+        config: {
+            'pixie/index': {
+                apiKey: 'XJKDLNS'
+            }
+        },
+        //Set up config for the "pixie" package, whose main
+        //module is the index.js file in the pixie folder.
+        packages: [
+            {
+                name: 'pixie',
+                main: 'index'
+            }
+        ]
+    });
+    ```
+- name: context
+  id: index#config-context
+  summary: 'context: A name to give to a loading context'
+  description: '**[context](#config-context)**: A name to give to a loading context. This allows require.js to load multiple versions of modules in a page, as long as each top-level require call specifies a unique context string. To use it correctly, see the [Multiversion Support](#multiversion) section.'
+- name: data-main Entry Point
+  id: index#data-main
+  summary: You will typically use a data-main script to set configuration options and then load the first application module
+  description: |-
+    ### data-main Entry Point
+
+    The data-main attribute is a special attribute that require.js will check to start script loading:
+
+    ``` markup
+    <!--when require.js loads it will inject another script tag
+        (with async attribute) for scripts/main.js-->
+    <script data-main="scripts/main" src="scripts/require.js"></script>
+    ```
+
+    You will typically use a data-main script to [set configuration options](#config) and then load the first application module. Note: the script tag require.js generates for your data-main module includes the [async attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#attr-async). This means that **you cannot assume that the load and execution of your data-main script will finish prior to other scripts referenced later in the same page.**
+
+    For example, this arrangement will fail randomly when the require.config path for the 'foo' module has not been set prior to it being require()'d later:
+
+    ``` markup
+    <script data-main="scripts/main" src="scripts/require.js"></script>
+    <script src="scripts/other.js"></script>
+    ```
+
+    ``` javascript
+    // contents of main.js:
+    require.config({
+        paths: {
+            foo: 'libs/foo-1.1.3'
+        }
+    });
+    ```
+
+    ``` javascript
+    // contents of other.js:
+
+    // This code might be called before the require.config() in main.js
+    // has executed. When that happens, require.js will attempt to
+    // load 'scripts/foo.js' instead of 'scripts/libs/foo-1.1.3.js'
+    require(['foo'], function(foo) {
+
+    });
+    ```
+
+    If you want to do `require()` calls in the HTML page, then it is best to not use data-main. data-main is only intended for use when the page just has one main entry point, the data-main script. For pages that want to do inline `require()` calls, it is best to nest those inside a `require()` call for the configuration:
+
+    ``` markup
+    <script src="scripts/require.js"></script>
+    <script>
+    require(['scripts/config'], function() {
+        // Configuration loaded now, safe to do other require calls
+        // that depend on that config.
+        require(['foo'], function(foo) {
+
+        });
+    });
+    </script>
+    ```
+- name: Define a Module
+  id: index#define
+  summary: A module is different from a traditional script file in that it defines a well-scoped object that avoids polluting the global namespace
+  description: |-
+    ### Define a Module
+
+    A module is different from a traditional script file in that it defines a well-scoped object that avoids polluting the global namespace. It can explicitly list its dependencies and get a handle on those dependencies without needing to refer to global objects, but instead receive the dependencies as arguments to the function that defines the module. Modules in RequireJS are an extension of the [Module Pattern](http://www.adequatelygood.com/2010/3/JavaScript-Module-Pattern-In-Depth), with the benefit of not needing globals to refer to other modules.
+
+    The RequireJS syntax for modules allows them to be loaded as fast as possible, even out of order, but evaluated in the correct dependency order, and since global variables are not created, it makes it possible to [load multiple versions of a module in a page](#multiversion).
+
+    (If you are familiar with or are using CommonJS modules, then please also see [CommonJS Notes](commonjs) for information on how the RequireJS module format maps to CommonJS modules).
+
+    There should only be **one** module definition per file on disk. The modules can be grouped into optimized bundles by the [optimization tool](optimization).
+- name: Define a Module as a Function
+  id: index#funcmodule
+  summary: Modules do not have to return objects
+  description: |-
+    #### Define a Module as a Function
+
+    Modules do not have to return objects. Any valid return value from a function is allowed. Here is a module that returns a function as its module definition:
+
+    ``` javascript
+    //A module definition inside foo/title.js. It uses
+    //my/cart and my/inventory modules from before,
+    //but since foo/title.js is in a different directory than
+    //the "my" modules, it uses the "my" in the module dependency
+    //name to find them. The "my" part of the name can be mapped
+    //to any directory, but by default, it is assumed to be a
+    //sibling to the "foo" directory.
+    define(["my/cart", "my/inventory"],
+        function(cart, inventory) {
+            //return a function to define "foo/title".
+            //It gets or sets the window title.
+            return function(title) {
+                return title ? (window.title = title) :
+                       inventory.storeName + ' ' + cart.name;
+            }
+        }
+    );
+    ```
+- name: Define a Module with a Name
+  id: index#modulename
+  summary: These are normally generated by the optimization tool
+  description: |-
+    #### Define a Module with a Name
+
+    You may encounter some define() calls that include a name for the module as the first argument to define():
+
+    ``` javascript
+        //Explicitly defines the "foo/title" module:
+        define("foo/title",
+            ["my/cart", "my/inventory"],
+            function(cart, inventory) {
+                //Define foo/title object in here.
+           }
+        );
+    ```
+
+    These are normally generated by the [optimization tool](optimization). You can explicitly name modules yourself, but it makes the modules less portable -- if you move the file to another directory you will need to change the name. It is normally best to avoid coding in a name for the module and just let the optimization tool burn in the module names. The optimization tool needs to add the names so that more than one module can be bundled in a file, to allow for faster loading in the browser.
+- name: Define a Module with Simplified CommonJS Wrapper
+  id: index#cjsmodule
+  summary: If you wish to reuse some code that was written in the traditional CommonJS module format it may be difficult to re-work to the array of dependencies used above, and you may prefer to have direct alignment of dependency name to the local variable used for that dependency
+  description: |-
+    #### Define a Module with Simplified CommonJS Wrapper
+
+    If you wish to reuse some code that was written in the traditional [CommonJS module format](http://wiki.commonjs.org/wiki/Modules/1.1.1) it may be difficult to re-work to the array of dependencies used above, and you may prefer to have direct alignment of dependency name to the local variable used for that dependency. You can use the [simplified CommonJS wrapper](commonjs) for those cases:
+
+    ``` javascript
+    define(function(require, exports, module) {
+            var a = require('a'),
+                b = require('b');
+
+            //Return the module value
+            return function () {};
+        }
+    );
+    ```
+
+    This wrapper relies on Function.prototype.toString() to give a useful string value of the function contents. This does not work on some devices like the PS3 and some older Opera mobile browsers. Use the [optimizer](optimization) to pull out the dependencies in the array format for use on those devices.
+
+    More information is available on the [CommonJS page](commonjs), and in the ["Sugar" section in the Why AMD page](whyamd#sugar).
+- name: Define an I18N Bundle
+  id: index#i18n
+  summary: Once your web app gets to a certain size and popularity, localizing the strings in the interface and providing other locale-specific information becomes more useful
+  description: "### Define an I18N Bundle\n\nOnce your web app gets to a certain size and popularity, localizing the strings in the interface and providing other locale-specific information becomes more useful. However, it can be cumbersome to work out a scheme that scales well for supporting multiple locales.\n\nRequireJS allows you to set up a basic module that has localized information without forcing you to provide all locale-specific information up front. It can be added over time, and only strings/values that change between locales can be defined in the locale-specific file.\n\ni18n bundle support is provided by the i18n.js plugin. It is automatically loaded when a module or dependency specifies the i18n! prefix (more info below). [Download the plugin](http://requirejs.org/docs/download.html#i18n) and put it in the same directory as your app's main JS file.\n\nTo define a bundle, put it in a directory called \"nls\" -- the i18n! plugin assumes a module name with \"nls\" in it indicates an i18n bundle. The \"nls\" marker in the name tells the i18n plugin where to expect the locale directories (they should be immediate children of the nls directory). If you wanted to provide a bundle of color names in your \"my\" set of modules, create the directory structure like so:\n\n- my/nls/colors.js\n\nThe contents of that file should look like so:\n\n``` javascript\n//my/nls/colors.js contents:\ndefine({\n    \"root\": {\n        \"red\": \"red\",\n        \"blue\": \"blue\",\n        \"green\": \"green\"\n    }\n});\n```\n\nAn object literal with a property of \"root\" defines this module. That is all you have to do to set the stage for later localization work.\n\nYou can then use the above module in another module, say, in a my/lamps.js file:\n\n``` javascript\n//Contents of my/lamps.js\ndefine([\"i18n!my/nls/colors\"], function(colors) {\n    return {\n        testMessage: \"The name for red in this locale is: \" + colors.red\n    }\n});\n```\n\nThe my/lamps module has one property called \"testMessage\" that uses colors.red to show the localized value for the color red.\n\nLater, when you want to add a specific translation to a file, say for the fr-fr locale, change my/nls/colors to look like so:\n\n``` javascript\n//Contents of my/nls/colors.js\ndefine({\n    \"root\": {\n        \"red\": \"red\",\n        \"blue\": \"blue\",\n        \"green\": \"green\"\n    },\n    \"fr-fr\": true\n});\n```\n\nThen define a file at my/nls/fr-fr/colors.js that has the following contents:\n\n``` javascript\n//Contents of my/nls/fr-fr/colors.js\ndefine({\n    \"red\": \"rouge\",\n    \"blue\": \"bleu\",\n    \"green\": \"vert\"\n});\n```\n\nRequireJS will use the browser's navigator.languages, navigator.language or navigator.userLanguage property to determine what locale values to use for my/nls/colors, so your app does not have to change. If you prefer to set the locale, you can use the [module config](#config-moduleconfig) to pass the locale to the plugin:\n\n``` javascript\nrequirejs.config({\n    config: {\n        //Set the config for the i18n\n        //module ID\n        i18n: {\n            locale: 'fr-fr'\n        }\n    }\n});\n```\n\n**Note** that RequireJS will always use a lowercase version of the locale, to avoid case issues, so all of the directories and files on disk for i18n bundles should use lowercase locales.\n\nRequireJS is also smart enough to pick the right locale bundle, the one that most closely matches the ones provided by my/nls/colors. For instance, if the locale is \"en-us\", then the \"root\" bundle will be used. If the locale is \"fr-fr-paris\" then the \"fr-fr\" bundle will be used.\n\nRequireJS also combines bundles together, so for instance, if the french bundle was defined like so (omitting a value for red):\n\n``` javascript\n//Contents of my/nls/fr-fr/colors.js\ndefine({\n    \"blue\": \"bleu\",\n    \"green\": \"vert\"\n});\n```\n\nThen the value for red in \"root\" will be used. This works for all locale pieces. If all the bundles listed below were defined, then RequireJS will use the values in the following priority order (the one at the top takes the most precedence):\n\n- my/nls/fr-fr-paris/colors.js\n- my/nls/fr-fr/colors.js\n- my/nls/fr/colors.js\n- my/nls/colors.js\n\nIf you prefer to not include the root bundle in the top level module, you can define it like a normal locale bundle. In that case, the top level module would look like:\n\n``` javascript\n//my/nls/colors.js contents:\ndefine({\n    \"root\": true,\n    \"fr-fr\": true,\n    \"fr-fr-paris\": true\n});\n```\n\nand the root bundle would look like:\n\n``` javascript\n//Contents of my/nls/root/colors.js\ndefine({\n    \"red\": \"red\",\n    \"blue\": \"blue\",\n    \"green\": \"green\"\n});\n```\n\n© jQuery Foundation and other contributors  \nLicensed under the MIT License.  \n[http://requirejs.org/docs/api.html](http://requirejs.org/docs/api.html)"
+- name: Definition Functions
+  id: index#deffunc
+  summary: null
+  description: |-
+    #### Definition Functions
+
+    If the module does not have dependencies, but needs to use a function to do some setup work, then define itself, pass a function to define():
+
+    ``` javascript
+    //my/shirt.js now does setup work
+    //before returning its module definition.
+    define(function () {
+        //Do setup work here
+
+        return {
+            color: "black",
+            size: "unisize"
+        }
+    });
+    ```
+- name: Definition Functions with Dependencies
+  id: index#defdep
+  summary: If the module has dependencies, the first argument should be an array of dependency names, and the second argument should be a definition function
+  description: |-
+    #### Definition Functions with Dependencies
+
+    If the module has dependencies, the first argument should be an array of dependency names, and the second argument should be a definition function. The function will be called to define the module once all dependencies have loaded. The function should return an object that defines the module. The dependencies will be passed to the definition function as function arguments, listed in the same order as the order in the dependency array:
+
+    ``` javascript
+    //my/shirt.js now has some dependencies, a cart and inventory
+    //module in the same directory as shirt.js
+    define(["./cart", "./inventory"], function(cart, inventory) {
+            //return an object to define the "my/shirt" module.
+            return {
+                color: "blue",
+                size: "large",
+                addToCart: function() {
+                    inventory.decrement(this);
+                    cart.add(this);
+                }
+            }
+        }
+    );
+    ```
+
+    In this example, a my/shirt module is created. It depends on my/cart and my/inventory. On disk, the files are structured like this:
+
+    - my/cart.js
+    - my/inventory.js
+    - my/shirt.js
+
+    The function call above specifies two arguments, "cart" and "inventory". These are the modules represented by the "./cart" and "./inventory" module names.
+
+    The function is not called until the my/cart and my/inventory modules have been loaded, and the function receives the modules as the "cart" and "inventory" arguments.
+
+    Modules that define globals are explicitly discouraged, so that multiple versions of a module can exist in a page at a time (see **Advanced Usage**). Also, the order of the function arguments should match the order of the dependencies.
+
+    The return object from the function call defines the "my/shirt" module. By defining modules in this way, "my/shirt" does not exist as a global object.
+- name: deps
+  id: index#config-deps
+  summary: 'deps: An array of dependencies to load'
+  description: '**[deps](#config-deps)**: An array of dependencies to load. Useful when require is defined as a config object before require.js is loaded, and you want to specify dependencies to load as soon as require() is defined. Using deps is just like doing a `require([])` call, but done as soon as the loader has processed the configuration. **It does not block** any other require() calls from starting their requests for modules, it is just a way to specify some modules to load asynchronously as part of a config block.'
+- name: enforceDefine
+  id: index#config-enforceDefine
+  summary: 'enforceDefine: If set to true, an error will be thrown if a script loads that does not call define() or have a shim exports string value that can be checked'
+  description: '**[enforceDefine](#config-enforceDefine)**: If set to true, an error will be thrown if a script loads that does not call define() or have a shim exports string value that can be checked. See [Catching load failures in IE](#ieloadfail) for more information.'
+- name: Global requirejs.onError function
+  id: index#requirejsonerror
+  summary: RequireJS supports loader plugins
+  description: |-
+    #### Global requirejs.onError function
+
+    To detect errors that are not caught by local errbacks, you can override requirejs.onError():
+
+    ``` javascript
+    requirejs.onError = function (err) {
+        console.log(err.requireType);
+        if (err.requireType === 'timeout') {
+            console.log('modules: ' + err.requireModules);
+        }
+
+        throw err;
+    };
+    ```
+
+    ## Loader Plugins
+
+    RequireJS supports [loader plugins](plugins). This is a way to support dependencies that are not plain JS files, but are still important for a script to have loaded before it can do its work. The RequireJS wiki has [a list of plugins](https://github.com/requirejs/requirejs/wiki/Plugins). This section talks about some specific plugins that are maintained alongside RequireJS:
+- name: Handling Errors
+  id: index#errors
+  summary: The general class of errors are 404s for scripts (not found), network timeouts or errors in the scripts that are loaded
+  description: |-
+    ### Handling Errors
+
+    The general class of errors are 404s for scripts (not found), network timeouts or errors in the scripts that are loaded. RequireJS has a few tools to deal with them: require-specific errbacks, a "paths" array config, and a global requirejs.onError.
+
+    The error object passed to errbacks and the global requirejs.onError function will usually contain two custom properties:
+
+    - **requireType**: A string value with a general classification, like "timeout", "nodefine", "scripterror".
+    - **requireModules**: an array of module names/URLs that timed out.
+
+    If you get an error with a requireModules, it probably means other modules that depend on the modules in that requireModules array are not defined.
+- name: How to use RequireJS with Dojo
+  id: dojo
+  summary: As of Dojo 1.8, Dojo has converted their modules to AMD modules
+  description: "# How to use RequireJS with Dojo\n\nAs of Dojo 1.8, Dojo has converted their modules to AMD modules. However, Dojo uses some loader plugins, and the loader plugin APIs are still in draft mode for AMD. So while some modules from Dojo can be used with RequireJS, it will be difficult to use all of Dojo. It is best to use Dojo's AMD loader until [ticket 15616](http://bugs.dojotoolkit.org/ticket/15616) has been resolved.\n\n© jQuery Foundation and other contributors  \nLicensed under the MIT License.  \n[http://requirejs.org/docs/dojo.html](http://requirejs.org/docs/dojo.html)"
+- name: How to use RequireJS with jQuery
+  id: jquery
+  summary: While RequireJS loads jQuery just like any other dependency, jQuery's wide use and extensive plugin ecosystem mean you'll likely have other scripts in your project that also depend on jQuery
+  description: "# How to use RequireJS with jQuery\n\n- [Introduction](#intro)\n- [Global Functions](#globalvars)\n- [Module Name](#modulename)\n- [Example using shim config](#shimconfig)\n- [Example loading jquery from a CDN](#cdnconfig)\n- [Mapping Modules to use noConflict](#noconflictmap)\n- [The previous example with a concatenated require-jquery file](#oldexample)\n\n## Introduction\n\nWhile RequireJS loads jQuery just like any other dependency, jQuery's wide use and extensive plugin ecosystem mean you'll likely have other scripts in your project that also depend on jQuery. You might approach your jQuery RequireJS configuration differently depending on whether you are starting a new project or whether you are adapting existing code.\n\n## Global Functions\n\njQuery registers itself as the global variables \"$\" and \"jQuery\", even when it detects AMD/RequireJS. The AMD approach advises against the use of global functions, but the decision to turn off these jQuery globals hinges on whether you have non-AMD code that depends on them. jQuery has a [noConflict function](http://api.jquery.com/jQuery.noConflict/) that supports releasing control of the global variables and this can be automated in your requirejs.config, as we will see [later](#noconflictmap).\n\n## Module Name\n\njQuery defines [named AMD module](api#modulename) 'jquery' (all lower case) when it detects AMD/RequireJS. To reduce confusion, we recommend using 'jquery' as the module name in your requirejs.config.\n\nExample:\n\n``` javascript\nrequirejs.config({\n    baseUrl: 'js/lib',\n    paths: {\n        // the left side is the module ID,\n        // the right side is the path to\n        // the jQuery file, relative to baseUrl.\n        // Also, the path should NOT include\n        // the '.js' file extension. This example\n        // is using jQuery 1.9.0 located at\n        // js/lib/jquery-1.9.0.js, relative to\n        // the HTML page.\n        jquery: 'jquery-1.9.0'\n    }\n});\n```\n\nThe other (recommended) solution is to just name the file 'jquery.js' and place it in the baseUrl directory. Then the above paths entry is not needed.\n\nYou can avoid lots of configuration lines by placing the files according to the default ID-to-path convention of `baseUrl + moduleID + '.js'`. The examples below show how to set baseUrl to be the directory for third-party, library code, and use one extra paths config for your app code.\n\nSo to reiterate, you will likely get an error if you refer to jQuery with another module name, like `'lib/jquery'`. **This example will not work**:\n\n``` javascript\n    // THIS WILL NOT WORK\n    define(['lib/jquery'], function ($) {...});\n```\n\nIt will not work, since jQuery registers itself with the name of 'jquery' and not 'lib/jquery'. In general, explicitly naming modules in the define() call are discouraged, but [jQuery has some special constraints](https://github.com/requirejs/requirejs/wiki/Updating-existing-libraries#anon).\n\n## Example using shim config\n\nThis example shows how to use the [shim config](api#config-shim) to specify dependencies for jQuery plugins that do not call [define()](api#define). This example is useful if you have an existing jQuery project you want to convert and do not want to modify the sources of the jQuery plugins to call define().\n\n#### [Example using jQuery with shim config](http://github.com/requirejs/example-jquery-shim)\n\n## Example loading jquery from a CDN\n\nThis is an example on how to load an optimize your code while loading jQuery from a [Content Delivery Network](http://en.wikipedia.org/wiki/Content_delivery_network) (CDN). This example requires all your jQuery plugins to call [define()](api#define) to properly express their dependencies. [Shim config](api#config-shim) does not work after optimization builds with CDN resources.\n\n#### [Example using jQuery from a CDN](http://github.com/requirejs/example-jquery-cdn)\n\n## Mapping Modules to use noConflict\n\nIf **all of your modules** (including any third party jQuery plugins or library code that depend on jQuery) are AMD compatible and you want to avoid having $ or jQuery in the global namespace when they call `requirejs(['jquery'])`, you can use the [map config](api#config-map) to map the use of jQuery to a module that calls noConflict and returns that value of jQuery for the 'jquery' module ID.\n\nYou can use this example with the CDN example above -- the shim example will not work since shimmed libraries need a global jQuery.\n\n``` javascript\nrequirejs.config({\n    // Add this map config in addition to any baseUrl or\n    // paths config you may already have in the project.\n    map: {\n      // '*' means all modules will get 'jquery-private'\n      // for their 'jquery' dependency.\n      '*': { 'jquery': 'jquery-private' },\n\n      // 'jquery-private' wants the real jQuery module\n      // though. If this line was not here, there would\n      // be an unresolvable cyclic dependency.\n      'jquery-private': { 'jquery': 'jquery' }\n    }\n});\n\n// and the 'jquery-private' module, in the\n// jquery-private.js file:\ndefine(['jquery'], function (jq) {\n    return jq.noConflict( true );\n});\n```\n\nThis means that any module which uses jQuery will need to use the AMD return value rather than depending on the global $:\n\n``` javascript\nrequirejs(['jquery'], function( $ ) {\n    console.log( $ ) // OK\n});\n\nrequirejs(['jquery'], function( jq ) {\n    console.log( jq ) // OK\n});\n\nrequirejs(['jquery'], function( ) {\n    console.log( $ ) // UNDEFINED!\n});\n```\n\n## The previous example with a concatenated require-jquery file\n\nPreviously, we've been pointing to an example using a special require-jquery file, which consisted of require.js and jQuery concatenated. This is no longer the recommended way to use jQuery with require.js, but if you're looking for the (no longer maintained) example, [you can find require-jquery here](https://github.com/requirejs/require-jquery).\n\nLatest Release: [2.3.5](http://requirejs.org/docs/download.html) Open source: [new BSD or MIT licensed](https://github.com/requirejs/requirejs/blob/master/LICENSE) web design by [Andy Chung](http://andychung.me/) © 2011-2017\n\n© jQuery Foundation and other contributors  \nLicensed under the MIT License.  \n[http://requirejs.org/docs/jquery.html](http://requirejs.org/docs/jquery.html)"
+- name: Load JavaScript Files
+  id: index#jsfiles
+  summary: RequireJS takes a different approach to script loading than traditional <script> tags
+  description: |-
+    ### Load JavaScript Files
+
+    RequireJS takes a different approach to script loading than traditional \<script\> tags. While it can also run fast and optimize well, the primary goal is to encourage modular code. As part of that, it encourages using **module IDs** instead of URLs for script tags.
+
+    RequireJS loads all code relative to a [baseUrl](#config-baseUrl). The baseUrl is normally set to the same directory as the script used in a data-main attribute for the top level script to load for a page. The [data-main attribute](#data-main) is a special attribute that require.js will check to start script loading. This example will end up with a baseUrl of **scripts**:
+
+    ``` markup
+    <!--This sets the baseUrl to the "scripts" directory, and
+        loads a script that will have a module ID of 'main'-->
+    <script data-main="scripts/main.js" src="scripts/require.js"></script>
+    ```
+
+    Or, baseUrl can be set manually via the [RequireJS config](#config). If there is no explicit config and data-main is not used, then the default baseUrl is the directory that contains the HTML page running RequireJS.
+
+    RequireJS also assumes by default that all dependencies are scripts, so it does not expect to see a trailing ".js" suffix on module IDs. RequireJS will automatically add it when translating the module ID to a path. With the [paths config](#config-paths), you can set up locations of a group of scripts. All of these capabilities allow you to use smaller strings for scripts as compared to traditional \<script\> tags.
+
+    There may be times when you do want to reference a script directly and not conform to the "baseUrl + paths" rules for finding it. If a module ID has one of the following characteristics, the ID will not be passed through the "baseUrl + paths" configuration, and just be treated like a regular URL that is relative to the document:
+
+    - Ends in ".js".
+    - Starts with a "/".
+    - Contains an URL protocol, like "http:" or "https:".
+
+    In general though, it is best to use the baseUrl and "paths" config to set paths for module IDs. By doing so, it gives you more flexibility in renaming and configuring the paths to different locations for optimization builds.
+
+    Similarly, to avoid a bunch of configuration, it is best to avoid deep folder hierarchies for scripts, and instead either keep all the scripts in baseUrl, or if you want to separate your library/vendor-supplied code from your app code, use a directory layout like this:
+
+    - www/
+      - index.html
+      - js/
+        - app/
+          - sub.js
+        - lib/
+          - jquery.js
+          - canvas.js
+        - app.js
+        - require.js
+
+    in index.html:
+
+    ``` markup
+    <script data-main="js/app.js" src="js/require.js"></script>
+    ```
+
+    and in app.js:
+
+    ``` javascript
+    requirejs.config({
+        //By default load any module IDs from js/lib
+        baseUrl: 'js/lib',
+        //except, if the module ID starts with "app",
+        //load it from the js/app directory. paths
+        //config is relative to the baseUrl, and
+        //never includes a ".js" extension since
+        //the paths config could be for a directory.
+        paths: {
+            app: '../app'
+        }
+    });
+
+    // Start the main app logic.
+    requirejs(['jquery', 'canvas', 'app/sub'],
+    function   ($,        canvas,   sub) {
+        //jQuery, canvas and the app/sub module are all
+        //loaded and can be used here now.
+    });
+    ```
+
+    Notice as part of that example, vendor libraries like jQuery did not have their version numbers in their file names. It is recommended to store that version info in a separate text file if you want to track it, or if you use a tool like [volo](https://github.com/volojs/volo), it will stamp the package.json with the version information but keep the file on disk as "jquery.js". This allows you to have the very minimal configuration instead of having to put an entry in the "paths" config for each library. For instance, configure "jquery" to be "jquery-1.7.2".
+
+    Ideally the scripts you load will be modules that are defined by calling [define()](#define). However, you may need to use some traditional/legacy "browser globals" scripts that do not express their dependencies via define(). For those, you can use the [shim config](#config-shim). To properly express their dependencies.
+
+    If you do not express the dependencies, you will likely get loading errors since RequireJS loads scripts asynchronously and out of order for speed.
+- name: Loading Code After Page Load
+  id: index#afterload
+  summary: The example above in the Multiversion Support section shows how code can later be loaded by nested require() calls
+  description: |-
+    ### Loading Code After Page Load
+
+    The example above in the **Multiversion Support** section shows how code can later be loaded by nested require() calls.
+- name: Loading Modules from Packages
+  id: index#packages
+  summary: RequireJS supports loading modules that are in a CommonJS Packages directory structure, but some additional configuration needs to be specified for it to work
+  description: |-
+    ### Loading Modules from Packages
+
+    RequireJS supports loading modules that are in a [CommonJS Packages](http://wiki.commonjs.org/wiki/Packages/1.1) directory structure, but some additional configuration needs to be specified for it to work. Specifically, there is support for the following CommonJS Packages features:
+
+    - A package can be associated with a module name/prefix.
+    - The package config can specify the following properties for a specific package:
+      - **name**: The name of the package (used for the module name/prefix mapping)
+      - **location**: The location on disk. Locations are relative to the baseUrl configuration value, unless they contain a protocol or start with a front slash (/).
+      - **main**: The name of the module inside the package that should be used when someone does a require for "packageName". The default value is "main", so only specify it if it differs from the default. The value is relative to the package folder.
+
+    **IMPORTANT NOTES**
+
+    - While the packages can have the CommonJS directory layout, the modules themselves should be in a module format that RequireJS can understand. Exception to the rule: if you are using the r.js Node adapter, the modules can be in the traditional CommonJS module format. You can use the [CommonJS converter tool](commonjs#autoconversion) if you need to convert traditional CommonJS modules into the async module format that RequireJS uses.
+    - Only one version of a package can be used in a project context at a time. You can use RequireJS [multiversion support](#multiversion) to load two different module contexts, but if you want to use Package A and B in one context and they depend on different versions of Package C, then that will be a problem. This may change in the future.
+
+    If you use a similar project layout as specified in the [Start Guide](http://requirejs.org/docs/start.html), the start of your web project would look something like this (Node/Rhino-based projects are similar, just use the contents of the **scripts** directory as the top-level project directory):
+
+    - project-directory/
+      - project.html
+      - scripts/
+        - require.js
+
+    Here is how the example directory layout looks with two packages, **cart** and **store**:
+
+    - project-directory/
+      - project.html
+      - scripts/
+        - cart/
+          - main.js
+        - store/
+          - main.js
+          - util.js
+        - main.js
+        - require.js
+
+    **project.html** will have a script tag like this:
+
+    ``` markup
+    <script data-main="scripts/main" src="scripts/require.js"></script>
+    ```
+
+    This will instruct require.js to load scripts/main.js. **main.js** uses the "packages" config to set up packages that are relative to require.js, which in this case are the source packages "cart" and "store":
+
+    ``` javascript
+    //main.js contents
+    //Pass a config object to require
+    require.config({
+        "packages": ["cart", "store"]
+    });
+
+    require(["cart", "store", "store/util"],
+    function (cart,   store,   util) {
+        //use the modules as usual.
+    });
+    ```
+
+    A require of "cart" means that it will be loaded from **scripts/cart/main.js**, since "main" is the default main module setting supported by RequireJS. A require of "store/util" will be loaded from **scripts/store/util.js**.
+
+    If the "store" package did not follow the "main.js" convention, and looked more like this:
+
+    - project-directory/
+      - project.html
+      - scripts/
+        - cart/
+          - main.js
+        - store/
+          - store.js
+          - util.js
+        - main.js
+        - package.json
+        - require.js
+
+    Then the RequireJS configuration would look like so:
+
+    ``` javascript
+    require.config({
+        packages: [
+            "cart",
+            {
+                name: "store",
+                main: "store"
+            }
+        ]
+    });
+    ```
+
+    To avoid verbosity, it is strongly suggested to always use packages that use "main" convention in their structure.
+- name: map
+  id: index#config-map
+  summary: 'map: For the given module prefix, instead of loading the module with the given ID, substitute a different module ID'
+  description: |-
+    **[map](#config-map)**: For the given module prefix, instead of loading the module with the given ID, substitute a different module ID.
+
+    This sort of capability is really important for larger projects which may have two sets of modules that need to use two different versions of 'foo', but they still need to cooperate with each other.
+
+    This is not possible with the [context-backed multiversion support](#multiversion). In addition, the [paths config](#config-paths) is only for setting up root paths for module IDs, not for mapping one module ID to another one.
+
+    map example:
+
+    ``` javascript
+    requirejs.config({
+        map: {
+            'some/newmodule': {
+                'foo': 'foo1.2'
+            },
+            'some/oldmodule': {
+                'foo': 'foo1.0'
+            }
+        }
+    });
+    ```
+
+    If the modules are laid out on disk like this:
+
+    - foo1.0.js
+    - foo1.2.js
+    - some/
+      - newmodule.js
+      - oldmodule.js
+
+    When 'some/newmodule' does \`require('foo')\` it will get the foo1.2.js file, and when 'some/oldmodule' does \`require('foo')\` it will get the foo1.0.js file.
+
+    This feature only works well for scripts that are real AMD modules that call define() and register as anonymous modules. Also, **only use absolute module IDs** for map config. Relative IDs (like `'../some/thing'`) do not work.
+
+    There is also support for a "\*" map value which means "for all modules loaded, use this map config". If there is a more specific map config, that one will take precedence over the star config. Example:
+
+    ``` javascript
+    requirejs.config({
+        map: {
+            '*': {
+                'foo': 'foo1.2'
+            },
+            'some/oldmodule': {
+                'foo': 'foo1.0'
+            }
+        }
+    });
+    ```
+
+    Means that for any module except "some/oldmodule", when "foo" is wanted, use "foo1.2" instead. For "some/oldmodule" only, use "foo1.0" when it asks for "foo".
+
+    **Note:** when doing builds with map config, the map config needs to be fed to the optimizer, and the build output must still contain a requirejs config call that sets up the map config. The optimizer does not do ID renaming during the build, because some dependency references in a project could depend on runtime variable state. So the optimizer does not invalidate the need for a map config after the build.
+- name: Multiversion Support
+  id: index#multiversion
+  summary: As mentioned in Configuration Options, multiple versions of a module can be loaded in a page by using different "context" configuration options
+  description: |-
+    ### Multiversion Support
+
+    As mentioned in [Configuration Options](#config), multiple versions of a module can be loaded in a page by using different "context" configuration options. require.config() returns a require function that will use the context configuration. Here is an example that loads two different versions of the alpha and beta modules (this example is taken from one of the test files):
+
+    ``` markup
+    <script src="../require.js"></script>
+    <script>
+    var reqOne = require.config({
+      context: "version1",
+      baseUrl: "version1"
+    });
+
+    reqOne(["require", "alpha", "beta",],
+    function(require,   alpha,   beta) {
+      log("alpha version is: " + alpha.version); //prints 1
+      log("beta version is: " + beta.version); //prints 1
+
+      setTimeout(function() {
+        require(["omega"],
+          function(omega) {
+            log("version1 omega loaded with version: " +
+                 omega.version); //prints 1
+          }
+        );
+      }, 100);
+    });
+
+    var reqTwo = require.config({
+          context: "version2",
+          baseUrl: "version2"
+        });
+
+    reqTwo(["require", "alpha", "beta"],
+    function(require,   alpha,   beta) {
+      log("alpha version is: " + alpha.version); //prints 2
+      log("beta version is: " + beta.version); //prints 2
+
+      setTimeout(function() {
+        require(["omega"],
+          function(omega) {
+            log("version2 omega loaded with version: " +
+                omega.version); //prints 2
+          }
+        );
+      }, 100);
+    });
+    </script>
+    ```
+
+    Note that "require" is specified as a dependency for the module. This allows the require() function that is passed to the function callback to use the right context to load the modules correctly for multiversion support. If "require" is not specified as a dependency, then there will likely be an error.
+- name: Nashorn Support
+  id: index#nashorn
+  summary: As of RequireJS 2.1.16, RequireJS can be used in Nashorn, Java 8+'s JavaScript engine, via the r.js adapter
+  description: |-
+    ### Nashorn Support
+
+    As of RequireJS 2.1.16, RequireJS can be used in [Nashorn](http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html), Java 8+'s JavaScript engine, via the [r.js adapter](http://requirejs.org/docs/download.html#rjs). See [the r.js README](https://github.com/requirejs/r.js/blob/master/README.html) for more information.
+- name: nodeIdCompat
+  id: index#config-nodeIdCompat
+  summary: 'nodeIdCompat: Node treats module ID example.js and example the same'
+  description: '**[nodeIdCompat](#config-nodeIdCompat)**: Node treats module ID `example.js` and `example` the same. By default these are two different IDs in RequireJS. If you end up using modules installed from npm, then you may need to set this config value to `true` to avoid resolution issues. This option only applies to treating the ".js" suffix differently, it does not do any other node resolution and evaluation matching such as .json file handling (JSON handling needs a ''json!'' loader plugin anyway). Available in 2.1.10 and greater.'
+- name: Other Module Notes
+  id: index#modulenotes
+  summary: 'One module per file.: Only one module should be defined per JavaScript file, given the nature of the module name-to-file-path lookup algorithm'
+  description: |-
+    #### Other Module Notes
+
+    **One module per file.**: Only one module should be defined per JavaScript file, given the nature of the module name-to-file-path lookup algorithm. You shoud only use the [optimization tool](optimization) to group multiple modules into optimized files.
+
+    **Relative module names inside define()**: For require("./relative/name") calls that can happen inside a define() function call, be sure to ask for "require" as a dependency, so that the relative name is resolved correctly:
+
+    ``` javascript
+    define(["require", "./relative/name"], function(require) {
+        var mod = require("./relative/name");
+    });
+    ```
+
+    Or better yet, use the shortened syntax that is available for use with [translating CommonJS](commonjs) modules:
+
+    ``` javascript
+    define(function(require) {
+        var mod = require("./relative/name");
+    });
+    ```
+
+    This form will use Function.prototype.toString() to find the require() calls, and add them to the dependency array, along with "require", so the code will work correctly with relative paths.
+
+    Relative paths are really useful if you are creating a few modules inside a directory, so that you can share the directory with other people or other projects, and you want to be able to get a handle on the sibling modules in that directory without having to know the directory's name.
+
+    **Relative module names are relative to other names, not paths**: The loader stores modules by their name and not by their path internally. So for relative name references, those are resolved relative to the module name making the reference, then that module name, or ID, is converted to a path if needs to be loaded. Example code for a 'compute' package that has a 'main' and 'extras' modules in it:
+
+    ``` javascript
+    * lib/
+        * compute/
+            * main.js
+            * extras.js
+    ```
+
+    where the main.js module looks like this:
+
+    ``` javascript
+    define(["./extras"], function(extras) {
+        //Uses extras in here.
+    });
+    ```
+
+    If this was the paths config:
+
+    ``` javascript
+    require.config({
+        baseUrl: 'lib',
+        paths: {
+          'compute': 'compute/main'
+        }
+    });
+    ```
+
+    And a `require(['compute'])` is done, then lib/compute/main.js will have the module name of 'compute'. When it asks for './extras', that is resolved relative to 'compute', so 'compute/./extras', which normalizes to just 'extras'. Since there is no paths config for that module name, the path generated will be for 'lib/extras.js', which is incorrect.
+
+    For this case, [packages config](#packages) is a better option, since it allows setting the main module up as 'compute', but internally the loader will store the module with the ID of 'compute/main' so that the relative reference for './extras' works.
+
+    Another option is to construct a module at lib/compute.js that is just `define(['./compute/main'], function(m) { return m; });`, then there is no need for paths or packages config.
+
+    Or, do not set that paths or packages config and do the top level require call as `require(['compute/main'])`.
+
+    **Generate URLs relative to module**: You may need to generate an URL that is relative to a module. To do so, ask for "require" as a dependency and then use require.toUrl() to generate the URL:
+
+    ``` javascript
+    define(["require"], function(require) {
+        var cssUrl = require.toUrl("./style.css");
+    });
+    ```
+
+    **Console debugging**: If you need to work with a module you already loaded via a `require(["module/name"], function(){})` call in the JavaScript console, then you can use the require() form that just uses the string name of the module to fetch it:
+
+    ``` javascript
+    require("module/name").callSomeFunction()
+    ```
+
+    Note this only works if "module/name" was previously loaded via the async version of require: `require(["module/name"])`. If using a relative path, like './module/name', those only work inside define
+- name: packages
+  id: index#config-packages
+  summary: 'packages: configures loading modules from CommonJS packages'
+  description: '**[packages](#config-packages)**: configures loading modules from CommonJS packages. See the [packages topic](#packages) for more information.'
+- name: Page Load Event Support/DOM Ready
+  id: index#pageload
+  summary: It is possible when using RequireJS to load scripts quickly enough that they complete before the DOM is ready
+  description: |-
+    ### Page Load Event Support/DOM Ready
+
+    It is possible when using RequireJS to load scripts quickly enough that they complete before the DOM is ready. Any work that tries to interact with the DOM should wait for the DOM to be ready. For modern browsers, this is done by waiting for the DOMContentLoaded event.
+
+    However, not all browsers in use support DOMContentLoaded. The domReady module implements a cross-browser method to determine when the DOM is ready. [Download the module](http://requirejs.org/docs/download.html#domReady) and use it in your project like so:
+
+    ``` javascript
+    require(['domReady'], function (domReady) {
+      domReady(function () {
+        //This function is called once the DOM is ready.
+        //It will be safe to query the DOM and manipulate
+        //DOM nodes in this function.
+      });
+    });
+    ```
+
+    Since DOM ready is a common application need, ideally the nested functions in the API above could be avoided. The domReady module also implements the [Loader Plugin API](plugins), so you can use the loader plugin syntax (notice the **!** in the domReady dependency) to force the require() callback function to wait for the DOM to be ready before executing.
+
+        domReady
+
+    will return the current document when used as a loader plugin:
+
+    ``` javascript
+    require(['domReady!'], function (doc) {
+        //This function is called once the DOM is ready,
+        //notice the value for 'domReady!' is the current
+        //document.
+    });
+    ```
+
+    **Note:** If the document takes a while to load (maybe it is a very large document, or has HTML script tags loading large JS files that block DOM completion until they are done), using domReady as a loader plugin may result in a RequireJS "timeout" error. If this is a problem either increase the [waitSeconds](#config-waitSeconds) configuration, or just use domReady as a module and call domReady() inside the require() callback.
+- name: paths
+  id: index#config-paths
+  summary: 'paths: path mappings for module names not found directly under baseUrl'
+  description: |-
+    **[paths](#config-paths)**: path mappings for module names not found directly under baseUrl. The path settings are assumed to be relative to baseUrl, unless the paths setting starts with a "/" or has a URL protocol in it ("like http:"). Using the above sample config, "some/module"'s script tag will be src="/another/path/some/v1.0/module.js".
+
+    The path that is used for a module name should **not** include an extension, since the path mapping could be for a directory. The path mapping code will automatically add the .js extension when mapping the module name to a path. If [require.toUrl()](#modulenotes-urls) is used, it will add the appropriate extension, if it is for something like a text template.
+
+    When run in a browser, [paths fallbacks](#pathsfallbacks) can be specified, to allow trying a load from a CDN location, but falling back to a local location if the CDN location fails to load.
+- name: paths config fallbacks
+  id: index#pathsfallbacks
+  summary: The above pattern for detecting a load failure, undef()ing a module, modifying paths and reloading is a common enough request that there is also a shorthand for it
+  description: |-
+    #### paths config fallbacks
+
+    The above pattern for detecting a load failure, undef()ing a module, modifying paths and reloading is a common enough request that there is also a shorthand for it. The paths config allows array values:
+
+    ``` javascript
+    requirejs.config({
+        //To get timely, correct error triggers in IE, force a define/shim exports check.
+        enforceDefine: true,
+        paths: {
+            jquery: [
+                'http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min',
+                //If the CDN location fails, load from this location
+                'lib/jquery'
+            ]
+        }
+    });
+
+    //Later
+    require(['jquery'], function ($) {
+    });
+    ```
+
+    This above code will try the CDN location, but if that fails, fall back to the local lib/jquery.js location.
+
+    **Note**: paths fallbacks only work for exact module ID matches. This is different from normal paths config which can apply to any part of a module ID prefix segment. Fallbacks are targeted more for unusual error recovery, not a generic path search path solution, since those are inefficient in the browser.
+- name: Plugins
+  id: plugins
+  summary: RequireJS allows you to write loader plugins that can load different types of resources as dependencies, and even include the dependencies in optimized builds
+  description: "# Plugins\n\n- [Intro](#intro)\n- [Plugin Names](#names)\n- [API](#api)\n\n- [load](#apiload)\n- [normalize](#apinormalize)\n- [write](#apiwrite)\n- [onLayerEnd](#apionlayerend)\n- [writeFile](#apiwritefile)\n- [pluginBuilder](#apipluginbuilder)\n\n## Intro\n\nRequireJS allows you to write loader plugins that can load different types of resources as dependencies, and even include the dependencies in optimized builds.\n\nExamples of existing loader plugins are the [text!](api#text) and [i18n!](api#i18n) plugins. The text! plugin handles loading text, and the i18n plugin handles loading a JavaScript object that is made up from objects from a few different modules. The object contains localized strings.\n\nThe RequireJS wiki has a longer [list of plugins](https://github.com/requirejs/requirejs/wiki/Plugins).\n\n## Plugin Names\n\nLoader plugins are just another module, but they implement a specific API. Loader plugins can also participate in the optimizer optimizations, allowing the resources they load to be inlined in an optimized build.\n\n**Note**: the plugin and its dependencies should be able to run in non-browser environments like Node and Nashorn. If they cannot, you should use an alternate [plugin builder](#apipluginbuilder) module that can run in those environments so that they can participate in optimization builds.\n\nYou can reference your plugin by putting its module name before a ! in the dependency. For instance, if you create a plugin with the name \"foo.js\", you would use it like so:\n\n``` javascript\nrequire(['foo!something/for/foo'], function (something) {\n    //something is a reference to the resource\n    //'something/for/foo' that was loaded by foo.js.\n});\n```\n\nSo, the plugin's module name comes before the ! separator. The part after the ! separator is called the **resource name**. The resource name may look like a normal module name. The plugin's module name can be any valid module name, so for instance, you could use a relative indicator:\n\n``` javascript\nrequire(['./foo!something/for/foo'], function (something) {\n});\n```\n\nOr, if it was inside a package or directory, say bar/foo.js:\n\n``` javascript\nrequire(['bar/foo!something/for/foo'], function (something) {\n});\n```\n\n## API\n\nRequireJS will load the plugin module first, then pass the rest of the dependency name to a load() method on the plugin. There are also some methods to help with module name normalization and for making use of the plugin as part of the [optimizer](optimization).\n\nThe complete Plugin API:\n\n- **[load](#apiload)**: A function that is called to load a resource. This is the only mandatory API method that needs to be implemented for the plugin to be useful.\n- **[normalize](#apinormalize)**: A function to normalize the resource name. This is useful in providing optimal caching and optimization, but only needed if the resource name is not a module name.\n- **[write](#apiwrite)**: used by the optimizer to indicate when the plugin should write out a representation of the resource in the optimized file.\n- **[pluginBuilder](#apipluginbuilder)**: A module name string for a module that should be used in the optimizer to do optimization work. That module is used instead of the plugin module when the optimizer runs.\n\n### load: function (name, parentRequire, onload, config)\n\nload is a function, and it will be called with the following arguments:\n\n- **name**: String. The name of the resource to load. This is the part after the ! separator in the name. So, if a module asks for 'foo!something/for/foo', the foo module's load function will receive 'something/for/foo' as the name.\n- **parentRequire**: Function. A local \"require\" function to use to load other modules. This function will resolve relative module names relative to the module name that asked for this plugin resource. If the loader plugin wants to `require()` something relative to its own ID, it can ask for a `require` in its own `define` call. This require function has some utilities on it:\n  - **parentRequire.toUrl(moduleResource)**:where moduleResource is a module name plus an extension. For instance \"view/templates/main.html\". It will return a full path to the resource, obeying any RequireJS configuration.\n  - **parentRequire.defined(moduleName)**: Returns true if the module has already been loaded and defined. Used to be called require.isDefined before RequireJS 0.25.0.\n  - **parentRequire.specified(moduleName)**: Returns true if the module has already been requested or is in the process of loading and should be available at some point.\n- **onload**: Function. A function to call with the value for name. This tells the loader that the plugin is done loading the resource. **onload.error()** can be called, passing an error object to it, if the plugin detects an error condition that means the resource will fail to load correctly.\n- **config**: Object. A configuration object. This is a way for the optimizer and the web app to pass configuration information to the plugin. The i18n! plugin uses this to get the current locale, if the web app wants to force a specific locale. The optimizer will set an **isBuild** property in the config to true if this plugin (or pluginBuilder) is being called as part of an optimizer build.\n\nAn example plugin that does not do anything interesting, just does a normal require to load a JS module:\n\n``` javascript\ndefine({\n    load: function (name, req, onload, config) {\n        //req has the same API as require().\n        req([name], function (value) {\n            onload(value);\n        });\n    }\n});\n```\n\nSome plugins may need to evaluate some JavaScript that was retrieved as text, and use that evaluated JavaScript as the value for the resource. There is a function off the onload() argument, **onload.fromText()**, that can be used to evaluate the JavaScript. eval() is used by RequireJS to evaluate that JavaScript, and RequireJS will do the right work for any anonymous define() call in the evaluated text, and use that define() module as the value for the resource.\n\nArguments for onload.fromText() (RequireJS 2.1.0 and later):\n\n- **text**: String. The string of JavaScript to evaluate.\n\nAn example plugin's load function that uses onload.fromText():\n\n``` javascript\ndefine({\n    load: function (name, req, onload, config) {\n        var url = req.toUrl(name + '.customFileExtension'),\n            text;\n\n        //Use a method to load the text (provided elsewhere)\n        //by the plugin\n        fetchText(url, function (text) {\n            //Transform the text as appropriate for\n            //the plugin by using a transform()\n            //method provided elsewhere in the plugin.\n            text = transform(text);\n\n            //Have RequireJS execute the JavaScript within\n            //the correct environment/context, and trigger the load\n            //call for this resource.\n            onload.fromText(text);\n        });\n    }\n});\n```\n\nBefore RequireJS 2.1.0, onload.fromText accepted a moduleName as the first argument: `onload.fromText(moduleName, text)`, and the loader plugin had to manually call `require([moduleName], onload)` after the onload.fromText() call.\n\n**Build considerations**: The optimizer traces dependencies **synchronously** to simplify the optimization logic. This is different from how require.js in the browser works, and it means that only plugins that can satisfy their dependencies synchronously should participate in the optimization steps that allow inlining of loader plugin values. Otherwise, the plugin should just call load() immediately if `config.isBuild` is true:\n\n``` javascript\ndefine({\n    load: function (name, req, onload, config) {\n        if (config.isBuild) {\n            //Indicate that the optimizer should not wait\n            //for this resource any more and complete optimization.\n            //This resource will be resolved dynamically during\n            //run time in the web browser.\n            onload();\n        } else {\n            //Do something else that can be async.\n        }\n    }\n});\n```\n\nSome plugins may do an async operation in the browser, but opt to complete the resource load synchronously when run in Node/Nashorn. This is what the text plugin does. If you just want to run AMD modules and load plugin dependencies using [amdefine](http://github.com/jrburke/amdefine) in Node, those also need to complete synchronously to match Node's synchronous module system.\n\n### normalize: function (name, normalize)\n\n**normalize** is called to normalize the name used to identify a resource. Some resources could use relative paths, and need to be normalized to the full path. normalize is called with the following arguments:\n\n- **name**: String. The resource name to normalize.\n- **normalize**: Function. A function that can be called to normalize a regular module name.\n\nAn example: suppose there is an **index!** plugin that will load a module name given an index. This is a contrived example, just to illustrate the concept. A module may reference an index! resource like so:\n\n``` javascript\ndefine(['index!2?./a:./b:./c'], function (indexResource) {\n    //indexResource will be the module that corresponds to './c'.\n});\n```\n\nIn this case, the normalized names the './a', './b', and './c' will be determined relative to the module asking for this resource. Since RequireJS does not know how to inspect the 'index!2?./a:./b:./c' to normalize the names for './a', './b', and './c', it needs to ask the plugin. This is the purpose of the normalize call.\n\nBy properly normalizing the resource name, it allows the loader to cache the value effectively, and to properly build an optimized build layer in the optimizer.\n\nThe **index!** plugin could be written like so:\n\n``` javascript\n(function () {\n\n    //Helper function to parse the 'N?value:value:value'\n    //format used in the resource name.\n    function parse(name) {\n        var parts = name.split('?'),\n            index = parseInt(parts[0], 10),\n            choices = parts[1].split(':'),\n            choice = choices[index];\n\n        return {\n            index: index,\n            choices: choices,\n            choice: choice\n        };\n    }\n\n    //Main module definition.\n    define({\n        normalize: function (name, normalize) {\n            var parsed = parse(name),\n                choices = parsed.choices;\n\n            //Normalize each path choice.\n            for (i = 0; i < choices.length; i++) {\n                //Call the normalize() method passed in\n                //to this function to normalize each\n                //module name.\n                choices[i] = normalize(choices[i]);\n            }\n\n            return parsed.index + '?' + choices.join(':');\n        },\n\n        load: function (name, req, onload, config) {\n            req([parse(name).choice], function (value) {\n                onload(value);\n            });\n        }\n    });\n\n}());\n```\n\nYou do not need to implement normalize if the resource name is just a regular module name. For instance, the text! plugin does not implement normalize because the dependency names look like 'text!./some/path.html'.\n\nIf a plugin does not implement normalize, then the loader will try to normalize the resource name using the normal module name rules.\n\n### write: function (pluginName, moduleName, write)\n\n**write** is only used by the optimizer, and it only needs to be implemented if the plugin can output something that would belong in an optimized layer. It is called with the following arguments:\n\n- **pluginName**: String. The **normalized** name for the plugin. Most plugins will not be authored with a name (they will be anonymous plugins) so it is useful to know the normalized name for the plugin module for use in the optimized file.\n- **moduleName**: String. The **normalized** resource name.\n- **write**: Function. A function to be called with a string of output to write to the optimized file. This function also contains a property function, **write.asModule(moduleName, text)**. asModule can be used to write out a module that may have an anonymous define call in there that needs name insertion or/and contains implicit require(\"\") dependencies that need to be pulled out for the optimized file. asModule is useful for text transform plugins, like a CoffeeScript plugin.\n\nThe text! plugin implements write, to write out a string value for the text file that it loaded. A snippet from that file:\n\n``` javascript\nwrite: function (pluginName, moduleName, write) {\n    //The text plugin keeps a map of strings it fetched\n    //during the build process, in a buildMap object.\n    if (moduleName in buildMap) {\n        //jsEscape is an internal method for the text plugin\n        //that is used to make the string safe\n        //for embedding in a JS string.\n        var text = jsEscape(buildMap[moduleName]);\n        write(\"define('\" + pluginName + \"!\" + moduleName  +\n              \"', function () { return '\" + text + \"';});\\n\");\n    }\n}\n```\n\n### onLayerEnd: function (write, data)\n\n**onLayerEnd** is only used by the optimizer, and is only supported in 2.1.0 or later of the optimizer. It is called after the modules for the layer have been written to the layer. It is useful to use if you need some code that should go at the end of the layer, or if the plugin needs to reset some internal state.\n\nOne example: a plugin that needs to write out some utility functions at the beginning of a layer, as part of the first [write](#apiwrite) call, and the plugin needs to know when to reset the internal state to know when to write out the utilities for the next layer. If the plugin implements onLayerEnd, it can get notified when to reset its internal state.\n\nonLayerEnd is called with the following arguments:\n\n- **write**: Function. A function to be called with a string of output to write to the optimized layer. **Modules should not be written out** in this call. They will not be normalized correctly for coexistence with other define() calls already in the file. It is useful only for writing out non-define() code.\n- **data**: Object. Information about the layer. Only has two properties:\n  - **name**: the module name of the layer. May be undefined.\n  - **path**: the file path of the layer. May be undefined, particularly if the output is just to a string that is consumed by another script.\n\n### writeFile: function (pluginName, name, parentRequire, write)\n\n**writeFile** is only used by the optimizer, and it only needs to be implemented if the plugin needs to write out an alternate version of a dependency that is handled by the plugin. It is a bit expensive to scan all modules in a project to look for all plugin dependencies, so this writeFile method will only be called if **optimizeAllPluginResources: true** is in the build profile for the RequireJS optimizer. writeFile is called with the following arguments:\n\n- **pluginName**: String. The **normalized** name for the plugin. Most plugins will not be authored with a name (they will be anonymous plugins) so it is useful to know the normalized name for the plugin module for use in the optimized file.\n- **name**: String. The **normalized** resource name.\n- **parentRequire**: Function. A local \"require\" function. The main use of this in writeFile is for calling parentRequire.toUrl() to generate file paths that are inside the build directory.\n- **write**: Function. A function to be called with two arguments:\n  - **fileName**: String. The name of the file to write. You can use parentRequire.toUrl() with a relative path to generate a file name that will be inside the build output directory.\n  - **text**: String. The contents of the file. Must be UTF-8 encoded.\n\n  This function also contains a property function, **write.asModule(moduleName, fileName, text)**. asModule can be used to write out a module that may have an anonymous define call in there that needs name insertion or/and contains implicit require(\"\") dependencies that need to be pulled out for the optimized file.\n\nSee the [text! plugin](https://github.com/requirejs/text) for an example of writeFile.\n\n### pluginBuilder\n\n**pluginBuilder** can be a string that points to another module to use instead of the current plugin when the plugin is used as part of an optimizer build.\n\nA plugin could have very specific logic that depends on a certain environment, like the browser. However, when run inside the optimizer, the environment is very different, and the plugin may have a **write** plugin API implementation that it does not want to deliver as part of the normal plugin that is loaded in the browser. In those cases, specifying a pluginBuilder is useful.\n\nSome notes about using a pluginBuilder:\n\n- Do not use named modules for the plugin or the pluginBuilder. The pluginBuilder text contents are used instead of the contents of the plugin file, but that will only work if the files do not call define() with a name.\n- Plugins and pluginBuilders that run as part of the build process have a very limited environment. The optimizer runs in a few different JS environments. Be careful of the environment assumptions if you want the plugin to run as part of the optimizer.\n\n© jQuery Foundation and other contributors  \nLicensed under the MIT License.  \n[http://requirejs.org/docs/plugins.html](http://requirejs.org/docs/plugins.html)"
+- name: require([]) errbacks
+  id: index#errbacks
+  summary: Errbacks, when used with requirejs.undef(), will allow you to detect if a module fails to load, undefine that module, reset the config to a another location, then try again
+  description: |-
+    #### require(\[\]) errbacks
+
+    Errbacks, when used with [requirejs.undef()](#undef), will allow you to detect if a module fails to load, undefine that module, reset the config to a another location, then try again.
+
+    A common use case for this is to use a CDN-hosted version of a library, but if that fails, switch to loading the file locally:
+
+    ``` javascript
+    requirejs.config({
+        enforceDefine: true,
+        paths: {
+            jquery: 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min'
+        }
+    });
+
+    //Later
+    require(['jquery'], function ($) {
+        //Do something with $ here
+    }, function (err) {
+        //The errback, error callback
+        //The error has a list of modules that failed
+        var failedId = err.requireModules && err.requireModules[0];
+        if (failedId === 'jquery') {
+            //undef is function only on the global requirejs object.
+            //Use it to clear internal knowledge of jQuery. Any modules
+            //that were dependent on jQuery and in the middle of loading
+            //will not be loaded yet, they will wait until a valid jQuery
+            //does load.
+            requirejs.undef(failedId);
+
+            //Set the path to jQuery to local path
+            requirejs.config({
+                paths: {
+                    jquery: 'local/jquery'
+                }
+            });
+
+            //Try again. Note that the above require callback
+            //with the "Do something with $ here" comment will
+            //be called if this new attempt to load jQuery succeeds.
+            require(['jquery'], function () {});
+        } else {
+            //Some other error. Maybe show message to the user.
+        }
+    });
+    ```
+
+    With \`requirejs.undef()\`, if you later set up a different config and try to load the same module, the loader will still remember which modules needed that dependency and finish loading them when the newly configured module loads.
+
+    **Note**: errbacks only work with callback-style require calls, not define() calls. define() is only for declaring modules.
+- name: RequireJS in Node
+  id: node
+  summary: Yes Node does
+  description: "# RequireJS in Node\n\n- [Doesn't Node already have a module loader?](#1)\n- [Can I use server modules written in the CommonJS module format?](#2)\n- [How do I use it?](#3)\n\n## Doesn't Node already have a module loader?\n\nYes [Node](http://nodejs.org) does. That loader uses the CommonJS module format. The CommonJS module format is [non-optimal for the browser](why), and I do not agree with [some of the trade-offs made in the CommonJS module format](http://tagneto.blogspot.com/2010/03/commonjs-module-trade-offs.html). By using RequireJS on the server, you can use one format for all your modules, whether they are running server side or in the browser. That way you can preserve the speed benefits and easy debugging you get with RequireJS in the browser, and not have to worry about extra translation costs for moving between two formats.\n\nIf you want to use define() for your modules but still run them in Node without needing to run RequireJS on the server, see [the section below](#nodeModules) about using [amdefine](https://github.com/jrburke/amdefine).\n\n## Can I use Node modules already written in the CommonJS module format?\n\nYes! The Node adapter for RequireJS, called r.js, will use Node's implementation of require and Node's search paths if the module is not found with the configuration used by RequireJS, so you can continue to use your existing Node-based modules without having to do changes to them.\n\nRequireJS will use its [Configuration Options](api#config) first to find modules. If RequireJS cannot find the module with its configuration, it is assumed to be a module that uses Node's type of modules and configuration. So, only configure module locations with RequireJS if they use the RequireJS API. For modules that expect Node's APIs and configuration/paths, just install them with a Node package manager, like [npm](http://npmjs.org/), and do not configure their locations with RequireJS.\n\n**Best practice**: Use npm to install Node-only packages/modules into the projects **node_modules** directory, but do not configure RequireJS to look inside the node_modules directory. Also avoid using relative module IDs to reference modules that are Node-only modules. So, **do not** do something like **require(\"./node_modules/foo/foo\")**.\n\nOther notes:\n\n- RequireJS in Node can only load modules that are on the local disk -- fetching modules across http, for instance, is not supported at this time.\n- RequireJS config options like map, packages, paths are only applied if RequireJS loads the module. If RequireJS needs to ask the node module system, the original ID is passed to Node. If you need a node module to work with a map config, inline define() calls work, as shown in [this email list thread.](https://groups.google.com/forum/#!msg/requirejs/ur_UQLr04rc/sSpM8y87VNMJ)\n\n## How do I use it?\n\nThere are two ways to get the Node adapter:\n\n### npm\n\nUse [npm](http://npmjs.org) to install it:\n\n``` javascript\nnpm install requirejs\n```\n\nThis option will install the latest release.\n\n### Download r.js\n\nIf you prefer to not use npm, you can get r.js directly:\n\n- Download r.js from the [the download page](http://requirejs.org/docs/download.html#rjs) and place it in your project.\n- Get the source from the [r.js repo](https://github.com/requirejs/r.js) and either generate the r.js via \"node dist.js\", or grab a snapshot from the **dist** directory.\n\n### Usage\n\nThese instructions assume an npm installation of 'requirejs'. If you are using the r.js file directly, replace require('requirejs') with require('./path/to/r.js'). Basic usage is:\n\n- require('requirejs')\n- Pass the main js file's \"require\" function in the configuration to requirejs.\n\nExample:\n\n``` javascript\nvar requirejs = require('requirejs');\n\nrequirejs.config({\n    //Pass the top-level main.js/index.js require\n    //function to requirejs so that node modules\n    //are loaded relative to the top-level JS file.\n    nodeRequire: require\n});\n\nrequirejs(['foo', 'bar'],\nfunction   (foo,   bar) {\n    //foo and bar are loaded according to requirejs\n    //config, but if not found, then node's require\n    //is used to load the module.\n});\n```\n\nBe sure to read the [notes in section 2](#2) about configuring RequireJS so that it can load node-only modules installed via npm.\n\nTo see a more complete example that loads a module via RequireJS but uses Node-native modules for other things, see the [embedded test](https://github.com/requirejs/r.js/tree/master/tests/node/embedded) in the r.js repo.\n\n**Note:** `requirejs([], function() {})` will call the function callback asynchronously in RequireJS 2.1+ (for earlier versions it was synchronously called). However, when running in Node, module loading will be loaded using sync IO calls, and loader plugins should resolve calls to their load method synchronously. This allows sync uses of the requirejs module in node to work via requirejs('stringValue') calls:\n\n``` javascript\n//Retrieves the module value for 'a' synchronously\nvar a = requirejs('a')\n```\n\n### Building node modules with AMD or RequireJS\n\nIf you want to code a module so that it works with RequireJS and in Node, without requiring users of your library in Node to use RequireJS, then you can use the [amdefine](https://github.com/jrburke/amdefine) package to do this:\n\n``` javascript\nif (typeof define !== 'function') {\n    var define = require('amdefine')(module);\n}\n\ndefine(function(require) {\n    var dep = require('dependency');\n\n    //The value returned from the function is\n    //used as the module export visible to Node.\n    return function () {};\n});\n```\n\nThe RequireJS optimizer, as of version 1.0.3, will strip out the use of 'amdefine' above, so it is safe to use this module for your web-based projects too. Just be sure to use **the exact 'amdefine' if() test and contents as shown above**. Differences in spaces/line breaks are allowed. See the [amdefine project](https://github.com/jrburke/amdefine) for more information.\n\nIf you want to use RequireJS directly to code your module, and then export a module value to node so that it can be used in other Node programs without requiring that app to use RequireJS, you can use the approach listed in the next example.\n\nIt is best to set the baseUrl specifically to the directory containing the module, so that it works properly when nested inside a node_modules heirarchy. Use the synchronous `requirejs('moduleId')` to fetch the module using the config and rules in requirejs, then use Node's module.exports to export your module value:\n\n``` javascript\nvar requirejs = require('requirejs');\n\nrequirejs.config({\n    //Use node's special variable __dirname to\n    //get the directory containing this file.\n    //Useful if building a library that will\n    //be used in node but does not require the\n    //use of node outside\n    baseUrl: __dirname,\n\n    //Pass the top-level main.js/index.js require\n    //function to requirejs so that node modules\n    //are loaded relative to the top-level JS file.\n    nodeRequire: require\n});\n\n//foo and bar are loaded according to requirejs\n//config, and if found, assumed to be an AMD module.\n//If they are not found via the requirejs config,\n//then node's require is used to load the module,\n//and if found, the module is assumed to be a\n//node-formatted module. Note: this synchronous\n//style of loading a module only works in Node.\nvar foo = requirejs('foo');\nvar bar = requirejs('bar');\n\n//Now export a value visible to Node.\nmodule.exports = function () {};\n```\n\n### Using the optimizer as a node module\n\nThe node module also exposes the RequireJS Optimizer as an **optimize** method for using the [RequireJS optimizer](optimization) via a function call instead of a command line tool:\n\n``` javascript\nvar requirejs = require('requirejs');\n\nvar config = {\n    baseUrl: '../appDir/scripts',\n    name: 'main',\n    out: '../build/main-built.js'\n};\n\nrequirejs.optimize(config, function (buildResponse) {\n    //buildResponse is just a text output of the modules\n    //included. Load the built file for the contents.\n    //Use config.out to get the optimized file contents.\n    var contents = fs.readFileSync(config.out, 'utf8');\n}, function(err) {\n    //optimization err callback\n});\n```\n\nThis allows you to build other optimization workflows, like [a web builder](https://github.com/requirejs/r.js/tree/master/build/tests/http) that can be used if you prefer to always develop with the \"one script file included before the \\</body\\> tag\" approach. The optimizer running in Node is fairly fast, but for larger projects that do not want to regenerate the build for every browser request, but just if you modify a script that is part of the build. You could use Node's fs.watchFile() to watch files and then trigger the build when a file changes.\n\n### Feedback\n\nIf you find you have a problem, and want to report it, use the [r.js GitHub Issues page](http://github.com/requirejs/r.js/issues).\n\n© jQuery Foundation and other contributors  \nLicensed under the MIT License.  \n[http://requirejs.org/docs/node.html](http://requirejs.org/docs/node.html)"
+- name: RequireJS Optimizer
+  id: optimization
+  summary: The optimizer is part of the r.js adapter for Node and Nashorn, and it is designed to be run as part of a build or packaging step after you are done with development and are ready to deploy the code for your users
+  description: "# RequireJS Optimizer\n\n- [Requirements](#requirements)\n- [Download](#download)\n- [Example setup](#setup)\n- [Basics](#basics)\n- [Optimizing one JavaScript file](#onejs)\n- [Shallow exclusions for fast development](#shallow)\n- [empty: paths for network/CDN resources](#empty)\n- [Optimizing one CSS file](#onecss)\n- [Optimizing a whole project](#wholeproject)\n- [Optimizing a multi-page project](#wholemultipage)\n- [Turbo options](#turbo)\n- [Integration with has.js](#hasjs)\n- [Source maps](#sourcemaps)\n- [All configuration options](#options)\n- [Deployment techniques](#deployment)\n- [Common pitfalls](#pitfalls)\n\nRequireJS has an optimization tool that does the following\n\n- Combines related scripts together into build layers and minifies them via [UglifyJS](https://github.com/mishoo/UglifyJS) (the default) or [Closure Compiler](https://developers.google.com/closure/compiler/) (an option when using Java).\n- Optimizes CSS by inlining CSS files referenced by @import and removing comments.\n\nThe optimizer is part of the [r.js adapter for Node and Nashorn](https://github.com/requirejs/r.js), and it is designed to be run as part of a build or packaging step after you are done with development and are ready to deploy the code for your users.\n\nThe optimizer will only combine modules that are specified in arrays of string literals that are passed to top-level require and define calls, or the require('name') string literal calls in a [simplified CommonJS wrapping](whyamd#sugar). So, it will not find modules that are loaded via a variable name:\n\n``` javascript\nvar mods = someCondition ? ['a', 'b'] : ['c', 'd'];\nrequire(mods);\n```\n\nbut 'a' and 'b' will be included if specified like so:\n\n``` javascript\nrequire(['a', 'b']);\n```\n\nor:\n\n``` javascript\ndefine(['a', 'b'], function (a, b) {});\n```\n\nThis behavior allows dynamic loading of modules even after optimization. You can always explicitly add modules that are not found via the optimizer's static analysis by using the **include** option.\n\n## Requirements\n\nThe optimizer can be run using Node, Java with Rhino or Nashorn, or in the browser. The requirements for each option:\n\n- **Node:** (preferred) [Node](http://nodejs.org) 0.4.0 or later.\n- **Java:** [Java 1.6](http://java.com/) or later.\n- **Browser:** as of 2.1.2, the optimizer can run in a web browser that has [array extras](http://dev.opera.com/articles/view/javascript-array-extras-in-detail/). While the optimizer options are the same as shown below, it is called via JavaScript instead of command line options. It is also only good for generating optimized single files, not a directory optimization. See [the browser example](https://github.com/requirejs/r.js/blob/master/tests/browser/r.html). This option is really only useful for providing web-based custom builds of your library.\n\nFor command line use, Node is the preferred execution environment. The optimizer runs **much faster** with Node.\n\nAll the example commands in this page assume Node usage, and running on a Linux/OS X command line. See the [r.js README](https://github.com/requirejs/r.js) for how to run it in Java.\n\n## Download\n\n1\\) You can download the tool on [the download page](http://requirejs.org/docs/download.html#rjs).\n\n2\\) If you are using Node with NPM, you can install r.js globally as part of the \"requirejs\" package in NPM:\n\n``` javascript\n> npm install -g requirejs\n> r.js -o app.build.js\n```\n\nIf on Windows, you may need to type `r.js.cmd` instead of `r.js`. Or, you can use [DOSKEY](http://www.microsoft.com/resources/documentation/windows/xp/all/proddocs/en-us/doskey.mspx?mfr=true):\n\n``` javascript\nDOSKEY r.js=r.js.cmd $*\n```\n\nIf you want to install requirejs locally in a project as an npm package, instead of globally:\n\n``` javascript\n> npm install requirejs\n```\n\nWith this local install, you can run the optimizer by running the `r.js` or `r.js.cmd` file found in the project's `node_modules/.bin` directory.\n\nWith the local install, you can also [use the optimizer via a function call](node#optimizer) inside a node program.\n\nThe rest of this page assumes that r.js is just downloaded manually from the download page. It is normally the clearest, most portable way to use the optimizer.\n\n## Example setup\n\nThe examples in this page will assume you downloaded and saved r.js in a directory that is a sibling to your project directory. The optimizer that is part of r.js can live anywhere you want, but you will likely need to adjust the paths accordingly in these examples.\n\nExample setup:\n\n- appdirectory\n  - main.html\n  - css\n    - common.css\n    - main.css\n  - scripts\n    - require.js\n    - main.js\n    - one.js\n    - two.js\n    - three.js\n- r.js (The r.js optimizer from [download page](http://requirejs.org/docs/download.html#rjs))\n\nmain.html has script tags for require.js and loads main.js via a require call, like so:\n\n``` markup\n<!DOCTYPE html>\n<html>\n    <head>\n        <title>My App</title>\n        <link rel=\"stylesheet\" type=\"text/css\" href=\"css/main.css\">\n        <script data-main=\"scripts/main\" src=\"scripts/require.js\"></script>\n    </head>\n    <body>\n        <h1>My App</h1>\n    </body>\n</html>\n```\n\nmain.js loads one.js, two.js and three.js via a require call:\n\n``` javascript\nrequire([\"one\", \"two\", \"three\"], function (one, two, three) {\n});\n```\n\nmain.css has content like the following:\n\n``` javascript\n@import url(\"common.css\");\n\n.app {\n    background: transparent url(../../img/app.png);\n}\n```\n\n## Basics\n\n**Command line arguments are interchangeable with a build profile properties**\n\nYou can either specify options on the command line:\n\n``` javascript\nnode r.js -o baseUrl=. paths.jquery=some/other/jquery name=main out=main-built.js\n```\n\nor in a build profile. In a **build.js**, the same command line arguments can be specified like so:\n\n``` javascript\n({\n    baseUrl: \".\",\n    paths: {\n        jquery: \"some/other/jquery\"\n    },\n    name: \"main\",\n    out: \"main-built.js\"\n})\n```\n\nthen just pass the build profile's file name to the optimizer:\n\n``` javascript\nnode r.js -o build.js\n```\n\nCommand line arguments take precedence over build profile settings, and you can mix them together:\n\n``` javascript\nnode r.js -o build.js optimize=none\n```\n\nThere is a **limitation** on the command line argument syntax. Dots are viewed as object property separators, to allow something like `paths.jquery=lib/jquery` to be transformed to the following in the optimizer:\n\n``` javascript\npaths: {\n    jquery: 'lib/jquery'\n}\n```\n\nbut this means you cannot set the value for a paths property of \"core/jquery.tabs\" to a value. This would not work: `paths.core/jquery.tabs=empty:`, since it would result in this incorrect structure:\n\n``` javascript\npaths: {\n    'core/jquery': {\n        tabs: 'empty:'\n    }\n}\n```\n\nIf you need to set a path like the \"core/jquery.tabs\" one, use a build.js file with the build options specified as a JavaScript object instead of using command line arguments.\n\nFor a list of all options, see [all configuration options](#options).\n\n**Relative path resolution rules:**:\n\nIn general, if it is a path, it is relative to the build.js file used to hold the build options, or if just using command line arguments, relative to the current working directory. Example of properties that are file paths: **appDir**, **dir**, **mainConfigFile**, **out**, **wrap.startFile**, **wrap.endFile**.\n\nFor **baseUrl**, it is relative to **appDir**. If no appDir, then baseUrl is relative to the build.js file, or if just using command line arguments, the current working directory.\n\nFor **paths** and **packages**, they are relative to **baseUrl**, just as they are for require.js.\n\nFor properties that are module IDs, they should be module IDs, and not file paths. Examples are **name**, **include**, **exclude**, **excludeShallow**, **deps**.\n\n**Config settings in your main JS module that is loaded in the browser at runtime **are not read by default** by the optimizer**\n\nThis is because the config settings for a build can be very different, with multiple optimization targets. So a separate set of config options need to be specified for the optimizer.\n\nIn version 1.0.5+ of the optimizer, the **[mainConfigFile](https://github.com/requirejs/r.js/blob/master/build/example.build.js#L27)** option can be used to specify the location of the runtime config. If specified with the path to your main JS file, the first `requirejs({}), requirejs.config({}), require({}), or require.config({})` found in that file will be parsed out and used as part of the configuration options passed to the optimizer:\n\n``` javascript\nmainConfigFile: 'path/to/main.js'\n```\n\nThe precedence for config: command line, build profile, mainConfigFile. In other words, the mainConfigFile configuration has the lowest priority.\n\n## Optimizing one JavaScript file\n\nUse the above example setup, if you just wanted to optimize main.js, you could use this command, from inside the **appdirectory/scripts** directory:\n\n``` javascript\nnode ../../r.js -o name=main out=main-built.js baseUrl=.\n```\n\nThis will create a file called **appdirectory/scripts/main-built.js** that will include the contents of main.js, one.js, two.js and three.js.\n\nNormally you should **not** save optimized files with your pristine project source. Normally you would save them to a copy of your project, but to make this example easier it is saved with the source. Change the **out=** option to any directory you like, that has a copy of your source. Then, you can change the main-built.js file name to just main.js so the HTML page will load the optimized version of the file.\n\nIf you want to include require.js with the main.js source, you can use this kind of command:\n\n``` javascript\nnode ../../r.js -o baseUrl=. paths.requireLib=../../require name=main include=requireLib out=main-built.js\n```\n\nSince \"require\" is a reserved dependency name, you create a \"requireLib\" dependency and map it to the require.js file.\n\nOnce that optimization is done, you can change the script tag to reference \"main-built.js\" instead of \"require.js\", and your optimized project will only need to make one script request.\n\nIf you want to wrap your built file so it can be used in pages that do not have an AMD loader like RequireJS, see the [Optimization FAQ](http://requirejs.org/docs/faq-optimization.html).\n\n## Shallow exclusions for fast development\n\nYou can use the [one JavaScript file optimization](#onejs) approach to make your development experience faster. By optimizing all the modules in your project into one file, except the one you are currently developing, you can reload your project quickly in the browser, but still give you the option of fine grained debugging in a module.\n\nYou can do this by using the **excludeShallow** option. Using the [example setup](#example) above, assume you are currently building out or debugging two.js. You could use this optimization command:\n\n``` javascript\nnode ../../r.js -o name=main excludeShallow=two out=main-built.js baseUrl=.\n```\n\nIf you do not want the main-build.js file minified, pass **optimize=none** in the command above.\n\nThen configure the HTML page to load the main-built.js file instead of main.js by configuring the path used for \"main\" to be \"main-built\":\n\n``` markup\n<!DOCTYPE html>\n<html>\n    <head>\n        <title>My App</title>\n        <link rel=\"stylesheet\" type=\"text/css\" href=\"css/main.css\">\n        <script src=\"scripts/require.js\"></script>\n        <script>\n            require.config({\n                paths: {\n                    //Comment out this line to go back to loading\n                    //the non-optimized main.js source file.\n                    \"main\": \"main-built\"\n                }\n            });\n            require([\"main\"]);\n        </script>\n    </head>\n    <body>\n        <h1>My App</h1>\n    </body>\n</html>\n```\n\nNow, when this page is loaded, the require() for \"main\" will load the main-built.js file. Since excludeShallow told it just to exclude two.js, two.js will still be loaded as a separate file, allowing you to see it as a separate file in the browser's debugger, so you can set breakpoints and better track its individual changes.\n\n## empty: paths for network/CDN resources\n\nYou may have a script you want to load from a [Content Delivery Network (CDN)](http://en.wikipedia.org/wiki/Content_delivery_network) or any other server on a different domain.\n\nThe optimizer cannot load network resources, so if you want it included in the build, be sure to create a [paths config](api#config-paths) to map the file to a module name. Then, for running the optimizer, download the CDN script and pass a paths config to the optimizer that maps the module name to the local file path.\n\nHowever, it is more likely that you do not want to include that resource in the build. If the script does not have any dependencies, or you do not want to include its dependencies or will be including them in another way, then you can use the special **'empty:' scheme** in the paths config to just skip the file when doing an optimization.\n\nIn your main.js file, create a paths config that gives the script a module name. This can be done even if the script does not define a module via a call to define(). paths config are just used to map short module/script IDs to an URL. This allows you to use a different paths config for the optimization. In main.js:\n\n``` javascript\nrequirejs.config({\n    paths: {\n        'jquery': 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min'\n    }\n});\n\nrequire(['jquery'], function ($) {\n});\n```\n\nThen, when running the optimizer, use 'empty:' for the paths config:\n\n``` javascript\nnode ../../r.js -o name=main out=main-built.js baseUrl=. paths.jquery=empty:\n```\n\nOr, in a [build profile](#wholeproject):\n\n``` javascript\n({\n    baseUrl: \".\",\n    name: \"main\",\n    out: \"main-built.js\",\n    paths: {\n        jquery: \"empty:\"\n    }\n})\n```\n\n## Optimizing one CSS file\n\nUse the above example setup, if you just wanted to optimize main.css, you could use this command, from inside the **appdirectory/css** directory:\n\n``` javascript\nnode ../../r.js -o cssIn=main.css out=main-built.css\n```\n\nThis will create a file called **appdirectory/css/main-build.css** that will include the contents of main.css, have the url() paths properly adjusted, and have comments removed.\n\nSee the notes for the [Optimizing one JavaScript file](#onejs) about avoiding saving optimized files in your pristine source tree. It is only done here to make the example simpler.\n\nNote: The url() path fixing will always fix the paths relative to the **cssIn** build option path, not the **out** build option.\n\n## Optimizing a whole project\n\nThe optimizer can take care of optimizing all the CSS and JS files in your project by using a build profile.\n\nCreate a build profile, call it app.build.js, and put it in the **scripts** directory. The app.build.js file can live anywhere, but just be sure to adjust the paths accordingly in the example below -- all paths will be relative to where the app.build.js is located. Example app.build.js:\n\n``` javascript\n({\n    appDir: \"../\",\n    baseUrl: \"scripts\",\n    dir: \"../../appdirectory-build\",\n    modules: [\n        {\n            name: \"main\"\n        }\n    ]\n})\n```\n\nThis build profile tells RequireJS to copy all of **appdirectory** to a sibling directory called **appdirectory-build** and apply all the optimizations in the **appdirectory-build** directory. It is strongly suggested you use a different output directory than the source directory -- otherwise bad things will likely happen as the optimizer overwrites your source.\n\nRequireJS will use **baseUrl** to resolve the paths for any module names. The **baseUrl** should be relative to **appDir**.\n\nIn the **modules** array, specify the module names that you want to optimize, in the example, \"main\". \"main\" will be mapped to **appdirectory/scripts/main.js** in your project. The build system will then trace the dependencies for main.js and inject them into the **appdirectory-build/scripts/main.js** file.\n\nIt will also optimize any CSS files it finds inside **appdirectory-build**.\n\nTo run the build, run this command from inside the **appdirectory/scripts** directory:\n\n``` javascript\nnode ../../r.js -o app.build.js\n```\n\nOnce the build is done, you can use **appdirectory-build** as your optimized project, ready for deployment.\n\n## Optimizing a multi-page project\n\n[requirejs/example-multipage](https://github.com/requirejs/example-multipage) is an example of a project that has multiple pages, but shares a common configuration and a common optimized build layer.\n\n## Turbo options\n\nThe default for the optimizer is to do the safest, most robust set of actions that avoid surprises after a build. However, depending on your project setup, you may want to turn off some of these features to get faster builds:\n\n- The biggest time drain is minification. If you are just doing builds as part of a dev workflow, then set **optimize** to `\"none\"`.\n- If doing a whole project optimization, but only want to minify the build layers specified in **modules** options and not the rest of the JS files in the build output directory, you can set **skipDirOptimize** to `true`.\n- Normally each run of a whole project optimization will delete the output build directory specified by **dir** for cleanliness. Some build options, like **onBuildWrite**, will modify the output directory in a way that is hazardous to do twice over the same files. However, if you are doing simple builds with no extra file transforms besides build layer minification, then you can set **keepBuildDir** to `true` to keep the build directory between runs. Then, only files that have changed between build runs will be copied.\n\nAs of version 2.1.2, there are some speed shortcuts the optimizer will take by default if **optimize** is set to `\"none\"`. However, if you are using `\"none\"` for **optimize** and you are planning to minify the built files after the optimizer runs, then you should turn set **normalizeDirDefines** to `\"all\"` so that define() calls are normalized correctly to withstand minification. If you are doing minification via the **optimize** option, then you do not need to worry about setting this option.\n\n## Integration with has.js\n\n[has.js](https://github.com/phiggins42/has.js) is a great tool to that adds easy feature detection for your project. There is some optimizer support for optimizing code paths for has.js tests.\n\nIf your code uses tests like the following:\n\n``` javascript\nif (has(\"someThing\")) {\n    //use native someThing\n} else {\n    //do some workaround\n}\n```\n\nYou can define a **has** object in the build config with true or false values for some has() tests, and the optimizer will replace the has() test with the true or false value.\n\nIf your build profile looked like so:\n\n``` javascript\n({\n    baseUrl: \".\",\n    name: \"hasTestModule\",\n    out: \"builds/hasTestModule.js\",\n    has: {\n        someThing: true\n    }\n})\n```\n\nThen the optimizer will transform the above code sample to:\n\n``` javascript\nif (true) {\n    //use native someThing\n} else {\n    //do some workaround\n}\n```\n\nThen, if you use the default optimize setting of \"uglify\" in r.js 0.26.0 or later, or if the **optimize** setting is set to \"closure\" (when [run under Java](https://github.com/requirejs/r.js)), the minifier will optimize out the dead code branch! So you can do custom builds of your code that are optimized for a set of has() tests.\n\n## Source maps\n\nVersion 2.1.6 and higher have experimental support for [source maps](http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/). It works for mapping minified, bundled code to unminified, separate modules and only when **optimize** is set to `\"uglify2\"`. optimize set to `\"closure\"` allows only mapping minified, bundled code to unminified bundled code (closure only available when running under Java with Rhino). The unminified files will show up in the developer tools with a \".src.js\" file extension.\n\nTo enable the source map generation, set **generateSourceMaps** to `true`. Since the minifier needs to have full control over the minified file to generate the source map, the **preserveLicenseComments** should be explicitly set to `false`. [There is is a way to get some license comments in the minified source though](errors#sourcemapcomments).\n\nThe optimizer has supported [sourceURL](https://blog.getfirebug.com/2009/08/11/give-your-eval-a-name-with-sourceurl/) (by setting **useSourceUrl** to `true`), for debugging combined modules as individual files. However, that only works with non-minified code. Source maps translate a minified file to a non-minified version. It does not make sense to use useSourceUrl with generateSourceMaps since useSourceUrl needs the source values as strings, which prohibits the useful minification done in combination with generateSourceMaps.\n\n## All configuration options\n\nThere is an [example.build.js](https://github.com/requirejs/r.js/blob/master/build/example.build.js) file in the requirejs/build directory that details all of the allowed optimizer configuration options.\n\n## Deployment techniques\n\nThe r.js optimizer is designed to offer some primitives that can be used for different deployment scenarios by adding other code on top of it. See the [deployment techniques wiki page](https://github.com/requirejs/r.js/wiki/Deployment-Techniques) for ideas on how to use the optimizer in that fashion.\n\n## Common pitfalls\n\nIf you are having trouble with the examples below, here are some common pitfalls that might be the source of the problem:\n\n**Do not specify the output directory to within the source area for your JavaScript**\n\nFor instance, if your baseUrl is 'js' and your build output goes into 'js/build', there will likely be problems with extra, nested files generated on each optimization run. This guidance is only for optimizations that are not single file optimizations.\n\n**Avoid optimization names that are outside the baseUrl**\n\nFor instance, if your baseUrl is 'js', and your optimization targets:\n\n``` javascript\nname: '../main'\n```\n\nthe optimization could overwrite or place files outside the output directory. For those cases, create a **paths** config to map that file to a local name, like:\n\n``` javascript\npaths: {\n    main: '../main'\n}\n```\n\nthen use name:\n\n``` javascript\nname: 'main'\n```\n\nfor the optimization target.\n\n**Note the build limitations of shim config.** In particular, you cannot load dependencies for shimmed libraries from a CDN. See the [shim config section](api#config-shim) for more information.\n\n© jQuery Foundation and other contributors  \nLicensed under the MIT License.  \n[http://requirejs.org/docs/optimization.html](http://requirejs.org/docs/optimization.html)"
+- name: Rhino Support
+  id: index#rhino
+  summary: RequireJS can be used in Rhino via the r.js adapter
+  description: |-
+    ### Rhino Support
+
+    RequireJS can be used in Rhino via the [r.js adapter](http://requirejs.org/docs/download.html#rjs). See [the r.js README](https://github.com/requirejs/r.js/blob/master/README.html) for more information.
+- name: scriptType
+  id: index#config-scriptType
+  summary: 'scriptType: Specify the value for the type="" attribute used for script tags inserted into the document by RequireJS'
+  description: '**[scriptType](#config-scriptType)**: Specify the value for the type="" attribute used for script tags inserted into the document by RequireJS. Default is "text/javascript". To use Firefox''s JavaScript 1.8 features, use "text/javascript;version=1.8".'
+- name: shim
+  id: index#config-shim
+  summary: 'shim: Configure the dependencies, exports, and custom initialization for older, traditional "browser globals" scripts that do not use define() to declare the dependencies and set a module value'
+  description: |-
+    **[shim](#config-shim)**: Configure the dependencies, exports, and custom initialization for older, traditional "browser globals" scripts that do not use define() to declare the dependencies and set a module value.
+
+    Here is an example. It requires RequireJS 2.1.0+, and assumes backbone.js, underscore.js and jquery.js have been installed in the baseUrl directory. If not, then you may need to set a paths config for them:
+
+    ``` javascript
+    requirejs.config({
+        //Remember: only use shim config for non-AMD scripts,
+        //scripts that do not already call define(). The shim
+        //config will not work correctly if used on AMD scripts,
+        //in particular, the exports and init config will not
+        //be triggered, and the deps config will be confusing
+        //for those cases.
+        shim: {
+            'backbone': {
+                //These script dependencies should be loaded before loading
+                //backbone.js
+                deps: ['underscore', 'jquery'],
+                //Once loaded, use the global 'Backbone' as the
+                //module value.
+                exports: 'Backbone'
+            },
+            'underscore': {
+                exports: '_'
+            },
+            'foo': {
+                deps: ['bar'],
+                exports: 'Foo',
+                init: function (bar) {
+                    //Using a function allows you to call noConflict for
+                    //libraries that support it, and do other cleanup.
+                    //However, plugins for those libraries may still want
+                    //a global. "this" for the function will be the global
+                    //object. The dependencies will be passed in as
+                    //function arguments. If this function returns a value,
+                    //then that value is used as the module export value
+                    //instead of the object found via the 'exports' string.
+                    //Note: jQuery registers as an AMD module via define(),
+                    //so this will not work for jQuery. See notes section
+                    //below for an approach for jQuery.
+                    return this.Foo.noConflict();
+                }
+            }
+        }
+    });
+
+    //Then, later in a separate file, call it 'MyModel.js', a module is
+    //defined, specifying 'backbone' as a dependency. RequireJS will use
+    //the shim config to properly load 'backbone' and give a local
+    //reference to this module. The global Backbone will still exist on
+    //the page too.
+    define(['backbone'], function (Backbone) {
+      return Backbone.Model.extend({});
+    });
+    ```
+
+    In RequireJS 2.0.\*, the "exports" property in the shim config could have been a function instead of a string. In that case, it functioned the same as the "init" property as shown above. The "init" pattern is used in RequireJS 2.1.0+ so a string value for `exports` can be used for [enforceDefine](#config-enforceDefine), but then allow functional work once the library is known to have loaded.
+
+    For "modules" that are just jQuery or Backbone plugins that do not need to export any module value, the shim config can just be an array of dependencies:
+
+    ``` javascript
+    requirejs.config({
+        shim: {
+            'jquery.colorize': ['jquery'],
+            'jquery.scroll': ['jquery'],
+            'backbone.layoutmanager': ['backbone']
+        }
+    });
+    ```
+
+    Note however if you want to get 404 load detection in IE so that you can use paths fallbacks or errbacks, then a string exports value should be given so the loader can check if the scripts actually loaded (a return from init is **not** used for `enforceDefine` checking):
+
+    ``` javascript
+    requirejs.config({
+        shim: {
+            'jquery.colorize': {
+                deps: ['jquery'],
+                exports: 'jQuery.fn.colorize'
+            },
+            'jquery.scroll': {
+                deps: ['jquery'],
+                exports: 'jQuery.fn.scroll'
+            },
+            'backbone.layoutmanager': {
+                deps: ['backbone']
+                exports: 'Backbone.LayoutManager'
+            }
+        }
+    });
+    ```
+
+    **Important notes for "shim" config:**
+
+    - The shim config only sets up code relationships. To load modules that are part of or use shim config, a normal require/define call is needed. Setting shim by itself does not trigger code to load.
+    - Only use other "shim" modules as dependencies for shimmed scripts, or AMD libraries that have no dependencies and call define() after they also create a global (like jQuery or lodash). Otherwise, if you use an AMD module as a dependency for a shim config module, after a build, that AMD module may not be evaluated until after the shimmed code in the build executes, and an error will occur. The ultimate fix is to upgrade all the shimmed code to have optional AMD define() calls.
+    - If it is not possible to upgrade the shimmed code to use AMD define() calls, as of RequireJS 2.1.11, the optimizer has a [wrapShim build option](https://github.com/requirejs/r.js/blob/b8a6982d2923ae8389355edaa50d2b7f8065a01a/build/example.build.js#L68) that will try to automatically wrap the shimmed code in a define() for a build. This changes the scope of shimmed dependencies, so it is not guaranteed to always work, but, for example, for shimmed dependencies that depend on an AMD version of Backbone, it can be helpful.
+    - The init function will **not** be called for AMD modules. For example, you cannot use a shim init function to call jQuery's noConflict. See [Mapping Modules to use noConflict](jquery#noconflictmap) for an alternate approach to jQuery.
+    - Shim config is not supported when running AMD modules in node via RequireJS (it works for optimizer use though). Depending on the module being shimmed, it may fail in Node because Node does not have the same global environment as browsers. As of RequireJS 2.1.7, it will warn you in the console that shim config is not supported, and it may or may not work. If you wish to suppress that message, you can pass `requirejs.config({ suppress: { nodeShim: true }});`.
+
+    **Important optimizer notes for "shim" config**:
+
+    - You should use the [mainConfigFile build option](optimization#mainConfigFile) to specify the file where to find the shim config. Otherwise the optimizer will not know of the shim config. The other option is to duplicate the shim config in the build profile.
+    - Do not mix CDN loading with shim config in a build. Example scenario: you load jQuery from the CDN but use the shim config to load something like the stock version of Backbone that depends on jQuery. When you do the build, be sure to inline jQuery in the built file and do not load it from the CDN. Otherwise, Backbone will be inlined in the built file and it will execute before the CDN-loaded jQuery will load. This is because the shim config just delays loading of the files until dependencies are loaded, but does not do any auto-wrapping of define. After a build, the dependencies are already inlined, the shim config cannot delay execution of the non-define()'d code until later. define()'d modules do work with CDN loaded code after a build because they properly wrap their source in define factory function that will not execute until dependencies are loaded. So the lesson: shim config is a stop-gap measure for non-modular code, legacy code. define()'d modules are better.
+    - For local, multi-file builds, the above CDN advice also applies. For any shimmed script, its dependencies **must** be loaded before the shimmed script executes. This means either building its dependencies directly in the buid layer that includes the shimmed script, or loading its dependencies with a `require([], function (){})` call, then doing a nested `require([])` call for the build layer that has the shimmed script.
+    - If you are using uglifyjs to minify the code, **do not** set the uglify option `toplevel` to true, or if using the command line **do not** pass `-mt`. That option mangles the global names that shim uses to find exports.
+
+    &nbsp;
+- name: Simple Name/Value Pairs
+  id: index#defsimple
+  summary: null
+  description: |-
+    #### Simple Name/Value Pairs
+
+    If the module does not have any dependencies, and it is just a collection of name/value pairs, then just pass an object literal to define():
+
+    ``` javascript
+    //Inside file my/shirt.js:
+    define({
+        color: "black",
+        size: "unisize"
+    });
+    ```
+- name: skipDataMain
+  id: index#config-skipDataMain
+  summary: 'skipDataMain: Introduced in RequireJS 2.1.9: If set to true, skips the data-main attribute scanning done to start module loading'
+  description: |-
+    **[skipDataMain](#config-skipDataMain)**: Introduced in RequireJS 2.1.9: If set to `true`, skips the [data-main attribute scanning](#data-main) done to start module loading. Useful if RequireJS is embedded in a utility library that may interact with other RequireJS library on the page, and the embedded version should not do data-main loading.
+
+    ## Advanced Usage
+- name: Specify a JSONP Service Dependency
+  id: index#jsonp
+  summary: JSONP is a way of calling some services in JavaScript
+  description: |-
+    #### Specify a JSONP Service Dependency
+
+    [JSONP](http://en.wikipedia.org/wiki/JSON#JSONP) is a way of calling some services in JavaScript. It works across domains and it is an established approach to calling services that just require an HTTP GET via a script tag.
+
+    To use a JSONP service in RequireJS, specify "define" as the callback parameter's value. This means you can get the value of a JSONP URL as if it was a module definition.
+
+    Here is an example that calls a JSONP API endpoint. In this example, the JSONP callback parameter is called "callback", so "callback=define" tells the API to wrap the JSON response in a "define()" wrapper:
+
+    ``` javascript
+    require(["http://example.com/api/data.json?callback=define"],
+        function (data) {
+            //The data object will be the API response for the
+            //JSONP data call.
+            console.log(data);
+        }
+    );
+    ```
+
+    This use of JSONP should be limited to JSONP services for initial application setup. If the JSONP service times out, it means other modules you define via define() may not get executed, so the error handling is not robust.
+
+    **Only JSONP return values that are JSON objects are supported**. A JSONP response that is an array, a string or a number will not work.
+
+    This functionality should not be used for long-polling JSONP connections -- APIs that deal with real time streaming. Those kinds of APIs should do more script cleanup after receiving each response, and RequireJS will only fetch a JSONP URL once -- subsequent uses of the same URL as a dependency in a require() or define() call will get a cached value.
+
+    Errors in loading a JSONP service are normally surfaced via timeouts for the service, since script tag loading does not give much detail into network problems. To detect errors, you can override requirejs.onError() to get errors. There is more information in the [Handling Errors](#errors) section.
+- name: Specify a Text File Dependency
+  id: index#text
+  summary: It is nice to build HTML using regular HTML tags, instead of building up DOM structures in script
+  description: |-
+    ### Specify a Text File Dependency
+
+    It is nice to build HTML using regular HTML tags, instead of building up DOM structures in script. However, there is no good way to embed HTML in a JavaScript file. The best that can be done is using a string of HTML, but that can be hard to manage, particularly for multi-line HTML.
+
+    RequireJS has a plugin, text.js, that can help with this issue. It will automatically be loaded if the text! prefix is used for a dependency. See the [text.js README](https://github.com/requirejs/text) for more information.
+- name: Undefining a Module
+  id: index#undef
+  summary: There is a global function, requirejs.undef(), that allows undefining a module
+  description: |-
+    #### Undefining a Module
+
+    There is a global function, **requirejs.undef()**, that allows undefining a module. It will reset the loader's internal state to forget about the previous definition of the module.
+
+    **However**, it will not remove the module from other modules that are already defined and got a handle on that module as a dependency when they executed. So it is really only useful to use in error situations when no other modules have gotten a handle on a module value, or as part of any future module loading that may use that module. See the [errback section](#errbacks) for an example.
+
+    If you want to do more sophisticated dependency graph analysis for undefining work, the semi-private [onResourceLoad API](https://github.com/requirejs/requirejs/wiki/Internal-API:-onResourceLoad) may be helpful.
+
+    ## Mechanics
+
+    RequireJS loads each dependency as a script tag, using head.appendChild().
+
+    RequireJS waits for all dependencies to load, figures out the right order in which to call the functions that define the modules, then calls the module definition functions once the dependencies for those functions have been called. Note that the dependencies for a given module definition function could be called in any order, due to their sub-dependency relationships and network load order.
+
+    Using RequireJS in a server-side JavaScript environment that has synchronous loading should be as easy as redefining require.load(). The build system does this, the require.load method for that environment can be found in build/jslib/requirePatch.js.
+
+    In the future, this code may be pulled into the require/ directory as an optional module that you can load in your env to get the right load behavior based on the host environment.
+
+    ## Configuration Options
+
+    When using require() in the top-level HTML page (or top-level script file that does not define a module), a configuration object can be passed as the first option:
+
+    ``` markup
+    <script src="scripts/require.js"></script>
+    <script>
+      require.config({
+        baseUrl: "/another/path",
+        paths: {
+            "some": "some/v1.0"
+        },
+        waitSeconds: 15
+      });
+      require( ["some/module", "my/module", "a.js", "b.js"],
+        function(someModule,    myModule) {
+            //This function will be called when all the dependencies
+            //listed above are loaded. Note that this function could
+            //be called before the page is loaded.
+            //This callback is optional.
+        }
+      );
+    </script>
+    ```
+
+    You may also call require.config from your [data-main Entry Point](api#data-main), but be aware that the data-main script is loaded asynchronously. Avoid other entry point scripts which wrongly assume that data-main and its require.config will always execute prior to their script loading.
+
+    Also, you can define the config object as the global variable `require` **before** require.js is loaded, and have the values applied automatically. This example specifies some dependencies to load as soon as require.js defines require():
+
+    ``` markup
+    <script>
+        var require = {
+            deps: ["some/module1", "my/module2", "a.js", "b.js"],
+            callback: function(module1, module2) {
+                //This function will be called when all the dependencies
+                //listed above in deps are loaded. Note that this
+                //function could be called before the page is loaded.
+                //This callback is optional.
+            }
+        };
+    </script>
+    <script src="scripts/require.js"></script>
+    ```
+
+    **Note:** It is best to use `var require = {}` and do not use `window.require = {}`, it will not behave correctly in IE.
+
+    There are [some patterns for separating the config from main module loading](https://github.com/requirejs/requirejs/wiki/Patterns-for-separating-config-from-the-main-module).
+
+    Supported configuration options:
+- name: urlArgs
+  id: index#config-urlArgs
+  summary: 'urlArgs: Extra query string arguments appended to URLs that RequireJS uses to fetch resources'
+  description: |-
+    **[urlArgs](#config-urlArgs)**: Extra query string arguments appended to URLs that RequireJS uses to fetch resources. Most useful to cache bust when the browser or server is not configured correctly. Example cache bust setting for urlArgs:
+
+    ``` javascript
+    urlArgs: "bust=" +  (new Date()).getTime()
+    ```
+
+    As of RequireJS 2.2.0, urlArgs can be a function. If a function, it will receive the module ID and the URL as parameters, and it should return a string that will be added to the end of the URL. Return an empty string if no args. Be sure to take care of adding the '?' or '&' depending on the existing state of the URL. Example:
+
+    ``` javascript
+    requirejs.config({
+        urlArgs: function(id, url) {
+            var args = 'v=1';
+            if (url.indexOf('view.html') !== -1) {
+                args = 'v=2'
+            }
+
+            return (url.indexOf('?') === -1 ? '?' : '&') + args;
+        }
+    });
+    ```
+
+    During development it can be useful to use this, however **be sure** to remove it before deploying your code.
+- name: waitSeconds
+  id: index#config-waitSeconds
+  summary: 'waitSeconds: The number of seconds to wait before giving up on loading a script'
+  description: '**[waitSeconds](#config-waitSeconds)**: The number of seconds to wait before giving up on loading a script. Setting it to 0 disables the timeout. The default is 7 seconds.'
+- name: Web Worker Support
+  id: index#webworker
+  summary: As of release 0.12, RequireJS can be run inside a Web Worker
+  description: |-
+    ### Web Worker Support
+
+    As of release 0.12, RequireJS can be run inside a Web Worker. Just use importScripts() inside a web worker to load require.js (or the JS file that contains the require() definition), then call require.
+
+    You will likely need to set the **baseUrl** [configuration option](#config) to make sure require() can find the scripts to load.
+
+    You can see an example of its use by looking at one of the files used in [the unit test](http://github.com/requirejs/requirejs/blob/master/tests/workers.js).
+- name: Why AMD?
+  id: whyamd
+  summary: This page talks about the design forces and use of the Asynchronous Module Definition (AMD) API for JavaScript modules, the module API supported by RequireJS
+  description: "# Why AMD?\n\n- [Module Purposes](#purposes)\n- [The Web Today](#today)\n- [CommonJS](#commonjs)\n- [AMD](#amd)\n- [Module Definition](#definition)\n- [Named Modules](#namedmodules)\n- [Sugar](#sugar)\n- [CommonJS Compatibility](#commonjscompat)\n- [AMD Used Today](#amdtoday)\n- [What You Can Do](#youcando)\n\nThis page talks about the design forces and use of the [Asynchronous Module Definition (AMD) API](https://github.com/amdjs/amdjs-api/wiki/AMD) for JavaScript modules, the module API supported by RequireJS. There is a different page that talks about [general approach to modules on the web](why).\n\n## Module Purposes\n\nWhat are JavaScript modules? What is their purpose?\n\n- **Definition**: how to encapsulate a piece of code into a useful unit, and how to register its capability/export a value for the module.\n- **Dependency References**: how to refer to other units of code.\n\n## The Web Today\n\n``` javascript\n(function () {\n    var $ = this.jQuery;\n\n    this.myExample = function () {};\n}());\n```\n\nHow are pieces of JavaScript code defined today?\n\n- Defined via an immediately executed factory function.\n- References to dependencies are done via global variable names that were loaded via an HTML script tag.\n- The dependencies are very weakly stated: the developer needs to know the right dependency order. For instance, The file containing Backbone cannot come before the jQuery tag.\n- It requires extra tooling to substitute a set of script tags into one tag for optimized deployment.\n\nThis can be difficult to manage on large projects, particularly as scripts start to have many dependencies in a way that may overlap and nest. Hand-writing script tags is not very scalable, and it leaves out the capability to load scripts on demand.\n\n## CommonJS\n\n``` javascript\nvar $ = require('jquery');\nexports.myExample = function () {};\n```\n\nThe original [CommonJS (CJS) list](http://groups.google.com/group/commonjs) participants decided to work out a module format that worked with today's JavaScript language, but was not necessarily bound to the limitations of the browser JS environment. The hope was to use some stop-gap measures in the browser and hopefully influence the browser makers to build solutions that would enable their module format to work better natively. The stop-gap measures:\n\n- Either use a server to translate CJS modules to something usable in the browser.\n- Or use XMLHttpRequest (XHR) to load the text of modules and do text transforms/parsing in browser.\n\nThe CJS module format only allowed one module per file, so a \"transport format\" would be used for bundling more than one module in a file for optimization/bundling purposes.\n\nWith this approach, the CommonJS group was able to work out dependency references and how to deal with circular dependencies, and how to get some properties about the current module. However, they did not fully embrace some things in the browser environment that cannot change but still affect module design:\n\n- network loading\n- inherent asynchronicity\n\nIt also meant they placed more of a burden on web developers to implement the format, and the stop-gap measures meant debugging was worse. eval-based debugging or debugging multiple files that are concatenated into one file have practical weaknesses. Those weaknesses may be addressed in browser tooling at some point in the future, but the end result: using CommonJS modules in the most common of JS environments, the browser, is non-optimal today.\n\n## AMD\n\n``` javascript\ndefine(['jquery'] , function ($) {\n    return function () {};\n});\n```\n\nThe AMD format comes from wanting a module format that was better than today's \"write a bunch of script tags with implicit dependencies that you have to manually order\" and something that was easy to use directly in the browser. Something with good debugging characteristics that did not require server-specific tooling to get started. It grew out of Dojo's real world experience with using XHR+eval and wanting to avoid its weaknesses for the future.\n\nIt is an improvement over the web's current \"globals and script tags\" because:\n\n- Uses the CommonJS practice of string IDs for dependencies. Clear declaration of dependencies and avoids the use of globals.\n- IDs can be mapped to different paths. This allows swapping out implementation. This is great for creating mocks for unit testing. For the above code sample, the code just expects something that implements the jQuery API and behavior. It does not have to be jQuery.\n- Encapsulates the module definition. Gives you the tools to avoid polluting the global namespace.\n- Clear path to defining the module value. Either use \"return value;\" or the CommonJS \"exports\" idiom, which can be useful for circular dependencies.\n\nIt is an improvement over CommonJS modules because:\n\n- It works better in the browser, it has the least amount of gotchas. Other approaches have problems with debugging, cross-domain/CDN usage, file:// usage and the need for server-specific tooling.\n- Defines a way to include multiple modules in one file. In CommonJS terms, the term for this is a \"transport format\", and that group has not agreed on a transport format.\n- Allows setting a function as the return value. This is really useful for constructor functions. In CommonJS this is more awkward, always having to set a property on the exports object. Node supports module.exports = function () {}, but that is not part of a CommonJS spec.\n\n## Module Definition\n\nUsing JavaScript functions for encapsulation has been documented as the [module pattern](http://www.adequatelygood.com/2010/3/JavaScript-Module-Pattern-In-Depth):\n\n``` javascript\n(function () {\n   this.myGlobal = function () {};\n}());\n```\n\nThat type of module relies on attaching properties to the global object to export the module value, and it is difficult to declare dependencies with this model. The dependencies are assumed to be immediately available when this function executes. This limits the loading strategies for the dependencies.\n\nAMD addresses these issues by:\n\n- Register the factory function by calling define(), instead of immediately executing it.\n- Pass dependencies as an array of string values, do not grab globals.\n- Only execute the factory function once all the dependencies have been loaded and executed.\n- Pass the dependent modules as arguments to the factory function.\n\n``` javascript\n//Calling define with a dependency array and a factory function\ndefine(['dep1', 'dep2'], function (dep1, dep2) {\n\n    //Define the module value by returning a value.\n    return function () {};\n});\n```\n\n## Named Modules\n\nNotice that the above module does not declare a name for itself. This is what makes the module very portable. It allows a developer to place the module in a different path to give it a different ID/name. The AMD loader will give the module an ID based on how it is referenced by other scripts.\n\nHowever, tools that combine multiple modules together for performance need a way to give names to each module in the optimized file. For that, AMD allows a string as the first argument to define():\n\n``` javascript\n//Calling define with module ID, dependency array, and factory function\ndefine('myModule', ['dep1', 'dep2'], function (dep1, dep2) {\n\n    //Define the module value by returning a value.\n    return function () {};\n});\n```\n\nYou should avoid naming modules yourself, and only place one module in a file while developing. However, for tooling and performance, a module solution needs a way to identify modules in built resources.\n\n## Sugar\n\nThe above AMD example works in all browsers. However, there is a risk of mismatched dependency names with named function arguments, and it can start to look a bit strange if your module has many dependencies:\n\n``` javascript\ndefine([ \"require\", \"jquery\", \"blade/object\", \"blade/fn\", \"rdapi\",\n         \"oauth\", \"blade/jig\", \"blade/url\", \"dispatch\", \"accounts\",\n         \"storage\", \"services\", \"widgets/AccountPanel\", \"widgets/TabButton\",\n         \"widgets/AddAccount\", \"less\", \"osTheme\", \"jquery-ui-1.8.7.min\",\n         \"jquery.textOverflow\"],\nfunction (require,   $,        object,         fn,         rdapi,\n          oauth,   jig,         url,         dispatch,   accounts,\n          storage,   services,   AccountPanel,           TabButton,\n          AddAccount,           less,   osTheme) {\n\n});\n```\n\nTo make this easier, and to make it easy to do a simple wrapping around CommonJS modules, this form of define is supported, sometimes referred to as \"simplified CommonJS wrapping\":\n\n``` javascript\ndefine(function (require) {\n    var dependency1 = require('dependency1'),\n        dependency2 = require('dependency2');\n\n    return function () {};\n});\n```\n\nThe AMD loader will parse out the require('') calls by using Function.prototype.toString(), then internally convert the above define call into this:\n\n``` javascript\ndefine(['require', 'dependency1', 'dependency2'], function (require) {\n    var dependency1 = require('dependency1'),\n        dependency2 = require('dependency2');\n\n    return function () {};\n});\n```\n\nThis allows the loader to load dependency1 and dependency2 asynchronously, execute those dependencies, then execute this function.\n\nNot all browsers give a usable Function.prototype.toString() results. As of October 2011, the PS 3 and older Opera Mobile browsers do not. Those browsers are more likely to need an optimized build of the modules for network/device limitations, so just do a build with an optimizer that knows how to convert these files to the normalized dependency array form, like the [RequireJS optimizer](optimization).\n\nSince the number of browsers that cannot support this toString() scanning is very small, it is safe to use this sugared form for all your modules, particularly if you like to line up the dependency names with the variables that will hold their module values.\n\n## CommonJS Compatibility\n\nEven though this sugared form is referred to as the \"simplified CommonJS wrapping\", it is not 100% compatible with CommonJS modules. However, the cases that are not supported would likely break in the browser anyway, since they generally assume synchronous loading of dependencies.\n\nMost CJS modules, around 95% based on my (thoroughly unscientific) personal experience, are perfectly compatible with the simplified CommonJS wrapping.\n\nThe modules that break are ones that do a dynamic calculation of a dependency, anything that does not use a string literal for the require() call, and anything that does not look like a declarative require() call. So things like this fail:\n\n``` javascript\n//BAD\nvar mod = require(someCondition ? 'a' : 'b');\n\n//BAD\nif (someCondition) {\n    var a = require('a');\n} else {\n    var a = require('a1');\n}\n```\n\nThese cases are handled by the [callback-require](https://github.com/amdjs/amdjs-api/wiki/require), `require([moduleName], function (){})` normally present in AMD loaders.\n\nThe AMD execution model is better aligned with how ECMAScript Harmony modules are being specified. The CommonJS modules that would not work in an AMD wrapper will also not work as a Harmony module. AMD's code execution behavior is more future compatible.\n\n## Verbosity vs. Usefulness\n\nOne of the criticisms of AMD, at least compared to CJS modules, is that it requires a level of indent and a function wrapping.\n\nBut here is the plain truth: the perceived extra typing and a level of indent to use AMD does not matter. Here is where your time goes when coding:\n\n- Thinking about the problem.\n- Reading code.\n\nYour time coding is mostly spent thinking, not typing. While fewer words are generally preferable, there is a limit to that approach paying off, and the extra typing in AMD is not that much more.\n\nMost web developers use a function wrapper anyway, to avoid polluting the page with globals. Seeing a function wrapped around functionality is a very common sight and does not add to the reading cost of a module.\n\nThere are also hidden costs with the CommonJS format:\n\n- the tooling dependency cost\n- edge cases that break in browsers, like cross-domain access\n- worse debugging, a cost that continues to add up over time\n\nAMD modules require less tooling, there are fewer edge case issues, and better debugging support.\n\nWhat is important: being able to actually share code with others. AMD is the lowest energy pathway to that goal.\n\nHaving a working, easy to debug module system that works in today's browsers means getting real world experience in making the best module system for JavaScript in the future.\n\nAMD and its related APIs, have helped show the following for any future JS module system:\n\n- **Returning a function as the module value**, particularly a constructor function, leads to better API design. Node has module.exports to allow this, but being able to use \"return function (){}\" is much cleaner. It means not having to get a handle on \"module\" to do module.exports, and it is a clearer code expression.\n- **Dynamic code loading** (done in AMD systems via [require(\\[\\], function (){})](https://github.com/amdjs/amdjs-api/wiki/require)) is a basic requirement. CJS talked about it, had some proposals, but it was not fully embraced. Node does not have any support for this need, instead relying on the synchronous behavior of require(''), which is not portable to the web.\n- **[Loader plugins](plugins)** are incredibly useful. It helps avoid the nested brace indenting common in callback-based programming.\n- **Selectively mapping one module** to load from another location makes it easy to provide mock objects for testing.\n- There should only be at most **one IO action for each module**, and it should be straightforward. Web browsers are not tolerant of multiple IO lookups to find a module. This argues against the multiple path lookups that Node does now, and avoiding the use of a package.json \"main\" property. Just use module names that map easily to one location based on the project's location, using a reasonable default convention that does not require verbose configuration, but allow for simple configuration when needed.\n- It is best if there is an **\"opt-in\" call** that can be done so that older JS code can participate in the new system.\n\nIf a JS module system cannot deliver on the above features, it is at a significant disadvantage when compared to AMD and its related APIs around [callback-require](https://github.com/amdjs/amdjs-api/wiki/require), [loader plugins](https://github.com/amdjs/amdjs-api/wiki/Loader-Plugins), and paths-based module IDs.\n\n## AMD Used Today\n\nAs of mid-October 2011, AMD already has good adoption on the web:\n\n- [jQuery](http://jquery.com/) 1.7\n- [Dojo](http://dojotoolkit.org/) 1.7\n- [EmbedJS](http://uxebu.github.com/embedjs/)\n- [Ender](http://enderjs.com/)-associated modules like [bonzo](https://github.com/ded/bonzo), [qwery](https://github.com/ded/qwery), [bean](https://github.com/fat/bean) and [domready](https://github.com/ded/domready)\n- Used by [Firebug](http://getfirebug.com/) 1.8+\n- The simplified CommonJS wrapper can be used in [Jetpack/Add-on SDK](https://addons.mozilla.org/en-US/developers/docs/sdk/1.1/) for Firefox\n- Used for parts of sites on [the BBC](http://www.bbc.co.uk/) (observed by looking at the source, not an official recommendation of AMD/RequireJS)\n\n## What You Can Do\n\n**If you write applications:**\n\n- Give an AMD loader a try. You have some choices:\n  - [RequireJS](http://requirejs.org)\n  - [curl](https://github.com/cujojs/curl)\n  - [lsjs](https://github.com/zazl/lsjs)\n  - [Dojo](http://dojotoolkit.org/) 1.7+\n- If you want to use AMD but still use the **load one script at the bottom of the HTML page** approach:\n  - Use the [RequireJS optimizer](optimization) either in command line mode or as an [HTTP service](https://github.com/requirejs/r.js/blob/master/build/tests/http/httpBuild.js) with the [almond AMD shim](https://github.com/requirejs/almond).\n\n**If you are a script/library author**:\n\n- [Optionally call define()](https://github.com/umdjs/umd) if it is available. The nice thing is you can still code your library without relying on AMD, just participate if it is available. This allows consumers of your modules to:\n  - avoid dumping global variables in the page\n  - use more options for code loading, delayed loading\n  - use existing AMD tooling to optimize their project\n  - participate in a workable module system for JS in the browser today.\n\n**If you write code loaders/engines/environments for JavaScript:**\n\n- Implement [the AMD API](https://github.com/amdjs/amdjs-api/wiki/AMD). There is [a discussion list](https://groups.google.com/group/amd-implement) and [compatibility tests](https://github.com/amdjs/amdjs-tests). By implementing AMD, you will reduce multi-module system boilerplate and help prove out a workable JavaScript module system on the web. This can be fed back into the ECMAScript process to build better native module support.\n- Also support [callback-require](https://github.com/amdjs/amdjs-api/wiki/require) and [loader plugins](https://github.com/amdjs/amdjs-api/wiki/Loader-Plugins). Loader plugins are a great way to reduce the nested callback syndrome that can be common in callback/async-style code.\n\n© jQuery Foundation and other contributors  \nLicensed under the MIT License.  \n[http://requirejs.org/docs/whyamd.html](http://requirejs.org/docs/whyamd.html)"
+- name: Why Web Modules?
+  id: why
+  summary: This page discusses why modules on the web are useful and the mechanisms that can be used on the web today to enable them
+  description: "# Why Web Modules?\n\n- [The Problem](#1)\n- [Solution](#2)\n- [Script loading APIs](#3)\n- [Async vs Sync](#4)\n- [Script loading: XHR](#5)\n- [Script loading: Web Workers](#6)\n- [Script loading: document.write()](#7)\n- [Script loading: head.appendchild(script)](#8)\n- [Function wrapping](#9)\n\nThis page discusses why modules on the web are useful and the mechanisms that can be used on the web today to enable them. There is a separate page that talks about [the design forces](whyamd) for the particular function wrapped format used by RequireJS.\n\n## The Problem\n\n- Web sites are turning into Web apps\n- Code complexity grows as the site gets bigger\n- Assembly gets harder\n- Developer wants discrete JS files/modules\n- Deployment wants optimized code in just one or a few HTTP calls\n\n## Solution\n\nFront-end developers need a solution with:\n\n- Some sort of \\#include/import/require\n- Ability to load nested dependencies\n- Ease of use for developer but then backed by an optimization tool that helps deployment\n\n## Script Loading APIs\n\nFirst thing to sort out is a script loading API. Here are some candidates:\n\n- Dojo: dojo.require(\"some.module\")\n- LABjs: $LAB.script(\"some/module.js\")\n- CommonJS: require(\"some/module\")\n\nAll of them map to loading some/path/some/module.js. Ideally we could choose the CommonJS syntax, since it is likely to get more common over time, and we want to reuse code.\n\nWe also want some sort of syntax that will allow loading plain JavaScript files that exist today -- a developer should not have to rewrite all of their JavaScript to get the benefits of script loading.\n\nHowever, we need something that works well in the browser. The CommonJS require() is a synchronous call, it is expected to return the module immediately. This does not work well in the browser.\n\n## Async vs Sync\n\nThis example should illustrate the basic problem for the browser. Suppose we have an Employee object and we want a Manager object to derive from the Employee object. [Taking this example](https://developer.mozilla.org/en-US/docs/JavaScript/Guide/Details_of_the_Object_Model#Creating_the_hierarchy), we might code it up like this using our script loading API:\n\n``` javascript\nvar Employee = require(\"types/Employee\");\n\nfunction Manager () {\n    this.reports = [];\n}\n\n//Error if require call is async\nManager.prototype = new Employee();\n```\n\nAs the comment indicates above, if require() is async, this code will not work. However, loading scripts synchronously in the browser kills performance. So, what to do?\n\n## Script Loading: XHR\n\nIt is tempting to use XMLHttpRequest (XHR) to load the scripts. If XHR is used, then we can massage the text above -- we can do a regexp to find require() calls, make sure we load those scripts, then use eval() or script elements that have their body text set to the text of the script loaded via XHR.\n\nUsing eval() to evaluate the modules is bad:\n\n- Developers have been taught that eval() is bad.\n- Some environments do not allow eval().\n- It is harder to debug. Firebug and WebKit's inspector have an //@ sourceURL= convention, which helps give a name to evaled text, but this support is not universal across browsers.\n- eval context is different across browsers. You might be able to use execScript in IE to help this, but it means more moving parts.\n\nUsing script tags with body text set to file text is bad:\n\n- While debugging, the line number you get for an error does not map to the original source file.\n\nXHR also has issues with cross-domain requests. Some browsers now have cross-domain XHR support, but it is not universal, and IE decided to create a different API object for cross-domain calls, XDomainRequest. More moving parts and more things to get wrong. In particular, you need to be sure to not send any non-standard HTTP headers or there may be another \"preflight\" request done to make sure the cross-domain access is allowed.\n\nDojo has used an XHR-based loader with eval() and, while it works, it has been a source of frustration for developers. Dojo has an xdomain loader but it requires the modules to be modified via a build step to use a function wrapper, so that script src=\"\" tags can be used to load the modules. There are many edge cases and moving parts that create a tax on the developer.\n\nIf we are creating a new script loader, we can do better.\n\n## Script Loading: Web Workers\n\nWeb Workers might be another way to load scripts, but:\n\n- It does not have strong cross browser support\n- It is a message-passing API, and the scripts likely want to interact with the DOM, so it means just using the worker to fetch the script text, but pass the text back to the main window then use eval/script with text body to execute the script. This has all of the problems as XHR mentioned above.\n\n## Script Loading: document.write()\n\ndocument.write() can be used to load scripts -- it can load scripts from other domains and it maps to how browsers normally consume scripts, so it allows for easy debugging.\n\nHowever, in the [Async vs Sync example](#4) we cannot just execute that script directly. Ideally we could know the require() dependencies before we execute the script, and make sure those dependencies are loaded first. But we do not have access to the script before it is executed.\n\nAlso, document.write() does not work after page load. A great way to get perceived performance for your site is loading code on demand, as the user needs it for their next action.\n\nFinally, scripts loaded via document.write() will block page rendering. When looking at reaching the very best performance for your site, this is undesirable.\n\n## Script Loading: head.appendChild(script)\n\nWe can create scripts on demand and add them to the head:\n\n``` javascript\nvar head = document.getElementsByTagName('head')[0],\n    script = document.createElement('script');\n\nscript.src = url;\nhead.appendChild(script);\n```\n\nThere is a bit more involved than just the above snippet, but that is the basic idea. This approach has the advantage over document.write in that it will not block page rendering and it works after page load.\n\nHowever, it still has the [Async vs Sync example](#4) problem: ideally we could know the require() dependencies before we execute the script, and make sure those dependencies are loaded first.\n\n## Function Wrapping\n\nSo we need to know the dependencies and make sure we load them before executing our script. The best way to do that is construct our module loading API with function wrappers. Like so:\n\n``` javascript\ndefine(\n    //The name of this module\n    \"types/Manager\",\n\n    //The array of dependencies\n    [\"types/Employee\"],\n\n    //The function to execute when all dependencies have loaded. The\n    //arguments to this function are the array of dependencies mentioned\n    //above.\n    function (Employee) {\n        function Manager () {\n            this.reports = [];\n        }\n\n        //This will now work\n        Manager.prototype = new Employee();\n\n        //return the Manager constructor function so it can be used by\n        //other modules.\n        return Manager;\n    }\n);\n```\n\nAnd this is the syntax used by RequireJS. There is also a simplified syntax if you just want to load some plain JavaScript files that do not define modules:\n\n``` javascript\nrequire([\"some/script.js\"], function() {\n    //This function is called after some/script.js has loaded.\n});\n```\n\nThis type of syntax was chosen because it is terse and allows the loader to use head.appendChild(script) type of loading.\n\nIt differs from the normal CommonJS syntax out of necessity to work well in the browser. There have been suggestions that the normal CommonJS syntax could be used with head.appendChild(script) type of loading if a server process transforms the modules to a transport format that has a function wrapper.\n\nI believe it is important to not force the use of a runtime server process to transform code:\n\n- It makes debugging weird, line numbers will be off vs. the source file since the server is injecting a function wrapper.\n- It requires more gear. Front-end development should be possible with static files.\n\nMore details on the design forces and use cases for this function wrapping format, called Asynchronous Module Definition (AMD), can be found on the [Why AMD?](whyamd) page.\n\n© jQuery Foundation and other contributors  \nLicensed under the MIT License.  \n[http://requirejs.org/docs/why.html](http://requirejs.org/docs/why.html)"
+- name: xhtml
+  id: index#config-xhtml
+  summary: 'xhtml: If set to true, document.createElementNS() will be used to create script elements'
+  description: '**[xhtml](#config-xhtml)**: If set to true, document.createElementNS() will be used to create script elements.'

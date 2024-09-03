@@ -747,6 +747,18 @@
     Licensed under the MIT License.
     https://knockoutjs.com/documentation/introduction.html
   homepage: https://knockoutjs.com/
+- name: Kubectl
+  slug: kubectl
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: ''
+  copyright: |-
+    © 2022 The Kubernetes Authors | Documentation Distributed under CC BY
+    4.0
+    Copyright © 2022 The Linux Foundation ®. All rights reserved.
+    https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
+  homepage: https://kubernetes.io/docs/reference/kubectl/
 - name: Kubernetes
   slug: kubernetes~1.28
   text_format: markdown
@@ -759,6 +771,29 @@
     https://v1-28.docs.kubernetes.io/docs/reference/kubernetes-api/
   homepage: https://kubernetes.io/
   generator_command: doc src:devdocs use kubernetes~1.28
+- name: LaTeX
+  slug: latex
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2007–2018 Karl Berry
+    Public Domain Software
+    http://latexref.xyz/Index.html
+  homepage: https://ctan.org/pkg/latex2e-help-texinfo/
+- name: Leaflet
+  slug: leaflet~1.9
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '1.9'
+  copyright: |-
+    © 2010–2022 Vladimir Agafonkin
+    © 2010–2011, CloudMade
+    Maps © OpenStreetMap contributors.
+    https://leafletjs.com/reference.html
+  homepage: https://leafletjs.com/
 - name: Less
   slug: less~4
   text_format: markdown
@@ -770,6 +805,28 @@
     http://lesscss.org/features
   homepage: http://lesscss.org/
   generator_command: doc src:devdocs use less~4
+- name: Liquid
+  slug: liquid
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2005, 2006 Tobias Luetke
+    Licensed under the MIT License.
+    https://shopify.github.io/liquid//
+  homepage: https://shopify.github.io/liquid/
+- name: lodash
+  slug: lodash~4
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '4'
+  copyright: |-
+    © JS Foundation and other contributors
+    Licensed under the MIT License.
+    https://lodash.com/docs/4.17.10
+  homepage: https://lodash.com/
 - name: LÖVE
   slug: love
   text_format: markdown
@@ -825,6 +882,17 @@
     https://www.lua.org/manual/5.4/manual.html
   homepage: null
   generator_command: doc src:devdocs use lua~5.4
+- name: Marionette.js
+  slug: marionette~4
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '4'
+  copyright: |-
+    © 2017 Muted Solutions, LLC
+    Licensed under the MIT License.
+    https://marionettejs.com/docs/v4.0.0/index
+  homepage: https://marionettejs.com/
 - name: Markdown
   slug: markdown
   text_format: markdown
@@ -836,6 +904,97 @@
     https://daringfireball.net/projects/markdown/syntax
   homepage: null
   generator_command: doc src:devdocs use markdown
+- name: Ruby / Minitest
+  slug: minitest
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © Ryan Davis, seattle.rb
+    Licensed under the MIT License.
+    https://docs.seattlerb.org/minitest/table_of_contents.html
+  homepage: null
+- name: Mocha
+  slug: mocha
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2011–2021 JS Foundation and contributors
+    Licensed under the Creative Commons Attribution 4.0 International
+    License.
+    https://mochajs.org/
+  homepage: https://mochajs.org/
+- name: Modernizr
+  slug: modernizr
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2009–2020 The Modernizr team
+    Licensed under the MIT License.
+    https://modernizr.com/docs/
+  homepage: null
+- name: Moment.js
+  slug: moment
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © JS Foundation and other contributors
+    Licensed under the MIT License.
+    https://momentjs.com/docs/
+  homepage: http://momentjs.com/
+- name: Moment.js Timezone
+  slug: moment_timezone
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © JS Foundation and other contributors
+    Licensed under the MIT License.
+    https://momentjs.com/timezone/docs/
+  homepage: https://momentjs.com/timezone/
+- name: Mongoose
+  slug: mongoose
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2010 LearnBoost
+    Licensed under the MIT License.
+    https://mongoosejs.com/docs/index.html
+  homepage: http://mongoosejs.com/
+- name: nginx
+  slug: nginx
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2002-2021 Igor Sysoev
+    © 2011-2024 Nginx, Inc.
+    Licensed under the BSD License.
+    https://nginx.org/en/docs/index.html
+  homepage: https://nginx.org/
+- name: nginx / Lua Module
+  slug: nginx_lua_module
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2009–2017 Xiaozhe Wang (chaoslawful)
+    © 2009–2018 Yichun "agentzh" Zhang (章亦春), OpenResty Inc.
+    Licensed under the BSD License.
+    https://github.com/openresty/lua-nginx-module/tree/v0.10.13/
+  homepage: null
 - name: Nix
   slug: nix
   text_format: markdown
@@ -860,6 +1019,33 @@
     https://nodejs.org/dist/latest-v20.x/docs/api/
   homepage: https://nodejs.org/
   generator_command: doc src:devdocs use node~20_lts
+- name: Nokogiri
+  slug: nokogiri
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2008–2023 by Mike Dalessio, Aaron Patterson, Yoko Harada, Akinori
+    MUSHA, John Shahid,
+    Karol Bucek, Sam Ruby, Craig Barnes, Stephen Checkoway, Lars Kanis,
+    Sergio Arbeo,
+    Timothy Elliott, Nobuyoshi Nakada, Charles Nutter, Patrick
+    MahoneyLicensed under the MIT License.
+    https://nokogiri.org/rdoc/table_of_contents.html
+  homepage: null
+- name: npm
+  slug: npm
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © npm, Inc. and Contributors
+    Licensed under the npm License.
+    npm is a trademark of npm, Inc.
+    https://docs.npmjs.com/
+  homepage: https://www.npmjs.com/
 - name: Nushell
   slug: nushell
   text_format: markdown
@@ -881,6 +1067,47 @@
     https://v2.ocaml.org/releases/4.14/htmlman/index.html
   homepage: https://ocaml.org/
   generator_command: doc src:devdocs use ocaml~4.14
+- name: OpenGL
+  slug: opengl~4
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '4'
+  copyright: https://registry.khronos.org/OpenGL-Refpages/gl4/index.php
+  homepage: https://registry.khronos.org/OpenGL-Refpages/
+- name: OpenTSDB
+  slug: opentsdb
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2010–2016 The OpenTSDB Authors
+    Licensed under the GNU LGPLv2.1+ and GPLv3+ licenses.
+    http://opentsdb.net/docs/build/html/index.html
+  homepage: http://opentsdb.net/
+- name: Padrino
+  slug: padrino
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2010–2020 Padrino
+    Licensed under the MIT License.
+    https://www.rubydoc.info/github/padrino/padrino-framework/file/README.rdoc
+  homepage: http://padrinorb.com/
+- name: Phalcon
+  slug: phalcon~3
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '3'
+  copyright: |-
+    © 2011–2017 Phalcon Framework Team
+    Licensed under the Creative Commons Attribution License 3.0.
+    https://docs.phalconphp.com/en/latest/index.html
+  homepage: https://phalconphp.com/
 - name: PHP
   slug: php
   text_format: markdown
@@ -892,6 +1119,40 @@
     https://www.php.net/manual/en/
   homepage: https://www.php.net/
   generator_command: doc src:devdocs use php
+- name: PHPUnit
+  slug: phpunit~9
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '9'
+  copyright: |-
+    © 2005–2020 Sebastian Bergmann
+    Licensed under the Creative Commons Attribution 3.0 Unported License.
+    https://phpunit.readthedocs.io/en/9.5/index.html
+  homepage: https://phpunit.de/
+- name: Playwright
+  slug: playwright
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2024 Microsoft
+    Licensed under the Apache License, Version 2.0.
+    https://playwright.dev/docs/intro
+  homepage: https://playwright.dev/
+- name: Pony
+  slug: pony
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2016-2020, The Pony Developers
+    © 2014-2015, Causality Ltd.
+    Licensed under the BSD 2-Clause License.
+    https://stdlib.ponylang.io/
+  homepage: https://www.ponylang.io/
 - name: PostgreSQL
   slug: postgresql~16
   text_format: markdown
@@ -903,6 +1164,49 @@
     https://www.postgresql.org/docs/16/reference.html
   homepage: https://www.postgresql.org/
   generator_command: doc src:devdocs use postgresql~16
+- name: Prettier
+  slug: prettier
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © James Long and contributors
+    https://prettier.io/docs/en/
+  homepage: https://prettier.io/
+- name: Pug
+  slug: pug
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © Pug authors
+    Licensed under the MIT license.
+    https://pugjs.org/api/getting-started.html
+  homepage: https://pugjs.org/
+- name: Puppeteer
+  slug: puppeteer
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2020 Google Inc
+    Licensed under the Apache License 2.0.
+    https://github.com/puppeteer/puppeteer/blob/v7.1.0/docs/api.md
+  homepage: null
+- name: Pygame
+  slug: pygame
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © Pygame Developers.
+    Licensed under the GNU LGPL License version 2.1.
+    https://www.pygame.org/docs/py-modindex.html
+  homepage: https://www.pygame.org/
 - name: Python
   slug: python~3.13
   text_format: markdown
@@ -914,6 +1218,28 @@
     https://docs.python.org/3.13/index.html
   homepage: https://www.python.org/
   generator_command: doc src:devdocs use python~3.13
+- name: Q
+  slug: q
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2009–2017 Kristopher Michael Kowal
+    Licensed under the MIT License.
+    https://github.com/kriskowal/q/wiki/API-Reference
+  homepage: http://documentup.com/kriskowal/q/
+- name: QUnit
+  slug: qunit
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © OpenJS Foundation and contributors.
+    Licensed under the MIT license.
+    https://qunitjs.com/api/
+  homepage: https://qunitjs.com/
 - name: R
   slug: r
   text_format: markdown
@@ -957,6 +1283,62 @@
     https://reactjs.org/docs/hello-world.html
   homepage: https://reactjs.org/
   generator_command: doc src:devdocs use react
+- name: React Bootstrap
+  slug: react_bootstrap
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2014–present Stephen J. Collings, Matthew Honnibal, Pieter Vanderwerff
+    Licensed under the MIT License (MIT).
+    https://react-bootstrap.github.io//
+  homepage: https://react-bootstrap.github.io
+- name: React Router
+  slug: react_router
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © React Training 2015-2019
+    © Remix Software 2020-2022
+    Licensed under the MIT License (MIT).
+    https://reactrouterdotcom.fly.dev/docs/en/v6
+  homepage: https://reactrouterdotcom.fly.dev/
+- name: ReactiveX
+  slug: reactivex
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © ReactiveX contributors
+    Licensed under the Apache License 2.0.
+    http://reactivex.io/intro.html
+  homepage: http://reactivex.io/
+- name: Redis
+  slug: redis
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2006–2022 Salvatore Sanfilippo
+    Licensed under the Creative Commons Attribution-ShareAlike License 4.0.
+    https://redis.io/commands
+  homepage: https://redis.io/
+- name: Redux
+  slug: redux
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: ''
+  copyright: |-
+    © 2015–2021 Dan Abramov
+    Licensed under the MIT License.
+    https://redux.js.org/api/index.html
+  homepage: http://redux.js.org/
 - name: Relay
   slug: relay~10
   text_format: markdown
@@ -968,6 +1350,28 @@
     https://relay.dev/docs/en/introduction-to-relay
   homepage: https://relay.dev/
   generator_command: doc src:devdocs use relay~10
+- name: Requests
+  slug: requests
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2011-2022 Kenneth Reitz and other contributors
+    Licensed under the Apache license.
+    https://requests.readthedocs.io/en/latest/api/index.html
+  homepage: https://requests.readthedocs.io/
+- name: RequireJS
+  slug: requirejs
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © jQuery Foundation and other contributors
+    Licensed under the MIT License.
+    http://requirejs.org/docs/api.html
+  homepage: http://requirejs.org/
 - name: Ruby
   slug: ruby~3.3
   text_format: markdown
@@ -993,6 +1397,75 @@
     https://doc.rust-lang.org/book/index.html
   homepage: https://www.rust-lang.org/
   generator_command: doc src:devdocs use rust
+- name: Sanctuary
+  slug: sanctuary
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2020 Sanctuary
+    © 2016 Plaid Technologies, Inc.
+    Licensed under the MIT License.
+    https://sanctuary.js.org/
+  homepage: https://sanctuary.js.org/
+- name: Sanctuary Def
+  slug: sanctuary_def
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2020 Sanctuary
+    © 2016 Plaid Technologies, Inc.
+    Licensed under the MIT License.
+    https://github.com/sanctuary-js/sanctuary-def/blob/v0.22.0/README.md
+  homepage: https://github.com/sanctuary-js/sanctuary-def
+- name: Sanctuary Type Classes
+  slug: sanctuary_type_classes
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2020 Sanctuary
+    © 2016 Plaid Technologies, Inc.
+    Licensed under the MIT License.
+    https://github.com/sanctuary-js/sanctuary-type-classes/blob/v13.0.0/README.md
+  homepage: https://github.com/sanctuary-js/sanctuary-type-classes
+- name: Sass
+  slug: sass
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2006–2022 the Sass team, and numerous contributors
+    Licensed under the MIT License.
+    https://sass-lang.com/documentation/index.html
+  homepage: http://sass-lang.com/
+- name: Sequelize
+  slug: sequelize~6
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '6'
+  copyright: |-
+    Copyright © 2014–present Sequelize contributors
+    Licensed under the MIT License.
+    https://sequelize.org/api/v6/
+  homepage: https://sequelize.org/
+- name: Sinon.JS
+  slug: sinon~15
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '15'
+  copyright: |-
+    © 2010–2022 Christian Johansen
+    Licensed under the BSD License.
+    https://sinonjs.org/releases/v15/
+  homepage: https://sinonjs.org/
 - name: SQLite
   slug: sqlite
   text_format: markdown
