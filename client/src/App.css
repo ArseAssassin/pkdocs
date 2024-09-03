@@ -1,3 +1,15 @@
+.site-navi {
+  position: absolute;
+  top: 1em;
+  right: 2em;
+  z-index: 10;
+}
+
+.site-navi a {
+  color: #666;
+  font-size: 0.8em;
+}
+
 .doc-symbol {
   padding: 50px 20px 20px;
 

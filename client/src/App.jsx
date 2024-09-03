@@ -275,6 +275,9 @@ function App() {
 
   return (
     <div>
+      <nav className='site-navi'>
+        <a href='https://github.com/ArseAssassin/pikadoc'>pkDocs on GitHub</a>
+      </nav>
       <Router hook={ useHashLocation }>
         <Route path='/:doc?/:symbol?'>
           {(params) => <DoctableSearch selectedDoc={ params.doc } />}
