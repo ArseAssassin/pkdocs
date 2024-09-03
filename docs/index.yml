@@ -64,6 +64,17 @@
     https://www.gnu.org/software/bash/manual/html_node/index.html
   homepage: https://www.gnu.org/software/bash/
   generator_command: doc src:devdocs use bash
+- name: Bazel
+  slug: bazel~7.0
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '7.0'
+  copyright: |-
+    Licensed under the Creative Commons Attribution 4.0 License, and code
+    samples are licensed under the Apache 2.0 License.
+    https://bazel.build/versions/7.0.0/reference/be/
+  homepage: null
 - name: Bootstrap
   slug: bootstrap~5
   text_format: markdown
@@ -78,6 +89,28 @@
     https://getbootstrap.com/docs/5.3/getting-started/introduction/
   homepage: https://getbootstrap.com/
   generator_command: doc src:devdocs use bootstrap~5
+- name: Bottle
+  slug: bottle~0.12
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '0.12'
+  copyright: |-
+    © 2009–2017 Marcel Hellkamp
+    Licensed under the MIT License.
+    https://bottlepy.org/docs/0.12/index.html
+  homepage: https://bottlepy.org/
+- name: Bower
+  slug: bower
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2018 Bower contributors
+    Licensed under the MIT License.
+    https://bower.io/docs/api
+  homepage: https://bower.io/
 - name: C
   slug: c
   text_format: markdown
@@ -90,6 +123,17 @@
     https://en.cppreference.com/w/c/header
   homepage: null
   generator_command: doc src:devdocs use c
+- name: Chai
+  slug: chai
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2017 Chai.js Assertion Library
+    Licensed under the MIT License.
+    https://www.chaijs.com/api/
+  homepage: https://www.chaijs.com/
 - name: click
   slug: click
   text_format: markdown
@@ -113,6 +157,28 @@
     https://clojure.github.io/clojure/api-index.html
   homepage: https://clojure.org
   generator_command: doc src:devdocs use clojure~1.11
+- name: CoffeeScript
+  slug: coffeescript~2
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '2'
+  copyright: |-
+    © 2009–2022 Jeremy Ashkenas
+    Licensed under the MIT License.
+    https://coffeescript.org/
+  homepage: https://coffeescript.org
+- name: Composer
+  slug: composer
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © Nils Adermann, Jordi Boggiano
+    Licensed under the MIT License.
+    https://getcomposer.org/doc/
+  homepage: https://getcomposer.org
 - name: C++
   slug: cpp
   text_format: markdown
@@ -149,6 +215,27 @@
     https://github.com/d3/d3/blob/master/API.md
   homepage: https://d3js.org/
   generator_command: doc src:devdocs use d3~7
+- name: Deno
+  slug: deno
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2018–2022 the Deno authors
+    https://doc.deno.land/deno/stable/
+  homepage: https://deno.land/
+- name: Django REST Framework
+  slug: django_rest_framework
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    Copyright © 2011–present Encode OSS Ltd.
+    Licensed under the BSD License.
+    https://www.django-rest-framework.org/index.html
+  homepage: https://www.django-rest-framework.org/
 - name: Django
   slug: django~5.1
   text_format: markdown
@@ -175,6 +262,17 @@
     https://docs.docker.com/
   homepage: https://docker.com/
   generator_command: doc src:devdocs use docker
+- name: Dojo
+  slug: dojo
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2005–2017 JS Foundation
+    Licensed under the AFL 2.1 and BSD 3-Clause licenses.
+    http://dojotoolkit.org/api/1.10/
+  homepage: http://dojotoolkit.org
 - name: Web APIs
   slug: dom
   text_format: markdown
@@ -199,6 +297,17 @@
     https://hexdocs.pm/elixir/1.17.2/introduction.html
   homepage: https://elixir-lang.org/
   generator_command: doc src:devdocs use elixir~1.17
+- name: Enzyme
+  slug: enzyme
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2015 Airbnb, Inc.
+    Licensed under the MIT License.
+    https://enzymejs.github.io/enzyme/index.html
+  homepage: null
 - name: Erlang
   slug: erlang~26
   text_format: markdown
@@ -209,6 +318,17 @@
     Licensed under the Apache License, Version 2.0.
   homepage: https://www.erlang.org/
   generator_command: doc src:devdocs use erlang~26
+- name: esbuild
+  slug: esbuild
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2020 Evan Wallace
+    Licensed under the MIT License.
+    https://esbuild.github.io/
+  homepage: https://esbuild.github.io/
 - name: ESLint
   slug: eslint
   text_format: markdown
@@ -231,6 +351,17 @@
     https://expressjs.com/en/4x/api.html
   homepage: https://expressjs.com/
   generator_command: doc src:devdocs use express
+- name: Falcon
+  slug: falcon~2.0
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '2.0'
+  copyright: |-
+    © 2019 by Falcon contributors
+    Licensed under the Apache License, Version 2.0.
+    https://falcon.readthedocs.io/en/2.0.0/index.html
+  homepage: https://falconframework.org/
 - name: Fish
   slug: fish~3.7
   text_format: markdown
@@ -253,6 +384,28 @@
     https://flask.palletsprojects.com/en/3.0.x/index.html
   homepage: https://palletsprojects.com/p/flask/
   generator_command: doc src:devdocs use flask~3.0
+- name: Flow
+  slug: flow
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2013–present Facebook Inc.
+    Licensed under the MIT License.
+    https://flow.org/en/docs/
+  homepage: https://flow.org/
+- name: Fluture
+  slug: fluture
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2020 Aldwin Vlasblom
+    Licensed under the MIT License.
+    https://github.com/fluture-js/Fluture/blob/14.0.0/README.md
+  homepage: https://github.com/fluture-js/Fluture
 - name: Git
   slug: git
   text_format: markdown
@@ -264,6 +417,53 @@
     https://git-scm.com/docs
   homepage: https://git-scm.com/
   generator_command: doc src:devdocs use git
+- name: GnuCOBOL
+  slug: gnu_cobol
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    Copyright © 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
+    Licensed under the GNU Free Documentation License.
+    https://gnucobol.sourceforge.io/HTML/gnucobpg.html
+  homepage: https://gnucobol.sourceforge.io/
+- name: GNU Fortran
+  slug: gnu_fortran~13
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '13'
+  copyright: |-
+    © Free Software Foundation
+    Licensed under the GNU Free Documentation License, Version 1.3.
+    https://gcc.gnu.org/onlinedocs/gcc-13.1.0/gfortran/index.html
+  homepage: https://gcc.gnu.org/fortran/
+- name: GNU Make
+  slug: gnu_make
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    Copyright © 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997,
+    1998, 1999, 2000, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+    2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022
+    Free Software Foundation, Inc.
+    Licensed under the GNU Free Documentation License.
+    https://www.gnu.org/software/make/manual/html_node/index.html
+  homepage: https://www.gnu.org/software/make/manual/html_node/
+- name: Gnuplot
+  slug: gnuplot
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    Copyright 1986 - 1993, 1998, 2004 Thomas Williams, Colin Kelley
+    Distributed under the gnuplot license (rights to distribute modified
+    versions are withheld).
+  homepage: http://www.gnuplot.info/
 - name: Go
   slug: go
   text_format: markdown
@@ -286,6 +486,64 @@
     https://docs.godotengine.org/en/4.2/
   homepage: https://godotengine.org/
   generator_command: doc src:devdocs use godot~4.2
+- name: Graphite
+  slug: graphite
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2008–2012 Chris Davis
+    © 2011–2016 The Graphite Project
+    Licensed under the Apache License, Version 2.0.
+    https://graphite.readthedocs.io/en/latest/
+  homepage: null
+- name: Grunt
+  slug: grunt
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © GruntJS Team
+    Licensed under the MIT License.
+    https://gruntjs.com/getting-started
+  homepage: https://gruntjs.com/
+- name: Hammerspoon
+  slug: hammerspoon
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2014–2017 Hammerspoon contributors
+    Licensed under the MIT License.
+    https://www.hammerspoon.org/docs/index.html
+  homepage: https://www.hammerspoon.org
+- name: Handlebars.js
+  slug: handlebars
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2011–2017 by Yehuda Katz
+    Licensed under the MIT License.
+    https://handlebarsjs.com/
+  homepage: https://handlebarsjs.com/
+- name: Hapi
+  slug: hapi
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    Copyright © 2011-2022, Project contributors Copyright © 2011-2020,
+    Sideway Inc Copyright © 2011-2014, Walmart
+    Copyright © 2011, Yahoo Inc.
+    Licensed under the BSD 3-clause License.
+    https://hapi.dev/api/?v=21.3.2
+  homepage: https://hapi.dev/
 - name: Haskell
   slug: haskell~9
   text_format: markdown
@@ -298,6 +556,28 @@
     https://downloads.haskell.org/~ghc/9.4.2/docs/users_guide/index.html
   homepage: https://www.haskell.org/
   generator_command: doc src:devdocs use haskell~9
+- name: Haxe
+  slug: haxe
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: ''
+  copyright: |-
+    © 2005–2020 Haxe Foundation
+    Licensed under a MIT license.
+    https://api.haxe.org/
+  homepage: https://haxe.org
+- name: Homebrew
+  slug: homebrew
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2009–present Homebrew contributors
+    Licensed under the BSD 2-Clause License.
+    https://docs.brew.sh/
+  homepage: https://brew.sh
 - name: HTML
   slug: html
   text_format: markdown
@@ -311,6 +591,16 @@
   homepage: https://developer.mozilla.org/en-US/docs/Web/HTML
   generator_command: |
     doc src:devdocs use html {stripElements: '//*[starts-with(@class, "baseline-indicator")]'}
+- name: htmx
+  slug: htmx
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    Licensed under the Zero-Clause BSD License.
+    https://htmx.org/
+  homepage: https://htmx.org/
 - name: i3
   slug: i3
   text_format: markdown
@@ -321,6 +611,28 @@
     https://i3wm.org/docs/userguide.html
   homepage: https://i3wm.org/
   generator_command: doc src:devdocs use i3
+- name: Immutable.js
+  slug: immutable
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2014–present, Lee Byron and other contributors
+    Licensed under the 3-clause BSD License.
+    https://immutable-js.com/docs/v4.2.1/
+  homepage: https://immutable-js.com/
+- name: Jasmine
+  slug: jasmine
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2008–2019 Pivotal Labs
+    Licensed under the MIT License.
+    https://jasmine.github.io/api/4.0/index.html
+  homepage: https://jasmine.github.io/
 - name: JavaScript
   slug: javascript
   text_format: markdown
@@ -334,6 +646,51 @@
   homepage: https://developer.mozilla.org/en-US/docs/Web/JavaScript
   generator_command: |
     doc src:devdocs use javascript {stripElements: '//*[starts-with(@class, "baseline-indicator")]'}
+- name: Jekyll
+  slug: jekyll~4
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '4'
+  copyright: |-
+    © 2020 Jekyll Core Team and contributors
+    Licensed under the MIT license.
+    https://jekyllrb.com/docs/index.html
+  homepage: https://jekyllrb.com/
+- name: Jest
+  slug: jest
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2022 Facebook, Inc.
+    Licensed under the MIT License.
+    https://jestjs.io/docs/getting-started
+  homepage: https://jestjs.io/
+- name: Jinja
+  slug: jinja~3.1
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '3.1'
+  copyright: |-
+    © 2007–2021 Pallets
+    Licensed under the BSD 3-clause License.
+    https://jinja.palletsprojects.com/en/3.1.x/index.html
+  homepage: https://palletsprojects.com/p/jinja/
+- name: Joi
+  slug: joi
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    Copyright © 2012-2022, Project contributors Copyright © 2012-2022,
+    Sideway Inc Copyright © 2012-2014, Walmart
+    Licensed under the BSD 3-clause License.
+    https://joi.dev/api/?v=17.11.0
+  homepage: https://joi.dev/
 - name: jq
   slug: jq
   text_format: markdown
@@ -345,6 +702,51 @@
     https://jqlang.github.io/jq/manual/v1.7/index.html
   homepage: https://jqlang.github.io/jq/
   generator_command: doc src:devdocs use jq
+- name: jQuery Mobile
+  slug: jquerymobile
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © The jQuery Foundation and other contributors
+    Licensed under the MIT License.
+    https://api.jquerymobile.com/category/all
+  homepage: null
+- name: jQuery UI
+  slug: jqueryui
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © The jQuery Foundation and other contributors
+    Licensed under the MIT License.
+    https://api.jqueryui.com/category/all
+  homepage: null
+- name: JSDoc
+  slug: jsdoc
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2011–2017 the contributors to the JSDoc 3 documentation project
+    Licensed under the Creative Commons Attribution-ShareAlike Unported
+    License v3.0.
+    https://jsdoc.app/index.html
+  homepage: https://jsdoc.app/
+- name: Knockout.js
+  slug: knockout
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © Steven Sanderson, the Knockout.js team, and other contributors
+    Licensed under the MIT License.
+    https://knockoutjs.com/documentation/introduction.html
+  homepage: https://knockoutjs.com/
 - name: Kubernetes
   slug: kubernetes~1.28
   text_format: markdown
