@@ -20,7 +20,7 @@ const REPO = 'https://raw.githubusercontent.com/ArseAssassin/pkdocs/main/docs'
 
 function isUrlAbsolute(url) {
   let idx = url.indexOf(':')
-  return idx < 10 && idx != -1
+  return url.indexOf('#') !== 0 && idx < 10 && idx != -1
 }
 
 function useGet(url) {
@@ -227,6 +227,8 @@ function DocPage({ doc, symbolId }) {
               a(props) {
                 if (isUrlAbsolute(props.href || '')) {
                   return <a {...props} />
+                } else if (props.href.indexOf('#') === 0) {
+                  return props.children
                 } else if (urlTable[props.href] !== undefined) {
                   return <Link {...props} href={ `/${doc}/${urlTable[props.href]}` } />
                 } else {
