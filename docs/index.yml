@@ -1477,6 +1477,17 @@
   homepage: https://sqlite.org/
   generator_command: |
     doc src:devdocs use sqlite {stripElements: "//*[@class='fancy_toc']"}
+- name: Svelte
+  slug: svelte
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: ''
+  copyright: |-
+    © 2016–2023 Rich Harris and contributors
+    Licensed under the MIT License.
+    https://svelte.dev/docs/introduction
+  homepage: https://svelte.dev/
 - name: SVG
   slug: svg
   text_format: markdown
@@ -1521,6 +1532,29 @@
     https://www.tensorflow.org/versions/r2.9/api_docs/python/tf
   homepage: https://www.tensorflow.org/
   generator_command: doc src:devdocs use tensorflow~2.9
+- name: Trio
+  slug: trio
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2017 Nathaniel J. Smith
+    Licensed under the MIT License.
+    https://trio.readthedocs.io/en/v0.22.2/index.html
+  homepage: https://trio.readthedocs.io/
+- name: Twig
+  slug: twig~3
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '3'
+  copyright: |-
+    © 2009–2018 by the Twig Team
+    Licensed under the three clause BSD license.
+    The Twig logo is © 2010–2020 Symfony
+    https://twig.symfony.com/doc/3.x/index.html
+  homepage: https://twig.symfony.com/
 - name: TypeScript
   slug: typescript
   text_format: markdown
@@ -1532,6 +1566,41 @@
     https://www.typescriptlang.org/docs/
   homepage: https://www.typescriptlang.org
   generator_command: doc src:devdocs use typescript
+- name: Underscore.js
+  slug: underscore
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2009–2021 Jeremy Ashkenas, DocumentCloud and Investigative Reporters &
+    Editors
+    Licensed under the MIT License.
+    https://underscorejs.org/
+  homepage: https://underscorejs.org
+- name: Vagrant
+  slug: vagrant
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2010–2018 Mitchell Hashimoto
+    Licensed under the MPL 2.0 License.
+    https://www.vagrantup.com/docs/index.html
+  homepage: https://www.vagrantup.com/
+- name: Varnish
+  slug: varnish
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: ''
+  copyright: |-
+    Copyright © 2006 Verdens Gang AS
+    Copyright © 2006–2020 Varnish Software AS
+    Licensed under the BSD-2-Clause License.
+    https://varnish-cache.org/docs/7.4/index.html
+  homepage: https://varnish-cache.org/
 - name: Vite
   slug: vite
   text_format: markdown
@@ -1543,6 +1612,51 @@
     https://vitejs.dev/
   homepage: https://vitejs.dev/
   generator_command: doc src:devdocs use vite
+- name: Vitest
+  slug: vitest
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2021-Present Anthony Fu
+    © 2021-Present Matias Capeletto
+    Licensed under the MIT License.
+    https://vitest.dev/
+  homepage: https://vitest.dev/
+- name: Vue Router
+  slug: vue_router~4
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '4'
+  copyright: |-
+    © 2013–present Evan You
+    Licensed under the MIT License.
+    https://next.router.vuejs.org/index.html
+  homepage: https://router.vuejs.org
+- name: VueUse
+  slug: vueuse
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2019-present Anthony Fu
+    Licensed under the MIT License.
+    https://vueuse.org/
+  homepage: https://vueuse.org/
+- name: Vuex
+  slug: vuex~4
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: '4'
+  copyright: |-
+    © 2015–present Evan You
+    Licensed under the MIT License.
+    https://next.vuex.vuejs.org/index.html
+  homepage: https://vuex.vuejs.org
 - name: Vue
   slug: vue~3
   text_format: markdown
@@ -1554,6 +1668,20 @@
     https://vuejs.org/
   homepage: https://vuejs.org/
   generator_command: doc src:devdocs use vue~3
+- name: Vulkan
+  slug: vulkan
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2014–2017 Khronos Group Inc.
+    Licensed under the Creative Commons Attribution 4.0 International
+    License.
+    Vulkan and the Vulkan logo are registered trademarks of the Khronos
+    Group Inc.
+    https://www.khronos.org/registry/vulkan/specs/1.0/apispec.html
+  homepage: https://www.khronos.org/vulkan/
 - name: webpack
   slug: webpack~5
   text_format: markdown
@@ -1588,3 +1716,25 @@
     https://developer.mozilla.org/en-US/docs/Web/XSLT
   homepage: null
   generator_command: doc src:devdocs use xslt_xpath
+- name: Yarn
+  slug: yarn~berry
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: Berry
+  copyright: |-
+    © 2016–present Yarn Contributors
+    Licensed under the BSD License.
+    https://yarnpkg.com/
+  homepage: https://yarnpkg.com/
+- name: Zig
+  slug: zig
+  text_format: markdown
+  generator: src:devdocs
+  generator_command: src:devdocs
+  version: null
+  copyright: |-
+    © 2015–2024, Zig contributors
+    Licensed under the MIT License.
+    https://ziglang.org/documentation/0.13.0/
+  homepage: https://ziglang.org/
