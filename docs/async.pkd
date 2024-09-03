@@ -3,6 +3,7 @@ name: Async
 slug: async
 text_format: markdown
 generator: src:devdocs
+generator_command: src:devdocs
 version: null
 copyright: |-
   © 2010–2018 Caolan McMahon

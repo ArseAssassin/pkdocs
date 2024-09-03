@@ -3,6 +3,7 @@ name: Babel
 slug: babel~7
 text_format: markdown
 generator: src:devdocs
+generator_command: src:devdocs
 version: '7'
 copyright: |-
   © 2014-present Sebastian McKenzie

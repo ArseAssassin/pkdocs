@@ -3,6 +3,7 @@ name: Apache Pig
 slug: apache_pig~0.17
 text_format: markdown
 generator: src:devdocs
+generator_command: src:devdocs
 version: '0.17'
 copyright: |-
   © 2007–2017 Apache Software Foundation
