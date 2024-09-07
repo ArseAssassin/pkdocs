@@ -1,0 +1,748 @@
+---
+name: Liquid
+slug: liquid
+text_format: markdown
+generator: src:devdocs
+generator_command: src:devdocs
+version: null
+copyright: |-
+  © 2005, 2006 Tobias Luetke
+  Licensed under the MIT License.
+  https://shopify.github.io/liquid//
+homepage: https://shopify.github.io/liquid/
+
+---
+- name: abs
+  id: filters/abs/index
+  summary: Returns the absolute value of a number
+  description: "# abs\n\nReturns the absolute value of a number.\n\nInput\n\n``` liquid\n{{ -17 | abs }}\n```\n\nOutput\n\n``` liquid\n17\n```\n\nInput\n\n``` liquid\n{{ 4 | abs }}\n```\n\nOutput\n\n``` liquid\n4\n```\n\nabs will also work on a string that only contains a number:\n\nInput\n\n``` liquid\n{{ \"-19.86\" | abs }}\n```\n\nOutput\n\n``` liquid\n19.86\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/abs/](https://shopify.github.io/liquid/filters/abs/)"
+- name: append
+  id: filters/append/index
+  summary: Concatenates two strings and returns the concatenated value
+  description: "# append\n\nConcatenates two strings and returns the concatenated value.\n\nInput\n\n``` liquid\n{{ \"/my/fancy/url\" | append: \".html\" }}\n```\n\nOutput\n\n``` liquid\n/my/fancy/url.html\n```\n\nappend can also be used with variables:\n\nInput\n\n``` liquid\n{% assign filename = \"/index.html\" %}\n{{ \"website.com\" | append: filename }}\n```\n\nOutput\n\n``` liquid\nwebsite.com/index.html\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/append/](https://shopify.github.io/liquid/filters/append/)"
+- name: assign
+  id: tags/variable/index#assign
+  summary: Creates a new variable
+  belongs_to: Variable
+  description: |-
+    ## assign
+
+    Creates a new variable.
+
+    Input
+
+    ``` liquid
+    {% assign my_variable = false %}
+    {% if my_variable != true %}
+      This statement is valid.
+    {% endif %}
+    ```
+
+    Output
+
+    ``` liquid
+    This statement is valid.
+    ```
+
+    Wrap a variable value in quotations " to save it as a string.
+
+    Input
+
+    ``` liquid
+    {% assign foo = "bar" %}
+    {{ foo }}
+    ```
+
+    Output
+
+    ``` liquid
+    bar
+    ```
+- name: at_least
+  id: filters/at_least/index
+  summary: Limits a number to a minimum value
+  description: "# at_least\n\nLimits a number to a minimum value.\n\nInput\n\n``` liquid\n{{ 4 | at_least: 5 }}\n```\n\nOutput\n\n``` liquid\n5\n```\n\nInput\n\n``` liquid\n{{ 4 | at_least: 3 }}\n```\n\nOutput\n\n``` liquid\n4\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/at_least/](https://shopify.github.io/liquid/filters/at_least/)"
+- name: at_most
+  id: filters/at_most/index
+  summary: Limits a number to a maximum value
+  description: "# at_most\n\nLimits a number to a maximum value.\n\nInput\n\n``` liquid\n{{ 4 | at_most: 5 }}\n```\n\nOutput\n\n``` liquid\n4\n```\n\nInput\n\n``` liquid\n{{ 4 | at_most: 3 }}\n```\n\nOutput\n\n``` liquid\n3\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/at_most/](https://shopify.github.io/liquid/filters/at_most/)"
+- name: capitalize
+  id: filters/capitalize/index
+  summary: Makes the first character of a string capitalized
+  description: "# capitalize\n\nMakes the first character of a string capitalized.\n\nInput\n\n``` liquid\n{{ \"title\" | capitalize }}\n```\n\nOutput\n\n``` liquid\nTitle\n```\n\ncapitalize only capitalizes the first character of a string, so later words are not affected:\n\nInput\n\n``` liquid\n{{ \"my great title\" | capitalize }}\n```\n\nOutput\n\n``` liquid\nMy great title\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/capitalize/](https://shopify.github.io/liquid/filters/capitalize/)"
+- name: capture
+  id: tags/variable/index#capture
+  summary: Captures the string inside of the opening and closing tags and assigns it to a variable
+  belongs_to: Variable
+  description: |-
+    ## capture
+
+    Captures the string inside of the opening and closing tags and assigns it to a variable. Variables created through capture are strings.
+
+    Input
+
+    ``` liquid
+    {% capture my_variable %}I am being captured.{% endcapture %}
+    {{ my_variable }}
+    ```
+
+    Output
+
+    ``` liquid
+    I am being captured.
+    ```
+
+    Using capture, you can create complex strings using other variables created with assign:
+
+    Input
+
+    ``` liquid
+    {% assign favorite_food = "pizza" %}
+    {% assign age = 35 %}
+
+    {% capture about_me %}
+    I am {{ age }} and my favorite food is {{ favorite_food }}.
+    {% endcapture %}
+
+    {{ about_me }}
+    ```
+
+    Output
+
+    ``` liquid
+    I am 35 and my favourite food is pizza.
+    ```
+- name: case/when
+  id: tags/control-flow/index#casewhen
+  summary: Creates a switch statement to compare a variable with different values
+  belongs_to: Control flow
+  description: "## case/when\n\nCreates a switch statement to compare a variable with different values. case initializes the switch statement, and when compares its values.\n\nInput\n\n``` liquid\n{% assign handle = \"cake\" %}\n{% case handle %}\n  {% when \"cake\" %}\n     This is a cake\n  {% when \"cookie\" %}\n     This is a cookie\n  {% else %}\n     This is not a cake nor a cookie\n{% endcase %}\n```\n\nOutput\n\n``` liquid\nThis is a cake\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/tags/control-flow/](https://shopify.github.io/liquid/tags/control-flow/)"
+- name: ceil
+  id: filters/ceil/index
+  summary: Rounds the input up to the nearest whole number
+  description: "# ceil\n\nRounds the input up to the nearest whole number. Liquid tries to convert the input to a number before the filter is applied.\n\nInput\n\n``` liquid\n{{ 1.2 | ceil }}\n```\n\nOutput\n\n``` liquid\n2\n```\n\nInput\n\n``` liquid\n{{ 2.0 | ceil }}\n```\n\nOutput\n\n``` liquid\n2\n```\n\nInput\n\n``` liquid\n{{ 183.357 | ceil }}\n```\n\nOutput\n\n``` liquid\n184\n```\n\nHere the input value is a string:\n\nInput\n\n``` liquid\n{{ \"3.5\" | ceil }}\n```\n\nOutput\n\n``` liquid\n4\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/ceil/](https://shopify.github.io/liquid/filters/ceil/)"
+- name: Comment
+  id: tags/comment/index
+  summary: Allows you to leave un-rendered code inside a Liquid template
+  description: "# Comment\n\nAllows you to leave un-rendered code inside a Liquid template. Any text within the opening and closing comment blocks will not be printed, and any Liquid code within will not be executed.\n\nInput\n\n``` liquid\nAnything you put between {% comment %} and {% endcomment %} tags\nis turned into a comment.\n```\n\nOutput\n\n``` liquid\nAnything you put between  tags\nis turned into a comment.\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/tags/comment/](https://shopify.github.io/liquid/tags/comment/)"
+- name: compact
+  id: filters/compact/index
+  summary: Removes any nil values from an array
+  description: "# compact\n\nRemoves any nil values from an array.\n\nFor this example, assume site.pages is an array of content pages for a website, and some of these pages have an attribute called category that specifies their content category. If we map those categories to an array, some of the array items might be nil if any pages do not have a category attribute.\n\nInput\n\n``` liquid\n{% assign site_categories = site.pages | map: \"category\" %}\n\n{% for category in site_categories %}\n- {{ category }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\n- business\n- celebrities\n-\n- lifestyle\n- sports\n-\n- technology\n```\n\nBy using compact when we create our site_categories array, we can remove all the nil values in the array.\n\nInput\n\n``` liquid\n{% assign site_categories = site.pages | map: \"category\" | compact %}\n\n{% for category in site_categories %}\n- {{ category }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\n- business\n- celebrities\n- lifestyle\n- sports\n- technology\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/compact/](https://shopify.github.io/liquid/filters/compact/)"
+- name: concat
+  id: filters/concat/index
+  summary: Concatenates (joins together) multiple arrays
+  description: "# concat\n\nConcatenates (joins together) multiple arrays. The resulting array contains all the items from the input arrays.\n\nInput\n\n``` liquid\n{% assign fruits = \"apples, oranges, peaches\" | split: \", \" %}\n{% assign vegetables = \"carrots, turnips, potatoes\" | split: \", \" %}\n\n{% assign everything = fruits | concat: vegetables %}\n\n{% for item in everything %}\n- {{ item }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\n- apples\n- oranges\n- peaches\n- carrots\n- turnips\n- potatoes\n```\n\nYou can string together concat filters to join more than two arrays:\n\nInput\n\n``` liquid\n{% assign furniture = \"chairs, tables, shelves\" | split: \", \" %}\n\n{% assign everything = fruits | concat: vegetables | concat: furniture %}\n\n{% for item in everything %}\n- {{ item }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\n- apples\n- oranges\n- peaches\n- carrots\n- turnips\n- potatoes\n- chairs\n- tables\n- shelves\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/concat/](https://shopify.github.io/liquid/filters/concat/)"
+- name: Control flow
+  id: tags/control-flow/index
+  summary: Control flow tags can change the information Liquid shows using programming logic
+  description: "# Control flow\n\nControl flow tags can change the information Liquid shows using programming logic.\n\n## if\n\nExecutes a block of code only if a certain condition is true.\n\nInput\n\n``` liquid\n{% if product.title == \"Awesome Shoes\" %}\n  These shoes are awesome!\n{% endif %}\n```\n\nOutput\n\n``` liquid\nThese shoes are awesome!\n```\n\n## unless\n\nThe opposite of if – executes a block of code only if a certain condition is **not** met.\n\nInput\n\n``` liquid\n{% unless product.title == \"Awesome Shoes\" %}\n  These shoes are not awesome.\n{% endunless %}\n```\n\nOutput\n\n``` liquid\nThese shoes are not awesome.\n```\n\nThis would be the equivalent of doing the following:\n\n``` liquid\n{% if product.title != \"Awesome Shoes\" %}\n  These shoes are not awesome.\n{% endif %}\n```\n\n## elsif / else\n\nAdds more conditions within an if or unless block.\n\nInput\n\n``` liquid\n<!-- If customer.name = \"anonymous\" -->\n{% if customer.name == \"kevin\" %}\n  Hey Kevin!\n{% elsif customer.name == \"anonymous\" %}\n  Hey Anonymous!\n{% else %}\n  Hi Stranger!\n{% endif %}\n```\n\nOutput\n\n``` liquid\nHey Anonymous!\n```\n\n## case/when\n\nCreates a switch statement to compare a variable with different values. case initializes the switch statement, and when compares its values.\n\nInput\n\n``` liquid\n{% assign handle = \"cake\" %}\n{% case handle %}\n  {% when \"cake\" %}\n     This is a cake\n  {% when \"cookie\" %}\n     This is a cookie\n  {% else %}\n     This is not a cake nor a cookie\n{% endcase %}\n```\n\nOutput\n\n``` liquid\nThis is a cake\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/tags/control-flow/](https://shopify.github.io/liquid/tags/control-flow/)"
+- name: cycle
+  id: tags/iteration/index#cycle
+  summary: Loops through a group of strings and prints them in the order that they were passed as arguments
+  belongs_to: Iteration
+  description: |-
+    ## cycle
+
+    Loops through a group of strings and prints them in the order that they were passed as arguments. Each time cycle is called, the next string argument is printed.
+
+    cycle must be used within a [for](#for) loop block.
+
+    Input
+
+    ``` liquid
+    {% cycle "one", "two", "three" %}
+    {% cycle "one", "two", "three" %}
+    {% cycle "one", "two", "three" %}
+    {% cycle "one", "two", "three" %}
+    ```
+
+    Output
+
+    ``` liquid
+    one
+    two
+    three
+    one
+    ```
+
+    Uses for cycle include:
+
+    - applying odd/even classes to rows in a table
+    - applying a unique class to the last product thumbnail in a row
+- name: cycle (parameters)
+  id: tags/iteration/index#cycle-parameters
+  summary: cycle accepts a “cycle group” parameter in cases where you need multiple cycle blocks in one template
+  belongs_to: Iteration
+  description: |-
+    ## cycle (parameters)
+
+    cycle accepts a “cycle group” parameter in cases where you need multiple cycle blocks in one template. If no name is supplied for the cycle group, then it is assumed that multiple calls with the same parameters are one group.
+
+    Input
+
+    ``` liquid
+    {% cycle "first": "one", "two", "three" %}
+    {% cycle "second": "one", "two", "three" %}
+    {% cycle "second": "one", "two", "three" %}
+    {% cycle "first": "one", "two", "three" %}
+    ```
+
+    Output
+
+    ``` liquid
+    one
+    one
+    two
+    two
+    ```
+- name: date
+  id: filters/date/index
+  summary: Converts a timestamp into another date format
+  description: "# date\n\nConverts a timestamp into another date format. The format for this syntax is the same as [strftime](http://strftime.net). The input uses the same format as Ruby’s [Time.parse](https://ruby-doc.org/stdlib/libdoc/time/rdoc/Time.html#method-c-parse).\n\nInput\n\n``` liquid\n{{ article.published_at | date: \"%a, %b %d, %y\" }}\n```\n\nOutput\n\n``` liquid\nFri, Jul 17, 15\n```\n\nInput\n\n``` liquid\n{{ article.published_at | date: \"%Y\" }}\n```\n\nOutput\n\n``` liquid\n2015\n```\n\ndate works on strings if they contain well-formatted dates:\n\nInput\n\n``` liquid\n{{ \"March 14, 2016\" | date: \"%b %d, %y\" }}\n```\n\nOutput\n\n``` liquid\nMar 14, 16\n```\n\nTo get the current time, pass the special word \"now\" (or \"today\") to date:\n\nInput\n\n``` liquid\nThis page was last updated at {{ \"now\" | date: \"%Y-%m-%d %H:%M\" }}.\n```\n\nOutput\n\n``` liquid\nThis page was last updated at 2019-09-19 17:48.\n```\n\nNote that the value will be the current time of when the page was last generated from the template, not when the page is presented to a user if caching or static site generation is involved.\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/date/](https://shopify.github.io/liquid/filters/date/)"
+- name: decrement
+  id: tags/variable/index#decrement
+  summary: Creates a new number variable, and decreases its value by one every time it is called
+  belongs_to: Variable
+  description: "## decrement\n\nCreates a new number variable, and decreases its value by one every time it is called. The initial value is -1.\n\nInput\n\n``` liquid\n{% decrement variable %}\n{% decrement variable %}\n{% decrement variable %}\n```\n\nOutput\n\n``` liquid\n-1\n-2\n-3\n```\n\nLike [increment](#increment), variables declared inside decrement are independent from variables created through assign or capture.\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/tags/variable/](https://shopify.github.io/liquid/tags/variable/)"
+- name: default
+  id: filters/default/index
+  summary: Allows you to specify a fallback in case a value doesn’t exist
+  description: "# default\n\nAllows you to specify a fallback in case a value doesn’t exist. default will show its value if the left side is nil, false, or empty.\n\nIn this example, product_price is not defined, so the default value is used.\n\nInput\n\n``` liquid\n{{ product_price | default: 2.99 }}\n```\n\nOutput\n\n``` liquid\n2.99\n```\n\nIn this example, product_price is defined, so the default value is not used.\n\nInput\n\n``` liquid\n{% assign product_price = 4.99 %}\n{{ product_price | default: 2.99 }}\n```\n\nOutput\n\n``` liquid\n4.99\n```\n\nIn this example, product_price is empty, so the default value is used.\n\nInput\n\n``` liquid\n{% assign product_price = \"\" %}\n{{ product_price | default: 2.99 }}\n```\n\nOutput\n\n``` liquid\n2.99\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/default/](https://shopify.github.io/liquid/filters/default/)"
+- name: divided_by
+  id: filters/divided_by/index
+  summary: Divides a number by another number
+  description: "# divided_by\n\nDivides a number by another number.\n\nThe result is rounded down to the nearest integer (that is, the [floor](../floor/index)) if the divisor is an integer.\n\nInput\n\n``` liquid\n{{ 16 | divided_by: 4 }}\n```\n\nOutput\n\n``` liquid\n4\n```\n\nInput\n\n``` liquid\n{{ 5 | divided_by: 3 }}\n```\n\nOutput\n\n``` liquid\n1\n```\n\n### Controlling rounding\n\ndivided_by produces a result of the same type as the divisor — that is, if you divide by an integer, the result will be an integer. If you divide by a float (a number with a decimal in it), the result will be a float.\n\nFor example, here the divisor is an integer:\n\nInput\n\n``` liquid\n{{ 20 | divided_by: 7 }}\n```\n\nOutput\n\n``` liquid\n2\n```\n\nHere it is a float:\n\nInput\n\n``` liquid\n{{ 20 | divided_by: 7.0 }}\n```\n\nOutput\n\n``` liquid\n2.857142857142857\n```\n\n### Changing variable types\n\nYou might want to use a variable as a divisor, in which case you can’t simply add .0 to convert it to a float. In these cases, you can assign a version of your variable converted to a float using the times filter.\n\nIn this example, we’re dividing by a variable that contains an integer, so we get an integer:\n\nInput\n\n``` liquid\n{% assign my_integer = 7 %}\n{{ 20 | divided_by: my_integer }}\n```\n\nOutput\n\n``` liquid\n2\n```\n\nHere, we [multiply](../times/index) the variable by 1.0 to get a float, then divide by the float instead:\n\nInput\n\n``` liquid\n{% assign my_integer = 7 %}\n{% assign my_float = my_integer | times: 1.0 %}\n{{ 20 | divided_by: my_float }}\n```\n\nOutput\n\n``` liquid\n2.857142857142857\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/divided_by/](https://shopify.github.io/liquid/filters/divided_by/)"
+- name: downcase
+  id: filters/downcase/index
+  summary: Makes each character in a string lowercase
+  description: "# downcase\n\nMakes each character in a string lowercase. It has no effect on strings which are already all lowercase.\n\nInput\n\n``` liquid\n{{ \"Parker Moore\" | downcase }}\n```\n\nOutput\n\n``` liquid\nparker moore\n```\n\nInput\n\n``` liquid\n{{ \"apple\" | downcase }}\n```\n\nOutput\n\n``` liquid\napple\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/downcase/](https://shopify.github.io/liquid/filters/downcase/)"
+- name: elsif / else
+  id: tags/control-flow/index#elsif--else
+  summary: Adds more conditions within an if or unless block
+  belongs_to: Control flow
+  description: |-
+    ## elsif / else
+
+    Adds more conditions within an if or unless block.
+
+    Input
+
+    ``` liquid
+    <!-- If customer.name = "anonymous" -->
+    {% if customer.name == "kevin" %}
+      Hey Kevin!
+    {% elsif customer.name == "anonymous" %}
+      Hey Anonymous!
+    {% else %}
+      Hi Stranger!
+    {% endif %}
+    ```
+
+    Output
+
+    ``` liquid
+    Hey Anonymous!
+    ```
+- name: escape
+  id: filters/escape/index
+  summary: Escapes a string by replacing characters with escape sequences (so that the string can be used in a URL, for example)
+  description: "# escape\n\nEscapes a string by replacing characters with escape sequences (so that the string can be used in a URL, for example). It doesn’t change strings that don’t have anything to escape.\n\nInput\n\n``` liquid\n{{ \"Have you read 'James & the Giant Peach'?\" | escape }}\n```\n\nOutput\n\n``` liquid\nHave you read &#39;James &amp; the Giant Peach&#39;?\n```\n\nInput\n\n``` liquid\n{{ \"Tetsuro Takara\" | escape }}\n```\n\nOutput\n\n``` liquid\nTetsuro Takara\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/escape/](https://shopify.github.io/liquid/filters/escape/)"
+- name: escape_once
+  id: filters/escape_once/index
+  summary: Escapes a string without changing existing escaped entities
+  description: "# escape_once\n\nEscapes a string without changing existing escaped entities. It doesn’t change strings that don’t have anything to escape.\n\nInput\n\n``` liquid\n{{ \"1 < 2 & 3\" | escape_once }}\n```\n\nOutput\n\n``` liquid\n1 &lt; 2 &amp; 3\n```\n\nInput\n\n``` liquid\n{{ \"1 &lt; 2 &amp; 3\" | escape_once }}\n```\n\nOutput\n\n``` liquid\n1 &lt; 2 &amp; 3\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/escape_once/](https://shopify.github.io/liquid/filters/escape_once/)"
+- name: first
+  id: filters/first/index
+  summary: Returns the first item of an array
+  description: "# first\n\nReturns the first item of an array.\n\nInput\n\n``` liquid\n{{ \"Ground control to Major Tom.\" | split: \" \" | first }}\n```\n\nOutput\n\n``` liquid\nGround\n```\n\nInput\n\n``` liquid\n{% assign my_array = \"zebra, octopus, giraffe, tiger\" | split: \", \" %}\n\n{{ my_array.first }}\n```\n\nOutput\n\n``` liquid\nzebra\n```\n\nYou can use first with dot notation when you need to use the filter inside a tag:\n\n``` liquid\n{% if my_array.first == \"zebra\" %}\n  Here comes a zebra!\n{% endif %}\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/first/](https://shopify.github.io/liquid/filters/first/)"
+- name: floor
+  id: filters/floor/index
+  summary: Rounds the input down to the nearest whole number
+  description: "# floor\n\nRounds the input down to the nearest whole number. Liquid tries to convert the input to a number before the filter is applied.\n\nInput\n\n``` liquid\n{{ 1.2 | floor }}\n```\n\nOutput\n\n``` liquid\n1\n```\n\nInput\n\n``` liquid\n{{ 2.0 | floor }}\n```\n\nOutput\n\n``` liquid\n2\n```\n\nInput\n\n``` liquid\n{{ 183.357 | floor }}\n```\n\nOutput\n\n``` liquid\n183\n```\n\nHere the input value is a string:\n\nInput\n\n``` liquid\n{{ \"3.5\" | floor }}\n```\n\nOutput\n\n``` liquid\n3\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/floor/](https://shopify.github.io/liquid/filters/floor/)"
+- name: for
+  id: tags/iteration/index#for
+  summary: Repeatedly executes a block of code
+  belongs_to: Iteration
+  description: |-
+    ## for
+
+    Repeatedly executes a block of code. For a full list of attributes available within a for loop, see [forloop (object)](https://help.shopify.com/themes/liquid/objects/for-loops).
+
+    Input
+
+    ``` liquid
+    {% for product in collection.products %}
+      {{ product.title }}
+    {% endfor %}
+    ```
+
+    Output
+
+    ``` liquid
+    hat shirt pants
+    ```
+
+    ### else
+
+    Specifies a fallback case for a for loop which will run if the loop has zero length.
+
+    Input
+
+    ``` liquid
+    {% for product in collection.products %}
+      {{ product.title }}
+    {% else %}
+      The collection is empty.
+    {% endfor %}
+    ```
+
+    Output
+
+    ``` liquid
+    The collection is empty.
+    ```
+
+    ### break
+
+    Causes the loop to stop iterating when it encounters the break tag.
+
+    Input
+
+    ``` liquid
+    {% for i in (1..5) %}
+      {% if i == 4 %}
+        {% break %}
+      {% else %}
+        {{ i }}
+      {% endif %}
+    {% endfor %}
+    ```
+
+    Output
+
+    ``` liquid
+    1 2 3
+    ```
+
+    ### continue
+
+    Causes the loop to skip the current iteration when it encounters the continue tag.
+
+    Input
+
+    ``` liquid
+    {% for i in (1..5) %}
+      {% if i == 4 %}
+        {% continue %}
+      {% else %}
+        {{ i }}
+      {% endif %}
+    {% endfor %}
+    ```
+
+    Output
+
+    ``` liquid
+    1 2 3   5
+    ```
+- name: for (parameters)
+  id: tags/iteration/index#for-parameters
+  summary: Limits the loop to the specified number of iterations
+  belongs_to: Iteration
+  description: |-
+    ## for (parameters)
+
+    ### limit
+
+    Limits the loop to the specified number of iterations.
+
+    Input
+
+    ``` liquid
+    <!-- if array = [1,2,3,4,5,6] -->
+    {% for item in array limit:2 %}
+      {{ item }}
+    {% endfor %}
+    ```
+
+    Output
+
+    ``` liquid
+    1 2
+    ```
+
+    ### offset
+
+    Begins the loop at the specified index.
+
+    Input
+
+    ``` liquid
+    <!-- if array = [1,2,3,4,5,6] -->
+    {% for item in array offset:2 %}
+      {{ item }}
+    {% endfor %}
+    ```
+
+    Output
+
+    ``` liquid
+    3 4 5 6
+    ```
+
+    ### range
+
+    Defines a range of numbers to loop through. The range can be defined by both literal and variable numbers.
+
+    Input
+
+    ``` liquid
+    {% for i in (3..5) %}
+      {{ i }}
+    {% endfor %}
+
+    {% assign num = 4 %}
+    {% for i in (1..num) %}
+      {{ i }}
+    {% endfor %}
+    ```
+
+    Output
+
+    ``` liquid
+    3 4 5
+    1 2 3 4
+    ```
+
+    ### reversed
+
+    Reverses the order of the loop. Note that this flag’s spelling is different from the filter reverse.
+
+    Input
+
+    ``` liquid
+    <!-- if array = [1,2,3,4,5,6] -->
+    {% for item in array reversed %}
+      {{ item }}
+    {% endfor %}
+    ```
+
+    Output
+
+    ``` liquid
+    6 5 4 3 2 1
+    ```
+- name: if
+  id: tags/control-flow/index#if
+  summary: Executes a block of code only if a certain condition is true
+  belongs_to: Control flow
+  description: |-
+    ## if
+
+    Executes a block of code only if a certain condition is true.
+
+    Input
+
+    ``` liquid
+    {% if product.title == "Awesome Shoes" %}
+      These shoes are awesome!
+    {% endif %}
+    ```
+
+    Output
+
+    ``` liquid
+    These shoes are awesome!
+    ```
+- name: increment
+  id: tags/variable/index#increment
+  summary: Creates a new number variable, and increases its value by one every time it is called
+  belongs_to: Variable
+  description: |-
+    ## increment
+
+    Creates a new number variable, and increases its value by one every time it is called. The initial value is 0.
+
+    Input
+
+    ``` liquid
+    {% increment my_counter %}
+    {% increment my_counter %}
+    {% increment my_counter %}
+    ```
+
+    Output
+
+    ``` liquid
+    0
+    1
+    2
+    ```
+
+    Variables created through the increment tag are independent from variables created through assign or capture.
+
+    In the example below, a variable named “var” is created through assign. The increment tag is then used several times on a variable with the same name. Note that the increment tag does not affect the value of “var” that was created through assign.
+
+    Input
+
+    ``` liquid
+    {% assign var = 10 %}
+    {% increment var %}
+    {% increment var %}
+    {% increment var %}
+    {{ var }}
+    ```
+
+    Output
+
+    ``` liquid
+    0
+    1
+    2
+    10
+    ```
+- name: Introduction
+  id: basics/introduction/index
+  summary: Liquid code can be categorized into objects, tags, and filters
+  description: "# Introduction\n\nLiquid code can be categorized into [**objects**](#objects), [**tags**](#tags), and [**filters**](#filters).\n\n## Objects\n\n**Objects** tell Liquid where to show content on a page. Objects and variable names are denoted by double curly braces: {{ and }}.\n\nInput\n\n``` liquid\n{{ page.title }}\n```\n\nOutput\n\n``` liquid\nIntroduction\n```\n\nIn this case, Liquid is rendering the content of an object called page.title, and that object contains the text Introduction.\n\n## Tags\n\n**Tags** create the logic and control flow for templates. They are denoted by curly braces and percent signs: {% and %}.\n\nThe markup used in tags does not produce any visible text. This means that you can assign variables and create conditions and loops without showing any of the Liquid logic on the page.\n\nInput\n\n``` liquid\n{% if user %}\n  Hello {{ user.name }}!\n{% endif %}\n```\n\nOutput\n\n``` liquid\nHello Adam!\n```\n\nTags can be categorized into three types:\n\n- [Control flow](../../tags/control-flow/index)\n- [Iteration](../../tags/iteration/index)\n- [Variable assignments](../../tags/variable/index)\n\nYou can read more about each type of tag in their respective sections.\n\n## Filters\n\n**Filters** change the output of a Liquid object. They are used within an output and are separated by a \\|.\n\nInput\n\n``` liquid\n{{ \"/my/fancy/url\" | append: \".html\" }}\n```\n\nOutput\n\n``` liquid\n/my/fancy/url.html\n```\n\nMultiple filters can be used on one output. They are applied from left to right.\n\nInput\n\n``` liquid\n{{ \"adam!\" | capitalize | prepend: \"Hello \" }}\n```\n\nOutput\n\n``` liquid\nHello Adam!\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/basics/introduction/](https://shopify.github.io/liquid/basics/introduction/)"
+- name: Iteration
+  id: tags/iteration/index
+  summary: Iteration tags run blocks of code repeatedly
+  description: "# Iteration\n\nIteration tags run blocks of code repeatedly.\n\n## for\n\nRepeatedly executes a block of code. For a full list of attributes available within a for loop, see [forloop (object)](https://help.shopify.com/themes/liquid/objects/for-loops).\n\nInput\n\n``` liquid\n{% for product in collection.products %}\n  {{ product.title }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\nhat shirt pants\n```\n\n### else\n\nSpecifies a fallback case for a for loop which will run if the loop has zero length.\n\nInput\n\n``` liquid\n{% for product in collection.products %}\n  {{ product.title }}\n{% else %}\n  The collection is empty.\n{% endfor %}\n```\n\nOutput\n\n``` liquid\nThe collection is empty.\n```\n\n### break\n\nCauses the loop to stop iterating when it encounters the break tag.\n\nInput\n\n``` liquid\n{% for i in (1..5) %}\n  {% if i == 4 %}\n    {% break %}\n  {% else %}\n    {{ i }}\n  {% endif %}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\n1 2 3\n```\n\n### continue\n\nCauses the loop to skip the current iteration when it encounters the continue tag.\n\nInput\n\n``` liquid\n{% for i in (1..5) %}\n  {% if i == 4 %}\n    {% continue %}\n  {% else %}\n    {{ i }}\n  {% endif %}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\n1 2 3   5\n```\n\n## for (parameters)\n\n### limit\n\nLimits the loop to the specified number of iterations.\n\nInput\n\n``` liquid\n<!-- if array = [1,2,3,4,5,6] -->\n{% for item in array limit:2 %}\n  {{ item }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\n1 2\n```\n\n### offset\n\nBegins the loop at the specified index.\n\nInput\n\n``` liquid\n<!-- if array = [1,2,3,4,5,6] -->\n{% for item in array offset:2 %}\n  {{ item }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\n3 4 5 6\n```\n\n### range\n\nDefines a range of numbers to loop through. The range can be defined by both literal and variable numbers.\n\nInput\n\n``` liquid\n{% for i in (3..5) %}\n  {{ i }}\n{% endfor %}\n\n{% assign num = 4 %}\n{% for i in (1..num) %}\n  {{ i }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\n3 4 5\n1 2 3 4\n```\n\n### reversed\n\nReverses the order of the loop. Note that this flag’s spelling is different from the filter reverse.\n\nInput\n\n``` liquid\n<!-- if array = [1,2,3,4,5,6] -->\n{% for item in array reversed %}\n  {{ item }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\n6 5 4 3 2 1\n```\n\n## cycle\n\nLoops through a group of strings and prints them in the order that they were passed as arguments. Each time cycle is called, the next string argument is printed.\n\ncycle must be used within a [for](#for) loop block.\n\nInput\n\n``` liquid\n{% cycle \"one\", \"two\", \"three\" %}\n{% cycle \"one\", \"two\", \"three\" %}\n{% cycle \"one\", \"two\", \"three\" %}\n{% cycle \"one\", \"two\", \"three\" %}\n```\n\nOutput\n\n``` liquid\none\ntwo\nthree\none\n```\n\nUses for cycle include:\n\n- applying odd/even classes to rows in a table\n- applying a unique class to the last product thumbnail in a row\n\n## cycle (parameters)\n\ncycle accepts a “cycle group” parameter in cases where you need multiple cycle blocks in one template. If no name is supplied for the cycle group, then it is assumed that multiple calls with the same parameters are one group.\n\nInput\n\n``` liquid\n{% cycle \"first\": \"one\", \"two\", \"three\" %}\n{% cycle \"second\": \"one\", \"two\", \"three\" %}\n{% cycle \"second\": \"one\", \"two\", \"three\" %}\n{% cycle \"first\": \"one\", \"two\", \"three\" %}\n```\n\nOutput\n\n``` liquid\none\none\ntwo\ntwo\n```\n\n## tablerow\n\nGenerates an HTML table. Must be wrapped in opening \\<table\\> and closing \\</table\\> HTML tags.\n\nInput\n\n``` liquid\n<table>\n{% tablerow product in collection.products %}\n  {{ product.title }}\n{% endtablerow %}\n</table>\n```\n\nOutput\n\n``` liquid\n<table>\n  <tr class=\"row1\">\n    <td class=\"col1\">\n      Cool Shirt\n    </td>\n    <td class=\"col2\">\n      Alien Poster\n    </td>\n    <td class=\"col3\">\n      Batman Poster\n    </td>\n    <td class=\"col4\">\n      Bullseye Shirt\n    </td>\n    <td class=\"col5\">\n      Another Classic Vinyl\n    </td>\n    <td class=\"col6\">\n      Awesome Jeans\n    </td>\n  </tr>\n</table>\n```\n\n## tablerow (parameters)\n\n### cols\n\nDefines how many columns the tables should have.\n\nInput\n\n``` liquid\n{% tablerow product in collection.products cols:2 %}\n  {{ product.title }}\n{% endtablerow %}\n```\n\nOutput\n\n``` liquid\n<table>\n  <tr class=\"row1\">\n    <td class=\"col1\">\n      Cool Shirt\n    </td>\n    <td class=\"col2\">\n      Alien Poster\n    </td>\n  </tr>\n  <tr class=\"row2\">\n    <td class=\"col1\">\n      Batman Poster\n    </td>\n    <td class=\"col2\">\n      Bullseye Shirt\n    </td>\n  </tr>\n  <tr class=\"row3\">\n    <td class=\"col1\">\n      Another Classic Vinyl\n    </td>\n    <td class=\"col2\">\n      Awesome Jeans\n    </td>\n  </tr>\n</table>\n```\n\n#### limit\n\nExits the tablerow after a specific index.\n\n``` liquid\n{% tablerow product in collection.products cols:2 limit:3 %}\n  {{ product.title }}\n{% endtablerow %}\n```\n\n### offset\n\nStarts the tablerow after a specific index.\n\n``` liquid\n{% tablerow product in collection.products cols:2 offset:3 %}\n  {{ product.title }}\n{% endtablerow %}\n```\n\n### range\n\nDefines a range of numbers to loop through. The range can be defined by both literal and variable numbers.\n\n``` liquid\n<!--variable number example-->\n\n{% assign num = 4 %}\n<table>\n{% tablerow i in (1..num) %}\n  {{ i }}\n{% endtablerow %}\n</table>\n\n<!--literal number example-->\n\n<table>\n{% tablerow i in (3..5) %}\n  {{ i }}\n{% endtablerow %}\n</table>\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/tags/iteration/](https://shopify.github.io/liquid/tags/iteration/)"
+- name: join
+  id: filters/join/index
+  summary: Combines the items in an array into a single string using the argument as a separator
+  description: "# join\n\nCombines the items in an array into a single string using the argument as a separator.\n\nInput\n\n``` liquid\n{% assign beatles = \"John, Paul, George, Ringo\" | split: \", \" %}\n\n{{ beatles | join: \" and \" }}\n```\n\nOutput\n\n``` liquid\nJohn and Paul and George and Ringo\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/join/](https://shopify.github.io/liquid/filters/join/)"
+- name: last
+  id: filters/last/index
+  summary: Returns the last item of an array
+  description: "# last\n\nReturns the last item of an array.\n\nInput\n\n``` liquid\n{{ \"Ground control to Major Tom.\" | split: \" \" | last }}\n```\n\nOutput\n\n``` liquid\nTom.\n```\n\nInput\n\n``` liquid\n{% assign my_array = \"zebra, octopus, giraffe, tiger\" | split: \", \" %}\n\n{{ my_array.last }}\n```\n\nOutput\n\n``` liquid\ntiger\n```\n\nYou can use last with dot notation when you need to use the filter inside a tag:\n\n``` liquid\n{% if my_array.last == \"tiger\" %}\n  There goes a tiger!\n{% endif %}\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/last/](https://shopify.github.io/liquid/filters/last/)"
+- name: lstrip
+  id: filters/lstrip/index
+  summary: Removes all whitespace (tabs, spaces, and newlines) from the left side of a string
+  description: "# lstrip\n\nRemoves all whitespace (tabs, spaces, and newlines) from the left side of a string. It does not affect spaces between words.\n\nInput\n\n``` liquid\n{{ \"          So much room for activities!          \" | lstrip }}\n```\n\nOutput\n\n``` liquid\nSo much room for activities!\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/lstrip/](https://shopify.github.io/liquid/filters/lstrip/)"
+- name: map
+  id: filters/map/index
+  summary: Creates an array of values by extracting the values of a named property from another object
+  description: "# map\n\nCreates an array of values by extracting the values of a named property from another object.\n\nIn this example, assume the object site.pages contains all the metadata for a website. Using assign with the map filter creates a variable that contains only the values of the category properties of everything in the site.pages object.\n\nInput\n\n``` liquid\n{% assign all_categories = site.pages | map: \"category\" %}\n\n{% for item in all_categories %}\n- {{ item }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\n- business\n- celebrities\n- lifestyle\n- sports\n- technology\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/map/](https://shopify.github.io/liquid/filters/map/)"
+- name: minus
+  id: filters/minus/index
+  summary: Subtracts a number from another number
+  description: "# minus\n\nSubtracts a number from another number.\n\nInput\n\n``` liquid\n{{ 4 | minus: 2 }}\n```\n\nOutput\n\n``` liquid\n2\n```\n\nInput\n\n``` liquid\n{{ 16 | minus: 4 }}\n```\n\nOutput\n\n``` liquid\n12\n```\n\nInput\n\n``` liquid\n{{ 183.357 | minus: 12 }}\n```\n\nOutput\n\n``` liquid\n171.357\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/minus/](https://shopify.github.io/liquid/filters/minus/)"
+- name: modulo
+  id: filters/modulo/index
+  summary: Returns the remainder of a division operation
+  description: "# modulo\n\nReturns the remainder of a division operation.\n\nInput\n\n``` liquid\n{{ 3 | modulo: 2 }}\n```\n\nOutput\n\n``` liquid\n1\n```\n\nInput\n\n``` liquid\n{{ 24 | modulo: 7 }}\n```\n\nOutput\n\n``` liquid\n3\n```\n\nInput\n\n``` liquid\n{{ 183.357 | modulo: 12 }}\n```\n\nOutput\n\n``` liquid\n3.357\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/modulo/](https://shopify.github.io/liquid/filters/modulo/)"
+- name: newline_to_br
+  id: filters/newline_to_br/index
+  summary: Replaces every newline (\n) in a string with an HTML line break (<br />)
+  description: "# newline_to_br\n\nReplaces every newline (\\n) in a string with an HTML line break (\\<br /\\>).\n\nInput\n\n``` liquid\n{% capture string_with_newlines %}\nHello\nthere\n{% endcapture %}\n\n{{ string_with_newlines | newline_to_br }}\n```\n\nOutput\n\n``` liquid\n<br />\nHello<br />\nthere<br />\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/newline_to_br/](https://shopify.github.io/liquid/filters/newline_to_br/)"
+- name: Operators
+  id: basics/operators/index
+  summary: Liquid includes many logical and comparison operators
+  description: "# Operators\n\nLiquid includes many logical and comparison operators.\n\n## Basic operators\n\n|       |                          |\n|-------|--------------------------|\n| `==`  | equals                   |\n| `!=`  | does not equal           |\n| `>`   | greater than             |\n| `<`   | less than                |\n| `>=`  | greater than or equal to |\n| `<=`  | less than or equal to    |\n| `or`  | logical or               |\n| `and` | logical and              |\n\nFor example:\n\n``` liquid\n{% if product.title == \"Awesome Shoes\" %}\n  These shoes are awesome!\n{% endif %}\n```\n\nYou can use multiple operators in a tag:\n\n``` liquid\n{% if product.type == \"Shirt\" or product.type == \"Shoes\" %}\n  This is a shirt or a pair of shoes.\n{% endif %}\n```\n\n## contains\n\ncontains checks for the presence of a substring inside a string.\n\n``` liquid\n{% if product.title contains \"Pack\" %}\n  This product's title contains the word Pack.\n{% endif %}\n```\n\ncontains can also check for the presence of a string in an array of strings.\n\n``` liquid\n{% if product.tags contains \"Hello\" %}\n  This product has been tagged with \"Hello\".\n{% endif %}\n```\n\ncontains can only search strings. You cannot use it to check for an object in an array of objects.\n\n## Order of operations\n\nIn tags with more than one and or or operator, operators are checked in order *from right to left*. You cannot change the order of operations using parentheses — parentheses are invalid characters in Liquid and will prevent your tags from working.\n\n``` liquid\n{% if true or false and false %}\n  This evaluates to true, since the `and` condition is checked first.\n{% endif %}\n```\n\n``` liquid\n{% if true and false and false or true %}\n  This evaluates to false, since the tags are checked like this:\n\n  true and (false and (false or true))\n  true and (false and true)\n  true and false\n  false\n{% endif %}\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/basics/operators/](https://shopify.github.io/liquid/basics/operators/)"
+- name: plus
+  id: filters/plus/index
+  summary: Adds a number to another number
+  description: "# plus\n\nAdds a number to another number.\n\nInput\n\n``` liquid\n{{ 4 | plus: 2 }}\n```\n\nOutput\n\n``` liquid\n6\n```\n\nInput\n\n``` liquid\n{{ 16 | plus: 4 }}\n```\n\nOutput\n\n``` liquid\n20\n```\n\nInput\n\n``` liquid\n{{ 183.357 | plus: 12 }}\n```\n\nOutput\n\n``` liquid\n195.357\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/plus/](https://shopify.github.io/liquid/filters/plus/)"
+- name: prepend
+  id: filters/prepend/index
+  summary: Adds the specified string to the beginning of another string
+  description: "# prepend\n\nAdds the specified string to the beginning of another string.\n\nInput\n\n``` liquid\n{{ \"apples, oranges, and bananas\" | prepend: \"Some fruit: \" }}\n```\n\nOutput\n\n``` liquid\nSome fruit: apples, oranges, and bananas\n```\n\nprepend can also be used with variables:\n\nInput\n\n``` liquid\n{% assign url = \"example.com\" %}\n{{ \"/index.html\" | prepend: url }}\n```\n\nOutput\n\n``` liquid\nexample.com/index.html\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/prepend/](https://shopify.github.io/liquid/filters/prepend/)"
+- name: Raw
+  id: tags/raw/index
+  summary: Raw temporarily disables tag processing
+  description: "# Raw\n\nRaw temporarily disables tag processing. This is useful for generating content (eg, Mustache, Handlebars) which uses conflicting syntax.\n\nInput\n\n``` liquid\n{% raw %}\n  In Handlebars, {{ this }} will be HTML-escaped, but\n  {{{ that }}} will not.\n{% endraw %}\n```\n\nOutput\n\n``` liquid\nIn Handlebars, {{ this }} will be HTML-escaped, but {{{ that }}} will not.\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/tags/raw/](https://shopify.github.io/liquid/tags/raw/)"
+- name: remove
+  id: filters/remove/index
+  summary: Removes every occurrence of the specified substring from a string
+  description: "# remove\n\nRemoves every occurrence of the specified substring from a string.\n\nInput\n\n``` liquid\n{{ \"I strained to see the train through the rain\" | remove: \"rain\" }}\n```\n\nOutput\n\n``` liquid\nI sted to see the t through the\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/remove/](https://shopify.github.io/liquid/filters/remove/)"
+- name: remove_first
+  id: filters/remove_first/index
+  summary: Removes only the first occurrence of the specified substring from a string
+  description: "# remove_first\n\nRemoves only the first occurrence of the specified substring from a string.\n\nInput\n\n``` liquid\n{{ \"I strained to see the train through the rain\" | remove_first: \"rain\" }}\n```\n\nOutput\n\n``` liquid\nI sted to see the train through the rain\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/remove_first/](https://shopify.github.io/liquid/filters/remove_first/)"
+- name: replace
+  id: filters/replace/index
+  summary: Replaces every occurrence of the first argument in a string with the second argument
+  description: "# replace\n\nReplaces every occurrence of the first argument in a string with the second argument.\n\nInput\n\n``` liquid\n{{ \"Take my protein pills and put my helmet on\" | replace: \"my\", \"your\" }}\n```\n\nOutput\n\n``` liquid\nTake your protein pills and put your helmet on\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/replace/](https://shopify.github.io/liquid/filters/replace/)"
+- name: replace_first
+  id: filters/replace_first/index
+  summary: Replaces only the first occurrence of the first argument in a string with the second argument
+  description: "# replace_first\n\nReplaces only the first occurrence of the first argument in a string with the second argument.\n\nInput\n\n``` liquid\n{{ \"Take my protein pills and put my helmet on\" | replace_first: \"my\", \"your\" }}\n```\n\nOutput\n\n``` liquid\nTake your protein pills and put my helmet on\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/replace_first/](https://shopify.github.io/liquid/filters/replace_first/)"
+- name: reverse
+  id: filters/reverse/index
+  summary: Reverses the order of the items in an array
+  description: "# reverse\n\nReverses the order of the items in an array. reverse cannot reverse a string.\n\nInput\n\n``` liquid\n{% assign my_array = \"apples, oranges, peaches, plums\" | split: \", \" %}\n\n{{ my_array | reverse | join: \", \" }}\n```\n\nOutput\n\n``` liquid\nplums, peaches, oranges, apples\n```\n\nAlthough reverse cannot be used directly on a string, you can split a string into an array, reverse the array, and rejoin it by chaining together filters:\n\nInput\n\n``` liquid\n{{ \"Ground control to Major Tom.\" | split: \"\" | reverse | join: \"\" }}\n```\n\nOutput\n\n``` liquid\n.moT rojaM ot lortnoc dnuorG\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/reverse/](https://shopify.github.io/liquid/filters/reverse/)"
+- name: round
+  id: filters/round/index
+  summary: Rounds a number to the nearest integer or, if a number is passed as an argument, to that number of decimal places
+  description: "# round\n\nRounds a number to the nearest integer or, if a number is passed as an argument, to that number of decimal places.\n\nInput\n\n``` liquid\n{{ 1.2 | round }}\n```\n\nOutput\n\n``` liquid\n1\n```\n\nInput\n\n``` liquid\n{{ 2.7 | round }}\n```\n\nOutput\n\n``` liquid\n3\n```\n\nInput\n\n``` liquid\n{{ 183.357 | round: 2 }}\n```\n\nOutput\n\n``` liquid\n183.36\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/round/](https://shopify.github.io/liquid/filters/round/)"
+- name: rstrip
+  id: filters/rstrip/index
+  summary: Removes all whitespace (tabs, spaces, and newlines) from the right side of a string
+  description: "# rstrip\n\nRemoves all whitespace (tabs, spaces, and newlines) from the right side of a string. It does not affect spaces between words.\n\nInput\n\n``` liquid\n{{ \"          So much room for activities!          \" | rstrip }}\n```\n\nOutput\n\n``` liquid\nSo much room for activities!\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/rstrip/](https://shopify.github.io/liquid/filters/rstrip/)"
+- name: size
+  id: filters/size/index
+  summary: Returns the number of characters in a string or the number of items in an array
+  description: "# size\n\nReturns the number of characters in a string or the number of items in an array.\n\nInput\n\n``` liquid\n{{ \"Ground control to Major Tom.\" | size }}\n```\n\nOutput\n\n``` liquid\n28\n```\n\nInput\n\n``` liquid\n{% assign my_array = \"apples, oranges, peaches, plums\" | split: \", \" %}\n\n{{ my_array.size }}\n```\n\nOutput\n\n``` liquid\n4\n```\n\nYou can use size with dot notation when you need to use the filter inside a tag:\n\n``` liquid\n{% if site.pages.size > 10 %}\n  This is a big website!\n{% endif %}\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/size/](https://shopify.github.io/liquid/filters/size/)"
+- name: slice
+  id: filters/slice/index
+  summary: Returns a substring of 1 character beginning at the index specified by the first argument
+  description: "# slice\n\nReturns a substring of 1 character beginning at the index specified by the first argument. An optional second argument specifies the length of the substring to be returned.\n\nString indices are numbered starting from 0.\n\nInput\n\n``` liquid\n{{ \"Liquid\" | slice: 0 }}\n```\n\nOutput\n\n``` liquid\nL\n```\n\nInput\n\n``` liquid\n{{ \"Liquid\" | slice: 2 }}\n```\n\nOutput\n\n``` liquid\nq\n```\n\nInput\n\n``` liquid\n{{ \"Liquid\" | slice: 2, 5 }}\n```\n\nOutput\n\n``` liquid\nquid\n```\n\nIf the first argument is a negative number, the indices are counted from the end of the string:\n\nInput\n\n``` liquid\n{{ \"Liquid\" | slice: -3, 2 }}\n```\n\nOutput\n\n``` liquid\nui\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/slice/](https://shopify.github.io/liquid/filters/slice/)"
+- name: sort
+  id: filters/sort/index
+  summary: Sorts items in an array in case-sensitive order
+  description: "# sort\n\nSorts items in an array in case-sensitive order.\n\nInput\n\n``` liquid\n{% assign my_array = \"zebra, octopus, giraffe, Sally Snake\" | split: \", \" %}\n\n{{ my_array | sort | join: \", \" }}\n```\n\nOutput\n\n``` liquid\nSally Snake, giraffe, octopus, zebra\n```\n\nAn optional argument specifies which property of the array’s items to use for sorting.\n\n``` liquid\n{% assign products_by_price = collection.products | sort: \"price\" %}\n{% for product in products_by_price %}\n  <h4>{{ product.title }}</h4>\n{% endfor %}\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/sort/](https://shopify.github.io/liquid/filters/sort/)"
+- name: sort_natural
+  id: filters/sort_natural/index
+  summary: Sorts items in an array in case-insensitive order
+  description: "# sort_natural\n\nSorts items in an array in case-insensitive order.\n\nInput\n\n``` liquid\n{% assign my_array = \"zebra, octopus, giraffe, Sally Snake\" | split: \", \" %}\n\n{{ my_array | sort_natural | join: \", \" }}\n```\n\nOutput\n\n``` liquid\ngiraffe, octopus, Sally Snake, zebra\n```\n\nAn optional argument specifies which property of the array’s items to use for sorting.\n\n``` liquid\n{% assign products_by_company = collection.products | sort_natural: \"company\" %}\n{% for product in products_by_company %}\n  <h4>{{ product.title }}</h4>\n{% endfor %}\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/sort_natural/](https://shopify.github.io/liquid/filters/sort_natural/)"
+- name: split
+  id: filters/split/index
+  summary: Divides a string into an array using the argument as a separator
+  description: "# split\n\nDivides a string into an array using the argument as a separator. split is commonly used to convert comma-separated items from a string to an array.\n\nInput\n\n``` liquid\n{% assign beatles = \"John, Paul, George, Ringo\" | split: \", \" %}\n\n{% for member in beatles %}\n  {{ member }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\nJohn\n\n  Paul\n\n  George\n\n  Ringo\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/split/](https://shopify.github.io/liquid/filters/split/)"
+- name: strip
+  id: filters/strip/index
+  summary: Removes all whitespace (tabs, spaces, and newlines) from both the left and right sides of a string
+  description: "# strip\n\nRemoves all whitespace (tabs, spaces, and newlines) from both the left and right sides of a string. It does not affect spaces between words.\n\nInput\n\n``` liquid\n{{ \"          So much room for activities!          \" | strip }}\n```\n\nOutput\n\n``` liquid\nSo much room for activities!\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/strip/](https://shopify.github.io/liquid/filters/strip/)"
+- name: strip_html
+  id: filters/strip_html/index
+  summary: Removes any HTML tags from a string
+  description: "# strip_html\n\nRemoves any HTML tags from a string.\n\nInput\n\n``` liquid\n{{ \"Have <em>you</em> read <strong>Ulysses</strong>?\" | strip_html }}\n```\n\nOutput\n\n``` liquid\nHave you read Ulysses?\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/strip_html/](https://shopify.github.io/liquid/filters/strip_html/)"
+- name: strip_newlines
+  id: filters/strip_newlines/index
+  summary: Removes any newline characters (line breaks) from a string
+  description: "# strip_newlines\n\nRemoves any newline characters (line breaks) from a string.\n\nInput\n\n``` liquid\n{% capture string_with_newlines %}\nHello\nthere\n{% endcapture %}\n\n{{ string_with_newlines | strip_newlines }}\n```\n\nOutput\n\n``` liquid\nHellothere\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/strip_newlines/](https://shopify.github.io/liquid/filters/strip_newlines/)"
+- name: tablerow
+  id: tags/iteration/index#tablerow
+  summary: Generates an HTML table
+  belongs_to: Iteration
+  description: |-
+    ## tablerow
+
+    Generates an HTML table. Must be wrapped in opening \<table\> and closing \</table\> HTML tags.
+
+    Input
+
+    ``` liquid
+    <table>
+    {% tablerow product in collection.products %}
+      {{ product.title }}
+    {% endtablerow %}
+    </table>
+    ```
+
+    Output
+
+    ``` liquid
+    <table>
+      <tr class="row1">
+        <td class="col1">
+          Cool Shirt
+        </td>
+        <td class="col2">
+          Alien Poster
+        </td>
+        <td class="col3">
+          Batman Poster
+        </td>
+        <td class="col4">
+          Bullseye Shirt
+        </td>
+        <td class="col5">
+          Another Classic Vinyl
+        </td>
+        <td class="col6">
+          Awesome Jeans
+        </td>
+      </tr>
+    </table>
+    ```
+- name: tablerow (parameters)
+  id: tags/iteration/index#tablerow-parameters
+  summary: Defines how many columns the tables should have
+  belongs_to: Iteration
+  description: "## tablerow (parameters)\n\n### cols\n\nDefines how many columns the tables should have.\n\nInput\n\n``` liquid\n{% tablerow product in collection.products cols:2 %}\n  {{ product.title }}\n{% endtablerow %}\n```\n\nOutput\n\n``` liquid\n<table>\n  <tr class=\"row1\">\n    <td class=\"col1\">\n      Cool Shirt\n    </td>\n    <td class=\"col2\">\n      Alien Poster\n    </td>\n  </tr>\n  <tr class=\"row2\">\n    <td class=\"col1\">\n      Batman Poster\n    </td>\n    <td class=\"col2\">\n      Bullseye Shirt\n    </td>\n  </tr>\n  <tr class=\"row3\">\n    <td class=\"col1\">\n      Another Classic Vinyl\n    </td>\n    <td class=\"col2\">\n      Awesome Jeans\n    </td>\n  </tr>\n</table>\n```\n\n#### limit\n\nExits the tablerow after a specific index.\n\n``` liquid\n{% tablerow product in collection.products cols:2 limit:3 %}\n  {{ product.title }}\n{% endtablerow %}\n```\n\n### offset\n\nStarts the tablerow after a specific index.\n\n``` liquid\n{% tablerow product in collection.products cols:2 offset:3 %}\n  {{ product.title }}\n{% endtablerow %}\n```\n\n### range\n\nDefines a range of numbers to loop through. The range can be defined by both literal and variable numbers.\n\n``` liquid\n<!--variable number example-->\n\n{% assign num = 4 %}\n<table>\n{% tablerow i in (1..num) %}\n  {{ i }}\n{% endtablerow %}\n</table>\n\n<!--literal number example-->\n\n<table>\n{% tablerow i in (3..5) %}\n  {{ i }}\n{% endtablerow %}\n</table>\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/tags/iteration/](https://shopify.github.io/liquid/tags/iteration/)"
+- name: times
+  id: filters/times/index
+  summary: Multiplies a number by another number
+  description: "# times\n\nMultiplies a number by another number.\n\nInput\n\n``` liquid\n{{ 3 | times: 2 }}\n```\n\nOutput\n\n``` liquid\n6\n```\n\nInput\n\n``` liquid\n{{ 24 | times: 7 }}\n```\n\nOutput\n\n``` liquid\n168\n```\n\nInput\n\n``` liquid\n{{ 183.357 | times: 12 }}\n```\n\nOutput\n\n``` liquid\n2200.284\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/times/](https://shopify.github.io/liquid/filters/times/)"
+- name: truncate
+  id: filters/truncate/index
+  summary: Shortens a string down to the number of characters passed as an argument
+  description: "# truncate\n\nShortens a string down to the number of characters passed as an argument. If the specified number of characters is less than the length of the string, an ellipsis (…) is appended to the string and is included in the character count.\n\nInput\n\n``` liquid\n{{ \"Ground control to Major Tom.\" | truncate: 20 }}\n```\n\nOutput\n\n``` liquid\nGround control to...\n```\n\n### Custom ellipsis\n\ntruncate takes an optional second argument that specifies the sequence of characters to be appended to the truncated string. By default this is an ellipsis (…), but you can specify a different sequence.\n\nThe length of the second argument counts against the number of characters specified by the first argument. For example, if you want to truncate a string to exactly 10 characters, and use a 3-character ellipsis, use **13** for the first argument of truncate, since the ellipsis counts as 3 characters.\n\nInput\n\n``` liquid\n{{ \"Ground control to Major Tom.\" | truncate: 25, \", and so on\" }}\n```\n\nOutput\n\n``` liquid\nGround control, and so on\n```\n\n### No ellipsis\n\nYou can truncate to the exact number of characters specified by the first argument and avoid showing trailing characters by passing a blank string as the second argument:\n\nInput\n\n``` liquid\n{{ \"Ground control to Major Tom.\" | truncate: 20, \"\" }}\n```\n\nOutput\n\n``` liquid\nGround control to Ma\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/truncate/](https://shopify.github.io/liquid/filters/truncate/)"
+- name: truncatewords
+  id: filters/truncatewords/index
+  summary: Shortens a string down to the number of words passed as an argument
+  description: "# truncatewords\n\nShortens a string down to the number of words passed as an argument. If the specified number of words is less than the number of words in the string, an ellipsis (…) is appended to the string.\n\nInput\n\n``` liquid\n{{ \"Ground control to Major Tom.\" | truncatewords: 3 }}\n```\n\nOutput\n\n``` liquid\nGround control to...\n```\n\n### Custom ellipsis\n\ntruncatewords takes an optional second argument that specifies the sequence of characters to be appended to the truncated string. By default this is an ellipsis (…), but you can specify a different sequence.\n\nInput\n\n``` liquid\n{{ \"Ground control to Major Tom.\" | truncatewords: 3, \"--\" }}\n```\n\nOutput\n\n``` liquid\nGround control to--\n```\n\n### No ellipsis\n\nYou can avoid showing trailing characters by passing a blank string as the second argument:\n\nInput\n\n``` liquid\n{{ \"Ground control to Major Tom.\" | truncatewords: 3, \"\" }}\n```\n\nOutput\n\n``` liquid\nGround control to\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/truncatewords/](https://shopify.github.io/liquid/filters/truncatewords/)"
+- name: Truthy and falsy
+  id: basics/truthy-and-falsy/index
+  summary: In programming, anything that returns true in a conditional is called truthy
+  description: "# Truthy and falsy\n\nIn programming, anything that returns true in a conditional is called **truthy**. Anything that returns false in a conditional is called **falsy**. All object types can be described as either truthy or falsy.\n\n- [Truthy](#truthy)\n- [Falsy](#falsy)\n- [Summary](#summary)\n\n## Truthy\n\nAll values in Liquid are truthy except nil and false.\n\nIn the example below, the string “Tobi” is not a boolean, but it is truthy in a conditional:\n\n``` liquid\n{% assign tobi = \"Tobi\" %}\n\n{% if tobi %}\n  This condition will always be true.\n{% endif %}\n```\n\n[Strings](../types/index#string), even when empty, are truthy. The example below will result in empty HTML tags if settings.fp_heading is empty:\n\nInput\n\n``` liquid\n{% if settings.fp_heading %}\n  <h1>{{ settings.fp_heading }}</h1>\n{% endif %}\n```\n\nOutput\n\n``` liquid\n<h1></h1>\n```\n\n## Falsy\n\nThe falsy values in Liquid are [nil](../types/index#nil) and [false](../types/index#boolean).\n\n## Summary\n\nThe table below summarizes what is truthy or falsy in Liquid.\n\n|              | truthy | falsy |\n|--------------|:------:|:-----:|\n| true         |   •    |       |\n| false        |        |   •   |\n| nil          |        |   •   |\n| string       |   •    |       |\n| empty string |   •    |       |\n| 0            |   •    |       |\n| integer      |   •    |       |\n| float        |   •    |       |\n| array        |   •    |       |\n| empty array  |   •    |       |\n| page         |   •    |       |\n| EmptyDrop    |   •    |       |\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/basics/truthy-and-falsy/](https://shopify.github.io/liquid/basics/truthy-and-falsy/)"
+- name: Types
+  id: basics/types/index
+  summary: You can initialize Liquid variables with the assign or capture tags
+  description: "# Types\n\nLiquid objects can have one of five types:\n\n- [String](#string)\n- [Number](#number)\n- [Boolean](#boolean)\n- [Nil](#nil)\n- [Array](#array)\n\nYou can initialize Liquid variables with the [assign](../../tags/variable/index#assign) or [capture](../../tags/variable/index#capture) tags.\n\n## String\n\nDeclare a string by wrapping a variable’s value in single or double quotes:\n\n``` liquid\n{% assign my_string = \"Hello World!\" %}\n```\n\n## Number\n\nNumbers include floats and integers:\n\n``` liquid\n{% assign my_int = 25 %}\n{% assign my_float = 39.756 %}\n```\n\n## Boolean\n\nBooleans are either true or false. No quotations are necessary when declaring a boolean:\n\n``` liquid\n{% assign foo = true %}\n{% assign bar = false %}\n```\n\n## Nil\n\nNil is a special empty value that is returned when Liquid code has no results. It is **not** a string with the characters “nil”.\n\nNil is [treated as false](../truthy-and-falsy/index#falsy) in the conditions of if blocks and other Liquid tags that check the truthfulness of a statement.\n\nIn the following example, if the user does not exist (that is, user returns nil), Liquid will not print the greeting:\n\n``` liquid\n{% if user %}\n  Hello {{ user.name }}!\n{% endif %}\n```\n\nTags or outputs that return nil will not print anything to the page.\n\nInput\n\n``` liquid\nThe current user is {{ user.name }}\n```\n\nOutput\n\n``` liquid\nThe current user is\n```\n\n## Array\n\nArrays hold lists of variables of any type.\n\n### Accessing items in arrays\n\nTo access all the items in an array, you can loop through each item in the array using an [iteration tag](../../tags/iteration/index).\n\nInput\n\n``` liquid\n<!-- if site.users = \"Tobi\", \"Laura\", \"Tetsuro\", \"Adam\" -->\n{% for user in site.users %}\n  {{ user }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\nTobi Laura Tetsuro Adam\n```\n\n### Accessing specific items in arrays\n\nYou can use square bracket \\[ \\] notation to access a specific item in an array. Array indexing starts at zero.\n\nInput\n\n``` liquid\n<!-- if site.users = \"Tobi\", \"Laura\", \"Tetsuro\", \"Adam\" -->\n{{ site.users[0] }}\n{{ site.users[1] }}\n{{ site.users[3] }}\n```\n\nOutput\n\n``` liquid\nTobi\nLaura\nAdam\n```\n\n### Initializing arrays\n\nYou cannot initialize arrays using only Liquid.\n\nYou can, however, use the [split](../../filters/split/index) filter to break a string into an array of substrings.\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/basics/types/](https://shopify.github.io/liquid/basics/types/)"
+- name: uniq
+  id: filters/uniq/index
+  summary: Removes any duplicate elements in an array
+  description: "# uniq\n\nRemoves any duplicate elements in an array.\n\nInput\n\n``` liquid\n{% assign my_array = \"ants, bugs, bees, bugs, ants\" | split: \", \" %}\n\n{{ my_array | uniq | join: \", \" }}\n```\n\nOutput\n\n``` liquid\nants, bugs, bees\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/uniq/](https://shopify.github.io/liquid/filters/uniq/)"
+- name: unless
+  id: tags/control-flow/index#unless
+  summary: The opposite of if – executes a block of code only if a certain condition is not met
+  belongs_to: Control flow
+  description: |-
+    ## unless
+
+    The opposite of if – executes a block of code only if a certain condition is **not** met.
+
+    Input
+
+    ``` liquid
+    {% unless product.title == "Awesome Shoes" %}
+      These shoes are not awesome.
+    {% endunless %}
+    ```
+
+    Output
+
+    ``` liquid
+    These shoes are not awesome.
+    ```
+
+    This would be the equivalent of doing the following:
+
+    ``` liquid
+    {% if product.title != "Awesome Shoes" %}
+      These shoes are not awesome.
+    {% endif %}
+    ```
+- name: upcase
+  id: filters/upcase/index
+  summary: Makes each character in a string uppercase
+  description: "# upcase\n\nMakes each character in a string uppercase. It has no effect on strings which are already all uppercase.\n\nInput\n\n``` liquid\n{{ \"Parker Moore\" | upcase }}\n```\n\nOutput\n\n``` liquid\nPARKER MOORE\n```\n\nInput\n\n``` liquid\n{{ \"APPLE\" | upcase }}\n```\n\nOutput\n\n``` liquid\nAPPLE\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/upcase/](https://shopify.github.io/liquid/filters/upcase/)"
+- name: url_decode
+  id: filters/url_decode/index
+  summary: Decodes a string that has been encoded as a URL or by url_encode
+  description: "# url_decode\n\nDecodes a string that has been encoded as a URL or by [url_encode](../url_encode/index).\n\nInput\n\n``` liquid\n{{ \"%27Stop%21%27+said+Fred\" | url_decode }}\n```\n\nOutput\n\n``` liquid\n'Stop!' said Fred\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/url_decode/](https://shopify.github.io/liquid/filters/url_decode/)"
+- name: url_encode
+  id: filters/url_encode/index
+  summary: Converts any URL-unsafe characters in a string into percent-encoded characters
+  description: "# url_encode\n\nConverts any URL-unsafe characters in a string into percent-encoded characters.\n\nInput\n\n``` liquid\n{{ \"john@liquid.com\" | url_encode }}\n```\n\nOutput\n\n``` liquid\njohn%40liquid.com\n```\n\nInput\n\n``` liquid\n{{ \"Tetsuro Takara\" | url_encode }}\n```\n\nOutput\n\n``` liquid\nTetsuro+Takara\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/url_encode/](https://shopify.github.io/liquid/filters/url_encode/)"
+- name: Variable
+  id: tags/variable/index
+  summary: Variable tags create new Liquid variables
+  description: "# Variable\n\nVariable tags create new Liquid variables.\n\n## assign\n\nCreates a new variable.\n\nInput\n\n``` liquid\n{% assign my_variable = false %}\n{% if my_variable != true %}\n  This statement is valid.\n{% endif %}\n```\n\nOutput\n\n``` liquid\nThis statement is valid.\n```\n\nWrap a variable value in quotations \" to save it as a string.\n\nInput\n\n``` liquid\n{% assign foo = \"bar\" %}\n{{ foo }}\n```\n\nOutput\n\n``` liquid\nbar\n```\n\n## capture\n\nCaptures the string inside of the opening and closing tags and assigns it to a variable. Variables created through capture are strings.\n\nInput\n\n``` liquid\n{% capture my_variable %}I am being captured.{% endcapture %}\n{{ my_variable }}\n```\n\nOutput\n\n``` liquid\nI am being captured.\n```\n\nUsing capture, you can create complex strings using other variables created with assign:\n\nInput\n\n``` liquid\n{% assign favorite_food = \"pizza\" %}\n{% assign age = 35 %}\n\n{% capture about_me %}\nI am {{ age }} and my favorite food is {{ favorite_food }}.\n{% endcapture %}\n\n{{ about_me }}\n```\n\nOutput\n\n``` liquid\nI am 35 and my favourite food is pizza.\n```\n\n## increment\n\nCreates a new number variable, and increases its value by one every time it is called. The initial value is 0.\n\nInput\n\n``` liquid\n{% increment my_counter %}\n{% increment my_counter %}\n{% increment my_counter %}\n```\n\nOutput\n\n``` liquid\n0\n1\n2\n```\n\nVariables created through the increment tag are independent from variables created through assign or capture.\n\nIn the example below, a variable named “var” is created through assign. The increment tag is then used several times on a variable with the same name. Note that the increment tag does not affect the value of “var” that was created through assign.\n\nInput\n\n``` liquid\n{% assign var = 10 %}\n{% increment var %}\n{% increment var %}\n{% increment var %}\n{{ var }}\n```\n\nOutput\n\n``` liquid\n0\n1\n2\n10\n```\n\n## decrement\n\nCreates a new number variable, and decreases its value by one every time it is called. The initial value is -1.\n\nInput\n\n``` liquid\n{% decrement variable %}\n{% decrement variable %}\n{% decrement variable %}\n```\n\nOutput\n\n``` liquid\n-1\n-2\n-3\n```\n\nLike [increment](#increment), variables declared inside decrement are independent from variables created through assign or capture.\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/tags/variable/](https://shopify.github.io/liquid/tags/variable/)"
+- name: Variations of Liquid
+  id: basics/variations/index
+  summary: Liquid is a flexible, safe language, and is used in many different environments
+  description: "# Variations of Liquid\n\nLiquid is a flexible, safe language, and is used in many different environments. Liquid was created for use in [Shopify](https://www.shopify.com) stores, and is also used extensively on [Jekyll](https://jekyllrb.com) websites. Over time, both Shopify and Jekyll have added their own objects, tags, and filters to Liquid. The most popular versions of Liquid that exist are **Liquid**, **Shopify Liquid**, and **Jekyll Liquid**.\n\nThis site documents the latest version of **Liquid** including betas and release candidates — that is, Liquid as it exists outside of Shopify and Jekyll. If you download the Liquid repository or install it as a [gem](https://rubygems.org/gems/liquid), you will get access to whatever objects, tags, and filters are in the version of Liquid that you chose.\n\n## Shopify\n\nShopify always uses the latest version of Liquid as a base, but Shopify adds a significant number of objects, tags, and filters to Liquid for use in merchants’ stores. These include objects representing store, product, and customer information, and filters for displaying store data and manipulating storefront assets like product images.\n\nShopify’s version of Liquid is documented in the [Shopify Help Center](https://help.shopify.com/themes/liquid). If you want to try out Shopify’s version of Liquid, you can create a development store through the [Shopify Partner Dashboard](https://help.shopify.com/en/partners/dashboard/development-stores).\n\n## Jekyll\n\n[Jekyll](https://jekyllrb.com) is a static site generator, a command-line tool that creates websites by merging templates with content files. Jekyll uses Liquid as its template language, and adds a few objects, tags, and filters. These include objects representing content pages, tags for including snippets of content in others, and filters for manipulating strings and URLs.\n\nJekyll also powers [GitHub Pages](https://pages.github.com/), a web hosting service that lets you push a Jekyll installation to a GitHub repository and have the resulting website published. This website is built using GitHub Pages.\n\nJekyll might not be using the latest version of Liquid. This means that the tags and filters listed on this site may not work in Jekyll. Often the Jekyll project will wait for a stable release of Liquid rather than using a beta or release candidate version. To see what version of Liquid Jekyll is using, check the **runtime dependencies** section of [Jekyll’s gem page](https://rubygems.org/gems/jekyll).\n\nJekyll’s version of Liquid is documented in the [Liquid section of Jekyll’s documentation](https://jekyllrb.com/docs/liquid/). If you want to try out Jekyll’s version of Liquid, you can clone the Jekyll project or install Jekyll as a gem and test Liquid on a static site.\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/basics/variations/](https://shopify.github.io/liquid/basics/variations/)"
+- name: where
+  id: filters/where/index
+  summary: Creates an array including only the objects with a given property value, or any truthy value by default
+  description: "# where\n\nCreates an array including only the objects with a given property value, or any [truthy](../../basics/truthy-and-falsy/index#truthy) value by default.\n\nIn this example, assume you have a list of products and you want to show your kitchen products separately. Using where, you can create an array containing only the products that have a \"type\" of \"kitchen\".\n\nInput\n\n``` liquid\nAll products:\n{% for product in products %}\n- {{ product.title }}\n{% endfor %}\n\n{% assign kitchen_products = products | where: \"type\", \"kitchen\" %}\n\nKitchen products:\n{% for product in kitchen_products %}\n- {{ product.title }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\nAll products:\n- Vacuum\n- Spatula\n- Television\n- Garlic press\n\nKitchen products:\n- Spatula\n- Garlic press\n```\n\nSay instead you have a list of products and you only want to show those that are available to buy. You can where with a property name but no target value to include all products with a [truthy](../../basics/truthy-and-falsy/index#truthy) \"available\" value.\n\nInput\n\n``` liquid\nAll products:\n{% for product in products %}\n- {{ product.title }}\n{% endfor %}\n\n{% assign available_products = products | where: \"available\" %}\n\nAvailable products:\n{% for product in available_products %}\n- {{ product.title }}\n{% endfor %}\n```\n\nOutput\n\n``` liquid\nAll products:\n- Coffee mug\n- Limited edition sneakers\n- Boring sneakers\n\nAvailable products:\n- Coffee mug\n- Boring sneakers\n```\n\nThe where filter can also be used to find a single object in an array when combined with the first filter. For example, say you want to show off the shirt in your new fall collection.\n\nInput\n\n``` liquid\n{% assign new_shirt = products | where: \"type\", \"shirt\" | first %}\n\nFeatured product: {{ new_shirt.title }}\n```\n\nOutput\n\n``` liquid\nFeatured product: Hawaiian print sweater vest\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/filters/where/](https://shopify.github.io/liquid/filters/where/)"
+- name: Whitespace control
+  id: basics/whitespace/index
+  summary: In Liquid, you can include a hyphen in your tag syntax {{-, -}}, {%-, and -%} to strip whitespace from the left or right side of a rendered tag
+  description: "# Whitespace control\n\nIn Liquid, you can include a hyphen in your tag syntax {{-, -}}, {%-, and -%} to strip whitespace from the left or right side of a rendered tag.\n\nNormally, even if it doesn’t print text, any line of Liquid in your template will still print a blank line in your rendered HTML:\n\nInput\n\n``` liquid\n{% assign my_variable = \"tomato\" %}\n{{ my_variable }}\n```\n\nNotice the blank line before “tomato” in the rendered template:\n\nOutput\n\n``` liquid\ntomato\n```\n\nBy including hyphens in your assign tag, you can strip the generated whitespace from the rendered template:\n\nInput\n\n``` liquid\n{%- assign my_variable = \"tomato\" -%}\n{{ my_variable }}\n```\n\nOutput\n\n``` liquid\ntomato\n```\n\nIf you don’t want any of your tags to print whitespace, as a general rule you can add hyphens to both sides of all your tags ({%- and -%}):\n\nInput\n\n``` liquid\n{% assign username = \"John G. Chalmers-Smith\" %}\n{% if username and username.size > 10 %}\n  Wow, {{ username }}, you have a long name!\n{% else %}\n  Hello there!\n{% endif %}\n```\n\nOutput without whitespace control\n\n``` liquid\nWow, John G. Chalmers-Smith, you have a long name!\n```\n\nInput\n\n``` liquid\n{%- assign username = \"John G. Chalmers-Smith\" -%}\n{%- if username and username.size > 10 -%}\n  Wow, {{ username }}, you have a long name!\n{%- else -%}\n  Hello there!\n{%- endif -%}\n```\n\nOutput with whitespace control\n\n``` liquid\nWow, John G. Chalmers-Smith, you have a long name!\n```\n\n© 2005, 2006 Tobias Luetke  \nLicensed under the MIT License.  \n[https://shopify.github.io/liquid/basics/whitespace/](https://shopify.github.io/liquid/basics/whitespace/)"

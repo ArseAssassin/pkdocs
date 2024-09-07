@@ -1,0 +1,1252 @@
+---
+name: Grunt
+slug: grunt
+text_format: markdown
+generator: src:devdocs
+generator_command: src:devdocs
+version: null
+copyright: |-
+  © GruntJS Team
+  Licensed under the MIT License.
+  https://gruntjs.com/getting-started
+homepage: https://gruntjs.com/
+
+---
+- name: Configuring tasks
+  id: configuring-tasks
+  summary: This guide explains how to configure tasks for your project using a Gruntfile
+  description: "# Configuring tasks\n\nThis guide explains how to configure tasks for your project using a `Gruntfile`. If you don't know what a `Gruntfile` is, please read the [Getting Started](https://gruntjs.com/getting-started/) guide and check out a [Sample Gruntfile](https://gruntjs.com/sample-gruntfile/).\n\n## Grunt Configuration\n\nTask configuration is specified in your `Gruntfile` via the `grunt.initConfig` method. This configuration will mostly be under task-named properties, but may contain any arbitrary data. As long as properties don't conflict with properties your tasks require, they will be otherwise ignored.\n\nAlso, because this is JavaScript, you're not limited to JSON; you may use any valid JavaScript here. You may even programmatically generate the configuration if necessary.\n\n``` javascript\ngrunt.initConfig({\n  concat: {\n    // concat task configuration goes here.\n  },\n  uglify: {\n    // uglify task configuration goes here.\n  },\n  // Arbitrary non-task-specific properties.\n  my_property: 'whatever',\n  my_src_files: ['foo/*.js', 'bar/*.js'],\n});\n```\n\n## Task Configuration and Targets\n\nWhen a task is run, Grunt looks for its configuration under a property of the same name. Multi-tasks can have multiple configurations, defined using arbitrarily named \"targets.\" In the example below, the `concat` task has `foo` and `bar` targets, while the `uglify` task only has a `bar` target.\n\n``` javascript\ngrunt.initConfig({\n  concat: {\n    foo: {\n      // concat task \"foo\" target options and files go here.\n    },\n    bar: {\n      // concat task \"bar\" target options and files go here.\n    },\n  },\n  uglify: {\n    bar: {\n      // uglify task \"bar\" target options and files go here.\n    },\n  },\n});\n```\n\nSpecifying both a task and target like `grunt concat:foo` or `grunt concat:bar` will process just the specified target's configuration, while running `grunt concat` will iterate over *all* targets, processing each in turn. Note that if a task has been renamed with [grunt.task.renameTask](https://gruntjs.com/grunt.task#grunt.task.renametask), Grunt will look for a property with the *new* task name in the config object.\n\n## Options\n\nInside a task configuration, an `options` property may be specified to override built-in defaults. In addition, each target may have an `options` property which is specific to that target. Target-level options will override task-level options.\n\nThe `options` object is optional and may be omitted if not needed.\n\n``` javascript\ngrunt.initConfig({\n  concat: {\n    options: {\n      // Task-level options may go here, overriding task defaults.\n    },\n    foo: {\n      options: {\n        // \"foo\" target options may go here, overriding task-level options.\n      },\n    },\n    bar: {\n      // No options specified; this target will use task-level options.\n    },\n  },\n});\n```\n\n## Files\n\nBecause most tasks perform file operations, Grunt has powerful abstractions for declaring on which files the task should operate. There are several ways to define **src-dest** (source-destination) file mappings, offering varying degrees of verbosity and control. Any multi task will understand all the following formats, so choose whichever format best meets your needs.\n\nAll file formats support `src` and `dest` but the [Compact](configuring-tasks#compact-format) and [Files Array](configuring-tasks#files-array-format) formats support a few additional properties:\n\n- `filter` Either a valid [fs.Stats method name](https://nodejs.org/docs/latest/api/fs.html#fs_class_fs_stats) or a function that is passed the matched `src` filepath and returns `true` or `false`. [See examples](configuring-tasks#custom-filter-function)\n- `nonull` If set to `true` then the operation will include non-matching patterns. Combined with grunt's `--verbose` flag, this option can help debug file path issues.\n- `dot` Allow patterns to match filenames starting with a period, even if the pattern does not explicitly have a period in that spot.\n- `matchBase` If set, patterns without slashes will be matched against the basename of the path if it contains slashes. For example, `a?b` would match the path `/xyz/123/acb`, but not `/xyz/acb/123`.\n- `expand` Process a dynamic src-dest file mapping, see [\"Building the files object dynamically\"](configuring-tasks#building-the-files-object-dynamically) for more information.\n- Other properties will be passed into the underlying libs as matching options. See the [node-glob](https://github.com/isaacs/node-glob) and [minimatch](https://github.com/isaacs/minimatch) documentation for more options.\n\n### Difference Between Grunt and Task Options\n\nMost tasks perform file operations, so Grunt provides a built-in infrastructure to retrieve the files a task should process. The advantage is that this logic doesn't have to be implemented again by tasks authors. To allow a user to specify these files, Grunt provides options such as `nonull` and `filter`.\n\nIn addition to the files to work on, each task has its own specific needs. A task author may want to allow its user to configure some options to override the default behavior. These task-specific options shall not be confused with the Grunt options described before.\n\nTo further clarify this difference, let's see an example that uses [grunt-contrib-jshint](https://github.com/gruntjs/grunt-contrib-jshint):\n\n``` javascript\ngrunt.initConfig({\n  jshint: {\n    ignore_warning: {\n      options: {\n        '-W015': true,\n      },\n      src: 'js/**',\n      filter: 'isFile'\n    }\n  }\n});\n```\n\nThis configuration employs the Grunt options `src` and `filter` to specify the files to process. It also uses the grunt-contrib-jshint task-specific option `-W015` to ignore a specific warning (the one having code `W015`).\n\n### Compact Format\n\nThis form allows a single **src-dest** (source-destination) file mapping per-target. It is most commonly used for read-only tasks, like [grunt-contrib-jshint](https://github.com/gruntjs/grunt-contrib-jshint), where a single `src` property is needed, and no `dest` key is relevant. This format also supports additional properties per src-dest file mapping.\n\n``` javascript\ngrunt.initConfig({\n  jshint: {\n    foo: {\n      src: ['src/aa.js', 'src/aaa.js']\n    },\n  },\n  concat: {\n    bar: {\n      src: ['src/bb.js', 'src/bbb.js'],\n      dest: 'dest/b.js',\n    },\n  },\n});\n```\n\n### Files Object Format\n\nThis form supports multiple src-dest mappings per-target, where the property name is the destination file, and its value is the source file(s). Any number of src-dest file mappings may be specified in this way, but additional properties may not be specified per mapping.\n\n``` javascript\ngrunt.initConfig({\n  concat: {\n    foo: {\n      files: {\n        'dest/a.js': ['src/aa.js', 'src/aaa.js'],\n        'dest/a1.js': ['src/aa1.js', 'src/aaa1.js'],\n      },\n    },\n    bar: {\n      files: {\n        'dest/b.js': ['src/bb.js', 'src/bbb.js'],\n        'dest/b1.js': ['src/bb1.js', 'src/bbb1.js'],\n      },\n    },\n  },\n});\n```\n\n### Files Array Format\n\nThis form supports multiple src-dest file mappings per-target, while also allowing additional properties per mapping.\n\n``` javascript\ngrunt.initConfig({\n  concat: {\n    foo: {\n      files: [\n        {src: ['src/aa.js', 'src/aaa.js'], dest: 'dest/a.js'},\n        {src: ['src/aa1.js', 'src/aaa1.js'], dest: 'dest/a1.js'},\n      ],\n    },\n    bar: {\n      files: [\n        {src: ['src/bb.js', 'src/bbb.js'], dest: 'dest/b/', nonull: true},\n        {src: ['src/bb1.js', 'src/bbb1.js'], dest: 'dest/b1/', filter: 'isFile'},\n      ],\n    },\n  },\n});\n```\n\n### Older Formats\n\nThe **dest-as-target** file format is a holdover from before multi tasks and targets existed, where the destination filepath is actually the target name. Unfortunately, because target names are filepaths, running `grunt task:target` can be awkward. Also, you can't specify target-level options or additional properties per src-dest file mapping.\n\nConsider this format deprecated, and avoid it where possible.\n\n``` javascript\ngrunt.initConfig({\n  concat: {\n    'dest/a.js': ['src/aa.js', 'src/aaa.js'],\n    'dest/b.js': ['src/bb.js', 'src/bbb.js'],\n  },\n});\n```\n\n### Custom Filter Function\n\nThe `filter` property can help you target files with a greater level of detail. Simply use a valid [fs.Stats method name](https://nodejs.org/docs/latest/api/fs.html#fs_class_fs_stats). The following will clean only if the pattern matches an actual file:\n\n``` javascript\ngrunt.initConfig({\n  clean: {\n    foo: {\n      src: ['tmp/**/*'],\n      filter: 'isFile',\n    },\n  },\n});\n```\n\nOr create your own `filter` function and return `true` or `false` whether the file should be matched. For example the following will only clean folders that are empty:\n\n``` javascript\ngrunt.initConfig({\n  clean: {\n    foo: {\n      src: ['tmp/**/*'],\n      filter: function(filepath) {\n        return (grunt.file.isDir(filepath) && require('fs').readdirSync(filepath).length === 0);\n      },\n    },\n  },\n});\n```\n\nAnother example—which utilizes the [globbing](configuring-tasks#globbing-patterns) and [expand: true](configuring-tasks#building-the-files-object-dynamically) features—allows you to avoid overwriting files which already exist in the destination:\n\n``` javascript\ngrunt.initConfig({\n  copy: {\n    templates: {\n      files: [{\n        expand: true,\n        cwd: ['templates/css/'],     // Parent folder of original CSS templates\n        src: '**/*.css',             // Collects all `*.css` files within the parent folder (and its subfolders)\n        dest: 'src/css/',            // Stores the collected `*.css` files in your `src/css/` folder\n        filter: function (dest) {    // `dest`, in this instance, is the filepath of each matched `src`\n          var cwd = this.cwd,        // Configures variables (these are documented for your convenience only)\n              src = dest.replace(new RegExp('^' + cwd), '');\n              dest = grunt.task.current.data.files[0].dest;\n          return (!grunt.file.exists(dest + src));    // Copies `src` files ONLY if their destinations are unoccupied\n        }\n      }]\n    }\n  }\n});\n```\n\nKeep in mind the above technique does not account for the [rename property](configuring-tasks#building-the-files-object-dynamically) when checking if the destination exists.\n\n### Globbing patterns\n\nIt is often impractical to specify all source filepaths individually, so Grunt supports filename expansion (also known as globbing) via the built-in [node-glob](https://github.com/isaacs/node-glob) and [minimatch](https://github.com/isaacs/minimatch) libraries.\n\nWhile this isn't a comprehensive tutorial on globbing patterns, know that in a filepath:\n\n- `*` matches any number of characters, but not `/`\n- `?` matches a single character, but not `/`\n- `**` matches any number of characters, including `/`, as long as it's the only thing in a path part\n- `{}` allows for a comma-separated list of \"or\" expressions\n- `!` at the beginning of a pattern will negate the match\n\nAll most people need to know is that `foo/*.js` will match all files ending with `.js` in the `foo/` subdirectory, but `foo/**/*.js` will match all files ending with `.js` in the `foo/` subdirectory *and all of its subdirectories*.\n\nAlso, in order to simplify otherwise complicated globbing patterns, Grunt allows arrays of file paths or globbing patterns to be specified. Patterns are processed in-order, with `!`-prefixed matches excluding matched files from the result set. The result set is uniqued.\n\nFor example:\n\n``` javascript\n// You can specify single files:\n{src: 'foo/this.js', dest: ...}\n// Or arrays of files:\n{src: ['foo/this.js', 'foo/that.js', 'foo/the-other.js'], dest: ...}\n// Or you can generalize with a glob pattern:\n{src: 'foo/th*.js', dest: ...}\n\n// This single node-glob pattern:\n{src: 'foo/{a,b}*.js', dest: ...}\n// Could also be written like this:\n{src: ['foo/a*.js', 'foo/b*.js'], dest: ...}\n\n// All .js files, in foo/, in alpha order:\n{src: ['foo/*.js'], dest: ...}\n// Here, bar.js is first, followed by the remaining files, in alpha order:\n{src: ['foo/bar.js', 'foo/*.js'], dest: ...}\n\n// All files except for bar.js, in alpha order:\n{src: ['foo/*.js', '!foo/bar.js'], dest: ...}\n// All files in alpha order, but with bar.js at the end.\n{src: ['foo/*.js', '!foo/bar.js', 'foo/bar.js'], dest: ...}\n\n// Templates may be used in filepaths or glob patterns:\n{src: ['src/<%= basename %>.js'], dest: 'build/<%= basename %>.min.js'}\n// But they may also reference file lists defined elsewhere in the config:\n{src: ['foo/*.js', '<%= jshint.all.src %>'], dest: ...}\n```\n\nFor more on glob pattern syntax, see the [node-glob](https://github.com/isaacs/node-glob) and [minimatch](https://github.com/isaacs/minimatch) documentation.\n\n### Building the files object dynamically\n\nWhen you want to process many individual files, a few additional properties may be used to build a files list dynamically. These properties may be specified in both [Compact](configuring-tasks#compact-format) and [Files Array](configuring-tasks#files-array-format) mapping formats.\n\n`expand` Set to `true` will enable the following properties:\n\n- `cwd` All `src` matches are relative to (but don't include) this path.\n- `src` Pattern(s) to match, relative to the `cwd`.\n- `dest` Destination path prefix.\n- `ext` Replace any existing extension with this value in generated `dest` paths.\n- `extDot` Used to indicate where the period indicating the extension is located. Can take either `'first'` (extension begins after the first period in the file name) or `'last'` (extension begins after the last period), and is set by default to `'first'` *\\[Added in 0.4.3\\]*\n- `flatten` Remove all path parts from generated `dest` paths.\n- `rename` Embeds a customized function, which returns a string containing the new destination and filename. This function is called for each matched `src` file (after extension renaming and flattening). [More information](configuring-tasks#the-rename-property)\n\nIn the following example, the `uglify` task will see the same list of src-dest file mappings for both the `static_mappings` and `dynamic_mappings` targets, because Grunt will automatically expand the `dynamic_mappings` files object into 4 individual static src-dest file mappings—assuming 4 files are found—when the task runs.\n\nAny combination of static src-dest and dynamic src-dest file mappings may be specified.\n\n``` javascript\ngrunt.initConfig({\n  uglify: {\n    static_mappings: {\n      // Because these src-dest file mappings are manually specified, every\n      // time a new file is added or removed, the Gruntfile has to be updated.\n      files: [\n        {src: 'lib/a.js', dest: 'build/a.min.js'},\n        {src: 'lib/b.js', dest: 'build/b.min.js'},\n        {src: 'lib/subdir/c.js', dest: 'build/subdir/c.min.js'},\n        {src: 'lib/subdir/d.js', dest: 'build/subdir/d.min.js'},\n      ],\n    },\n    dynamic_mappings: {\n      // Grunt will search for \"**/*.js\" under \"lib/\" when the \"uglify\" task\n      // runs and build the appropriate src-dest file mappings then, so you\n      // don't need to update the Gruntfile when files are added or removed.\n      files: [\n        {\n          expand: true,     // Enable dynamic expansion.\n          cwd: 'lib/',      // Src matches are relative to this path.\n          src: ['**/*.js'], // Actual pattern(s) to match.\n          dest: 'build/',   // Destination path prefix.\n          ext: '.min.js',   // Dest filepaths will have this extension.\n          extDot: 'first'   // Extensions in filenames begin after the first dot\n        },\n      ],\n    },\n  },\n});\n```\n\n#### The rename Property\n\nThe `rename` property is unique, as the only valid value for it is a JavaScript function. Although the function returns a string, you cannot simply use a string as a value for `rename` (doing so results in an error: `Property 'rename' of object # is not a function`). In the following example, the `copy` task will create a backup of README.md.\n\n``` javascript\ngrunt.initConfig({\n  copy: {\n    backup: {\n      files: [{\n        expand: true,\n        src: ['docs/README.md'],    // The README.md file has been specified for backup\n        rename: function () {       // The value for rename must be a function\n          return 'docs/BACKUP.txt'; // The function must return a string with the complete destination\n        }\n      }]\n    }\n  }\n});\n```\n\nWhen the function is called, the `dest` and matched `src` path are passed in and can be used for returning the output string. In the following example, files are copied from the `dev` folder to the `dist` folder, and renamed to have the word \"beta\" removed .\n\n``` javascript\ngrunt.initConfig({\n  copy: {\n    production: {\n      files: [{\n        expand: true,\n        cwd: 'dev/',\n        src: ['*'],\n        dest: 'dist/',\n        rename: function (dest, src) {          // The `dest` and `src` values can be passed into the function\n          return dest + src.replace('beta',''); // The `src` is being renamed; the `dest` remains the same\n        }\n      }]\n    }\n  }\n});\n```\n\nIf multiple matched `src` paths are renamed to an identical destination (i.e. if two different files get renamed to the same file), each output will be added to an array of sources for it.\n\n## Templates\n\nTemplates specified using `<% %>` delimiters will be automatically expanded when tasks read them from the config. Templates are expanded recursively until no more remain.\n\nThe entire config object is the context in which properties are resolved. Additionally, `grunt` and its methods are available inside templates, eg. `<%= grunt.template.today('yyyy-mm-dd') %>`.\n\n- `<%= prop.subprop %>` Expand to the value of `prop.subprop` in the config, regardless of type. Templates like this can be used to reference not only string values, but also arrays or other objects.\n- `<% %>` Execute arbitrary inline JavaScript code. This is useful with control flow or looping.\n\nGiven the sample `concat` task configuration below, running `grunt concat:sample` will generate a file named `build/abcde.js` by concatenating the banner `/* abcde */` with all files matching `foo/*.js` + `bar/*.js` + `baz/*.js`.\n\n``` javascript\ngrunt.initConfig({\n  concat: {\n    sample: {\n      options: {\n        banner: '/* <%= baz %> */\\n',   // '/* abcde */\\n'\n      },\n      src: ['<%= qux %>', 'baz/*.js'],  // [['foo/*.js', 'bar/*.js'], 'baz/*.js']\n      dest: 'build/<%= baz %>.js',      // 'build/abcde.js'\n    },\n  },\n  // Arbitrary properties used in task configuration templates.\n  foo: 'c',\n  bar: 'b<%= foo %>d', // 'bcd'\n  baz: 'a<%= bar %>e', // 'abcde'\n  qux: ['foo/*.js', 'bar/*.js'],\n});\n```\n\n## Importing External Data\n\nIn the following Gruntfile, project metadata is imported into the Grunt config from a `package.json` file, and the [grunt-contrib-uglify plugin](https://github.com/gruntjs/grunt-contrib-uglify) `uglify` task is configured to minify a source file and generate a banner comment dynamically using that metadata.\n\nGrunt has `grunt.file.readJSON` and `grunt.file.readYAML` methods for importing JSON and YAML data.\n\n``` javascript\ngrunt.initConfig({\n  pkg: grunt.file.readJSON('package.json'),\n  uglify: {\n    options: {\n      banner: '/*! <%= pkg.name %> <%= grunt.template.today(\"yyyy-mm-dd\") %> */\\n'\n    },\n    dist: {\n      src: 'src/<%= pkg.name %>.js',\n      dest: 'dist/<%= pkg.name %>.min.js'\n    }\n  }\n});\n```\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/configuring-tasks](https://gruntjs.com/configuring-tasks)"
+- name: Creating plugins
+  id: creating-plugins
+  summary: The "grunt-contrib" namespace is reserved for tasks maintained by the Grunt team, please name your task something appropriate that avoids that naming scheme
+  description: "# Creating plugins\n\n1.  Install [grunt-init](https://github.com/gruntjs/grunt-init) with `npm install -g grunt-init`\n2.  Install the gruntplugin template with `git clone git://github.com/gruntjs/grunt-init-gruntplugin.git ~/.grunt-init/gruntplugin` (`%USERPROFILE%\\.grunt-init\\gruntplugin` on Windows).\n3.  Run `grunt-init gruntplugin` in an empty directory.\n4.  Run `npm install` to prepare the development environment.\n5.  Author your plugin.\n6.  Run `npm publish` to publish the Grunt plugin to npm!\n\n## Notes\n\n### Naming your task\n\nThe \"grunt-contrib\" namespace is reserved for tasks maintained by the Grunt team, please name your task something appropriate that avoids that naming scheme.\n\n### Debugging\n\nGrunt hides error stack traces by default, but they can be enabled for easier task debugging with the `--stack` option. If you want Grunt to always log stack traces on errors, create an alias in your shell. Eg, in bash, you could do `alias grunt='grunt --stack'`.\n\n### Storing task files\n\nOnly store data files in a .grunt/\\[npm-module-name\\]/ directory at the project's root and clean up after yourself when appropriate. This is not a solution for temporary scratch files, use one of the common npm modules (eg [temporary](https://www.npmjs.org/package/temporary), [tmp](https://www.npmjs.org/package/tmp)) that take advantage of the OS level temporary directories for that case.\n\n### Avoid Changing the Current Working Directory: `process.cwd()`\n\nBy default, the current working directory is set to be the directory that contains the gruntfile. The user can change it using `grunt.file.setBase()` in their gruntfile, but plugins should take care to not change it.\n\n`path.resolve('foo')` can be used to get the absolute path of the filepath 'foo' relative to the `Gruntfile`.\n\n### Creating your task\n\nYou might also want to know how to [create your own tasks](creating-tasks) or take a look at the [API](https://gruntjs.com/api) reference.\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/creating-plugins](https://gruntjs.com/creating-plugins)"
+- name: Creating tasks
+  id: creating-tasks
+  summary: Tasks are grunt's bread and butter
+  description: "# Creating tasks\n\nTasks are grunt's bread and butter. The stuff you do most often, like `jshint` or `nodeunit`. Every time Grunt is run, you specify one or more tasks to run, which tells Grunt what you'd like it to do.\n\nIf you don't specify a task, but a task named \"default\" has been defined, that task will run (unsurprisingly) by default.\n\n## Alias Tasks\n\nIf a task list is specified, the new task will be an alias for one or more other tasks. Whenever this \"alias task\" is run, every specified tasks in `taskList` will be run, in the order specified. The `taskList` argument must be an array of tasks.\n\n``` javascript\ngrunt.registerTask(taskName, [description, ] taskList)\n```\n\nThis example alias task defines a \"default\" task whereby the \"jshint\", \"qunit\", \"concat\" and \"uglify\" tasks are run automatically if Grunt is executed without specifying any tasks:\n\n``` javascript\ngrunt.registerTask('default', ['jshint', 'qunit', 'concat', 'uglify']);\n```\n\nTask arguments can be specified as well. In this example, the alias \"dist\" runs both the \"concat\" and \"uglify\" tasks, each with a \"dist\" argument:\n\n``` javascript\ngrunt.registerTask('dist', ['concat:dist', 'uglify:dist']);\n```\n\n## Multi Tasks\n\nWhen a multi task is run, Grunt looks for a property of the same name in the Grunt configuration. Multi-tasks can have multiple configurations, defined using arbitrarily named \"targets.\"\n\nSpecifying both a task and target like `grunt concat:foo` or `grunt concat:bar` will process just the specified target's configuration, while running `grunt concat` will iterate over *all* targets, processing each in turn. Note that if a task has been renamed with [grunt.task.renameTask](https://gruntjs.com/grunt.task#grunt.task.renametask), Grunt will look for a property with the *new* task name in the config object.\n\nMost of the contrib tasks, including the [grunt-contrib-jshint plugin jshint task](https://github.com/gruntjs/grunt-contrib-jshint#jshint-task) and [grunt-contrib-concat plugin concat task](https://github.com/gruntjs/grunt-contrib-concat#concat-task) are multi tasks.\n\n``` javascript\ngrunt.registerMultiTask(taskName, [description, ] taskFunction)\n```\n\nGiven the specified configuration, this example multi task would log `foo: 1,2,3` if Grunt was run via `grunt log:foo`, or it would log `bar: hello world` if Grunt was run via `grunt log:bar`. If Grunt was run as `grunt log` however, it would log `foo: 1,2,3` then `bar: hello world` then `baz: false`.\n\n``` javascript\ngrunt.initConfig({\n  log: {\n    foo: [1, 2, 3],\n    bar: 'hello world',\n    baz: false\n  }\n});\n\ngrunt.registerMultiTask('log', 'Log stuff.', function() {\n  grunt.log.writeln(this.target + ': ' + this.data);\n});\n```\n\n## \"Basic\" Tasks\n\nWhen a basic task is run, Grunt doesn't look at the configuration or environment—it just runs the specified task function, passing any specified colon-separated arguments in as function arguments.\n\n``` javascript\ngrunt.registerTask(taskName, [description, ] taskFunction)\n```\n\nThis example task logs `foo, testing 123` if Grunt is run via `grunt foo:testing:123`. If the task is run without arguments as `grunt foo` the task logs `foo, no args`.\n\n``` javascript\ngrunt.registerTask('foo', 'A sample task that logs stuff.', function(arg1, arg2) {\n  if (arguments.length === 0) {\n    grunt.log.writeln(this.name + \", no args\");\n  } else {\n    grunt.log.writeln(this.name + \", \" + arg1 + \" \" + arg2);\n  }\n});\n```\n\n## Custom tasks\n\nYou can go crazy with tasks. If your tasks don't follow the \"multi task\" structure, use a custom task.\n\n``` javascript\ngrunt.registerTask('default', 'My \"default\" task description.', function() {\n  grunt.log.writeln('Currently running the \"default\" task.');\n});\n```\n\nInside a task, you can run other tasks.\n\n``` javascript\ngrunt.registerTask('foo', 'My \"foo\" task.', function() {\n  // Enqueue \"bar\" and \"baz\" tasks, to run after \"foo\" finishes, in-order.\n  grunt.task.run('bar', 'baz');\n  // Or:\n  grunt.task.run(['bar', 'baz']);\n});\n```\n\nTasks can be asynchronous.\n\n``` javascript\ngrunt.registerTask('asyncfoo', 'My \"asyncfoo\" task.', function() {\n  // Force task into async mode and grab a handle to the \"done\" function.\n  var done = this.async();\n  // Run some sync stuff.\n  grunt.log.writeln('Processing task...');\n  // And some async stuff.\n  setTimeout(function() {\n    grunt.log.writeln('All done!');\n    done();\n  }, 1000);\n});\n```\n\nTasks can access their own name and arguments.\n\n``` javascript\ngrunt.registerTask('foo', 'My \"foo\" task.', function(a, b) {\n  grunt.log.writeln(this.name, a, b);\n});\n\n// Usage:\n// grunt foo\n//   logs: \"foo\", undefined, undefined\n// grunt foo:bar\n//   logs: \"foo\", \"bar\", undefined\n// grunt foo:bar:baz\n//   logs: \"foo\", \"bar\", \"baz\"\n```\n\nTasks can fail if any errors were logged.\n\n``` javascript\ngrunt.registerTask('foo', 'My \"foo\" task.', function() {\n  if (failureOfSomeKind) {\n    grunt.log.error('This is an error message.');\n  }\n\n  // Fail by returning false if this task had errors\n  if (ifErrors) { return false; }\n\n  grunt.log.writeln('This is the success message');\n});\n```\n\nWhen tasks fail, all subsequent tasks will be aborted unless `--force` was specified.\n\n``` javascript\ngrunt.registerTask('foo', 'My \"foo\" task.', function() {\n  // Fail synchronously.\n  return false;\n});\n\ngrunt.registerTask('bar', 'My \"bar\" task.', function() {\n  var done = this.async();\n  setTimeout(function() {\n    // Fail asynchronously.\n    done(false);\n  }, 1000);\n});\n```\n\nTasks can be dependent on the successful execution of other tasks. Note that `grunt.task.requires` won't actually RUN the other task(s). It'll just check to see that it has run and not failed.\n\n``` javascript\ngrunt.registerTask('foo', 'My \"foo\" task.', function() {\n  return false;\n});\n\ngrunt.registerTask('bar', 'My \"bar\" task.', function() {\n  // Fail task if \"foo\" task failed or never ran.\n  grunt.task.requires('foo');\n  // This code executes if the \"foo\" task ran successfully.\n  grunt.log.writeln('Hello, world.');\n});\n\n// Usage:\n// grunt foo bar\n//   doesn't log, because foo failed.\n//   ***Note: This is an example of space-separated sequential commands,\n//   (similar to executing two lines of code: `grunt foo` then `grunt bar`)\n// grunt bar\n//   doesn't log, because foo never ran.\n```\n\nTasks can fail if required configuration properties don't exist.\n\n``` javascript\ngrunt.registerTask('foo', 'My \"foo\" task.', function() {\n  // Fail task if \"meta.name\" config prop is missing\n  // Format 1: String\n  grunt.config.requires('meta.name');\n  // or Format 2: Array\n  grunt.config.requires(['meta', 'name']);\n  // Log... conditionally.\n  grunt.log.writeln('This will only log if meta.name is defined in the config.');\n});\n```\n\nTasks can access configuration properties.\n\n``` javascript\ngrunt.registerTask('foo', 'My \"foo\" task.', function() {\n  // Log the property value. Returns null if the property is undefined.\n  grunt.log.writeln('The meta.name property is: ' + grunt.config('meta.name'));\n  // Also logs the property value. Returns null if the property is undefined.\n  grunt.log.writeln('The meta.name property is: ' + grunt.config(['meta', 'name']));\n});\n```\n\nTake a look at the [contrib tasks](https://github.com/gruntjs/) for more examples.\n\n## CLI options / environment\n\nUse `process.env` to access the [environment variables](https://en.wikipedia.org/wiki/Environment_variable).\n\nRead more about the available command-line options on the [Using the CLI](using-the-cli) page.\n\n## Why doesn't my asynchronous task complete?\n\nChances are this is happening because you have forgotten to call the [this.async](api/inside-tasks#this.async) method to tell Grunt that your task is asynchronous. For simplicity's sake, Grunt uses a synchronous coding style, which can be switched to asynchronous by calling `this.async()` within the task body.\n\nNote that passing `false` to the `done()` function tells Grunt that the task has failed.\n\nFor example:\n\n``` javascript\ngrunt.registerTask('asyncme', 'My asynchronous task.', function() {\n  var done = this.async();\n  doSomethingAsync(done);\n});\n```\n\n## Extra Reference\n\nCheckout the [API](https://gruntjs.com/api) documentation if you need extra reference to create your tasks.\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/creating-tasks](https://gruntjs.com/creating-tasks)"
+- name: Exit Codes
+  id: api/exit-codes
+  summary: © GruntJS Team Licensed under the MIT License
+  description: "# Exit Codes\n\n- `0` - No errors!\n- `1` - Fatal error\n- `2` - Missing gruntfile error\n- `3` - Task error\n- `4` - Template processing error\n- `5` - Invalid shell auto-completion rules error\n- `6` - Warning\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/api/exit-codes](https://gruntjs.com/api/exit-codes)"
+- name: grunt
+  id: api/grunt
+  summary: Grunt exposes all of its methods and properties on the grunt object that gets passed into the module.exports function exported in your Gruntfile, Grunt plugin or in a tasks file
+  description: "# grunt\n\nGrunt exposes all of its methods and properties on the `grunt` object that gets passed into the `module.exports` function exported in your [Gruntfile](../index), Grunt plugin or in a [tasks file](../creating-tasks).\n\nNearly all of the following methods are defined elsewhere, but are provided directly on the `grunt` object for convenience. See the individual api section docs for detailed explanations and examples.\n\n## Config\n\n### grunt.initConfig\n\n*This method is an alias for the [grunt.config.init](https://gruntjs.com/grunt.config#grunt.config.init) method.*\n\n## Creating Tasks\n\n### grunt.registerTask\n\n*This method is an alias for the [grunt.task.registerTask](https://gruntjs.com/grunt.task#grunt.task.registertask) method.*\n\n### grunt.registerMultiTask\n\n*This method is an alias for the [grunt.task.registerMultiTask](https://gruntjs.com/grunt.task#grunt.task.registermultitask) method.*\n\n### grunt.renameTask\n\n*This method is an alias for the [grunt.task.renameTask](https://gruntjs.com/grunt.task#grunt.task.renametask) method.*\n\n## Loading Externally-Defined Tasks\n\n### grunt.loadTasks\n\n*This method is an alias for the [grunt.task.loadTasks](https://gruntjs.com/grunt.task#grunt.task.loadtasks) method.*\n\n### grunt.loadNpmTasks\n\n*This method is an alias for the [grunt.task.loadNpmTasks](https://gruntjs.com/grunt.task#grunt.task.loadnpmtasks) method.*\n\n## Warnings and Fatal Errors\n\n### grunt.warn\n\n*This method is an alias for the [grunt.fail.warn](https://gruntjs.com/grunt.fail#grunt.fail.warn) method.*\n\n### grunt.fatal\n\n*This method is an alias for the [grunt.fail.fatal](https://gruntjs.com/grunt.fail#grunt.fail.fatal) method.*\n\n## Command-line Options\n\n### grunt.option\n\nRetrieve the value of a command-line option, eg. `debug`. Note that for each command-line option, the inverse can be tested, eg. `no-debug`.\n\n``` javascript\ngrunt.option(optionName)\n```\n\n## Miscellaneous\n\n### grunt.package\n\nThe current Grunt `package.json` metadata, as an object.\n\n``` javascript\ngrunt.package\n```\n\n### grunt.version\n\nThe current Grunt version, as a string. This is just a shortcut to the `grunt.package.version` property.\n\n``` javascript\ngrunt.version\n```\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/api/grunt](https://gruntjs.com/api/grunt)"
+- name: grunt.config
+  id: api/grunt.config
+  summary: Access project-specific configuration data defined in the Gruntfile
+  description: "# grunt.config\n\nAccess project-specific configuration data defined in the `Gruntfile`.\n\nNote that any method marked with a ☃ (unicode snowman) is also available directly on the `grunt` object, and any method marked with a ☆ (white star) is also available inside tasks on the `this` object. Just so you know.\n\n## Initializing Config Data\n\n*Note that the following method is also available on the `grunt` object as `grunt.initConfig`.*\n\n### grunt.config.init ☃\n\nInitialize a configuration object for the current project. The specified `configObject` is used by tasks and can be accessed using the `grunt.config` method. Nearly every project's `Gruntfile` will call this method.\n\n``` javascript\ngrunt.config.init(configObject)\n```\n\nNote that any specified `<% %>` template strings will be processed when config data is retrieved.\n\nThis example contains sample config data for the [grunt-contrib-jshint plugin](https://github.com/gruntjs/grunt-contrib-jshint) `jshint` task:\n\n``` javascript\ngrunt.config.init({\n  jshint: {\n    all: ['lib/*.js', 'test/*.js', 'Gruntfile.js']\n  }\n});\n```\n\nSee the [Getting started](https://gruntjs.com/getting-started/) guide for more configuration examples.\n\n*This method is also available as `grunt.initConfig`.*\n\n## Accessing Config Data\n\nThe following methods allow Grunt configuration data to be accessed either via dot-delimited string like `'pkg.author.name'` or via array of property name parts like `['pkg', 'author', 'name']`.\n\nNote that if a specified property name contains a `.` dot, it must be escaped with a literal backslash, eg. `'concat.dist/built\\\\.js'`. If an array of parts is specified, Grunt will handle the escaping internally with the `grunt.config.escape` method.\n\n### grunt.config\n\nGet or set a value from the project's Grunt configuration. This method serves as an alias to other methods; if two arguments are passed, `grunt.config.set` is called, otherwise `grunt.config.get` is called.\n\n``` javascript\ngrunt.config([prop [, value]])\n```\n\n### grunt.config.get\n\nGet a value from the project's Grunt configuration. If `prop` is specified, that property's value is returned, or `null` if that property is not defined. If `prop` isn't specified, a copy of the entire config object is returned. Templates strings will be recursively processed using the `grunt.config.process` method.\n\n``` javascript\ngrunt.config.get([prop])\n```\n\n### grunt.config.process\n\nProcess a value, recursively expanding `<% %>` templates (via the `grunt.template.process` method) in the context of the Grunt config, as they are encountered. this method is called automatically by `grunt.config.get` but *not* by `grunt.config.getRaw`.\n\n``` javascript\ngrunt.config.process(value)\n```\n\nIf any retrieved value is entirely a single `'<%= foo %>'` or `'<%= foo.bar %>'` template string, and the specified `foo` or `foo.bar` property is a non-string (and not `null` or `undefined`) value, it will be expanded to the *actual* value. That, combined with grunt's task system automatically flattening arrays, can be extremely useful.\n\n### grunt.config.getRaw\n\nGet a raw value from the project's Grunt configuration, without processing `<% %>` template strings. If `prop` is specified, that property's value is returned, or `null` if that property is not defined. If `prop` isn't specified, a copy of the entire config object is returned.\n\n``` javascript\ngrunt.config.getRaw([prop])\n```\n\n### grunt.config.set\n\nSet a value into the project's Grunt configuration.\n\n``` javascript\ngrunt.config.set(prop, value)\n```\n\nNote that any specified `<% %>` template strings will only be processed when config data is retrieved.\n\n### grunt.config.escape\n\nEscape `.` dots in the given `propString`. This should be used for property names that contain dots.\n\n``` javascript\ngrunt.config.escape(propString)\n```\n\n### grunt.config.merge\n\n*Added in 0.4.5*\n\nRecursively merges properties of the specified `configObject` into the current project configuration. Array and plain object properties are merged recursively while other value types are overridden.\n\n``` javascript\ngrunt.config.merge(configObject)\n```\n\nYou can use this method to append configuration options, targets, etc., to already defined tasks, for example:\n\n``` javascript\ngrunt.config.merge({\n  watch: {\n    files: [\"path/to/files\"],\n    tasks: [\"task\"]\n  }\n});\n```\n\nArray values are merged based on their index. Consider the following code:\n\n``` javascript\ngrunt.initConfig({\n  jshint: {\n    files: ['Gruntfile.js', 'src/**/*.js'],\n  }\n);\n\nvar config = {\n  jshint: {\n    files: ['hello.js'],\n  }\n};\n\ngrunt.config.merge(config);\n```\n\nIt'll result in the configuration shown below:\n\n``` javascript\njshint: {\n  files: ['hello.js', 'src/**/*.js'],\n}\n```\n\nIn conclusion, the first value of the `files` array defined in the `config` variable (`hello.js`) overriddes the first value specified in the `initConfig` configuration call (`Gruntfile.js`).\n\n## Requiring Config Data\n\n*Note that the method listed below is also available inside tasks on the `this` object as `this.requiresConfig`.*\n\n### grunt.config.requires ☆\n\nFail the current task if one or more required config properties is missing, `null` or `undefined`. One or more string or array config properties may be specified.\n\n``` javascript\ngrunt.config.requires(prop [, prop [, ...]])\n```\n\n*This method is also available inside tasks as `this.requiresConfig`.*\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/api/grunt.config](https://gruntjs.com/api/grunt.config)"
+- name: grunt.config.escape
+  id: api/grunt.config#
+  summary: Access project-specific configuration data defined in the Gruntfile
+  belongs_to: grunt.config
+  description: |-
+    # grunt.config
+
+    Access project-specific configuration data defined in the `Gruntfile`.
+
+    Note that any method marked with a ☃ (unicode snowman) is also available directly on the `grunt` object, and any method marked with a ☆ (white star) is also available inside tasks on the `this` object. Just so you know.
+- name: grunt.config.get
+  id: api/grunt.config#
+  summary: Access project-specific configuration data defined in the Gruntfile
+  belongs_to: grunt.config
+  description: |-
+    # grunt.config
+
+    Access project-specific configuration data defined in the `Gruntfile`.
+
+    Note that any method marked with a ☃ (unicode snowman) is also available directly on the `grunt` object, and any method marked with a ☆ (white star) is also available inside tasks on the `this` object. Just so you know.
+- name: grunt.config.getRaw
+  id: api/grunt.config#
+  summary: Access project-specific configuration data defined in the Gruntfile
+  belongs_to: grunt.config
+  description: |-
+    # grunt.config
+
+    Access project-specific configuration data defined in the `Gruntfile`.
+
+    Note that any method marked with a ☃ (unicode snowman) is also available directly on the `grunt` object, and any method marked with a ☆ (white star) is also available inside tasks on the `this` object. Just so you know.
+- name: grunt.config.init
+  id: api/grunt.config#
+  summary: Access project-specific configuration data defined in the Gruntfile
+  belongs_to: grunt.config
+  description: |-
+    # grunt.config
+
+    Access project-specific configuration data defined in the `Gruntfile`.
+
+    Note that any method marked with a ☃ (unicode snowman) is also available directly on the `grunt` object, and any method marked with a ☆ (white star) is also available inside tasks on the `this` object. Just so you know.
+- name: grunt.config.merge
+  id: api/grunt.config#
+  summary: Access project-specific configuration data defined in the Gruntfile
+  belongs_to: grunt.config
+  description: |-
+    # grunt.config
+
+    Access project-specific configuration data defined in the `Gruntfile`.
+
+    Note that any method marked with a ☃ (unicode snowman) is also available directly on the `grunt` object, and any method marked with a ☆ (white star) is also available inside tasks on the `this` object. Just so you know.
+- name: grunt.config.process
+  id: api/grunt.config#
+  summary: Access project-specific configuration data defined in the Gruntfile
+  belongs_to: grunt.config
+  description: |-
+    # grunt.config
+
+    Access project-specific configuration data defined in the `Gruntfile`.
+
+    Note that any method marked with a ☃ (unicode snowman) is also available directly on the `grunt` object, and any method marked with a ☆ (white star) is also available inside tasks on the `this` object. Just so you know.
+- name: grunt.config.requires
+  id: api/grunt.config#
+  summary: Access project-specific configuration data defined in the Gruntfile
+  belongs_to: grunt.config
+  description: |-
+    # grunt.config
+
+    Access project-specific configuration data defined in the `Gruntfile`.
+
+    Note that any method marked with a ☃ (unicode snowman) is also available directly on the `grunt` object, and any method marked with a ☆ (white star) is also available inside tasks on the `this` object. Just so you know.
+- name: grunt.config.set
+  id: api/grunt.config#
+  summary: Access project-specific configuration data defined in the Gruntfile
+  belongs_to: grunt.config
+  description: |-
+    # grunt.config
+
+    Access project-specific configuration data defined in the `Gruntfile`.
+
+    Note that any method marked with a ☃ (unicode snowman) is also available directly on the `grunt` object, and any method marked with a ☆ (white star) is also available inside tasks on the `this` object. Just so you know.
+- name: grunt.event
+  id: api/grunt.event
+  summary: Even though only the most relevant methods are listed on this page, the full EventEmitter2 API is available on the grunt.event object
+  description: "# grunt.event\n\nEven though only the most relevant methods are listed on this page, the full [EventEmitter2 API](https://github.com/hij1nx/EventEmitter2) is available on the `grunt.event` object. Event namespaces may be specified with the `.` (dot) separator, and namespace wildcards have been enabled.\n\n*Note that Grunt doesn't yet emit any events, but can still be useful in your own tasks.*\n\n### grunt.event.on\n\nAdds a listener to the end of the listeners array for the specified event.\n\n``` javascript\ngrunt.event.on(event, listener)\n```\n\n### grunt.event.once\n\nAdds a **one time** listener for the event. The listener is invoked only the first time the event is fired, after which it is removed.\n\n``` javascript\ngrunt.event.once(event, listener)\n```\n\n### grunt.event.many\n\nAdds a listener that will execute **n times** for the event before being removed.\n\n``` javascript\ngrunt.event.many(event, timesToListen, listener)\n```\n\n### grunt.event.off\n\nRemove a listener from the listener array for the specified event.\n\n``` javascript\ngrunt.event.off(event, listener)\n```\n\n### grunt.event.removeAllListeners\n\nRemoves all listeners, or those of the specified event.\n\n``` javascript\ngrunt.event.removeAllListeners([event])\n```\n\n### grunt.event.emit\n\nExecute each of the listeners that may be listening for the specified event name in order with the list of arguments.\n\n``` javascript\ngrunt.event.emit(event, [arg1], [arg2], [...])\n```\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/api/grunt.event](https://gruntjs.com/api/grunt.event)"
+- name: grunt.event.emit
+  id: api/grunt.event#
+  summary: Even though only the most relevant methods are listed on this page, the full EventEmitter2 API is available on the grunt.event object
+  belongs_to: grunt.event
+  description: |-
+    # grunt.event
+
+    Even though only the most relevant methods are listed on this page, the full [EventEmitter2 API](https://github.com/hij1nx/EventEmitter2) is available on the `grunt.event` object. Event namespaces may be specified with the `.` (dot) separator, and namespace wildcards have been enabled.
+
+    *Note that Grunt doesn't yet emit any events, but can still be useful in your own tasks.*
+- name: grunt.event.many
+  id: api/grunt.event#
+  summary: Even though only the most relevant methods are listed on this page, the full EventEmitter2 API is available on the grunt.event object
+  belongs_to: grunt.event
+  description: |-
+    # grunt.event
+
+    Even though only the most relevant methods are listed on this page, the full [EventEmitter2 API](https://github.com/hij1nx/EventEmitter2) is available on the `grunt.event` object. Event namespaces may be specified with the `.` (dot) separator, and namespace wildcards have been enabled.
+
+    *Note that Grunt doesn't yet emit any events, but can still be useful in your own tasks.*
+- name: grunt.event.off
+  id: api/grunt.event#
+  summary: Even though only the most relevant methods are listed on this page, the full EventEmitter2 API is available on the grunt.event object
+  belongs_to: grunt.event
+  description: |-
+    # grunt.event
+
+    Even though only the most relevant methods are listed on this page, the full [EventEmitter2 API](https://github.com/hij1nx/EventEmitter2) is available on the `grunt.event` object. Event namespaces may be specified with the `.` (dot) separator, and namespace wildcards have been enabled.
+
+    *Note that Grunt doesn't yet emit any events, but can still be useful in your own tasks.*
+- name: grunt.event.on
+  id: api/grunt.event#
+  summary: Even though only the most relevant methods are listed on this page, the full EventEmitter2 API is available on the grunt.event object
+  belongs_to: grunt.event
+  description: |-
+    # grunt.event
+
+    Even though only the most relevant methods are listed on this page, the full [EventEmitter2 API](https://github.com/hij1nx/EventEmitter2) is available on the `grunt.event` object. Event namespaces may be specified with the `.` (dot) separator, and namespace wildcards have been enabled.
+
+    *Note that Grunt doesn't yet emit any events, but can still be useful in your own tasks.*
+- name: grunt.event.once
+  id: api/grunt.event#
+  summary: Even though only the most relevant methods are listed on this page, the full EventEmitter2 API is available on the grunt.event object
+  belongs_to: grunt.event
+  description: |-
+    # grunt.event
+
+    Even though only the most relevant methods are listed on this page, the full [EventEmitter2 API](https://github.com/hij1nx/EventEmitter2) is available on the `grunt.event` object. Event namespaces may be specified with the `.` (dot) separator, and namespace wildcards have been enabled.
+
+    *Note that Grunt doesn't yet emit any events, but can still be useful in your own tasks.*
+- name: grunt.event.removeAllListeners
+  id: api/grunt.event#
+  summary: Even though only the most relevant methods are listed on this page, the full EventEmitter2 API is available on the grunt.event object
+  belongs_to: grunt.event
+  description: |-
+    # grunt.event
+
+    Even though only the most relevant methods are listed on this page, the full [EventEmitter2 API](https://github.com/hij1nx/EventEmitter2) is available on the `grunt.event` object. Event namespaces may be specified with the `.` (dot) separator, and namespace wildcards have been enabled.
+
+    *Note that Grunt doesn't yet emit any events, but can still be useful in your own tasks.*
+- name: grunt.fail
+  id: api/grunt.fail
+  summary: For when something goes horribly wrong
+  description: "# grunt.fail\n\nFor when something goes horribly wrong.\n\nSee the [fail lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/fail.js) for more information.\n\n## The fail API\n\nIf something explodes (or is about to explode) inside a task, it can force Grunt to abort. See the [exit codes documentation](https://gruntjs.com/exit-codes) for a list of all built-in Grunt exit codes.\n\nNote that any method marked with a ☃ (unicode snowman) is also available directly on the `grunt` object. Just so you know. See the [API main page](https://gruntjs.com/grunt) for more usage information.\n\n### grunt.fail.warn ☃\n\nDisplay a warning and abort Grunt immediately. Grunt will continue processing tasks if the `--force` command-line option was specified. The `error` argument can be a string message or an error object.\n\n``` javascript\ngrunt.fail.warn(error [, errorcode])\n```\n\nIf `--stack` is specified on the command-line and an error object was specified, a stack trace will be logged.\n\n*This method is also available as `grunt.warn`.*\n\n### grunt.fail.fatal ☃\n\nDisplay a warning and abort Grunt immediately. The `error` argument can be a string message or an error object.\n\n``` javascript\ngrunt.fail.fatal(error [, errorcode])\n```\n\nIf `--stack` is specified on the command-line and an error object was specified, a stack trace will be logged.\n\nA beep is emitted on fatal unless the `--no-color` option is specified.\n\n*This method is also available as `grunt.fatal`.*\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/api/grunt.fail](https://gruntjs.com/api/grunt.fail)"
+- name: grunt.fail.fatal
+  id: api/grunt.fail#
+  summary: For when something goes horribly wrong
+  belongs_to: grunt.fail
+  description: |-
+    # grunt.fail
+
+    For when something goes horribly wrong.
+
+    See the [fail lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/fail.js) for more information.
+- name: grunt.fail.warn
+  id: api/grunt.fail#
+  summary: For when something goes horribly wrong
+  belongs_to: grunt.fail
+  description: |-
+    # grunt.fail
+
+    For when something goes horribly wrong.
+
+    See the [fail lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/fail.js) for more information.
+- name: grunt.fatal
+  id: api/grunt#
+  summary: Grunt exposes all of its methods and properties on the grunt object that gets passed into the module.exports function exported in your Gruntfile, Grunt plugin or in a tasks file
+  belongs_to: grunt
+  description: |-
+    # grunt
+
+    Grunt exposes all of its methods and properties on the `grunt` object that gets passed into the `module.exports` function exported in your [Gruntfile](../index), Grunt plugin or in a [tasks file](../creating-tasks).
+
+    Nearly all of the following methods are defined elsewhere, but are provided directly on the `grunt` object for convenience. See the individual api section docs for detailed explanations and examples.
+- name: grunt.file
+  id: api/grunt.file
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  description: "# grunt.file\n\nThere are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.\n\n*Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*\n\n## Character encoding\n\n### grunt.file.defaultEncoding\n\nSet this property to change the default encoding used by all `grunt.file` methods. Defaults to `'utf8'`. If you do have to change this value, it's recommended that you change it as early as possible inside your Gruntfile.\n\n``` javascript\ngrunt.file.defaultEncoding = 'utf8';\n```\n\n### grunt.file.preserveBOM\n\n*Added in 0.4.2*\n\nWhether to preserve the Byte Order Mark (BOM) on `file.read` rather than strip it.\n\n``` javascript\ngrunt.file.preserveBOM = false;\n```\n\n## Reading and writing\n\n### grunt.file.read\n\nRead and return a file's contents. Returns a string, unless `options.encoding` is `null` in which case it returns a [Buffer](https://nodejs.org/docs/latest/api/buffer.html).\n\n``` javascript\ngrunt.file.read(filepath [, options])\n```\n\nThe `options` object has these possible properties:\n\n``` javascript\nvar options = {\n  // If an encoding is not specified, default to grunt.file.defaultEncoding.\n  // If specified as null, returns a non-decoded Buffer instead of a string.\n  encoding: encodingName\n};\n```\n\n### grunt.file.readJSON\n\nRead a file's contents, parsing the data as JSON and returning the result. See `grunt.file.read` for a list of supported options.\n\n``` javascript\ngrunt.file.readJSON(filepath [, options])\n```\n\n### grunt.file.readYAML\n\nRead a file's contents, parsing the data as YAML and returning the result. See `grunt.file.read` for a list of supported options.\n\n``` javascript\ngrunt.file.readYAML(filepath [, options])\n```\n\n### grunt.file.write\n\nWrite the specified contents to a file, creating intermediate directories if necessary. Strings will be encoded using the specified character encoding, [Buffers](https://nodejs.org/docs/latest/api/buffer.html) will be written to disk as-specified.\n\n*If the `--no-write` command-line option is specified, the file won't actually be written.*\n\n``` javascript\ngrunt.file.write(filepath, contents [, options])\n```\n\nThe `options` object has these possible properties:\n\n``` javascript\nvar options = {\n  // If an encoding is not specified, default to grunt.file.defaultEncoding.\n  // If `contents` is a Buffer, encoding is ignored.\n  encoding: encodingName\n};\n```\n\n### grunt.file.copy\n\nCopy a source file to a destination path, creating intermediate directories if necessary.\n\n*If the `--no-write` command-line option is specified, the file won't actually be written.*\n\n``` javascript\ngrunt.file.copy(srcpath, destpath [, options])\n```\n\nThe `options` object has these possible properties:\n\n``` javascript\nvar options = {\n  // If an encoding is not specified, default to grunt.file.defaultEncoding.\n  // If null, the `process` function will receive a Buffer instead of String.\n  encoding: encodingName,\n  // The source file contents, source file path, and destination file path\n  // are passed into this function, whose return value will be used as the\n  // destination file's contents. If this function returns `false`, the file\n  // copy will be aborted.\n  process: processFunction,\n  // These optional globbing patterns will be matched against the filepath\n  // (not the filename) using grunt.file.isMatch. If any specified globbing\n  // pattern matches, the file won't be processed via the `process` function.\n  // If `true` is specified, processing will be prevented.\n  noProcess: globbingPatterns\n};\n```\n\n### grunt.file.delete\n\nDelete the specified filepath. Will delete files and folders recursively.\n\n*Will not delete the current working directory or files outside the current working directory unless the `--force` command-line option is specified.*\n\n*If the `--no-write` command-line option is specified, the filepath won't actually be deleted.*\n\n``` javascript\ngrunt.file.delete(filepath [, options])\n```\n\nThe `options` object has one possible property:\n\n``` javascript\nvar options = {\n  // Enable deleting outside the current working directory. This option may\n  // be overridden by the --force command-line option.\n  force: true\n};\n```\n\n## Directories\n\n### grunt.file.mkdir\n\nWorks like `mkdir -p`. Create a directory along with any intermediate directories. If `mode` isn't specified, it defaults to `0777 & (~process.umask())`.\n\n*If the `--no-write` command-line option is specified, directories won't actually be created.*\n\n``` javascript\ngrunt.file.mkdir(dirpath [, mode])\n```\n\n### grunt.file.recurse\n\nRecurse into a directory, executing `callback` for each file.\n\n``` javascript\ngrunt.file.recurse(rootdir, callback)\n```\n\nThe callback function receives the following arguments:\n\n``` javascript\nfunction callback(abspath, rootdir, subdir, filename) {\n  // The full path to the current file, which is nothing more than\n  // the rootdir + subdir + filename arguments, joined.\n  abspath\n  // The root director, as originally specified.\n  rootdir\n  // The current file's directory, relative to rootdir.\n  subdir\n  // The filename of the current file, without any directory parts.\n  filename\n}\n```\n\n## Globbing patterns\n\nIt is often impractical to specify all source filepaths individually, so Grunt supports filename expansion (also know as globbing) via the built-in [node-glob](https://github.com/isaacs/node-glob) library.\n\nSee the \"Globbing patterns\" section of the [Configuring tasks](https://gruntjs.com/configuring-tasks/) guide for globbing pattern examples.\n\n### grunt.file.expand\n\nReturn a unique array of all file or directory paths that match the given globbing pattern(s). This method accepts either comma separated globbing patterns or an array of globbing patterns. Paths matching patterns that begin with `!` will be excluded from the returned array. Patterns are processed in order, so inclusion and exclusion order is significant.\n\n``` javascript\ngrunt.file.expand([options, ] patterns)\n```\n\nFile paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.\n\nThe `options` object supports all [minimatch library](https://github.com/isaacs/minimatch) options, and a few others. For example:\n\n- `filter` Either a valid [fs.Stats method name](https://nodejs.org/docs/latest/api/fs.html#fs_class_fs_stats) or a function that is passed the matched `src` filepath and returns `true` or `false`.\n- `nonull` Retain `src` patterns even if they fail to match files. Combined with grunt's `--verbose` flag, this option can help debug file path issues.\n- `matchBase` Patterns without slashes will match just the basename part. Eg. this makes `*.js` work like `**/*.js`.\n- `cwd` Patterns will be matched relative to this path, and all returned filepaths will also be relative to this path.\n\n### grunt.file.expandMapping\n\nReturns an array of src-dest file mapping objects. For each source file matched by a specified pattern, join that file path to the specified `dest`. This file path may be flattened or renamed, depending on the options specified. See the `grunt.file.expand` method documentation for an explanation of how the `patterns` and `options` arguments may be specified.\n\n``` javascript\ngrunt.file.expandMapping(patterns, dest [, options])\n```\n\n*Note that while this method may be used to programmatically generate a `files` array for a multi task, the declarative syntax for doing this described in the \"Building the files object dynamically\" section of the [Configuring tasks](https://gruntjs.com/configuring-tasks/) guide is preferred.*\n\nIn addition to those the `grunt.file.expand` method supports, the `options` object also supports these properties:\n\n``` javascript\nvar options = {\n  // The directory from which patterns are matched. Any string specified as\n  // cwd is effectively stripped from the beginning of all matched paths.\n  cwd: String,\n  // Remove the path component from all matched src files. The src file path\n  // is still joined to the specified dest.\n  flatten: Boolean,\n  // Remove anything after (and including) either the first or last \".\" in the\n  // destination path (indicated by options.extDot), then append this value.\n  ext: String,\n  // *Added in 0.4.3*\n  // Indicates where the period demarcating the extension is located. Can take:\n  // - 'first' (extension begins after the first period in the file name)\n  // - 'last' (extension begins after the last period)\n  // Default: 'first'\n  extDot: String,\n  // If specified, this function will be responsible for returning the final\n  // dest filepath. By default, it joins dest and matchedSrcPath like so:\n  rename: function(dest, matchedSrcPath, options) {\n    return path.join(dest, matchedSrcPath);\n  }\n};\n```\n\n### grunt.file.match\n\nMatch one or more globbing patterns against one or more file paths. Returns a uniqued array of all file paths that match any of the specified globbing patterns. Both the `patterns` and `filepaths` argument can be a single string or array of strings. Paths matching patterns that begin with `!` will be excluded from the returned array. Patterns are processed in order, so inclusion and exclusion order is significant.\n\n``` javascript\ngrunt.file.match([options, ] patterns, filepaths)\n```\n\nThe `options` object supports all [minimatch library](https://github.com/isaacs/minimatch) options. For example, if `options.matchBase` is true, patterns without slashes will match against the basename of the path even if it contains slashes, eg. pattern `*.js` will match filepath `path/to/file.js`.\n\n### grunt.file.isMatch\n\nThis method contains the same signature and logic as the `grunt.file.match` method, but simply returns `true` if any files were matched, otherwise `false`.\n\n## File types\n\n### grunt.file.exists\n\nDoes the given path exist? Returns a boolean.\n\nLike the Node.js [path.join](https://nodejs.org/docs/latest/api/path.html#path_path_join_path1_path2) method, this method will join all arguments together and normalize the resulting path.\n\n``` javascript\ngrunt.file.exists(path1 [, path2 [, ...]])\n```\n\n### grunt.file.isLink\n\nIs the given path a symbolic link? Returns a boolean.\n\nLike the Node.js [path.join](https://nodejs.org/docs/latest/api/path.html#path_path_join_path1_path2) method, this method will join all arguments together and normalize the resulting path.\n\n``` javascript\ngrunt.file.isLink(path1 [, path2 [, ...]])\n```\n\nReturns false if the path doesn't exist.\n\n### grunt.file.isDir\n\nIs the given path a directory? Returns a boolean.\n\nLike the Node.js [path.join](https://nodejs.org/docs/latest/api/path.html#path_path_join_path1_path2) method, this method will join all arguments together and normalize the resulting path.\n\n``` javascript\ngrunt.file.isDir(path1 [, path2 [, ...]])\n```\n\nReturns false if the path doesn't exist.\n\n### grunt.file.isFile\n\nIs the given path a file? Returns a boolean.\n\nLike the Node.js [path.join](https://nodejs.org/docs/latest/api/path.html#path_path_join_path1_path2) method, this method will join all arguments together and normalize the resulting path.\n\n``` javascript\ngrunt.file.isFile(path1 [, path2 [, ...]])\n```\n\nReturns false if the path doesn't exist.\n\n## Paths\n\n### grunt.file.isPathAbsolute\n\nIs a given file path absolute? Returns a boolean.\n\nLike the Node.js [path.join](https://nodejs.org/docs/latest/api/path.html#path_path_join_path1_path2) method, this method will join all arguments together and normalize the resulting path.\n\n``` javascript\ngrunt.file.isPathAbsolute(path1 [, path2 [, ...]])\n```\n\n### grunt.file.arePathsEquivalent\n\nDo all the specified paths refer to the same path? Returns a boolean.\n\n``` javascript\ngrunt.file.arePathsEquivalent(path1 [, path2 [, ...]])\n```\n\n### grunt.file.doesPathContain\n\nAre all descendant path(s) contained within the specified ancestor path? Returns a boolean.\n\n*Note: does not check to see if paths actually exist.*\n\n``` javascript\ngrunt.file.doesPathContain(ancestorPath, descendantPath1 [, descendantPath2 [, ...]])\n```\n\n### grunt.file.isPathCwd\n\nIs a given file path the CWD? Returns a boolean.\n\nLike the Node.js [path.join](https://nodejs.org/docs/latest/api/path.html#path_path_join_path1_path2) method, this method will join all arguments together and normalize the resulting path.\n\n``` javascript\ngrunt.file.isPathCwd(path1 [, path2 [, ...]])\n```\n\n### grunt.file.isPathInCwd\n\nIs a given file path inside the CWD? Note: CWD is not *inside* CWD. Returns a boolean.\n\nLike the Node.js [path.join](https://nodejs.org/docs/latest/api/path.html#path_path_join_path1_path2) method, this method will join all arguments together and normalize the resulting path.\n\n``` javascript\ngrunt.file.isPathInCwd(path1 [, path2 [, ...]])\n```\n\n### grunt.file.setBase\n\nChange grunt's current working directory (CWD). By default, all file paths are relative to the `Gruntfile`. This works just like the `--base` command-line option.\n\n``` javascript\ngrunt.file.setBase(path1 [, path2 [, ...]])\n```\n\nLike the Node.js [path.join](https://nodejs.org/docs/latest/api/path.html#path_path_join_path1_path2) method, this method will join all arguments together and normalize the resulting path.\n\n## External libraries\n\n*Deprecated*\n\n**All external libraries that are listed below are now deprecated.**\n\nPlease use **npm** to manage these external libraries in your project's dependencies.\n\nFor example if you want use [Lo-Dash](https://www.npmjs.org/package/lodash), install it first `npm install lodash`, then use it in your `Gruntfile`: `var _ = require('lodash');`\n\n### grunt.file.glob\n\n*Deprecated*\n\n[glob](https://github.com/isaacs/node-glob) - File globbing utility.\n\n### grunt.file.minimatch\n\n*Deprecated*\n\n[minimatch](https://github.com/isaacs/minimatch) - File pattern matching utility.\n\n### grunt.file.findup\n\n*Deprecated*\n\n[findup-sync](https://github.com/cowboy/node-findup-sync) - Search upwards for matching file patterns.\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/api/grunt.file](https://gruntjs.com/api/grunt.file)"
+- name: grunt.file.arePathsEquivalent
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.copy
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.defaultEncoding
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.delete
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.doesPathContain
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.exists
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.expand
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.expandMapping
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.findup
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.glob
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.isDir
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.isFile
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.isLink
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.isMatch
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.isPathAbsolute
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.isPathCwd
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.isPathInCwd
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.match
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.minimatch
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.mkdir
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.preserveBOM
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.read
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.readJSON
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.readYAML
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.recurse
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.setBase
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.file.write
+  id: api/grunt.file#
+  summary: There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns
+  belongs_to: grunt.file
+  description: |-
+    # grunt.file
+
+    There are many provided methods for reading and writing files, traversing the filesystem and finding files by matching globbing patterns. Many of these methods are wrappers around built-in Node.js file functionality, but with additional error handling, logging and character encoding normalization.
+
+    *Note: all file paths are relative to the `Gruntfile` unless the current working directory is changed with `grunt.file.setBase` or the `--base` command-line option.*
+- name: grunt.initConfig
+  id: api/grunt#
+  summary: Grunt exposes all of its methods and properties on the grunt object that gets passed into the module.exports function exported in your Gruntfile, Grunt plugin or in a tasks file
+  belongs_to: grunt
+  description: |-
+    # grunt
+
+    Grunt exposes all of its methods and properties on the `grunt` object that gets passed into the `module.exports` function exported in your [Gruntfile](../index), Grunt plugin or in a [tasks file](../creating-tasks).
+
+    Nearly all of the following methods are defined elsewhere, but are provided directly on the `grunt` object for convenience. See the individual api section docs for detailed explanations and examples.
+- name: grunt.loadNpmTasks
+  id: api/grunt#
+  summary: Grunt exposes all of its methods and properties on the grunt object that gets passed into the module.exports function exported in your Gruntfile, Grunt plugin or in a tasks file
+  belongs_to: grunt
+  description: |-
+    # grunt
+
+    Grunt exposes all of its methods and properties on the `grunt` object that gets passed into the `module.exports` function exported in your [Gruntfile](../index), Grunt plugin or in a [tasks file](../creating-tasks).
+
+    Nearly all of the following methods are defined elsewhere, but are provided directly on the `grunt` object for convenience. See the individual api section docs for detailed explanations and examples.
+- name: grunt.loadTasks
+  id: api/grunt#
+  summary: Grunt exposes all of its methods and properties on the grunt object that gets passed into the module.exports function exported in your Gruntfile, Grunt plugin or in a tasks file
+  belongs_to: grunt
+  description: |-
+    # grunt
+
+    Grunt exposes all of its methods and properties on the `grunt` object that gets passed into the `module.exports` function exported in your [Gruntfile](../index), Grunt plugin or in a [tasks file](../creating-tasks).
+
+    Nearly all of the following methods are defined elsewhere, but are provided directly on the `grunt` object for convenience. See the individual api section docs for detailed explanations and examples.
+- name: grunt.log
+  id: api/grunt.log
+  summary: Output messages to the console
+  description: "# grunt.log\n\nOutput messages to the console.\n\nSee the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.\n\n## The log API\n\nGrunt output should look consistent, and maybe even pretty. As such, there is a plethora of logging methods, and a few useful patterns. All of the methods that actually log something are chainable.\n\n*Note: all methods available under `grunt.verbose` work exactly like `grunt.log` methods, but only log if the `--verbose` command-line option was specified.*\n\n### grunt.log.write / grunt.verbose.write\n\nLog the specified `msg` string, with no trailing newline.\n\n``` javascript\ngrunt.log.write(msg)\n```\n\n### grunt.log.writeln / grunt.verbose.writeln\n\nLog the specified `msg` string, with trailing newline.\n\n``` javascript\ngrunt.log.writeln([msg])\n```\n\n### grunt.log.error / grunt.verbose.error\n\nIf `msg` string is omitted, logs `ERROR` in red, otherwise logs `>> msg`, with trailing newline.\n\n``` javascript\ngrunt.log.error([msg])\n```\n\n### grunt.log.errorlns / grunt.verbose.errorlns\n\nLog an error with `grunt.log.error`, wrapping text to 80 columns using `grunt.log.wraptext`.\n\n``` javascript\ngrunt.log.errorlns(msg)\n```\n\n### grunt.log.ok / grunt.verbose.ok\n\nIf `msg` string is omitted, logs `OK` in green, otherwise logs `>> msg`, with trailing newline.\n\n``` javascript\ngrunt.log.ok([msg])\n```\n\n### grunt.log.oklns / grunt.verbose.oklns\n\nLog an ok message with `grunt.log.ok`, wrapping text to 80 columns using `grunt.log.wraptext`.\n\n``` javascript\ngrunt.log.oklns(msg)\n```\n\n### grunt.log.subhead / grunt.verbose.subhead\n\nLog the specified `msg` string in **bold**, with trailing newline.\n\n``` javascript\ngrunt.log.subhead(msg)\n```\n\n### grunt.log.writeflags / grunt.verbose.writeflags\n\nLog a list of `obj` properties (good for debugging flags).\n\n``` javascript\ngrunt.log.writeflags(obj, prefix)\n```\n\n### grunt.log.debug / grunt.verbose.debug\n\nLogs a debugging message, but only if the `--debug` command-line option was specified.\n\n``` javascript\ngrunt.log.debug(msg)\n```\n\n## Verbose and Notverbose\n\nAll logging methods available under `grunt.verbose` work exactly like their `grunt.log` counterparts, but only log if the `--verbose` command-line option was specified. There is also a \"notverbose\" counterpart available at both `grunt.log.notverbose` and `grunt.log.verbose.or`. In fact, the `.or` property can be used on both `verbose` and `notverbose` to effectively toggle between the two.\n\n### grunt.verbose / grunt.log.verbose\n\nThis object contains all methods of `grunt.log` but only logs if the `--verbose` command-line option was specified.\n\n``` javascript\ngrunt.verbose\n```\n\n### grunt.verbose.or / grunt.log.notverbose\n\nThis object contains all methods of `grunt.log` but only logs if the `--verbose` command-line option was *not* specified.\n\n``` javascript\ngrunt.verbose.or\n```\n\n## Utility Methods\n\nThese methods don't actually log, they just return strings that can be used in other methods.\n\n### grunt.log.wordlist\n\nReturns a comma-separated list of `arr` array items.\n\n``` javascript\ngrunt.log.wordlist(arr [, options])\n```\n\nThe `options` object has these possible properties, and default values:\n\n``` javascript\nvar options = {\n  // The separator string (can be colored).\n  separator: ', ',\n  // The array item color (specify false to not colorize).\n  color: 'cyan',\n};\n```\n\n### grunt.log.uncolor\n\nRemoves all color information from a string, making it suitable for testing `.length` or perhaps logging to a file.\n\n``` javascript\ngrunt.log.uncolor(str)\n```\n\n### grunt.log.wraptext\n\nWrap `text` string to `width` characters with `\\n`, ensuring that words are not split in the middle unless absolutely necessary.\n\n``` javascript\ngrunt.log.wraptext(width, text)\n```\n\n### grunt.log.table\n\nWrap `texts` array of strings to columns `widths` characters wide. A wrapper for the `grunt.log.wraptext` method that can be used to generate output in columns.\n\n``` javascript\ngrunt.log.table(widths, texts)\n```\n\n## An Example\n\nA common pattern is to only log when in `--verbose` mode OR if an error occurs, like so:\n\n``` javascript\ngrunt.registerTask('something', 'Do something interesting.', function(arg) {\n  var msg = 'Doing something...';\n  grunt.verbose.write(msg);\n  try {\n    doSomethingThatThrowsAnExceptionOnError(arg);\n    // Success!\n    grunt.verbose.ok();\n  } catch(e) {\n    // Something went wrong.\n    grunt.verbose.or.write(msg).error().error(e.message);\n    grunt.fail.warn('Something went wrong.');\n  }\n});\n```\n\nAn explanation of the above code:\n\n1.  `grunt.verbose.write(msg);` logs the message (no newline), but only in `--verbose` mode.\n2.  `grunt.verbose.ok();` logs OK in green, with a newline.\n3.  `grunt.verbose.or.write(msg).error().error(e.message);` does a few things:\n    1.  `grunt.verbose.or.write(msg)` logs the message (no newline) if not in `--verbose` mode, and returns the `notverbose` object.\n    2.  `.error()` logs ERROR in red, with a newline, and returns the `notverbose` object.\n    3.  `.error(e.message);` logs the actual error message (and returns the `notverbose` object).\n4.  `grunt.fail.warn('Something went wrong.');` logs a warning in bright yellow, exiting Grunt with exit code 1, unless `--force` was specified.\n\nTake a look at the [grunt-contrib-\\* tasks source code](https://github.com/gruntjs) for more examples.\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/api/grunt.log](https://gruntjs.com/api/grunt.log)"
+- name: grunt.log.debug
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.log.error
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.log.errorlns
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.log.ok
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.log.oklns
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.log.subhead
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.log.table
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.log.uncolor
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.log.wordlist
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.log.wraptext
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.log.write
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.log.writeflags
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.log.writeln
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.option
+  id: api/grunt#
+  summary: Grunt exposes all of its methods and properties on the grunt object that gets passed into the module.exports function exported in your Gruntfile, Grunt plugin or in a tasks file
+  belongs_to: grunt
+  description: |-
+    # grunt
+
+    Grunt exposes all of its methods and properties on the `grunt` object that gets passed into the `module.exports` function exported in your [Gruntfile](../index), Grunt plugin or in a [tasks file](../creating-tasks).
+
+    Nearly all of the following methods are defined elsewhere, but are provided directly on the `grunt` object for convenience. See the individual api section docs for detailed explanations and examples.
+- name: grunt.option
+  id: api/grunt.option
+  summary: The Grunt option API is for sharing parameters across multiple tasks and accessing parameters set on the command line
+  description: "# grunt.option\n\nThe Grunt option API is for sharing parameters across multiple tasks and accessing parameters set on the command line.\n\nAn example would be a flag to target whether your build is for development or staging. On the command line: `grunt deploy --target=staging` would cause `grunt.option('target')` to return `\"staging\"`.\n\nAn example `Gruntfile` to utilize the `target` option could be:\n\n``` javascript\ngrunt.initConfig({\n  compass: {\n    dev: {\n      options: {\n        /* ... */\n        outputStyle: 'expanded'\n      },\n    },\n    staging: {\n      options: {\n        /* ... */\n        outputStyle: 'compressed'\n      },\n    },\n  },\n});\nvar target = grunt.option('target') || 'dev';\ngrunt.registerTask('deploy', ['compass:' + target]);\n```\n\nAs you run `grunt deploy` your stylesheets would default to the `dev` target and output the CSS in the expanded format. If you ran `grunt deploy --target=staging` the `staging` target would instead be ran and your CSS would be in the compressed format.\n\n`grunt.option` can be used within tasks as well, for example:\n\n``` javascript\ngrunt.registerTask('upload', 'Upload code to specified target.', function(n) {\n  var target = grunt.option('target');\n  // do something useful with target here\n});\ngrunt.registerTask('deploy', ['validate', 'upload']);\n```\n\n*Note that boolean options can be specified using just a key without a value. For example, running `grunt deploy --staging` on the command line would cause `grunt.option('staging')` to return `true`.*\n\n### grunt.option ☃\n\nGets or sets an option.\n\n``` javascript\ngrunt.option(key[, val])\n```\n\nBoolean options can be negated by prepending `no-` onto the `key`. For example:\n\n``` javascript\ngrunt.option('staging', false);\nvar isDev = grunt.option('no-staging');\n// isDev === true\n```\n\n### grunt.option.init\n\nInitialize `grunt.option`. If `initObject` is omitted option will be initialized to an empty object otherwise will be set to `initObject`.\n\n``` javascript\ngrunt.option.init([initObject])\n```\n\n### grunt.option.flags\n\nReturns the options as an array of command line parameters.\n\n``` javascript\ngrunt.option.flags()\n```\n\n### grunt.option.keys\n\n@since 1.2.0+\n\nReturns all option keys.\n\n``` javascript\ngrunt.option.keys()\n```\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/api/grunt.option](https://gruntjs.com/api/grunt.option)"
+- name: grunt.option.flags
+  id: api/grunt.option#
+  summary: The Grunt option API is for sharing parameters across multiple tasks and accessing parameters set on the command line
+  belongs_to: grunt.option
+  description: |-
+    # grunt.option
+
+    The Grunt option API is for sharing parameters across multiple tasks and accessing parameters set on the command line.
+
+    An example would be a flag to target whether your build is for development or staging. On the command line: `grunt deploy --target=staging` would cause `grunt.option('target')` to return `"staging"`.
+
+    An example `Gruntfile` to utilize the `target` option could be:
+
+    ``` javascript
+    grunt.initConfig({
+      compass: {
+        dev: {
+          options: {
+            /* ... */
+            outputStyle: 'expanded'
+          },
+        },
+        staging: {
+          options: {
+            /* ... */
+            outputStyle: 'compressed'
+          },
+        },
+      },
+    });
+    var target = grunt.option('target') || 'dev';
+    grunt.registerTask('deploy', ['compass:' + target]);
+    ```
+
+    As you run `grunt deploy` your stylesheets would default to the `dev` target and output the CSS in the expanded format. If you ran `grunt deploy --target=staging` the `staging` target would instead be ran and your CSS would be in the compressed format.
+
+    `grunt.option` can be used within tasks as well, for example:
+
+    ``` javascript
+    grunt.registerTask('upload', 'Upload code to specified target.', function(n) {
+      var target = grunt.option('target');
+      // do something useful with target here
+    });
+    grunt.registerTask('deploy', ['validate', 'upload']);
+    ```
+
+    *Note that boolean options can be specified using just a key without a value. For example, running `grunt deploy --staging` on the command line would cause `grunt.option('staging')` to return `true`.*
+- name: grunt.option.init
+  id: api/grunt.option#
+  summary: The Grunt option API is for sharing parameters across multiple tasks and accessing parameters set on the command line
+  belongs_to: grunt.option
+  description: |-
+    # grunt.option
+
+    The Grunt option API is for sharing parameters across multiple tasks and accessing parameters set on the command line.
+
+    An example would be a flag to target whether your build is for development or staging. On the command line: `grunt deploy --target=staging` would cause `grunt.option('target')` to return `"staging"`.
+
+    An example `Gruntfile` to utilize the `target` option could be:
+
+    ``` javascript
+    grunt.initConfig({
+      compass: {
+        dev: {
+          options: {
+            /* ... */
+            outputStyle: 'expanded'
+          },
+        },
+        staging: {
+          options: {
+            /* ... */
+            outputStyle: 'compressed'
+          },
+        },
+      },
+    });
+    var target = grunt.option('target') || 'dev';
+    grunt.registerTask('deploy', ['compass:' + target]);
+    ```
+
+    As you run `grunt deploy` your stylesheets would default to the `dev` target and output the CSS in the expanded format. If you ran `grunt deploy --target=staging` the `staging` target would instead be ran and your CSS would be in the compressed format.
+
+    `grunt.option` can be used within tasks as well, for example:
+
+    ``` javascript
+    grunt.registerTask('upload', 'Upload code to specified target.', function(n) {
+      var target = grunt.option('target');
+      // do something useful with target here
+    });
+    grunt.registerTask('deploy', ['validate', 'upload']);
+    ```
+
+    *Note that boolean options can be specified using just a key without a value. For example, running `grunt deploy --staging` on the command line would cause `grunt.option('staging')` to return `true`.*
+- name: grunt.option.keys
+  id: api/grunt.option#
+  summary: The Grunt option API is for sharing parameters across multiple tasks and accessing parameters set on the command line
+  belongs_to: grunt.option
+  description: |-
+    # grunt.option
+
+    The Grunt option API is for sharing parameters across multiple tasks and accessing parameters set on the command line.
+
+    An example would be a flag to target whether your build is for development or staging. On the command line: `grunt deploy --target=staging` would cause `grunt.option('target')` to return `"staging"`.
+
+    An example `Gruntfile` to utilize the `target` option could be:
+
+    ``` javascript
+    grunt.initConfig({
+      compass: {
+        dev: {
+          options: {
+            /* ... */
+            outputStyle: 'expanded'
+          },
+        },
+        staging: {
+          options: {
+            /* ... */
+            outputStyle: 'compressed'
+          },
+        },
+      },
+    });
+    var target = grunt.option('target') || 'dev';
+    grunt.registerTask('deploy', ['compass:' + target]);
+    ```
+
+    As you run `grunt deploy` your stylesheets would default to the `dev` target and output the CSS in the expanded format. If you ran `grunt deploy --target=staging` the `staging` target would instead be ran and your CSS would be in the compressed format.
+
+    `grunt.option` can be used within tasks as well, for example:
+
+    ``` javascript
+    grunt.registerTask('upload', 'Upload code to specified target.', function(n) {
+      var target = grunt.option('target');
+      // do something useful with target here
+    });
+    grunt.registerTask('deploy', ['validate', 'upload']);
+    ```
+
+    *Note that boolean options can be specified using just a key without a value. For example, running `grunt deploy --staging` on the command line would cause `grunt.option('staging')` to return `true`.*
+- name: grunt.package
+  id: api/grunt#
+  summary: Grunt exposes all of its methods and properties on the grunt object that gets passed into the module.exports function exported in your Gruntfile, Grunt plugin or in a tasks file
+  belongs_to: grunt
+  description: |-
+    # grunt
+
+    Grunt exposes all of its methods and properties on the `grunt` object that gets passed into the `module.exports` function exported in your [Gruntfile](../index), Grunt plugin or in a [tasks file](../creating-tasks).
+
+    Nearly all of the following methods are defined elsewhere, but are provided directly on the `grunt` object for convenience. See the individual api section docs for detailed explanations and examples.
+- name: grunt.registerMultiTask
+  id: api/grunt#
+  summary: Grunt exposes all of its methods and properties on the grunt object that gets passed into the module.exports function exported in your Gruntfile, Grunt plugin or in a tasks file
+  belongs_to: grunt
+  description: |-
+    # grunt
+
+    Grunt exposes all of its methods and properties on the `grunt` object that gets passed into the `module.exports` function exported in your [Gruntfile](../index), Grunt plugin or in a [tasks file](../creating-tasks).
+
+    Nearly all of the following methods are defined elsewhere, but are provided directly on the `grunt` object for convenience. See the individual api section docs for detailed explanations and examples.
+- name: grunt.registerTask
+  id: api/grunt#
+  summary: Grunt exposes all of its methods and properties on the grunt object that gets passed into the module.exports function exported in your Gruntfile, Grunt plugin or in a tasks file
+  belongs_to: grunt
+  description: |-
+    # grunt
+
+    Grunt exposes all of its methods and properties on the `grunt` object that gets passed into the `module.exports` function exported in your [Gruntfile](../index), Grunt plugin or in a [tasks file](../creating-tasks).
+
+    Nearly all of the following methods are defined elsewhere, but are provided directly on the `grunt` object for convenience. See the individual api section docs for detailed explanations and examples.
+- name: grunt.renameTask
+  id: api/grunt#
+  summary: Grunt exposes all of its methods and properties on the grunt object that gets passed into the module.exports function exported in your Gruntfile, Grunt plugin or in a tasks file
+  belongs_to: grunt
+  description: |-
+    # grunt
+
+    Grunt exposes all of its methods and properties on the `grunt` object that gets passed into the `module.exports` function exported in your [Gruntfile](../index), Grunt plugin or in a [tasks file](../creating-tasks).
+
+    Nearly all of the following methods are defined elsewhere, but are provided directly on the `grunt` object for convenience. See the individual api section docs for detailed explanations and examples.
+- name: grunt.task
+  id: api/grunt.task
+  summary: Register, run and load external tasks
+  description: "# grunt.task\n\nRegister, run and load external tasks.\n\nSee the [task lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/task.js) and [task util lib source](https://github.com/gruntjs/grunt/blob/master/lib/util/task.js) for more information.\n\n## The task API\n\nWhile a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. See the [Inside tasks](https://gruntjs.com/inside-tasks/) guide for a list of these properties and methods.\n\nMany utility properties and methods are available inside of tasks via the `this` object.\n\nNote that any method marked with a ☃ (unicode snowman) is also available directly on the `grunt` object. Just so you know. See the [API main page](https://gruntjs.com/grunt) for more usage information.\n\n## Creating Tasks\n\n### grunt.task.registerTask ☃\n\nRegister an \"alias task\" or a task function. This method supports the following two signatures:\n\n**Alias task**\n\nIf a task list is specified, the new task will be an alias for one or more other tasks. Whenever this \"alias task\" is run, every specified task in `taskList` will be run, in the order specified. The `taskList` argument must be an array of tasks.\n\n``` javascript\ngrunt.task.registerTask(taskName, taskList)\n```\n\nWhen the optional `description` string is passed it will be displayed when `grunt --help` is run:\n\n``` javascript\ngrunt.task.registerTask(taskName, description, taskList)\n```\n\nThis example alias task defines a \"default\" task whereby the \"jshint\", \"qunit\", \"concat\" and \"uglify\" tasks are run automatically if Grunt is executed without any tasks specified:\n\n``` javascript\ntask.registerTask('default', ['jshint', 'qunit', 'concat', 'uglify']);\n```\n\nTask arguments can be specified as well. In this example, the alias \"dist\" runs both the \"concat\" and \"uglify\" tasks, each with the \"dist\" argument:\n\n``` javascript\ntask.registerTask('dist', ['concat:dist', 'uglify:dist']);\n```\n\n**Function task**\n\nIf a `description` and `taskFunction` are passed, the specified function will be executed whenever the task is run. In addition, the specified description will be shown when `grunt --help` is run. Task-specific properties and methods are available inside the task function as properties of the `this` object. The task function can return `false` to indicate that the task has failed.\n\nNote that the `grunt.task.registerMultiTask` method, explained below, can be used to define a special type of task known as a \"multi task.\"\n\n``` javascript\ngrunt.task.registerTask(taskName, description, taskFunction)\n```\n\nThis example task logs `foo, testing 123` if Grunt is run via `grunt foo:testing:123`. If the task is run without arguments as `grunt foo` the task logs `foo, no args`.\n\n``` javascript\ngrunt.task.registerTask('foo', 'A sample task that logs stuff.', function(arg1, arg2) {\n  if (arguments.length === 0) {\n    grunt.log.writeln(this.name + \", no args\");\n  } else {\n    grunt.log.writeln(this.name + \", \" + arg1 + \" \" + arg2);\n  }\n});\n```\n\nSee the [creating tasks](../creating-tasks) documentation for more examples of tasks and alias tasks.\n\n*This method is also available as [grunt.registerTask](https://gruntjs.com/grunt).*\n\n### grunt.task.registerMultiTask ☃\n\nRegister a \"multi task.\" A multi task is a task that implicitly iterates over all of its named sub-properties (AKA targets) if no target was specified. In addition to the default properties and methods, extra multi task-specific properties are available inside the task function as properties of the `this` object.\n\nMany of the contrib tasks, including the [jshint task](https://github.com/gruntjs/grunt-contrib-jshint), [concat task](https://github.com/gruntjs/grunt-contrib-concat) and [uglify task](https://github.com/gruntjs/grunt-contrib-uglify) are multi tasks.\n\n``` javascript\ngrunt.task.registerMultiTask(taskName, description, taskFunction)\n```\n\nGiven the specified configuration, this example multi task would log `foo: 1,2,3` if Grunt was run via `grunt log:foo`, or it would log `bar: hello world` if Grunt was run via `grunt log:bar`. If Grunt was run as `grunt log` however, it would log `foo: 1,2,3` then `bar: hello world` then `baz: false`.\n\n``` javascript\ngrunt.initConfig({\n  log: {\n    foo: [1, 2, 3],\n    bar: 'hello world',\n    baz: false\n  }\n});\n\ngrunt.task.registerMultiTask('log', 'Log stuff.', function() {\n  grunt.log.writeln(this.target + ': ' + this.data);\n});\n```\n\nSee the [creating tasks](../creating-tasks) documentation for more examples of multi tasks.\n\n*This method is also available as [grunt.registerMultiTask](https://gruntjs.com/grunt).*\n\n### grunt.task.requires\n\nFail the task if some other task failed or never ran.\n\n``` javascript\ngrunt.task.requires(taskName);\n```\n\n### grunt.task.exists\n\n*Added in 0.4.5*\n\nCheck with the name, if a task exists in the registered tasks. Return a boolean.\n\n``` javascript\ngrunt.task.exists(name)\n```\n\n### grunt.task.renameTask ☃\n\nRename a task. This might be useful if you want to override the default behavior of a task, while retaining the old name.\n\n*Note that if a task has been renamed, the [this.name](https://gruntjs.com/inside-tasks#this.name) and [this.nameArgs](https://gruntjs.com/inside-tasks#this.nameargs) properties will change accordingly.*\n\n``` javascript\ngrunt.task.renameTask(oldname, newname)\n```\n\n*This method is also available as [grunt.renameTask](https://gruntjs.com/grunt).*\n\n## Loading Externally-Defined Tasks\n\nFor most projects, tasks will be defined in the [Gruntfile](../index). For larger projects, or in cases where tasks need to be shared across projects, tasks can be loaded from one or more external directories or Npm-installed Grunt plugins.\n\n### grunt.task.loadTasks ☃\n\nLoad task-related files from the specified directory, relative to the [Gruntfile](../index). This method can be used to load task-related files from a local Grunt plugin by specifying the path to that plugin's \"tasks\" subdirectory.\n\n``` javascript\ngrunt.task.loadTasks(tasksPath)\n```\n\n*This method is also available as [grunt.loadTasks](https://gruntjs.com/grunt).*\n\n### grunt.task.loadNpmTasks ☃\n\nLoad tasks from the specified Grunt plugin. This plugin must be installed locally via npm, and must be relative to the [Gruntfile](../index). Grunt plugins can be created by using the [grunt-init gruntplugin template](https://github.com/gruntjs/grunt-init): `grunt init:gruntplugin`.\n\n``` javascript\ngrunt.task.loadNpmTasks(pluginName)\n```\n\n*This method is also available as [grunt.loadNpmTasks](https://gruntjs.com/grunt).*\n\n## Queueing Tasks\n\nGrunt automatically enqueues and runs all tasks specified on the command line, but individual tasks can enqueue additional tasks to be run.\n\n### grunt.task.run\n\nEnqueue one or more tasks. Every specified task in `taskList` will be run immediately after the current task completes, in the order specified. The task list can be an array of tasks or individual task arguments.\n\n``` javascript\ngrunt.task.run(taskList)\n```\n\n### grunt.task.clearQueue\n\nEmpty the task queue completely. Unless additional tasks are enqueued, no more tasks will be run.\n\n``` javascript\ngrunt.task.clearQueue()\n```\n\n### grunt.task.normalizeMultiTaskFiles\n\nNormalizes a task target configuration object into an array of src-dest file mappings. This method is used internally by the multi task system [this.files / grunt.task.current.files](https://gruntjs.com/grunt.task#wiki-this-files) property.\n\n``` javascript\ngrunt.task.normalizeMultiTaskFiles(data [, targetname])\n```\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/api/grunt.task](https://gruntjs.com/api/grunt.task)"
+- name: grunt.task.clearQueue
+  id: api/grunt.task#
+  summary: Register, run and load external tasks
+  belongs_to: grunt.task
+  description: |-
+    # grunt.task
+
+    Register, run and load external tasks.
+
+    See the [task lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/task.js) and [task util lib source](https://github.com/gruntjs/grunt/blob/master/lib/util/task.js) for more information.
+- name: grunt.task.exists
+  id: api/grunt.task#
+  summary: Register, run and load external tasks
+  belongs_to: grunt.task
+  description: |-
+    # grunt.task
+
+    Register, run and load external tasks.
+
+    See the [task lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/task.js) and [task util lib source](https://github.com/gruntjs/grunt/blob/master/lib/util/task.js) for more information.
+- name: grunt.task.loadNpmTasks
+  id: api/grunt.task#
+  summary: Register, run and load external tasks
+  belongs_to: grunt.task
+  description: |-
+    # grunt.task
+
+    Register, run and load external tasks.
+
+    See the [task lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/task.js) and [task util lib source](https://github.com/gruntjs/grunt/blob/master/lib/util/task.js) for more information.
+- name: grunt.task.loadTasks
+  id: api/grunt.task#
+  summary: Register, run and load external tasks
+  belongs_to: grunt.task
+  description: |-
+    # grunt.task
+
+    Register, run and load external tasks.
+
+    See the [task lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/task.js) and [task util lib source](https://github.com/gruntjs/grunt/blob/master/lib/util/task.js) for more information.
+- name: grunt.task.normalizeMultiTaskFiles
+  id: api/grunt.task#
+  summary: Register, run and load external tasks
+  belongs_to: grunt.task
+  description: |-
+    # grunt.task
+
+    Register, run and load external tasks.
+
+    See the [task lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/task.js) and [task util lib source](https://github.com/gruntjs/grunt/blob/master/lib/util/task.js) for more information.
+- name: grunt.task.registerMultiTask
+  id: api/grunt.task#
+  summary: Register, run and load external tasks
+  belongs_to: grunt.task
+  description: |-
+    # grunt.task
+
+    Register, run and load external tasks.
+
+    See the [task lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/task.js) and [task util lib source](https://github.com/gruntjs/grunt/blob/master/lib/util/task.js) for more information.
+- name: grunt.task.registerTask
+  id: api/grunt.task#
+  summary: Register, run and load external tasks
+  belongs_to: grunt.task
+  description: |-
+    # grunt.task
+
+    Register, run and load external tasks.
+
+    See the [task lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/task.js) and [task util lib source](https://github.com/gruntjs/grunt/blob/master/lib/util/task.js) for more information.
+- name: grunt.task.renameTask
+  id: api/grunt.task#
+  summary: Register, run and load external tasks
+  belongs_to: grunt.task
+  description: |-
+    # grunt.task
+
+    Register, run and load external tasks.
+
+    See the [task lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/task.js) and [task util lib source](https://github.com/gruntjs/grunt/blob/master/lib/util/task.js) for more information.
+- name: grunt.task.requires
+  id: api/grunt.task#
+  summary: Register, run and load external tasks
+  belongs_to: grunt.task
+  description: |-
+    # grunt.task
+
+    Register, run and load external tasks.
+
+    See the [task lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/task.js) and [task util lib source](https://github.com/gruntjs/grunt/blob/master/lib/util/task.js) for more information.
+- name: grunt.task.run
+  id: api/grunt.task#
+  summary: Register, run and load external tasks
+  belongs_to: grunt.task
+  description: |-
+    # grunt.task
+
+    Register, run and load external tasks.
+
+    See the [task lib source](https://github.com/gruntjs/grunt/blob/master/lib/grunt/task.js) and [task util lib source](https://github.com/gruntjs/grunt/blob/master/lib/util/task.js) for more information.
+- name: grunt.template
+  id: api/grunt.template
+  summary: Template strings can be processed manually using the provided template functions
+  description: "# grunt.template\n\nTemplate strings can be processed manually using the provided template functions. In addition, the `config.get` method (used by many tasks) automatically expands `<% %>` style template strings specified as config data inside the `Gruntfile`.\n\n### grunt.template.process\n\nProcess a [Lo-Dash template](http://lodash.com/docs/#template) string. The `template` argument will be processed recursively until there are no more templates to process.\n\nThe default data object is the entire config object, but if `options.data` is set, that object will be used instead. The default template delimiters are `<% %>` but if `options.delimiters` is set to a custom delimiter name (set with [`grunt.template.addDelimiters`](https://api/grunt.template#grunt.template.adddelimiters)), those template delimiters will be used instead.\n\n``` javascript\ngrunt.template.process(template [, options])\n```\n\nInside templates, the `grunt` object is exposed so that you can do things like `<%= grunt.template.today('yyyy') %>`. *Note that if the data object already has a `grunt` property, the `grunt` API will not be accessible in templates.*\n\nIn this example, the `baz` property is processed recursively until there are no more `<% %>` templates to process.\n\n``` javascript\nvar obj = {\n  foo: 'c',\n  bar: 'b<%= foo %>d',\n  baz: 'a<%= bar %>e'\n};\ngrunt.template.process('<%= baz %>', {data: obj}) // 'abcde'\n```\n\n### grunt.template.setDelimiters\n\nSet the [Lo-Dash template](http://lodash.com/docs/#template) delimiters to a predefined set in case `grunt.util._.template` needs to be called manually. The `config` delimiters `<% %>` are included by default.\n\n*You probably won't need to use this method, because you'll be using `grunt.template.process` which uses this method internally.*\n\n``` javascript\ngrunt.template.setDelimiters(name)\n```\n\n### grunt.template.addDelimiters\n\nAdd a named set of [Lo-Dash template](http://lodash.com/docs/#template) delimiters. You probably won't need to use this method, because the built-in delimiters should be sufficient, but you could always add `{% %}` or `[% %]` style delimiters.\n\nThe `name` argument should be unique since it is how we access the delimiters from `grunt.template.setDelimiters` and as an option for `grunt.template.process`.\n\n``` javascript\ngrunt.template.addDelimiters(name, opener, closer)\n```\n\nIn this example, if we were to use the `{% %}` style mentioned above we would use the following:\n\n``` javascript\ngrunt.template.addDelimiters('myDelimiters', '{%', '%}')\n```\n\n## Helpers\n\n### grunt.template.date\n\nFormat a date using the [dateformat library](https://github.com/felixge/node-dateformat).\n\n``` javascript\ngrunt.template.date(date, format)\n```\n\nIn this example, a specific date is formatted as month/day/year.\n\n``` javascript\ngrunt.template.date(847602000000, 'yyyy-mm-dd') // '1996-11-10'\n```\n\n### grunt.template.today\n\nFormat today's date using the [dateformat library](https://github.com/felixge/node-dateformat).\n\n``` javascript\ngrunt.template.today(format)\n```\n\nIn this example, today's date is formatted as a 4-digit year.\n\n``` javascript\ngrunt.template.today('yyyy') // This returns a year in format such as '2020'\n```\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/api/grunt.template](https://gruntjs.com/api/grunt.template)"
+- name: grunt.template.addDelimiters
+  id: api/grunt.template#
+  summary: Template strings can be processed manually using the provided template functions
+  belongs_to: grunt.template
+  description: |-
+    # grunt.template
+
+    Template strings can be processed manually using the provided template functions. In addition, the `config.get` method (used by many tasks) automatically expands `<% %>` style template strings specified as config data inside the `Gruntfile`.
+- name: grunt.template.date
+  id: api/grunt.template#
+  summary: Template strings can be processed manually using the provided template functions
+  belongs_to: grunt.template
+  description: |-
+    # grunt.template
+
+    Template strings can be processed manually using the provided template functions. In addition, the `config.get` method (used by many tasks) automatically expands `<% %>` style template strings specified as config data inside the `Gruntfile`.
+- name: grunt.template.process
+  id: api/grunt.template#
+  summary: Template strings can be processed manually using the provided template functions
+  belongs_to: grunt.template
+  description: |-
+    # grunt.template
+
+    Template strings can be processed manually using the provided template functions. In addition, the `config.get` method (used by many tasks) automatically expands `<% %>` style template strings specified as config data inside the `Gruntfile`.
+- name: grunt.template.setDelimiters
+  id: api/grunt.template#
+  summary: Template strings can be processed manually using the provided template functions
+  belongs_to: grunt.template
+  description: |-
+    # grunt.template
+
+    Template strings can be processed manually using the provided template functions. In addition, the `config.get` method (used by many tasks) automatically expands `<% %>` style template strings specified as config data inside the `Gruntfile`.
+- name: grunt.template.today
+  id: api/grunt.template#
+  summary: Template strings can be processed manually using the provided template functions
+  belongs_to: grunt.template
+  description: |-
+    # grunt.template
+
+    Template strings can be processed manually using the provided template functions. In addition, the `config.get` method (used by many tasks) automatically expands `<% %>` style template strings specified as config data inside the `Gruntfile`.
+- name: grunt.util
+  id: api/grunt.util
+  summary: Miscellaneous utilities for your Gruntfile and tasks
+  description: "# grunt.util\n\nMiscellaneous utilities for your Gruntfile and tasks.\n\n### grunt.util.kindOf\n\nReturn the \"kind\" of a value. Like `typeof` but returns the internal `[Class](Class/)` value. Possible results are `\"number\"`, `\"string\"`, `\"boolean\"`, `\"function\"`, `\"regexp\"`, `\"array\"`, `\"date\"`, `\"error\"`, `\"null\"`, `\"undefined\"` and the catch-all `\"object\"`.\n\n``` javascript\ngrunt.util.kindOf(value)\n```\n\n### grunt.util.error\n\nReturn a new Error instance (that can be thrown) with the appropriate message. If an Error object is specified instead of `message` that object will be returned. Also, if an Error object is specified for `origError` and Grunt was run with the `--stack` option, the original Error stack will be dumped.\n\n``` javascript\ngrunt.util.error(message [, origError])\n```\n\n### grunt.util.linefeed\n\nThe linefeed character, normalized for the current operating system. (`\\r\\n` on Windows, `\\n` otherwise)\n\n### grunt.util.normalizelf\n\nGiven a string, return a new string with all the linefeeds normalized for the current operating system. (`\\r\\n` on Windows, `\\n` otherwise)\n\n``` javascript\ngrunt.util.normalizelf(string)\n```\n\n### grunt.util.recurse\n\nRecurse through nested objects and arrays, executing `callbackFunction` for each non-object value. If `continueFunction` returns `false`, a given object or value will be skipped.\n\n``` javascript\ngrunt.util.recurse(object, callbackFunction, continueFunction)\n```\n\n### grunt.util.repeat\n\nReturn string `str` repeated `n` times.\n\n``` javascript\ngrunt.util.repeat(n, str)\n```\n\n### grunt.util.pluralize\n\nGiven `str` of `\"a/b\"`, If `n` is `1`, return `\"a\"` otherwise `\"b\"`. You can specify a custom separator if '/' doesn't work for you.\n\n``` javascript\ngrunt.util.pluralize(n, str, separator)\n```\n\n### grunt.util.spawn\n\nSpawn a child process, keeping track of its stdout, stderr and exit code. The method returns a reference to the spawned child. When the child exits, the `doneFunction` is called.\n\n``` javascript\ngrunt.util.spawn(options, doneFunction)\n```\n\nThe `options` object has these possible properties:\n\n``` javascript\nvar options = {\n  // The command to execute. It should be in the system path.\n  cmd: commandToExecute,\n  // If specified, the same grunt bin that is currently running will be\n  // spawned as the child command, instead of the \"cmd\" option. Defaults\n  // to false.\n  grunt: boolean,\n  // An array of arguments to pass to the command.\n  args: arrayOfArguments,\n  // Additional options for the Node.js child_process spawn method.\n  opts: nodeSpawnOptions,\n  // If this value is set and an error occurs, it will be used as the value\n  // and null will be passed as the error value.\n  fallback: fallbackValue\n};\n```\n\nThe `doneFunction` accepts these arguments:\n\n``` javascript\nfunction doneFunction(error, result, code) {\n  // If the exit code was non-zero and a fallback wasn't specified, an Error\n  // object, otherwise null.\n  error\n  // The result object is an object with the properties .stdout, .stderr, and\n  // .code (exit code).\n  result\n  // When result is coerced to a string, the value is stdout if the exit code\n  // was zero, the fallback if the exit code was non-zero and a fallback was\n  // specified, or stderr if the exit code was non-zero and a fallback was\n  // not specified.\n  String(result)\n  // The numeric exit code.\n  code\n}\n```\n\n### grunt.util.toArray\n\nGiven an array or array-like object, return an array. Great for converting `arguments` objects into arrays.\n\n``` javascript\ngrunt.util.toArray(arrayLikeObject)\n```\n\n### grunt.util.callbackify\n\nNormalizes both \"returns a value\" and \"passes result to a callback\" functions to always pass a result to the specified callback. If the original function returns a value, that value will now be passed to the callback, which is specified as the last argument, after all other predefined arguments. If the original function passed a value to a callback, it will continue to do so.\n\n``` javascript\ngrunt.util.callbackify(syncOrAsyncFunction)\n```\n\nThis example might better illustrate:\n\n``` javascript\nfunction add1(a, b) {\n  return a + b;\n}\nfunction add2(a, b, callback) {\n  callback(a + b);\n}\n\nvar fn1 = grunt.util.callbackify(add1);\nvar fn2 = grunt.util.callbackify(add2);\n\nfn1(1, 2, function(result) {\n  console.log('1 plus 2 equals ' + result);\n});\nfn2(1, 2, function(result) {\n  console.log('1 plus 2 equals ' + result);\n});\n```\n\n## Internal libraries\n\n### grunt.util.namespace\n\nAn internal library for resolving deeply-nested properties in objects.\n\n### grunt.util.task\n\nAn internal library for task running.\n\n## External libraries\n\n*Deprecated*\n\n**All external libraries that are listed below are now deprecated.**\n\nPlease use **npm** to manage these external libraries in your project's dependencies.\n\nFor example if you want to use [Lo-Dash](https://www.npmjs.org/package/lodash), install it first: `npm install lodash`, then use it in your `Gruntfile`: `var _ = require('lodash');`.\n\n#### grunt.util.\\_\n\n*Deprecated*\n\n[Lo-Dash](http://lodash.com/) and [Underscore.string](https://github.com/epeli/underscore.string)\n\n`grunt.util._.str` is available for methods that conflict with existing Lo-Dash methods.\n\n#### grunt.util.async\n\n*Deprecated*\n\n[Async](https://github.com/caolan/async) - Async utilities for node and the browser.\n\n#### grunt.util.hooker\n\n*Deprecated*\n\n[JavaScript Hooker](https://github.com/cowboy/javascript-hooker) - Monkey-patch (hook) functions for debugging and stuff.\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/api/grunt.util](https://gruntjs.com/api/grunt.util)"
+- name: grunt.util.callbackify
+  id: api/grunt.util#
+  summary: Miscellaneous utilities for your Gruntfile and tasks
+  belongs_to: grunt.util
+  description: |-
+    # grunt.util
+
+    Miscellaneous utilities for your Gruntfile and tasks.
+- name: grunt.util.error
+  id: api/grunt.util#
+  summary: Miscellaneous utilities for your Gruntfile and tasks
+  belongs_to: grunt.util
+  description: |-
+    # grunt.util
+
+    Miscellaneous utilities for your Gruntfile and tasks.
+- name: grunt.util.kindOf
+  id: api/grunt.util#
+  summary: Miscellaneous utilities for your Gruntfile and tasks
+  belongs_to: grunt.util
+  description: |-
+    # grunt.util
+
+    Miscellaneous utilities for your Gruntfile and tasks.
+- name: grunt.util.linefeed
+  id: api/grunt.util#
+  summary: Miscellaneous utilities for your Gruntfile and tasks
+  belongs_to: grunt.util
+  description: |-
+    # grunt.util
+
+    Miscellaneous utilities for your Gruntfile and tasks.
+- name: grunt.util.namespace
+  id: api/grunt.util#
+  summary: Miscellaneous utilities for your Gruntfile and tasks
+  belongs_to: grunt.util
+  description: |-
+    # grunt.util
+
+    Miscellaneous utilities for your Gruntfile and tasks.
+- name: grunt.util.normalizelf
+  id: api/grunt.util#
+  summary: Miscellaneous utilities for your Gruntfile and tasks
+  belongs_to: grunt.util
+  description: |-
+    # grunt.util
+
+    Miscellaneous utilities for your Gruntfile and tasks.
+- name: grunt.util.pluralize
+  id: api/grunt.util#
+  summary: Miscellaneous utilities for your Gruntfile and tasks
+  belongs_to: grunt.util
+  description: |-
+    # grunt.util
+
+    Miscellaneous utilities for your Gruntfile and tasks.
+- name: grunt.util.recurse
+  id: api/grunt.util#
+  summary: Miscellaneous utilities for your Gruntfile and tasks
+  belongs_to: grunt.util
+  description: |-
+    # grunt.util
+
+    Miscellaneous utilities for your Gruntfile and tasks.
+- name: grunt.util.repeat
+  id: api/grunt.util#
+  summary: Miscellaneous utilities for your Gruntfile and tasks
+  belongs_to: grunt.util
+  description: |-
+    # grunt.util
+
+    Miscellaneous utilities for your Gruntfile and tasks.
+- name: grunt.util.spawn
+  id: api/grunt.util#
+  summary: Miscellaneous utilities for your Gruntfile and tasks
+  belongs_to: grunt.util
+  description: |-
+    # grunt.util
+
+    Miscellaneous utilities for your Gruntfile and tasks.
+- name: grunt.util.task
+  id: api/grunt.util#
+  summary: Miscellaneous utilities for your Gruntfile and tasks
+  belongs_to: grunt.util
+  description: |-
+    # grunt.util
+
+    Miscellaneous utilities for your Gruntfile and tasks.
+- name: grunt.util.toArray
+  id: api/grunt.util#
+  summary: Miscellaneous utilities for your Gruntfile and tasks
+  belongs_to: grunt.util
+  description: |-
+    # grunt.util
+
+    Miscellaneous utilities for your Gruntfile and tasks.
+- name: grunt.verbose
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.verbose.or
+  id: api/grunt.log#
+  summary: Output messages to the console
+  belongs_to: grunt.log
+  description: |-
+    # grunt.log
+
+    Output messages to the console.
+
+    See the [log lib source](https://github.com/gruntjs/grunt-legacy-log/blob/master/index.js) for more information.
+- name: grunt.version
+  id: api/grunt#
+  summary: Grunt exposes all of its methods and properties on the grunt object that gets passed into the module.exports function exported in your Gruntfile, Grunt plugin or in a tasks file
+  belongs_to: grunt
+  description: |-
+    # grunt
+
+    Grunt exposes all of its methods and properties on the `grunt` object that gets passed into the `module.exports` function exported in your [Gruntfile](../index), Grunt plugin or in a [tasks file](../creating-tasks).
+
+    Nearly all of the following methods are defined elsewhere, but are provided directly on the `grunt` object for convenience. See the individual api section docs for detailed explanations and examples.
+- name: grunt.warn
+  id: api/grunt#
+  summary: Grunt exposes all of its methods and properties on the grunt object that gets passed into the module.exports function exported in your Gruntfile, Grunt plugin or in a tasks file
+  belongs_to: grunt
+  description: |-
+    # grunt
+
+    Grunt exposes all of its methods and properties on the `grunt` object that gets passed into the `module.exports` function exported in your [Gruntfile](../index), Grunt plugin or in a [tasks file](../creating-tasks).
+
+    Nearly all of the following methods are defined elsewhere, but are provided directly on the `grunt` object for convenience. See the individual api section docs for detailed explanations and examples.
+- name: Installing grunt
+  id: installing-grunt
+  summary: This document explains how to install specific versions of Grunt and Grunt plugins
+  description: "# Installing grunt\n\nThis document explains how to install specific versions of Grunt and Grunt plugins. If you haven't read the [Getting Started](https://gruntjs.com/getting-started/) guide, you should check that out first.\n\n## Overview\n\nGrunt and Grunt plugins should be defined as [devDependencies](https://docs.npmjs.com/files/package.json#devdependencies) in your project's [package.json](https://docs.npmjs.com/files/package.json). This will allow you to install all of your project's dependencies with a single command: `npm install`. The current stable and development versions of Grunt are always listed on the wiki's [home page](https://github.com/gruntjs/grunt/wiki/).\n\n## Installing a specific version\n\nIf you need a specific version of Grunt or a Grunt plugin, run `npm install grunt@VERSION --save-dev` where `VERSION` is the version you need. This will install the specified version, adding it to your package.json devDependencies.\n\nNote that a [tilde version range](https://docs.npmjs.com/cli/v6/using-npm/semver#ranges) will be used in your `package.json` when you add the `--save-dev` flag to `npm install`. This is typically good, as new patch releases of the specified version will automatically be upgraded as development continues, per [semver](http://semver.org).\n\n## Installing a published development version\n\nPeriodically, as new functionality is being developed, Grunt builds may be published to npm. These builds will *never* be installable without explicitly specifying a version number, and will typically have a build number or alpha/beta/release candidate designation.\n\nLike installing a specific version of grunt, run `npm install grunt@VERSION --save-dev` where `VERSION` is the version you need, and npm will install that version of Grunt in your project folder, adding it to your `package.json` devDependencies.\n\nNote that regardless of the version you specify, a [tilde version range](https://docs.npmjs.com/cli/v6/using-npm/semver#ranges) will be specified in `package.json`. **This is very bad**, as new, possibly incompatible, patch releases of the specified development version may be installed by npm, breaking your build.\n\n*In this case it is **very important** that you manually edit your `package.json` and remove the ~ (tilde) from the version number. This will lock in the exact development version that you have specified.*\n\nThe same process may be used to install a published development version of a Grunt plugin.\n\n## Installing directly from GitHub\n\nIf you want to install a bleeding-edge, unpublished version of Grunt or Grunt plugin, follow the instructions for specifying a [git URL as a dependency](https://docs.npmjs.com/files/package.json#git-urls-as-dependencies) and be sure to specify an actual commit SHA (not a branch name) as the `commit-ish`. This will guarantee that your project always uses that exact version of grunt.\n\nThe specified git URL may be that of the official Grunt repo or a fork.\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/installing-grunt](https://gruntjs.com/installing-grunt)"
+- name: Project Scaffolding
+  id: project-scaffolding
+  summary: Grunt-init is a scaffolding tool used to automate project creation
+  description: "# Project Scaffolding\n\n## grunt-init\n\nGrunt-init is a scaffolding tool used to automate project creation. It will build an entire directory structure based on current environment and answers to some questions. The exact files and contents created depend on the template chosen along with the answers to the questions asked.\n\n*Note: This standalone utility used to be built-in to Grunt as the \"init\" task. See the Grunt [Upgrading from 0.3 to 0.4](upgrading-from-0.3-to-0.4) guide for more information about this change.*\n\n## Installation\n\nIn order to use grunt-init, you'll want to install it globally.\n\n``` javascript\nnpm install -g grunt-init\n```\n\nThis will put the `grunt-init` command in your system path, allowing it to be run from anywhere.\n\n*Notes: You may need to use sudo or run your command shell as Administrator to do this.*\n\n## Usage\n\n- Get program help and a listing of available templates with `grunt-init --help`\n- Create a project based around an available template with `grunt-init TEMPLATE`\n- Create a project based around a arbitrarily-located template with `grunt-init /path/to/TEMPLATE`\n\nNote that most templates generate their files in the current directory, so be sure to change to a new directory first if you don't want to overwrite existing files.\n\n## Installing templates\n\nOnce templates are installed into your `~/.grunt-init/` directory (`%USERPROFILE%\\.grunt-init\\` on Windows) they will be available for use via grunt-init. It's recommended that you use git to clone a template into that directory. For example, the [grunt-init-jquery](https://github.com/gruntjs/grunt-init-jquery) template can be installed like so:\n\n``` javascript\ngit clone https://github.com/gruntjs/grunt-init-jquery.git ~/.grunt-init/jquery\n```\n\n*Note: if you want to make the template available locally as \"foobarbaz\" you could specify `~/.grunt-init/foobarbaz` while cloning. Grunt-init will use the actual template directory name as it exists inside of the `~/.grunt-init/` directory.*\n\nA few grunt-init templates are maintained officially:\n\n- [grunt-init-commonjs](https://github.com/gruntjs/grunt-init-commonjs) - Create a commonjs module, including Nodeunit unit tests. ([sample \"generated\" repo](https://github.com/gruntjs/grunt-init-commonjs-sample/tree/generated) \\| [creation transcript](https://github.com/gruntjs/grunt-init-commonjs-sample#project-creation-transcript))\n- [grunt-init-gruntfile](https://github.com/gruntjs/grunt-init-gruntfile) - Create a basic Gruntfile. ([sample \"generated\" repo](https://github.com/gruntjs/grunt-init-gruntfile-sample/tree/generated) \\| [creation transcript](https://github.com/gruntjs/grunt-init-gruntfile-sample#project-creation-transcript))\n- [grunt-init-gruntplugin](https://github.com/gruntjs/grunt-init-gruntplugin) - Create a Grunt plugin, including Nodeunit unit tests. ([sample \"generated\" repo](https://github.com/gruntjs/grunt-init-gruntplugin-sample/tree/generated) \\| [creation transcript](https://github.com/gruntjs/grunt-init-gruntplugin-sample#project-creation-transcript))\n- [grunt-init-jquery](https://github.com/gruntjs/grunt-init-jquery) - Create a jQuery plugin, including QUnit unit tests. ([sample \"generated\" repo](https://github.com/gruntjs/grunt-init-jquery-sample/tree/generated) \\| [creation transcript](https://github.com/gruntjs/grunt-init-jquery-sample#project-creation-transcript))\n- [grunt-init-node](https://github.com/gruntjs/grunt-init-node) - Create a Node.js module, including Nodeunit unit tests. ([sample \"generated\" repo](https://github.com/gruntjs/grunt-init-node-sample/tree/generated) \\| [creation transcript](https://github.com/gruntjs/grunt-init-node-sample#project-creation-transcript))\n\n## Custom templates\n\nYou can create and use custom templates. Your template must follow the same structure as the aforementioned templates.\n\nA sample template named `my-template` would follow this general file structure:\n\n- `my-template/template.js` - the main template file.\n- `my-template/rename.json` - template-specific rename rules, processed as templates.\n- `my-template/root/` - files to be copied into the target location.\n\nAssuming these files exist at `/path/to/my-template`, the command `grunt-init /path/to/my-template` would be used to process the template. Multiple uniquely-named templates may exist in the same directory.\n\nAdditionally, if you place this custom template in your `~/.grunt-init/` directory (`%USERPROFILE%\\.grunt-init\\` on Windows) it will be automatically available to be used with just `grunt-init my-template`.\n\n### Copying files\n\nAs long as a template uses the `init.filesToCopy` and `init.copyAndProcess` methods, any files in the `root/` subdirectory will be copied to the current directory when the init template is run.\n\nNote that all copied files will be processed as templates, with any `{% %}` template being processed against the collected `props` data object, unless the `noProcess` option is set. See the [jquery template](https://github.com/gruntjs/grunt-init-jquery) for an example.\n\n### Renaming or excluding template files\n\nThe `rename.json` describes `sourcepath` to `destpath` rename mappings. The `sourcepath` must be the path of the file-to-be-copied relative to the `root/` folder, but the `destpath` value can contain `{% %}` templates, describing what the destination path will be.\n\nIf `false` is specified as a `destpath` the file will not be copied. Also, glob patterns are supported for `srcpath`.\n\n## Specifying default prompt answers\n\nEach init prompt either has a default value hard-coded or it looks at the current environment to attempt to determine that default value. If you want to override a particular prompt's default value, you can do so in the optional OS X or Linux `~/.grunt-init/defaults.json` or Windows `%USERPROFILE%\\.grunt-init\\defaults.json` file.\n\nFor example, my `defaults.json` file looks like this, because I want to use a slightly different name than the default name, I want to exclude my email address, and I want to specify an author URL automatically.\n\n``` javascript\n{\n  \"author_name\": \"\\\"Cowboy\\\" Ben Alman\",\n  \"author_email\": \"none\",\n  \"author_url\": \"http://benalman.com/\"\n}\n```\n\n*Note: until all the built-in prompts have been documented, you can find their names and default values in the [source code](https://github.com/gruntjs/grunt-init/blob/master/tasks/init.js).*\n\n## Defining an init template\n\n### exports.description\n\nThis brief template description will be displayed along with the template name when the user runs `grunt init` or `grunt-init` to display a list of all available init templates.\n\n``` javascript\nexports.description = descriptionString;\n```\n\n### exports.notes\n\nIf specified, this optional extended description will be displayed before any prompts are displayed. This is a good place to give the user a little help explaining naming conventions, which prompts may be required or optional, etc.\n\n``` javascript\nexports.notes = notesString;\n```\n\n### exports.warnOn\n\nIf this optional (but recommended) wildcard pattern or array of wildcard patterns is matched, Grunt will abort with a warning that the user can override with `--force`. This is very useful in cases where the init template could potentially override existing files.\n\n``` javascript\nexports.warnOn = wildcardPattern;\n```\n\nWhile the most common value will be `'*'`, matching any file or directory, the [minimatch](https://github.com/isaacs/minimatch) wildcard pattern syntax used allows for a lot of flexibility. For example:\n\n``` javascript\nexports.warnOn = 'Gruntfile.js';    // Warn on a Gruntfile.js file.\nexports.warnOn = '*.js';            // Warn on any .js file.\nexports.warnOn = '*';               // Warn on any non-dotfile or non-dotdir.\nexports.warnOn = '.*';              // Warn on any dotfile or dotdir.\nexports.warnOn = '{.*,*}';          // Warn on any file or dir (dot or non-dot).\nexports.warnOn = '!*/**';           // Warn on any file (ignoring dirs).\nexports.warnOn = '*.{png,gif,jpg}'; // Warn on any image file.\n\n// This is another way of writing the last example.\nexports.warnOn = ['*.png', '*.gif', '*.jpg'];\n```\n\n### exports.template\n\nWhile the `exports` properties are defined outside this function, all the actual init code is specified inside. Three arguments are passed into this function. The `grunt` argument is a reference to grunt, containing all the [grunt methods and libs](api/grunt). The `init` argument is an object containing methods and properties specific to this init template. The `done` argument is a function that must be called when the init template is done executing.\n\n``` javascript\nexports.template = function(grunt, init, done) {\n  // See the \"Inside an init template\" section.\n};\n```\n\n## Inside an init template\n\n### init.addLicenseFiles\n\nAdd properly-named license files to the files object.\n\n``` javascript\nvar files = {};\nvar licenses = ['MIT'];\ninit.addLicenseFiles(files, licenses);\n// files === {'LICENSE-MIT': 'licenses/LICENSE-MIT'}\n```\n\n### init.availableLicenses\n\nReturn an array of available licenses.\n\n``` javascript\nvar licenses = init.availableLicenses();\n// licenses === [ 'Apache-2.0', 'GPL-2.0', 'MIT', 'MPL-2.0' ]\n```\n\n### init.copy\n\nGiven an absolute or relative source path, and an optional relative destination path, copy a file, optionally processing it through the passed callback.\n\n``` javascript\ninit.copy(srcpath[, destpath], options)\n```\n\n### init.copyAndProcess\n\nIterate over all files in the passed object, copying the source file to the destination, processing the contents.\n\n``` javascript\ninit.copyAndProcess(files, props[, options])\n```\n\n### init.defaults\n\nUser-specified default init values from `defaults.json`.\n\n``` javascript\ninit.defaults\n```\n\n### init.destpath\n\nAbsolute destination file path.\n\n``` javascript\ninit.destpath()\n```\n\n### init.expand\n\nSame as [grunt.file.expand](https://github.com/gruntjs/grunt/wiki/grunt.file#wiki-grunt-file-expand).\n\nReturn a unique array of all file or directory paths that match the given wildcard pattern(s). This method accepts either comma separated wildcard patterns or an array of wildcard patterns. Paths matching patterns that begin with ! will be excluded from the returned array. Patterns are processed in order, so inclusion and exclusion order is significant.\n\n``` javascript\ninit.expand([options, ] patterns)\n```\n\n### init.filesToCopy\n\nReturn an object containing files to copy with their absolute source path and relative destination path, renamed (or omitted) according to rules in rename.json (if it exists).\n\n``` javascript\nvar files = init.filesToCopy(props);\n/* files === { '.gitignore': 'template/root/.gitignore',\n  '.jshintrc': 'template/root/.jshintrc',\n  'Gruntfile.js': 'template/root/Gruntfile.js',\n  'README.md': 'template/root/README.md',\n  'test/test_test.js': 'template/root/test/name_test.js' } */\n```\n\n### init.getFile\n\nGet a single task file path.\n\n``` javascript\ninit.getFile(filepath[, ...])\n```\n\n### init.getTemplates\n\nReturns an object of all the available templates.\n\n``` javascript\ninit.getTemplates()\n```\n\n### init.initSearchDirs\n\nInitialize the directories to search for init templates. `template` is the location of a template. Will also include `~/.grunt-init/` and the core init tasks within grunt-init.\n\n``` javascript\ninit.initSearchDirs([filename])\n```\n\n### init.process\n\nStart up the process to begin prompting for input.\n\n``` javascript\ninit.process(options, prompts, done)\n```\n\n``` javascript\ninit.process({}, [\n  // Prompt for these values\n  init.prompt('name'),\n  init.prompt('description'),\n  init.prompt('version')\n], function(err, props) {\n  // All finished, do something with the properties\n});\n```\n\n### init.prompt\n\nPrompt a user for a value.\n\n``` javascript\ninit.prompt(name[, default])\n```\n\n### init.prompts\n\nAn object of all the prompts.\n\n``` javascript\nvar prompts = init.prompts;\n```\n\n### init.readDefaults\n\nRead JSON defaults from task files (if they exist), merging them into one data object.\n\n``` javascript\ninit.readDefaults(filepath[, ...])\n```\n\n### init.renames\n\nThe rename rules for the template.\n\n``` javascript\nvar renames = init.renames;\n// renames === { 'test/name_test.js': 'test/{%= name %}_test.js' }\n```\n\n### init.searchDirs\n\nAn array of directories to search for templates in.\n\n``` javascript\nvar dirs = init.searchDirs;\n/* dirs === [ '/Users/shama/.grunt-init',\n  '/usr/local/lib/node_modules/grunt-init/templates' ] */\n```\n\n### init.srcpath\n\nSearch init template paths for filename and return an absolute path.\n\n``` javascript\ninit.srcpath(filepath[, ...])\n```\n\n### init.userDir\n\nReturns the absolute path to the user's template directory.\n\n``` javascript\nvar dir = init.userDir();\n// dir === '/Users/shama/.grunt-init'\n```\n\n### init.writePackageJSON\n\nSave a package.json file in the destination directory. The callback can be used to post-process properties to add/remove/whatever.\n\n``` javascript\ninit.writePackageJSON(filename, props[, callback])\n```\n\n## Built-in prompts\n\n### author_email\n\nAuthor's email address to use in the `package.json`. Will attempt to find a default value from the user's git config.\n\n### author_name\n\nAuthor's full name to use in the `package.json` and copyright notices. Will attempt to find a default value from the user's git config.\n\n### author_url\n\nA public URL to the author's website to use in the `package.json`.\n\n### bin\n\nA relative path from the project root for a cli script.\n\n### bugs\n\nA public URL to the project's issues tracker. Will default to the GitHub issue tracker if the project has a GitHub repository.\n\n### description\n\nA description of the project. Used in the `package.json` and README files.\n\n### grunt_version\n\nA valid semantic version range descriptor of Grunt the project requires.\n\n### homepage\n\nA public URL to the project's home page. Will default to the GitHub URL if a GitHub repository.\n\n### jquery_version\n\nIf a jQuery project, the version of jQuery the project requires. Must be a valid semantic version range descriptor.\n\n### licenses\n\nThe license(s) for the project. Multiple licenses are separated by spaces. The licenses built-in are: `MIT`, `MPL-2.0`, `GPL-2.0`, and `Apache-2.0`. Defaults to `MIT`. Add custom licenses with [init.addLicenseFiles](project-scaffolding#init.addlicensefiles).\n\n### main\n\nThe primary entry point of the project. Defaults to the project name within the `lib` folder.\n\n### name\n\nThe name of the project. Will be used heavily throughout the project template. Defaults to the current working directory.\n\n### node_version\n\nThe version of Node.js the project requires. Must be a valid semantic version range descriptor.\n\n### npm_test\n\nThe command to run tests on your project. Defaults to `grunt`.\n\n### repository\n\nProject's git repository. Defaults to a guess of a GitHub URL.\n\n### title\n\nA human readable project name. Defaults to the actual project name altered to be more human readable.\n\n### version\n\nThe version of the project. Defaults to the first valid semantic version, `0.1.0`.\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/project-scaffolding](https://gruntjs.com/project-scaffolding)"
+- name: Sample Gruntfile
+  id: sample-gruntfile
+  summary: In this page we walk you through the creation of a Gruntfile that covers the usual needs of a simple project
+  description: "# Sample Gruntfile\n\nIn this page we walk you through the creation of a `Gruntfile` that covers the usual needs of a simple project. If you already know how to set up a `Gruntfile` and you're looking for a quick example, here's one:\n\n``` javascript\nmodule.exports = function(grunt) {\n\n  grunt.initConfig({\n    jshint: {\n      files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],\n      options: {\n        globals: {\n          jQuery: true\n        }\n      }\n    },\n    watch: {\n      files: ['<%= jshint.files %>'],\n      tasks: ['jshint']\n    }\n  });\n\n  grunt.loadNpmTasks('grunt-contrib-jshint');\n  grunt.loadNpmTasks('grunt-contrib-watch');\n\n  grunt.registerTask('default', ['jshint']);\n\n};\n```\n\n## Requirements\n\nEvery project has its own needs, but most of them have something in common. In this guide we introduce you to a few Grunt plugins to automate basic requirements. The final goal is to teach you how to configure these Grunt plugins so that you can use them in your projects.\n\nFor the sake of the example, let's say that you're creating a JavaScript library. The typical folder structure features the following folders: `src`, `dist`, and `test`. The `src` folder (sometimes called `app`) contains the source code of the library as you author it. The `dist` folder (sometimes called `build`) contains the distribution, a minified version of the source code. A minified file is one where all unnecessary characters, such as spaces, new lines, comments are removed, without affecting the functionality of the source code. Minified source code is especially useful for users of the project because it reduces the amount of data that needs to be transferred. Finally, the `test` folder contains the code to test the project. This set up will be used in the next sections when creating the `Gruntfile` configuration.\n\nWhile developing the library and releasing new versions there are a few tasks that you need to perform on a regular basis. For example, you might want to ensure that the code you write adheres to best practices, or that the code you've written doesn't result in unexpected behaviors. To do that, you can employ a tool called [JSHint](http://jshint.com/about/). Grunt has an official plugin for it called [grunt-contrib-jshint](https://github.com/gruntjs/grunt-contrib-jshint) which we'll adopt in this example. In particular, you might want to ensure that as you modify your code, you don't break any rules or best practices. So, a good strategy is to check the code at every change you perform. To do that, we'll cover a Grunt plugin called [grunt-contrib-watch](https://github.com/gruntjs/grunt-contrib-watch). The latter runs predefined tasks, such as `grunt-contrib-jshint`, whenever files are added, changed, or deleted.\n\nChecking that your source code follows best practices is not enough to guarantee that it's stable and doesn't contain bugs. To create a robust project, you need to test it. There are several libraries you can adopt such as [QUnit](https://qunitjs.com/) or [Jasmine](http://jasmine.github.io/). In this guide, we describe how to configure QUnit, and specifically [grunt-contrib-qunit](https://github.com/gruntjs/grunt-contrib-qunit), to test your code.\n\nWhen it comes to distributing your work, you want to offer a version as small in size as possible. To create a minified version you need a Grunt plugin like [grunt-contrib-uglify](https://github.com/gruntjs/grunt-contrib-uglify). Moreover, unless the project you're developing is very small, chances are that you've split the code in multiple files. While this is a good practice for the developer, you want users to include only one file. So, before minifying the code, you should concatenate the source files to create a single one. To achieve this goal you need a Grunt plugin like [grunt-contrib-concat](https://github.com/gruntjs/grunt-contrib-concat).\n\nTo sum up, in this guide we'll use the following five Grunt plugins:\n\n- [grunt-contrib-uglify](https://github.com/gruntjs/grunt-contrib-uglify)\n- [grunt-contrib-qunit](https://github.com/gruntjs/grunt-contrib-qunit)\n- [grunt-contrib-concat](https://github.com/gruntjs/grunt-contrib-concat)\n- [grunt-contrib-jshint](https://github.com/gruntjs/grunt-contrib-jshint)\n- [grunt-contrib-watch](https://github.com/gruntjs/grunt-contrib-watch)\n\nIf you're curious about what the final result looks like, the entire `Gruntfile` can be found at the bottom of this page.\n\n## Setting up the `Gruntfile`\n\nThe first part is the \"wrapper\" function, which encapsulates your Grunt configuration.\n\n``` javascript\nmodule.exports = function(grunt) {\n};\n```\n\nWithin that function we can initialize our configuration object:\n\n``` javascript\ngrunt.initConfig({\n});\n```\n\nNext, we can store the project settings from the `package.json` file into the `pkg` property. This allows us to refer to the values of properties within our `package.json` file, as we'll see shortly.\n\n``` javascript\npkg: grunt.file.readJSON('package.json')\n```\n\nThis leaves us with this so far:\n\n``` javascript\nmodule.exports = function(grunt) {\n  grunt.initConfig({\n    pkg: grunt.file.readJSON('package.json')\n  });\n};\n```\n\nNow we can define a configuration for each of the tasks we mentioned. The configuration object for a plugin lives as a property on the configuration object, that often shares the same name as its plugin. The configuration for `grunt-contrib-concat` goes in the configuration object under the `concat` key as shown below:\n\n``` javascript\nconcat: {\n  options: {\n    // define a string to put between each file in the concatenated output\n    separator: ';'\n  },\n  dist: {\n    // the files to concatenate\n    src: ['src/**/*.js'],\n    // the location of the resulting JS file\n    dest: 'dist/<%= pkg.name %>.js'\n  }\n}\n```\n\nNote how in the snippet above we refer to the `name` property that's in the JSON file. We access it by using `pkg.name` as earlier we defined the `pkg` property to be the result of loading the `package.json` file, which is then parsed to a JavaScript object. Grunt has a simple template engine to output the values of properties in the configuration object. Here we tell the `concat` task to concatenate all files that exist within `src/` and end in `.js`.\n\nNow let's configure the `grunt-contrib-uglify` plugin, which minifies the JavaScript code:\n\n``` javascript\nuglify: {\n  options: {\n    // the banner is inserted at the top of the output\n    banner: '/*! <%= pkg.name %> <%= grunt.template.today(\"dd-mm-yyyy\") %> */\\n'\n  },\n  dist: {\n    files: {\n      'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']\n    }\n  }\n}\n```\n\nThis snippet tells `grunt-contrib-uglify` to create a file within `dist/` that contains the result of minifying the JavaScript files. Here we use `<%= concat.dist.dest %>` so uglify will minify the file that the concat task produces.\n\nUp to this point, we have configured the plugins to create the distribution version the library. It's now time to use `grunt-contrib-qunit` to automate the testing of the code. To do that, we need to give to specify the location of the test runner files, which are the HTML files QUnit runs on. The resulting code is reported below:\n\n``` javascript\nqunit: {\n  files: ['test/**/*.html']\n},\n```\n\nOnce done, it's time to set up the configuration to ensure that the code of the project adheres to best practices. JSHint is a tool that can detect issues or potential issues like a high cyclomatic complexity, the use of the equality operator instead of the strict equality operator, and the definition of unused variables and functions.\n\nWe advise you to analyze with `grunt-contrib-jshint` all the JavaScript files of your project, including `Gruntfile` and the test files. An example of configuration of `grunt-contrib-jshint` is the following:\n\n``` javascript\njshint: {\n  // define the files to lint\n  files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],\n  // configure JSHint (documented at http://www.jshint.com/docs/)\n  options: {\n    // more options here if you want to override JSHint defaults\n    globals: {\n      jQuery: true,\n      console: true,\n      module: true\n    }\n  }\n}\n```\n\nThis plugin takes an array of files and then an object of options. These are all [documented on the JSHint site](http://www.jshint.com/docs/). If you're happy with the plugin defaults, there's no need to redefine them in the Gruntfile.\n\nThe last plugin left to configure is `grunt-contrib-watch`. We'll use it to run the `jshint` and the `qunit` tasks as soon as a JavaScript file is added, deleted, or modified. When it detects any of the files specified have changed (here, we use the same files we told JSHint to check), it will run the tasks you specify, in the order they appear. This can be run on the command line with `grunt watch`.\n\nTurning the previous description into a configuration for `grunt-contrib-watch` results in the snippet below:\n\n``` javascript\nwatch: {\n  files: ['<%= jshint.files %>'],\n  tasks: ['jshint', 'qunit']\n}\n```\n\nWith this snippet, we've set up the configuration for all the plugins mentioned in the introduction. The last step to perform is to load in the Grunt plugins we need. All of these should have been previously installed through npm.\n\n``` javascript\ngrunt.loadNpmTasks('grunt-contrib-uglify');\ngrunt.loadNpmTasks('grunt-contrib-jshint');\ngrunt.loadNpmTasks('grunt-contrib-qunit');\ngrunt.loadNpmTasks('grunt-contrib-watch');\ngrunt.loadNpmTasks('grunt-contrib-concat');\n```\n\nAnd finally set up some tasks. The most important of these tasks is the default task:\n\n``` javascript\n// this would be run by typing \"grunt test\" on the command line\ngrunt.registerTask('test', ['jshint', 'qunit']);\n\n// the default task can be run just by typing \"grunt\" on the command line\ngrunt.registerTask('default', ['jshint', 'qunit', 'concat', 'uglify']);\n```\n\nThe default task is executed when you invoke `Grunt` without specifying a task to execute (`grunt`).\n\n## The resulting `Gruntfile`\n\nIf you've followed this guide correctly you should have the following `Gruntfile`:\n\n``` javascript\nmodule.exports = function(grunt) {\n\n  grunt.initConfig({\n    pkg: grunt.file.readJSON('package.json'),\n    concat: {\n      options: {\n        separator: ';'\n      },\n      dist: {\n        src: ['src/**/*.js'],\n        dest: 'dist/<%= pkg.name %>.js'\n      }\n    },\n    uglify: {\n      options: {\n        banner: '/*! <%= pkg.name %> <%= grunt.template.today(\"dd-mm-yyyy\") %> */\\n'\n      },\n      dist: {\n        files: {\n          'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']\n        }\n      }\n    },\n    qunit: {\n      files: ['test/**/*.html']\n    },\n    jshint: {\n      files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],\n      options: {\n        // options here to override JSHint defaults\n        globals: {\n          jQuery: true,\n          console: true,\n          module: true,\n          document: true\n        }\n      }\n    },\n    watch: {\n      files: ['<%= jshint.files %>'],\n      tasks: ['jshint', 'qunit']\n    }\n  });\n\n  grunt.loadNpmTasks('grunt-contrib-uglify');\n  grunt.loadNpmTasks('grunt-contrib-jshint');\n  grunt.loadNpmTasks('grunt-contrib-qunit');\n  grunt.loadNpmTasks('grunt-contrib-watch');\n  grunt.loadNpmTasks('grunt-contrib-concat');\n\n  grunt.registerTask('test', ['jshint', 'qunit']);\n\n  grunt.registerTask('default', ['jshint', 'qunit', 'concat', 'uglify']);\n\n};\n```\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/sample-gruntfile](https://gruntjs.com/sample-gruntfile)"
+- name: this.args
+  id: api/inside-tasks#
+  summary: While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the this object
+  description: |-
+    # Inside Tasks
+
+    While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. This same object is also exposed as `grunt.task.current` for use in [templates](https://gruntjs.com/grunt.template), eg. the property `this.name` is also available as `grunt.task.current.name`.
+- name: this.async
+  id: api/inside-tasks#
+  summary: While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the this object
+  description: |-
+    # Inside Tasks
+
+    While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. This same object is also exposed as `grunt.task.current` for use in [templates](https://gruntjs.com/grunt.template), eg. the property `this.name` is also available as `grunt.task.current.name`.
+- name: this.data
+  id: api/inside-tasks#
+  summary: While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the this object
+  description: |-
+    # Inside Tasks
+
+    While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. This same object is also exposed as `grunt.task.current` for use in [templates](https://gruntjs.com/grunt.template), eg. the property `this.name` is also available as `grunt.task.current.name`.
+- name: this.errorCount
+  id: api/inside-tasks#
+  summary: While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the this object
+  description: |-
+    # Inside Tasks
+
+    While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. This same object is also exposed as `grunt.task.current` for use in [templates](https://gruntjs.com/grunt.template), eg. the property `this.name` is also available as `grunt.task.current.name`.
+- name: this.files
+  id: api/inside-tasks#
+  summary: While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the this object
+  description: |-
+    # Inside Tasks
+
+    While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. This same object is also exposed as `grunt.task.current` for use in [templates](https://gruntjs.com/grunt.template), eg. the property `this.name` is also available as `grunt.task.current.name`.
+- name: this.filesSrc
+  id: api/inside-tasks#
+  summary: While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the this object
+  description: |-
+    # Inside Tasks
+
+    While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. This same object is also exposed as `grunt.task.current` for use in [templates](https://gruntjs.com/grunt.template), eg. the property `this.name` is also available as `grunt.task.current.name`.
+- name: this.flags
+  id: api/inside-tasks#
+  summary: While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the this object
+  description: |-
+    # Inside Tasks
+
+    While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. This same object is also exposed as `grunt.task.current` for use in [templates](https://gruntjs.com/grunt.template), eg. the property `this.name` is also available as `grunt.task.current.name`.
+- name: this.name
+  id: api/inside-tasks#
+  summary: While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the this object
+  description: |-
+    # Inside Tasks
+
+    While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. This same object is also exposed as `grunt.task.current` for use in [templates](https://gruntjs.com/grunt.template), eg. the property `this.name` is also available as `grunt.task.current.name`.
+- name: this.nameArgs
+  id: api/inside-tasks#
+  summary: While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the this object
+  description: |-
+    # Inside Tasks
+
+    While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. This same object is also exposed as `grunt.task.current` for use in [templates](https://gruntjs.com/grunt.template), eg. the property `this.name` is also available as `grunt.task.current.name`.
+- name: this.options
+  id: api/inside-tasks#
+  summary: While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the this object
+  description: |-
+    # Inside Tasks
+
+    While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. This same object is also exposed as `grunt.task.current` for use in [templates](https://gruntjs.com/grunt.template), eg. the property `this.name` is also available as `grunt.task.current.name`.
+- name: this.requires
+  id: api/inside-tasks#
+  summary: While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the this object
+  description: |-
+    # Inside Tasks
+
+    While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. This same object is also exposed as `grunt.task.current` for use in [templates](https://gruntjs.com/grunt.template), eg. the property `this.name` is also available as `grunt.task.current.name`.
+- name: this.requiresConfig
+  id: api/inside-tasks#
+  summary: While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the this object
+  description: |-
+    # Inside Tasks
+
+    While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. This same object is also exposed as `grunt.task.current` for use in [templates](https://gruntjs.com/grunt.template), eg. the property `this.name` is also available as `grunt.task.current.name`.
+- name: this.target
+  id: api/inside-tasks#
+  summary: While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the this object
+  description: |-
+    # Inside Tasks
+
+    While a task is running, Grunt exposes many task-specific utility properties and methods inside the task function via the `this` object. This same object is also exposed as `grunt.task.current` for use in [templates](https://gruntjs.com/grunt.template), eg. the property `this.name` is also available as `grunt.task.current.name`.
+- name: Upgrading from 0.3 to 0.4
+  id: upgrading-from-0.3-to-0.4
+  summary: Note that even if you are familiar with grunt, it would be worthwhile to read the new Getting started guide
+  description: "# Upgrading from 0.3 to 0.4\n\n*Note that even if you are familiar with grunt, it would be worthwhile to read the new [Getting started](https://gruntjs.com/getting-started/) guide.*\n\nGrunt is now split into three parts: `grunt`, `grunt-cli` and `grunt-init`.\n\n1.  The npm module `grunt` should be installed locally to your project. It contains the code and logic for running tasks, loading plugins, etc.\n2.  The npm module `grunt-cli` should be installed globally. It puts the `grunt` command in your PATH so you can execute it anywhere. By itself, it doesn't do anything; its job is to load and run the Grunt that has been installed locally to your project, regardless of the version. For more information about why this has changed, please read [npm 1.0: Global vs Local installation](http://blog.nodejs.org/2011/03/23/npm-1-0-global-vs-local-installation).\n3.  The `init` task has been broken into its own npm module, `grunt-init`. It should be installed globally with `npm install -g grunt-init` and run with the `grunt-init` command. In the coming months, [Yeoman](http://yeoman.io/) will completely replace grunt-init. See the [grunt-init project page](https://github.com/gruntjs/grunt-init) for more information.\n\n## Grunt 0.3 Notes\n\nIf you are upgrading from Grunt 0.3, make sure to uninstall global `grunt`:\n\n``` javascript\nnpm uninstall -g grunt\n```\n\n*Note that for 0.3.x, plugin names and task configuration options may be different than those shown in \"The Gruntfile\" section.*\n\n*This file was named `grunt.js` for 0.3.x versions of Grunt.*\n\n## Pre-existing tasks and plugins\n\nAll `grunt-contrib-*` series plugins are Grunt 0.4 ready. However, it is highly unlikely that third party plugins written for Grunt 0.3 will continue to work with 0.4 until they have been updated. We are actively working with plugin authors to ensure this happens as swiftly as possible.\n\n*A forthcoming Grunt release will be focused on decoupling grunt's architecture so that plugins are not affected by future updates.*\n\n## Requirements\n\n- Grunt now requires Node.js version `>= 0.8.0`\n\n## The Gruntfile\n\n- The \"Gruntfile\" has changed from `grunt.js` to `Gruntfile.js`.\n- CoffeeScript is supported in your `Gruntfile.coffee` project `Gruntfile` or `*.coffee` task files (transpiling to JS happens automatically).\n\nSee the \"The Gruntfile\" section of the [Getting started](https://gruntjs.com/getting-started/) guide for more information.\n\n## Core Tasks are now Grunt Plugins\n\nThe eight core tasks that were included in Grunt 0.3 are now separate Grunt plugins. Each is a discrete npm module that must be installed as a plugin per the \"Loading Grunt plugins and tasks\" section of the [Getting started](https://gruntjs.com/getting-started/) guide.\n\n- concat → [grunt-contrib-concat](https://github.com/gruntjs/grunt-contrib-concat) plugin\n- init → stand-alone [grunt-init](https://github.com/gruntjs/grunt-init) utility\n- lint → [grunt-contrib-jshint](https://github.com/gruntjs/grunt-contrib-jshint) plugin\n- min → [grunt-contrib-uglify](https://github.com/gruntjs/grunt-contrib-uglify) plugin\n- qunit → [grunt-contrib-qunit](https://github.com/gruntjs/grunt-contrib-qunit) plugin\n- server → [grunt-contrib-connect](https://github.com/gruntjs/grunt-contrib-connect) plugin\n- test → [grunt-contrib-nodeunit](https://github.com/gruntjs/grunt-contrib-nodeunit) plugin\n- watch → [grunt-contrib-watch](https://github.com/gruntjs/grunt-contrib-watch) plugin\n\nSome task names and options have changed. Be sure to see each plugin's documentation as linked above for the latest configuration details.\n\n## Configuration\n\nThe configuration format for Grunt 0.4 tasks has been standardized and greatly enhanced. See the [Configuring tasks](https://gruntjs.com/configuring-tasks/) guide, as well as individual plugin documentation for more information.\n\n- File globbing (wildcard) patterns may now be negated to exclude matched files.\n- Tasks now support a standard `options` object.\n- Tasks now support a standard `files` object.\n\n`<% %>` style template strings specified as config data inside the `Gruntfile` are automatically expanded, see the [grunt.template](https://gruntjs.com/grunt.template/) documentation for more information.\n\n**Directives have been removed**, but their functionality has been retained. These replacements can be made:\n\n- `'<config:prop.subprop>'` → `'<%= prop.subprop %>'`\n- `'<json:file.json>'` → `grunt.file.readJSON('file.json')`\n- `'<file_template:file.js>'` → `grunt.template.process(grunt.file.read('file.js'))`\n\nInstead of specifying a banner in a file list with `'<banner>'` or `'<banner:prop.subprop>'`, the [grunt-contrib-concat](https://github.com/gruntjs/grunt-contrib-concat) and [grunt-contrib-uglify](https://github.com/gruntjs/grunt-contrib-uglify) plugins each have a `banner` option.\n\nInstead of stripping banners from files individually with `'<file_strip_banner:file.js>'`, the [grunt-contrib-concat](https://github.com/gruntjs/grunt-contrib-concat) and [grunt-contrib-uglify](https://github.com/gruntjs/grunt-contrib-uglify) plugins each have an option to strip/preserve banners.\n\n## Alias task changes\n\nWhen specifying an alias task, the list of tasks to run must now be specified as an array.\n\n``` javascript\n// v0.3.x (old format)\ngrunt.registerTask('default', 'jshint nodeunit concat');\n// v0.4.x (new format)\ngrunt.registerTask('default', ['jshint', 'nodeunit', 'concat']);\n```\n\n## Task arguments may now contain spaces\n\nThe aforementioned alias task change (task lists must be specified as an array) makes this possible. Just be sure to surround task arguments containing spaces with quotes when specifying them on the command line, so they can be properly parsed.\n\n``` javascript\ngrunt my-task:argument-without-spaces \"other-task:argument with spaces\"\n```\n\n## Character encodings\n\nThe [file.defaultEncoding](https://gruntjs.com/grunt.file#wiki-grunt-file-defaultencoding) method was added to normalize character encodings, and all `grunt.file` methods have been updated to support the specified encoding.\n\n## Helpers\n\nGrunt's helper system has been removed in favor of node `require`. For a concise example on how to share functionality between Grunt plugins, please see [grunt-lib-legacyhelpers](https://github.com/gruntjs/grunt-lib-legacyhelpers). Plugin authors are encouraged to upgrade their plugins.\n\n## API\n\nThe Grunt API saw substantial changes from 0.3 to 0.4.\n\n- [grunt](https://gruntjs.com/grunt)\n  - Removed `grunt.registerHelper` and `grunt.renameHelper` methods.\n- [grunt.config](https://gruntjs.com/grunt.config)\n  - Changed [config.get](https://gruntjs.com/grunt.config#wiki-grunt-config-get) method to automatically recursively expand `<% %>` templates.\n  - Added [config.getRaw](https://gruntjs.com/grunt.config#wiki-grunt-config-getraw) method that will retrieve raw (unexpanded) config data.\n  - Changed [config.process](https://gruntjs.com/grunt.config#wiki-grunt-config-process) method to now process a value as if it had been retrieved from the config, expanding templates recursively. This method is called internally inside of `config.get`, but *not* inside of `config.getRaw`.\n- [grunt.event](https://gruntjs.com/grunt.event) added so that tasks may emit events.\n- [grunt.fail](https://gruntjs.com/grunt.fail)\n  - Won't emit a beep if `--no-color` option specified.\n  - Added `fail.code` exit code map.\n  - Removed `fail.warnAlternate` method.\n- [grunt.file](https://gruntjs.com/grunt.file)\n  - Tasks are no longer automatically loaded from `~/.grunt/tasks/` directory (install them locally to your project!).\n  - Added [file.defaultEncoding](https://gruntjs.com/grunt.file#wiki-grunt-file-defaultencoding) method for normalizing character encoding across all `grunt.file` methods.\n  - Added [file.delete](https://gruntjs.com/grunt.file#wiki-grunt-file-delete) method.\n  - Added relatively self-explanatory [file.exists](https://gruntjs.com/grunt.file#wiki-grunt-file-exists), [file.isDir](https://gruntjs.com/grunt.file#wiki-grunt-file-isdir), [file.isFile](https://gruntjs.com/grunt.file#wiki-grunt-file-isfile), [file.isLink](https://gruntjs.com/grunt.file#wiki-grunt-file-islink), [file.isPathCwd](https://gruntjs.com/grunt.file#wiki-grunt-file-ispathcwd), [file.isPathInCwd](https://gruntjs.com/grunt.file#wiki-grunt-file-ispathincwd), [file.doesPathContain](https://gruntjs.com/grunt.file#wiki-grunt-file-doespathcontain), [file.arePathsEquivalent](https://gruntjs.com/grunt.file#wiki-grunt-file-arepathsequivalent) testing methods.\n  - Added [file.match](https://gruntjs.com/grunt.file#wiki-grunt-file-match) and [file.isMatch](https://gruntjs.com/grunt.file#wiki-grunt-file-ismatch) methods to facilitate matching wildcard patterns against file paths.\n  - Added [file.expandMapping](https://gruntjs.com/grunt.file#wiki-grunt-file-expandmapping) method for use in generating 1-to-1 src-dest file mappings.\n  - Added [file.readYAML](https://gruntjs.com/grunt.file#wiki-grunt-file-readyaml) method.\n  - Changed [file.findup](https://gruntjs.com/grunt.file#wiki-grunt-file-findup) to use the [findup-sync](https://github.com/cowboy/node-findup-sync) module.\n  - Changed [file.glob](https://gruntjs.com/grunt.file#wiki-grunt-file-glob) to use the [glob](https://github.com/isaacs/node-glob) module.\n  - Added [file.minimatch](https://gruntjs.com/grunt.file#wiki-grunt-file-minimatch) which exposes the [minimatch](https://github.com/isaacs/minimatch) module.\n  - Removed `file.userDir` method (moved into [grunt-init](https://github.com/gruntjs/grunt-init)).\n  - Removed `file.clearRequireCache` method.\n  - Removed `file.expandFiles` and `file.expandDirs` methods, use the `filter` option of `file.expand` instead.\n  - Removed `file.expandFileURLs` method. Don't specify URLs where files should be specified (eg. the qunit task now allows for a `urls` option).\n- [grunt.task](https://gruntjs.com/grunt#wiki-grunt-task)\n  - Tasks registered with both [task.registerTask](https://gruntjs.com/grunt.task#wiki-grunt-task-registertask) and [task.registerMultiTask](https://gruntjs.com/grunt.task#wiki-grunt-task-registermultitask) get a `this.options` method.\n  - Added [task.normalizeMultiTaskFiles](https://gruntjs.com/grunt.task#wiki-grunt-task-normalizemultitaskfiles) method to facilitate the normalization of multi task `files` objects into the `this.file` property.\n  - Removed `task.registerHelper` and `task.renameHelper` methods.\n  - Removed `task.searchDirs` property.\n  - Removed `task.expand` `task.expandDirs` `task.expandFiles` `task.getFile` `task.readDefaults` methods (moved into [grunt-init](https://github.com/gruntjs/grunt-init)).\n- [grunt.package](https://gruntjs.com/grunt#wiki-grunt-package) reflects the metadata stored in grunt's `package.json`.\n- [grunt.version](https://gruntjs.com/grunt#wiki-grunt-version) is the current version of Grunt as a string.\n- [grunt.template](https://gruntjs.com/grunt.template)\n  - Added [template.addDelimiters](https://gruntjs.com/grunt.template#wiki-grunt-template-adddelimiters) method to add new template delimiters.\n  - Added [template.setDelimiters](https://gruntjs.com/grunt.template#wiki-grunt-template-setdelimiters) method to select template delimiters.\n  - The `init` and `user` template delimiters have been removed, but you can add them in again if you need to with `template.addDelimiters` ([grunt-init](https://github.com/gruntjs/grunt-init) uses this to enable the `{% %}` template delimiters).\n- [grunt.util](https://gruntjs.com/grunt.util) replaces the now-removed `grunt.utils`.\n  - Changed `util._` to use [Lo-Dash](http://lodash.com/)\n  - Added the [util.callbackify](https://gruntjs.com/grunt.util#wiki-grunt-util-callbackify) method.\n  - Changed the [util.spawn](https://gruntjs.com/grunt.util#wiki-grunt-util-spawn) method to be much better behaved and pass more consistent arguments into its callback.\n\n## Task / plugin authors\n\n**Plugin authors, please indicate clearly on your repository README which version number of your Grunt plugin breaks compatibility with Grunt 0.3.**\n\n### Tasks\n\n- Multi tasks\n  - Multiple src-dest file mappings may now be specified per target in a `files` object (this is optional).\n- [this.files / grunt.task.current.files](https://gruntjs.com/grunt.task#wiki-this-files)\n  - The `this.files` property is an array of src-dest file mapping objects to be iterated over in your multi task. It will always be an array, and you should always iterate over it, even if the most common use case is to specify a single file.\n  - Each src-dest file mapping object has a `src` and `dest` property (and possibly others, depending on what the user specified). The `src` property is already expanded from whatever glob pattern the user may have specified.\n- [this.filesSrc / grunt.task.current.filesSrc](https://gruntjs.com/grunt.task#wiki-this-filessrc)\n  - The `this.filesSrc` property is a reduced, uniqued array of all files matched by all specified `src` properties. Useful for read-only tasks.\n- [this.options / grunt.task.current.options](https://gruntjs.com/grunt.task#wiki-this-options)\n  - The `this.options` method may be used within tasks to normalize options. Inside a task, you may specify options defaults like: `var options = this.options({option: 'defaultvalue', ...});`\n\n### Plugins\n\n- An updated `gruntplugin` template has been created for Grunt 0.4-compatible plugins, and is available in the standalone [grunt-init](https://github.com/gruntjs/grunt-init).\n\n## Troubleshooting\n\n- If you had previously installed a development version of Grunt 0.4 or any grunt-contrib plugins, be sure to flush your npm cache with `npm cache clean` first to ensure that you are pulling the final version of Grunt and grunt-contrib plugins.\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/upgrading-from-0.3-to-0.4](https://gruntjs.com/upgrading-from-0.3-to-0.4)"
+- name: Upgrading from 0.4 to 1.0
+  id: upgrading-from-0.4-to-1.0
+  summary: This guide is here to help you update your projects and plugins from Grunt 0.4.x to Grunt 1.0
+  description: "# Upgrading from 0.4 to 1.0\n\nThis guide is here to help you update your projects and plugins from Grunt 0.4.x to Grunt 1.0.\n\n**Be advised Grunt 1.0.0 no longer supports Node.js v0.8.**\n\n## For Projects that use Grunt\n\n### Peer Dependencies\n\nYou might receive `peerDependencies` errors when you install a project with Grunt 1.0. We ask you to send pull requests to your favourite plugins and ask them to update the peerDependencies section of their package.json. See below for details about plugin updates.\n\n## For Plugins and Plugin developers\n\n### Peer Dependencies\n\nIf you have a Grunt plugin that includes grunt in the peerDependencies section of your package.json, we recommend tagging with \"grunt\": \"\\>=0.4.0\". Otherwise when grunt@1.0.0 is released, npm@2 users will receive a hard error when trying to install your plugin and npm@3 users will get a warning.\n\nBe aware, peer dependencies are no longer installed for users as of npm@3. Users of Grunt plugins are expected to npm install grunt --save-dev alongside any Grunt plugin install.\n\nWe ask you to update your plugin with `\"grunt\": \">=0.4.0\"` in it and publish that on npm.\n\n### Changes in 1.0.0\n\n- Prevent async callback from being called multiple times. Pull \\#1464.\n- Update copyright to jQuery Foundation and remove redundant headers. Fixes \\#1478.\n- Update glob to 7.0.x. Fixes \\#1467.\n- Removing duplicate BOM strip code. Pull \\#1482.\n- Updated to latest cli ~1.2.0\n- Ensure a grunt bin gets created upon install.\n\n### Changes in Grunt 1.0 RC1:\n\nBe aware, some APIs have changed warranting a major version update:\n\n- `coffee-script` is upgraded to `~1.10.0` which could incur breaking changes when using the language with plugins and Gruntfiles.\n- `nopt` is upgraded to `~3.0.6` which has fixed many issues, including passing multiple arguments and dealing with numbers as options. Be aware previously `--foo bar` used to pass the value `'bar'` to the option `foo`. It will now set the option `foo` to `true` and run the task `bar`.\n- `glob` is upgraded to `~6.0.4` and `minimatch` is upgraded to `~3.0.0`. Results are now sorted by default with `grunt.file.expandMapping()`. Pass the `nosort: true` option if you don't want the results to be sorted.\n- `lodash` was upgraded to `~4.3.0`. Many changes have occurred. Some of which that directly effect Grunt are `grunt.util._.template()` returns a compile function and `grunt.util._.flatten` no longer flattens deeply. `grunt.util._` is deprecated and we highly encourage you to `npm install lodash` and `var _ = require('lodash')` to use `lodash`. Please see the lodash changelog for a full list of changes: <https://github.com/lodash/lodash/wiki/Changelog>\n- `iconv-lite` is upgraded to `~0.4.13` and strips the BOM by default.\n- `js-yaml` is upgraded to `~3.5.2` and may affect `grunt.file.readYAML`. We encourage you to please `npm install js-yaml` and use `var YAML = require('js-yaml')` directly in case of future deprecations.\n- A file `mode` option can be passed into [grunt.file.write()](api/grunt.file#grunt.file.write).\n- `Done, without errors.` was changed to `Done.` to avoid failing by mistake on the word `errors`.\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/upgrading-from-0.4-to-1.0](https://gruntjs.com/upgrading-from-0.4-to-1.0)"
+- name: Using the CLI
+  id: using-the-cli
+  summary: Run sudo npm install -g grunt-cli (Windows users should omit "sudo ", and may need to run the command-line with elevated privileges)
+  description: "# Using the CLI\n\n## Installing the CLI\n\nRun `sudo npm install -g grunt-cli` (Windows users should omit \"sudo \", and may need to run the command-line with elevated privileges).\n\nThe `grunt` command-line interface comes with a series of options. Use `grunt -h` from your terminal to show these options.\n\n### --help, -h\n\nDisplay help text\n\n### --base, -b\n\nSpecify an alternate base path. By default, all file paths are relative to the `Gruntfile`.\n\nAlternative to `grunt.file.setBase(...)`\n\n### --no-color\n\nDisable colored output.\n\n### --gruntfile\n\nSpecify an alternate `Gruntfile`.\n\nBy default, grunt looks in the current or parent directories for the nearest `Gruntfile.js` or `Gruntfile.[ext]` file.\n\n### --debug, -d\n\nEnable debugging mode for tasks that support it.\n\n### --stack\n\nPrint a stack trace when exiting with a warning or fatal error.\n\n### --force, -f\n\nA way to force your way past warnings.\n\nWant a suggestion? Don't use this option, fix your code.\n\n### --tasks\n\nAdditional directory paths to scan for task and \"extra\" files.\n\nAlternative to `grunt.loadTasks(...)`\n\n### --npm\n\nNpm-installed grunt plugins to scan for task and \"extra\" files.\n\nAlternative to `grunt.loadNpmTasks(...)`\n\n### --no-write\n\nDisable writing files (dry run).\n\n### --verbose, -v\n\nVerbose mode. A lot more information output.\n\n### --version, -V\n\nPrint the grunt version. Combine with --verbose for more info.\n\n### --completion\n\nOutput shell auto-completion rules. See the grunt-cli documentation for more information.\n\n### --preload\n\nSpecify a language interpreter to require first if you are writing your Gruntfile in a language Grunt doesn't support by default.\n\n### --require (Grunt 1.3.0 and below)\n\nSpecify a language interpreter to require first if you are writing your Gruntfile in a language Grunt doesn't support by default.\n\n© GruntJS Team  \nLicensed under the MIT License.  \n[https://gruntjs.com/using-the-cli](https://gruntjs.com/using-the-cli)"

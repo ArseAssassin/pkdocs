@@ -1,0 +1,2877 @@
+---
+name: Sanctuary
+slug: sanctuary
+text_format: markdown
+generator: src:devdocs
+generator_command: src:devdocs
+version: null
+copyright: |-
+  © 2020 Sanctuary
+  © 2016 Plaid Technologies, Inc.
+  Licensed under the MIT License.
+  https://sanctuary.js.org/
+homepage: https://sanctuary.js.org/
+
+---
+- name: create
+  id: index#create
+  summary: Takes an options record and returns a Sanctuary module
+  description: |-
+    #### [`create`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L506)` :: { checkTypes :: `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`, env :: `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` `[`Type`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Type)` } -> `[`Module`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Module)
+
+    Takes an options record and returns a Sanctuary module. `checkTypes` specifies whether to enable type checking. The module's polymorphic functions (such as [`I`](#I)) require each value associated with a type variable to be a member of at least one type in the environment.
+
+    A well-typed application of a Sanctuary function will produce the same result regardless of whether type checking is enabled. If type checking is enabled, a badly typed application will produce an exception with a descriptive error message.
+
+    The following snippet demonstrates defining a custom type and using `create` to produce a Sanctuary module that is aware of that type:
+
+    ``` javascript
+    const {create, env} = require ('sanctuary');
+    const $ = require ('sanctuary-def');
+    const type = require ('sanctuary-type-identifiers');
+
+    //    Identity :: a -> Identity a
+    const Identity = x => {
+      const identity = Object.create (Identity$prototype);
+      identity.value = x;
+      return identity;
+    };
+
+    //    identityTypeIdent :: String
+    const identityTypeIdent = 'my-package/Identity@1';
+
+    const Identity$prototype = {
+      '@@type': identityTypeIdent,
+      '@@show': function() { return `Identity (${S.show (this.value)})`; },
+      'fantasy-land/map': function(f) { return Identity (f (this.value)); },
+    };
+
+    //    IdentityType :: Type -> Type
+    const IdentityType = $.UnaryType
+      ('Identity')
+      ('http://example.com/my-package#Identity')
+      ([])
+      (x => type (x) === identityTypeIdent)
+      (identity => [identity.value]);
+
+    const S = create ({
+      checkTypes: process.env.NODE_ENV !== 'production',
+      env: env.concat ([IdentityType ($.Unknown)]),
+    });
+
+    S.map (S.sub (1)) (Identity (43));
+    // => Identity (42)
+    ```
+
+    See also [`env`](#env).
+- name: env
+  id: index#env
+  summary: The Sanctuary module's environment ((S.create ({checkTypes, env})).env is a reference to env)
+  description: |-
+    #### [`env`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L582)` :: `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` `[`Type`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Type)
+
+    The Sanctuary module's environment (`(S.create ({checkTypes, env})).env` is a reference to `env`). Useful in conjunction with [`create`](#create).
+
+    ``` javascript
+    > S.env
+    [Function, Arguments, Array Unknown, Array2 Unknown Unknown, Boolean, Buffer, Date, Descending Unknown, Either Unknown Unknown, Error, Unknown -> Unknown, HtmlElement, Identity Unknown, JsMap Unknown Unknown, JsSet Unknown, Maybe Unknown, Module, Null, Number, Object, Pair Unknown Unknown, RegExp, StrMap Unknown, String, Symbol, Type, TypeClass, Undefined]
+    ```
+- name: unchecked
+  id: index#unchecked
+  summary: A complete Sanctuary module that performs no type checking
+  description: |-
+    #### [`unchecked`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L619)` :: `[`Module`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Module)
+
+    A complete Sanctuary module that performs no type checking. This is useful as it permits operations that Sanctuary's type checking would disallow, such as mapping over an object with heterogeneous values.
+
+    See also [`create`](#create).
+
+    ``` javascript
+    > S.unchecked.map (S.show) ({x: 'foo', y: true, z: 42})
+    {"x": "\"foo\"", "y": "true", "z": "42"}
+    ```
+
+    Opting out of type checking may cause type errors to go unnoticed.
+
+    ``` javascript
+    > S.unchecked.add (2) ('2')
+    "22"
+    ```
+
+    ### Classify
+- name: type
+  id: index#type
+  summary: Returns the result of parsing the type identifier of the given value
+  description: |-
+    #### [`type`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L641)` :: `[`Any`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Any)` -> { namespace :: `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)`, name :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)`, version :: `[`NonNegativeInteger`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#NonNegativeInteger)` }`
+
+    Returns the result of parsing the [type identifier](https://github.com/sanctuary-js/sanctuary-type-identifiers/tree/v3.0.0) of the given value.
+
+    ``` javascript
+    > S.type (S.Just (42))
+    {"name": "Maybe", "namespace": Just ("sanctuary-maybe"), "version": 1}
+
+    > S.type ([1, 2, 3])
+    {"name": "Array", "namespace": Nothing, "version": 0}
+    ```
+- name: is
+  id: index#is
+  summary: Returns true iff the given value is a member of the specified type
+  description: |-
+    #### [`is`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L666)` :: `[`Type`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Type)` -> `[`Any`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Any)` -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` [iff](https://en.wikipedia.org/wiki/If_and_only_if) the given value is a member of the specified type. See [`$.test`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#test) for details.
+
+    ``` javascript
+    > S.is ($.Array ($.Integer)) ([1, 2, 3])
+    true
+
+    > S.is ($.Array ($.Integer)) ([1, 2, 3.14])
+    false
+    ```
+
+    ### Showable
+- name: show
+  id: index#show
+  summary: Alias of show
+  description: |-
+    #### [`show`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L681)` :: `[`Any`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Any)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Alias of [`show`](https://github.com/sanctuary-js/sanctuary-show/tree/v2.0.0#show).
+
+    ``` javascript
+    > S.show (-0)
+    "-0"
+
+    > S.show (['foo', 'bar', 'baz'])
+    "[\"foo\", \"bar\", \"baz\"]"
+
+    > S.show ({x: 1, y: 2, z: 3})
+    "{\"x\": 1, \"y\": 2, \"z\": 3}"
+
+    > S.show (S.Left (S.Right (S.Just (S.Nothing))))
+    "Left (Right (Just (Nothing)))"
+    ```
+
+    ### Fantasy Land
+
+    Sanctuary is compatible with the [Fantasy Land](https://github.com/fantasyland/fantasy-land/tree/v4.0.1) specification.
+- name: equals
+  id: index#equals
+  summary: Curried version of Z.equals that requires two arguments of the same type
+  description: |-
+    #### [`equals`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L708)` :: `[`Setoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Setoid)` a => a -> a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Curried version of [`Z.equals`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#equals) that requires two arguments of the same type.
+
+    To compare values of different types first use [`create`](#create) to create a Sanctuary module with type checking disabled, then use that module's `equals` function.
+
+    ``` javascript
+    > S.equals (0) (-0)
+    true
+
+    > S.equals (NaN) (NaN)
+    true
+
+    > S.equals (S.Just ([1, 2, 3])) (S.Just ([1, 2, 3]))
+    true
+
+    > S.equals (S.Just ([1, 2, 3])) (S.Just ([1, 2, 4]))
+    false
+    ```
+- name: lt
+  id: index#lt
+  summary: Returns true iff the second argument is less than the first according to Z.lt
+  description: |-
+    #### [`lt`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L741)` :: `[`Ord`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Ord)` a => a -> a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` [iff](https://en.wikipedia.org/wiki/If_and_only_if) the *second* argument is less than the first according to [`Z.lt`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#lt).
+
+    ``` javascript
+    > S.filter (S.lt (3)) ([1, 2, 3, 4, 5])
+    [1, 2]
+    ```
+- name: lte
+  id: index#lte
+  summary: Returns true iff the second argument is less than or equal to the first according to Z.lte
+  description: |-
+    #### [`lte`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L761)` :: `[`Ord`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Ord)` a => a -> a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` [iff](https://en.wikipedia.org/wiki/If_and_only_if) the *second* argument is less than or equal to the first according to [`Z.lte`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#lte).
+
+    ``` javascript
+    > S.filter (S.lte (3)) ([1, 2, 3, 4, 5])
+    [1, 2, 3]
+    ```
+- name: gt
+  id: index#gt
+  summary: Returns true iff the second argument is greater than the first according to Z.gt
+  description: |-
+    #### [`gt`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L781)` :: `[`Ord`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Ord)` a => a -> a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` [iff](https://en.wikipedia.org/wiki/If_and_only_if) the *second* argument is greater than the first according to [`Z.gt`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#gt).
+
+    ``` javascript
+    > S.filter (S.gt (3)) ([1, 2, 3, 4, 5])
+    [4, 5]
+    ```
+- name: gte
+  id: index#gte
+  summary: Returns true iff the second argument is greater than or equal to the first according to Z.gte
+  description: |-
+    #### [`gte`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L801)` :: `[`Ord`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Ord)` a => a -> a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` [iff](https://en.wikipedia.org/wiki/If_and_only_if) the *second* argument is greater than or equal to the first according to [`Z.gte`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#gte).
+
+    ``` javascript
+    > S.filter (S.gte (3)) ([1, 2, 3, 4, 5])
+    [3, 4, 5]
+    ```
+- name: min
+  id: index#min
+  summary: Returns the smaller of its two arguments (according to Z.lte)
+  description: |-
+    #### [`min`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L821)` :: `[`Ord`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Ord)` a => a -> a -> a`
+
+    Returns the smaller of its two arguments (according to [`Z.lte`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#lte)).
+
+    See also [`max`](#max).
+
+    ``` javascript
+    > S.min (10) (2)
+    2
+
+    > S.min (new Date ('1999-12-31')) (new Date ('2000-01-01'))
+    new Date ("1999-12-31T00:00:00.000Z")
+
+    > S.min ('10') ('2')
+    "10"
+    ```
+- name: max
+  id: index#max
+  summary: Returns the larger of its two arguments (according to Z.lte)
+  description: |-
+    #### [`max`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L843)` :: `[`Ord`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Ord)` a => a -> a -> a`
+
+    Returns the larger of its two arguments (according to [`Z.lte`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#lte)).
+
+    See also [`min`](#min).
+
+    ``` javascript
+    > S.max (10) (2)
+    10
+
+    > S.max (new Date ('1999-12-31')) (new Date ('2000-01-01'))
+    new Date ("2000-01-01T00:00:00.000Z")
+
+    > S.max ('10') ('2')
+    "2"
+    ```
+- name: clamp
+  id: index#clamp
+  summary: Takes a lower bound, an upper bound, and a value of the same type
+  description: |-
+    #### [`clamp`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L865)` :: `[`Ord`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Ord)` a => a -> a -> a -> a`
+
+    Takes a lower bound, an upper bound, and a value of the same type. Returns the value if it is within the bounds; the nearer bound otherwise.
+
+    See also [`min`](#min) and [`max`](#max).
+
+    ``` javascript
+    > S.clamp (0) (100) (42)
+    42
+
+    > S.clamp (0) (100) (-1)
+    0
+
+    > S.clamp ('A') ('Z') ('~')
+    "Z"
+    ```
+- name: id
+  id: index#id
+  summary: Type-safe version of Z.id
+  description: |-
+    #### [`id`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L888)` :: `[`Category`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Category)` c => `[`TypeRep`](https://github.com/fantasyland/fantasy-land#type-representatives)` c -> c`
+
+    [Type-safe](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0) version of [`Z.id`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#id).
+
+    ``` javascript
+    > S.id (Function) (42)
+    42
+    ```
+- name: concat
+  id: index#concat
+  summary: Curried version of Z.concat
+  description: |-
+    #### [`concat`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L902)` :: `[`Semigroup`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Semigroup)` a => a -> a -> a`
+
+    Curried version of [`Z.concat`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#concat).
+
+    ``` javascript
+    > S.concat ('abc') ('def')
+    "abcdef"
+
+    > S.concat ([1, 2, 3]) ([4, 5, 6])
+    [1, 2, 3, 4, 5, 6]
+
+    > S.concat ({x: 1, y: 2}) ({y: 3, z: 4})
+    {"x": 1, "y": 3, "z": 4}
+
+    > S.concat (S.Just ([1, 2, 3])) (S.Just ([4, 5, 6]))
+    Just ([1, 2, 3, 4, 5, 6])
+
+    > S.concat (Sum (18)) (Sum (24))
+    Sum (42)
+    ```
+- name: empty
+  id: index#empty
+  summary: Type-safe version of Z.empty
+  description: |-
+    #### [`empty`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L928)` :: `[`Monoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Monoid)` a => `[`TypeRep`](https://github.com/fantasyland/fantasy-land#type-representatives)` a -> a`
+
+    [Type-safe](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0) version of [`Z.empty`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#empty).
+
+    ``` javascript
+    > S.empty (String)
+    ""
+
+    > S.empty (Array)
+    []
+
+    > S.empty (Object)
+    {}
+
+    > S.empty (Sum)
+    Sum (0)
+    ```
+- name: invert
+  id: index#invert
+  summary: Type-safe version of Z.invert
+  description: |-
+    #### [`invert`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L951)` :: `[`Group`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Group)` g => g -> g`
+
+    [Type-safe](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0) version of [`Z.invert`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#invert).
+
+    ``` javascript
+    > S.invert (Sum (5))
+    Sum (-5)
+    ```
+- name: filter
+  id: index#filter
+  summary: Curried version of Z.filter
+  description: |-
+    #### [`filter`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L965)` :: `[`Filterable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Filterable)` f => (a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> f a -> f a`
+
+    Curried version of [`Z.filter`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#filter). Discards every element that does not satisfy the predicate.
+
+    See also [`reject`](#reject).
+
+    ``` javascript
+    > S.filter (S.odd) ([1, 2, 3])
+    [1, 3]
+
+    > S.filter (S.odd) ({x: 1, y: 2, z: 3})
+    {"x": 1, "z": 3}
+
+    > S.filter (S.odd) (S.Nothing)
+    Nothing
+
+    > S.filter (S.odd) (S.Just (0))
+    Nothing
+
+    > S.filter (S.odd) (S.Just (1))
+    Just (1)
+    ```
+- name: reject
+  id: index#reject
+  summary: Curried version of Z.reject
+  description: |-
+    #### [`reject`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L999)` :: `[`Filterable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Filterable)` f => (a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> f a -> f a`
+
+    Curried version of [`Z.reject`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#reject). Discards every element that satisfies the predicate.
+
+    See also [`filter`](#filter).
+
+    ``` javascript
+    > S.reject (S.odd) ([1, 2, 3])
+    [2]
+
+    > S.reject (S.odd) ({x: 1, y: 2, z: 3})
+    {"y": 2}
+
+    > S.reject (S.odd) (S.Nothing)
+    Nothing
+
+    > S.reject (S.odd) (S.Just (0))
+    Just (0)
+
+    > S.reject (S.odd) (S.Just (1))
+    Nothing
+    ```
+- name: map
+  id: index#map
+  summary: Curried version of Z.map
+  description: "#### [`map`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1033)` :: `[`Functor`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Functor)` f => (a -> b) -> f a -> f b`\n\nCurried version of [`Z.map`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#map).\n\n``` javascript\n> S.map (Math.sqrt) ([1, 4, 9])\n[1, 2, 3]\n\n> S.map (Math.sqrt) ({x: 1, y: 4, z: 9})\n{\"x\": 1, \"y\": 2, \"z\": 3}\n\n> S.map (Math.sqrt) (S.Just (9))\nJust (3)\n\n> S.map (Math.sqrt) (S.Right (9))\nRight (3)\n\n> S.map (Math.sqrt) (S.Pair (99980001) (99980001))\nPair (99980001) (9999)\n```\n\nReplacing `Functor f => f` with `Function x` produces the B combinator from combinatory logic (i.e. [`compose`](#compose)):\n\n          Functor f => (a -> b) -> f a -> f b\n    (a -> b) -> Function x a -> Function x b\n    (a -> c) -> Function x a -> Function x c\n    (b -> c) -> Function x b -> Function x c\n    (b -> c) -> Function a b -> Function a c\n    (b -> c) -> (a -> b) -> (a -> c)\n\n        \n\n``` javascript\n> S.map (Math.sqrt) (S.add (1)) (99)\n10\n```"
+- name: flip
+  id: index#flip
+  summary: Curried version of Z.flip
+  description: "#### [`flip`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1079)` :: `[`Functor`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Functor)` f => f (a -> b) -> a -> f b`\n\nCurried version of [`Z.flip`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#flip). Maps over the given functions, applying each to the given value.\n\nReplacing `Functor f => f` with `Function x` produces the C combinator from combinatory logic:\n\n          Functor f => f (a -> b) -> a -> f b\n    Function x (a -> b) -> a -> Function x b\n    Function x (a -> c) -> a -> Function x c\n    Function x (b -> c) -> b -> Function x c\n    Function a (b -> c) -> b -> Function a c\n    (a -> b -> c) -> b -> a -> c\n\n        \n\n``` javascript\n> S.flip (S.concat) ('!') ('foo')\n\"foo!\"\n\n> S.flip ([Math.floor, Math.ceil]) (1.5)\n[1, 2]\n\n> S.flip ({floor: Math.floor, ceil: Math.ceil}) (1.5)\n{\"ceil\": 2, \"floor\": 1}\n\n> S.flip (Cons (Math.floor) (Cons (Math.ceil) (Nil))) (1.5)\nCons (1) (Cons (2) (Nil))\n```"
+- name: bimap
+  id: index#bimap
+  summary: Curried version of Z.bimap
+  description: |-
+    #### [`bimap`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1118)` :: `[`Bifunctor`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Bifunctor)` f => (a -> b) -> (c -> d) -> f a c -> f b d`
+
+    Curried version of [`Z.bimap`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#bimap).
+
+    ``` javascript
+    > S.bimap (S.toUpper) (Math.sqrt) (S.Pair ('foo') (64))
+    Pair ("FOO") (8)
+
+    > S.bimap (S.toUpper) (Math.sqrt) (S.Left ('foo'))
+    Left ("FOO")
+
+    > S.bimap (S.toUpper) (Math.sqrt) (S.Right (64))
+    Right (8)
+    ```
+- name: mapLeft
+  id: index#mapLeft
+  summary: Curried version of Z.mapLeft
+  description: |-
+    #### [`mapLeft`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1138)` :: `[`Bifunctor`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Bifunctor)` f => (a -> b) -> f a c -> f b c`
+
+    Curried version of [`Z.mapLeft`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#mapLeft). Maps the given function over the left side of a Bifunctor.
+
+    ``` javascript
+    > S.mapLeft (S.toUpper) (S.Pair ('foo') (64))
+    Pair ("FOO") (64)
+
+    > S.mapLeft (S.toUpper) (S.Left ('foo'))
+    Left ("FOO")
+
+    > S.mapLeft (S.toUpper) (S.Right (64))
+    Right (64)
+    ```
+- name: promap
+  id: index#promap
+  summary: Curried version of Z.promap
+  description: |-
+    #### [`promap`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1159)` :: `[`Profunctor`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Profunctor)` p => (a -> b) -> (c -> d) -> p b c -> p a d`
+
+    Curried version of [`Z.promap`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#promap).
+
+    ``` javascript
+    > S.promap (Math.abs) (S.add (1)) (Math.sqrt) (-100)
+    11
+    ```
+- name: alt
+  id: index#alt
+  summary: Curried version of Z.alt with arguments flipped to facilitate partial application
+  description: |-
+    #### [`alt`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1173)` :: `[`Alt`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Alt)` f => f a -> f a -> f a`
+
+    Curried version of [`Z.alt`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#alt) with arguments flipped to facilitate partial application.
+
+    ``` javascript
+    > S.alt (S.Just ('default')) (S.Nothing)
+    Just ("default")
+
+    > S.alt (S.Just ('default')) (S.Just ('hello'))
+    Just ("hello")
+
+    > S.alt (S.Right (0)) (S.Left ('X'))
+    Right (0)
+
+    > S.alt (S.Right (0)) (S.Right (1))
+    Right (1)
+    ```
+- name: zero
+  id: index#zero
+  summary: Type-safe version of Z.zero
+  description: |-
+    #### [`zero`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1202)` :: `[`Plus`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Plus)` f => `[`TypeRep`](https://github.com/fantasyland/fantasy-land#type-representatives)` f -> f a`
+
+    [Type-safe](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0) version of [`Z.zero`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#zero).
+
+    ``` javascript
+    > S.zero (Array)
+    []
+
+    > S.zero (Object)
+    {}
+
+    > S.zero (S.Maybe)
+    Nothing
+    ```
+- name: reduce
+  id: index#reduce
+  summary: Takes a curried binary function, an initial value, and a Foldable, and applies the function to the initial value and the Foldable's first value, then applies the function to the result of the previous application and the Foldable's second value
+  description: |-
+    #### [`reduce`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1222)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => (b -> a -> b) -> b -> f a -> b`
+
+    Takes a curried binary function, an initial value, and a [Foldable](https://github.com/fantasyland/fantasy-land/tree/v4.0.1#foldable), and applies the function to the initial value and the Foldable's first value, then applies the function to the result of the previous application and the Foldable's second value. Repeats this process until each of the Foldable's values has been used. Returns the initial value if the Foldable is empty; the result of the final application otherwise.
+
+    See also [`reduce_`](#reduce_).
+
+    ``` javascript
+    > S.reduce (S.add) (0) ([1, 2, 3, 4, 5])
+    15
+
+    > S.reduce (xs => x => S.prepend (x) (xs)) ([]) ([1, 2, 3, 4, 5])
+    [5, 4, 3, 2, 1]
+    ```
+- name: reduce_
+  id: index#reduce_
+  summary: Variant of reduce that takes a reducing function with arguments flipped
+  description: |-
+    #### [`reduce_`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1256)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => (a -> b -> b) -> b -> f a -> b`
+
+    Variant of [`reduce`](#reduce) that takes a reducing function with arguments flipped.
+
+    ``` javascript
+    > S.reduce_ (S.append) ([]) (Cons (1) (Cons (2) (Cons (3) (Nil))))
+    [1, 2, 3]
+
+    > S.reduce_ (S.prepend) ([]) (Cons (1) (Cons (2) (Cons (3) (Nil))))
+    [3, 2, 1]
+    ```
+- name: traverse
+  id: index#traverse
+  summary: Curried version of Z.traverse
+  description: |-
+    #### [`traverse`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1274)` :: (`[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` f, `[`Traversable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Traversable)` t) => `[`TypeRep`](https://github.com/fantasyland/fantasy-land#type-representatives)` f -> (a -> f b) -> t a -> f (t b)`
+
+    Curried version of [`Z.traverse`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#traverse).
+
+    ``` javascript
+    > S.traverse (Array) (S.words) (S.Just ('foo bar baz'))
+    [Just ("foo"), Just ("bar"), Just ("baz")]
+
+    > S.traverse (Array) (S.words) (S.Nothing)
+    [Nothing]
+
+    > S.traverse (S.Maybe) (S.parseInt (16)) (['A', 'B', 'C'])
+    Just ([10, 11, 12])
+
+    > S.traverse (S.Maybe) (S.parseInt (16)) (['A', 'B', 'C', 'X'])
+    Nothing
+
+    > S.traverse (S.Maybe) (S.parseInt (16)) ({a: 'A', b: 'B', c: 'C'})
+    Just ({"a": 10, "b": 11, "c": 12})
+
+    > S.traverse (S.Maybe) (S.parseInt (16)) ({a: 'A', b: 'B', c: 'C', x: 'X'})
+    Nothing
+    ```
+- name: sequence
+  id: index#sequence
+  summary: Curried version of Z.sequence
+  description: |-
+    #### [`sequence`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1303)` :: (`[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` f, `[`Traversable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Traversable)` t) => `[`TypeRep`](https://github.com/fantasyland/fantasy-land#type-representatives)` f -> t (f a) -> f (t a)`
+
+    Curried version of [`Z.sequence`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#sequence). Inverts the given `t (f a)` to produce an `f (t a)`.
+
+    ``` javascript
+    > S.sequence (Array) (S.Just ([1, 2, 3]))
+    [Just (1), Just (2), Just (3)]
+
+    > S.sequence (S.Maybe) ([S.Just (1), S.Just (2), S.Just (3)])
+    Just ([1, 2, 3])
+
+    > S.sequence (S.Maybe) ([S.Just (1), S.Just (2), S.Nothing])
+    Nothing
+
+    > S.sequence (S.Maybe) ({a: S.Just (1), b: S.Just (2), c: S.Just (3)})
+    Just ({"a": 1, "b": 2, "c": 3})
+
+    > S.sequence (S.Maybe) ({a: S.Just (1), b: S.Just (2), c: S.Nothing})
+    Nothing
+    ```
+- name: ap
+  id: index#ap
+  summary: Curried version of Z.ap
+  description: "#### [`ap`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1330)` :: `[`Apply`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Apply)` f => f (a -> b) -> f a -> f b`\n\nCurried version of [`Z.ap`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#ap).\n\n``` javascript\n> S.ap ([Math.sqrt, x => x * x]) ([1, 4, 9, 16, 25])\n[1, 2, 3, 4, 5, 1, 16, 81, 256, 625]\n\n> S.ap ({x: Math.sqrt, y: S.add (1), z: S.sub (1)}) ({w: 4, x: 4, y: 4})\n{\"x\": 2, \"y\": 5}\n\n> S.ap (S.Just (Math.sqrt)) (S.Just (64))\nJust (8)\n```\n\nReplacing `Apply f => f` with `Function x` produces the S combinator from combinatory logic:\n\n          Apply f => f (a -> b) -> f a -> f b\n    Function x (a -> b) -> Function x a -> Function x b\n    Function x (a -> c) -> Function x a -> Function x c\n    Function x (b -> c) -> Function x b -> Function x c\n    Function a (b -> c) -> Function a b -> Function a c\n    (a -> b -> c) -> (a -> b) -> (a -> c)\n\n        \n\n``` javascript\n> S.ap (s => n => s.slice (0, n)) (s => Math.ceil (s.length / 2)) ('Haskell')\n\"Hask\"\n```"
+- name: lift2
+  id: index#lift2
+  summary: Promotes a curried binary function to a function that operates on two Applys
+  description: |-
+    #### [`lift2`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1365)` :: `[`Apply`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Apply)` f => (a -> b -> c) -> f a -> f b -> f c`
+
+    Promotes a curried binary function to a function that operates on two [Apply](https://github.com/fantasyland/fantasy-land/tree/v4.0.1#apply)s.
+
+    ``` javascript
+    > S.lift2 (S.add) (S.Just (2)) (S.Just (3))
+    Just (5)
+
+    > S.lift2 (S.add) (S.Just (2)) (S.Nothing)
+    Nothing
+
+    > S.lift2 (S.and) (S.Just (true)) (S.Just (true))
+    Just (true)
+
+    > S.lift2 (S.and) (S.Just (true)) (S.Just (false))
+    Just (false)
+    ```
+- name: lift3
+  id: index#lift3
+  summary: Promotes a curried ternary function to a function that operates on three Applys
+  description: |-
+    #### [`lift3`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1389)` :: `[`Apply`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Apply)` f => (a -> b -> c -> d) -> f a -> f b -> f c -> f d`
+
+    Promotes a curried ternary function to a function that operates on three [Apply](https://github.com/fantasyland/fantasy-land/tree/v4.0.1#apply)s.
+
+    ``` javascript
+    > S.lift3 (S.reduce) (S.Just (S.add)) (S.Just (0)) (S.Just ([1, 2, 3]))
+    Just (6)
+
+    > S.lift3 (S.reduce) (S.Just (S.add)) (S.Just (0)) (S.Nothing)
+    Nothing
+    ```
+- name: apFirst
+  id: index#apFirst
+  summary: Curried version of Z.apFirst
+  description: |-
+    #### [`apFirst`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1407)` :: `[`Apply`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Apply)` f => f a -> f b -> f a`
+
+    Curried version of [`Z.apFirst`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#apFirst). Combines two effectful actions, keeping only the result of the first. Equivalent to Haskell's `(<*)` function.
+
+    See also [`apSecond`](#apSecond).
+
+    ``` javascript
+    > S.apFirst ([1, 2]) ([3, 4])
+    [1, 1, 2, 2]
+
+    > S.apFirst (S.Just (1)) (S.Just (2))
+    Just (1)
+    ```
+- name: apSecond
+  id: index#apSecond
+  summary: Curried version of Z.apSecond
+  description: |-
+    #### [`apSecond`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1428)` :: `[`Apply`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Apply)` f => f a -> f b -> f b`
+
+    Curried version of [`Z.apSecond`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#apSecond). Combines two effectful actions, keeping only the result of the second. Equivalent to Haskell's `(*>)` function.
+
+    See also [`apFirst`](#apFirst).
+
+    ``` javascript
+    > S.apSecond ([1, 2]) ([3, 4])
+    [3, 4, 3, 4]
+
+    > S.apSecond (S.Just (1)) (S.Just (2))
+    Just (2)
+    ```
+- name: of
+  id: index#of
+  summary: Curried version of Z.of
+  description: |-
+    #### [`of`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1449)` :: `[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` f => `[`TypeRep`](https://github.com/fantasyland/fantasy-land#type-representatives)` f -> a -> f a`
+
+    Curried version of [`Z.of`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#of).
+
+    ``` javascript
+    > S.of (Array) (42)
+    [42]
+
+    > S.of (Function) (42) (null)
+    42
+
+    > S.of (S.Maybe) (42)
+    Just (42)
+
+    > S.of (S.Either) (42)
+    Right (42)
+    ```
+- name: chain
+  id: index#chain
+  summary: Curried version of Z.chain
+  description: |-
+    #### [`chain`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1477)` :: `[`Chain`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Chain)` m => (a -> m b) -> m a -> m b`
+
+    Curried version of [`Z.chain`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#chain).
+
+    ``` javascript
+    > S.chain (x => [x, x]) ([1, 2, 3])
+    [1, 1, 2, 2, 3, 3]
+
+    > S.chain (n => s => s.slice (0, n)) (s => Math.ceil (s.length / 2)) ('slice')
+    "sli"
+
+    > S.chain (S.parseInt (10)) (S.Just ('123'))
+    Just (123)
+
+    > S.chain (S.parseInt (10)) (S.Just ('XXX'))
+    Nothing
+    ```
+- name: join
+  id: index#join
+  summary: Type-safe version of Z.join
+  description: "#### [`join`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1500)` :: `[`Chain`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Chain)` m => m (m a) -> m a`\n\n[Type-safe](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0) version of [`Z.join`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#join). Removes one level of nesting from a nested monadic structure.\n\n``` javascript\n> S.join ([[1], [2], [3]])\n[1, 2, 3]\n\n> S.join ([[[1, 2, 3]]])\n[[1, 2, 3]]\n\n> S.join (S.Just (S.Just (1)))\nJust (1)\n\n> S.join (S.Pair ('foo') (S.Pair ('bar') ('baz')))\nPair (\"foobar\") (\"baz\")\n```\n\nReplacing `Chain m => m` with `Function x` produces the W combinator from combinatory logic:\n\n          Chain m => m (m a) -> m a\n    Function x (Function x a) -> Function x a\n    (x -> x -> a) -> (x -> a)\n\n        \n\n``` javascript\n> S.join (S.concat) ('abc')\n\"abcabc\"\n```"
+- name: chainRec
+  id: index#chainRec
+  summary: Performs a chain-like computation with constant stack usage
+  description: |-
+    #### [`chainRec`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1536)` :: `[`ChainRec`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#ChainRec)` m => `[`TypeRep`](https://github.com/fantasyland/fantasy-land#type-representatives)` m -> (a -> m (`[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` a b)) -> a -> m b`
+
+    Performs a [`chain`](#chain)-like computation with constant stack usage. Similar to [`Z.chainRec`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#chainRec), but curried and more convenient due to the use of the Either type to indicate completion (via a Right).
+
+    ``` javascript
+    > S.chainRec (Array) (s => s.length === 2 ? S.map (S.Right) ([s + '!', s + '?']) : S.map (S.Left) ([s + 'o', s + 'n'])) ('')
+    ["oo!", "oo?", "on!", "on?", "no!", "no?", "nn!", "nn?"]
+    ```
+- name: extend
+  id: index#extend
+  summary: Curried version of Z.extend
+  description: |-
+    #### [`extend`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1565)` :: `[`Extend`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Extend)` w => (w a -> b) -> w a -> w b`
+
+    Curried version of [`Z.extend`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#extend).
+
+    ``` javascript
+    > S.extend (S.joinWith ('')) (['x', 'y', 'z'])
+    ["xyz", "yz", "z"]
+
+    > S.extend (f => f ([3, 4])) (S.reverse) ([1, 2])
+    [4, 3, 2, 1]
+    ```
+- name: duplicate
+  id: index#duplicate
+  summary: Type-safe version of Z.duplicate
+  description: |-
+    #### [`duplicate`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1582)` :: `[`Extend`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Extend)` w => w a -> w (w a)`
+
+    [Type-safe](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0) version of [`Z.duplicate`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#duplicate). Adds one level of nesting to a comonadic structure.
+
+    ``` javascript
+    > S.duplicate (S.Just (1))
+    Just (Just (1))
+
+    > S.duplicate ([1])
+    [[1]]
+
+    > S.duplicate ([1, 2, 3])
+    [[1, 2, 3], [2, 3], [3]]
+
+    > S.duplicate (S.reverse) ([1, 2]) ([3, 4])
+    [4, 3, 2, 1]
+    ```
+- name: extract
+  id: index#extract
+  summary: Type-safe version of Z.extract
+  description: |-
+    #### [`extract`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1606)` :: `[`Comonad`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Comonad)` w => w a -> a`
+
+    [Type-safe](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0) version of [`Z.extract`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#extract).
+
+    ``` javascript
+    > S.extract (S.Pair ('foo') ('bar'))
+    "bar"
+    ```
+- name: contramap
+  id: index#contramap
+  summary: Type-safe version of Z.contramap
+  description: |-
+    #### [`contramap`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1620)` :: `[`Contravariant`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Contravariant)` f => (b -> a) -> f a -> f b`
+
+    [Type-safe](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0) version of [`Z.contramap`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#contramap).
+
+    ``` javascript
+    > S.contramap (s => s.length) (Math.sqrt) ('Sanctuary')
+    3
+    ```
+
+    ### Combinator
+- name: I
+  id: index#I
+  summary: The I combinator
+  description: |-
+    #### [`I`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1636)` :: a -> a`
+
+    The I combinator. Returns its argument. Equivalent to Haskell's `id` function.
+
+    ``` javascript
+    > S.I ('foo')
+    "foo"
+    ```
+- name: K
+  id: index#K
+  summary: The K combinator
+  description: |-
+    #### [`K`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1654)` :: a -> b -> a`
+
+    The K combinator. Takes two values and returns the first. Equivalent to Haskell's `const` function.
+
+    ``` javascript
+    > S.K ('foo') ('bar')
+    "foo"
+
+    > S.map (S.K (42)) (S.range (0) (5))
+    [42, 42, 42, 42, 42]
+    ```
+- name: T
+  id: index#T
+  summary: The T (thrush) combinator
+  description: |-
+    #### [`T`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1677)` :: a -> (a -> b) -> b`
+
+    The T ([thrush](https://github.com/raganwald-deprecated/homoiconic/blob/master/2008-10-30/thrush.markdown)) combinator. Takes a value and a function, and returns the result of applying the function to the value. Equivalent to Haskell's `(&)` function.
+
+    ``` javascript
+    > S.T (42) (S.add (1))
+    43
+
+    > S.map (S.T (100)) ([S.add (1), Math.sqrt])
+    [101, 10]
+    ```
+
+    ### Function
+- name: curry2
+  id: index#curry2
+  summary: Curries the given binary function
+  description: |-
+    #### [`curry2`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1703)` :: ((a, b) -> c) -> a -> b -> c`
+
+    Curries the given binary function.
+
+    ``` javascript
+    > S.map (S.curry2 (Math.pow) (10)) ([1, 2, 3])
+    [10, 100, 1000]
+    ```
+- name: curry3
+  id: index#curry3
+  summary: Curries the given ternary function
+  description: |-
+    #### [`curry3`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1724)` :: ((a, b, c) -> d) -> a -> b -> c -> d`
+
+    Curries the given ternary function.
+
+    ``` javascript
+    > const replaceString = S.curry3 ((what, replacement, string) => string.replace (what, replacement))
+    undefined
+
+    > replaceString ('banana') ('orange') ('banana icecream')
+    "orange icecream"
+    ```
+- name: curry4
+  id: index#curry4
+  summary: Curries the given quaternary function
+  description: |-
+    #### [`curry4`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1751)` :: ((a, b, c, d) -> e) -> a -> b -> c -> d -> e`
+
+    Curries the given quaternary function.
+
+    ``` javascript
+    > const createRect = S.curry4 ((x, y, width, height) => ({x, y, width, height}))
+    undefined
+
+    > createRect (0) (0) (10) (10)
+    {"height": 10, "width": 10, "x": 0, "y": 0}
+    ```
+- name: curry5
+  id: index#curry5
+  summary: Curries the given quinary function
+  description: |-
+    #### [`curry5`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1780)` :: ((a, b, c, d, e) -> f) -> a -> b -> c -> d -> e -> f`
+
+    Curries the given quinary function.
+
+    ``` javascript
+    > const toUrl = S.curry5 ((protocol, creds, hostname, port, pathname) => protocol + '//' + S.maybe ('') (S.flip (S.concat) ('@')) (creds) + hostname + S.maybe ('') (S.concat (':')) (port) + pathname)
+    undefined
+
+    > toUrl ('https:') (S.Nothing) ('example.com') (S.Just ('443')) ('/foo/bar')
+    "https://example.com:443/foo/bar"
+    ```
+
+    ### Composition
+- name: compose
+  id: index#compose
+  summary: Curried version of Z.compose
+  description: |-
+    #### [`compose`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1817)` :: `[`Semigroupoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Semigroupoid)` s => s b c -> s a b -> s a c`
+
+    Curried version of [`Z.compose`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#compose).
+
+    When specialized to Function, `compose` composes two unary functions, from right to left (this is the B combinator from combinatory logic).
+
+    The generalized type signature indicates that `compose` is compatible with any [Semigroupoid](https://github.com/fantasyland/fantasy-land/tree/v4.0.1#semigroupoid).
+
+    See also [`pipe`](#pipe).
+
+    ``` javascript
+    > S.compose (Math.sqrt) (S.add (1)) (99)
+    10
+    ```
+- name: pipe
+  id: index#pipe
+  summary: Takes a sequence of functions assumed to be unary and a value of any type, and returns the result of applying the sequence of transformations to the initial value
+  description: |-
+    #### [`pipe`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1839)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => f (`[`Any`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Any)` -> `[`Any`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Any)`) -> a -> b`
+
+    Takes a sequence of functions assumed to be unary and a value of any type, and returns the result of applying the sequence of transformations to the initial value.
+
+    In general terms, `pipe` performs left-to-right composition of a sequence of functions. `pipe ([f, g, h]) (x)` is equivalent to `h (g (f (x)))`.
+
+    ``` javascript
+    > S.pipe ([S.add (1), Math.sqrt, S.sub (1)]) (99)
+    9
+    ```
+- name: pipeK
+  id: index#pipeK
+  summary: Takes a sequence of functions assumed to be unary that return values with a Chain, and a value of that Chain, and returns the result of applying the sequence of transformations to the initial value
+  description: |-
+    #### [`pipeK`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1863)` :: (`[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f, `[`Chain`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Chain)` m) => f (`[`Any`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Any)` -> m `[`Any`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Any)`) -> m a -> m b`
+
+    Takes a sequence of functions assumed to be unary that return values with a [Chain](https://github.com/fantasyland/fantasy-land/tree/v4.0.1#chain), and a value of that Chain, and returns the result of applying the sequence of transformations to the initial value.
+
+    In general terms, `pipeK` performs left-to-right [Kleisli](https://en.wikipedia.org/wiki/Kleisli_category) composition of an sequence of functions. `pipeK ([f, g, h]) (x)` is equivalent to `chain (h) (chain (g) (chain (f) (x)))`.
+
+    ``` javascript
+    > S.pipeK ([S.tail, S.tail, S.head]) (S.Just ([1, 2, 3, 4]))
+    Just (3)
+    ```
+- name: on
+  id: index#on
+  summary: Takes a binary function f, a unary function g, and two values x and y
+  description: |-
+    #### [`on`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1888)` :: (b -> b -> c) -> (a -> b) -> a -> a -> c`
+
+    Takes a binary function `f`, a unary function `g`, and two values `x` and `y`. Returns `f (g (x)) (g (y))`.
+
+    This is the P combinator from combinatory logic.
+
+    ``` javascript
+    > S.on (S.concat) (S.reverse) ([1, 2, 3]) ([4, 5, 6])
+    [3, 2, 1, 6, 5, 4]
+    ```
+
+    ### Pair
+
+    Pair is the canonical product type: a value of type `Pair a b` always contains exactly two values: one of type `a`; one of type `b`.
+
+    The implementation is provided by [sanctuary-pair](https://github.com/sanctuary-js/sanctuary-pair/tree/v2.1.0).
+- name: Pair
+  id: index#Pair
+  summary: Pair's sole data constructor
+  description: |-
+    #### [`Pair`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1921)` :: a -> b -> `[`Pair`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Pair)` a b`
+
+    Pair's sole data constructor. Additionally, it serves as the Pair [type representative](https://github.com/fantasyland/fantasy-land/tree/v4.0.1#type-representatives).
+
+    ``` javascript
+    > S.Pair ('foo') (42)
+    Pair ("foo") (42)
+    ```
+- name: pair
+  id: index#pair
+  summary: Pair's sole data constructor
+  description: |-
+    #### [`Pair`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1921)` :: a -> b -> `[`Pair`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Pair)` a b`
+
+    Pair's sole data constructor. Additionally, it serves as the Pair [type representative](https://github.com/fantasyland/fantasy-land/tree/v4.0.1#type-representatives).
+
+    ``` javascript
+    > S.Pair ('foo') (42)
+    Pair ("foo") (42)
+    ```
+- name: fst
+  id: index#fst
+  summary: fst (Pair (x) (y)) is equivalent to x
+  description: |-
+    #### [`fst`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1955)` :: `[`Pair`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Pair)` a b -> a`
+
+    `fst (Pair (x) (y))` is equivalent to `x`.
+
+    ``` javascript
+    > S.fst (S.Pair ('foo') (42))
+    "foo"
+    ```
+- name: snd
+  id: index#snd
+  summary: snd (Pair (x) (y)) is equivalent to y
+  description: |-
+    #### [`snd`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1969)` :: `[`Pair`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Pair)` a b -> b`
+
+    `snd (Pair (x) (y))` is equivalent to `y`.
+
+    ``` javascript
+    > S.snd (S.Pair ('foo') (42))
+    42
+    ```
+- name: swap
+  id: index#swap
+  summary: swap (Pair (x) (y)) is equivalent to Pair (y) (x)
+  description: |-
+    #### [`swap`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L1983)` :: `[`Pair`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Pair)` a b -> `[`Pair`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Pair)` b a`
+
+    `swap (Pair (x) (y))` is equivalent to `Pair (y) (x)`.
+
+    ``` javascript
+    > S.swap (S.Pair ('foo') (42))
+    Pair (42) ("foo")
+    ```
+
+    ### Maybe
+
+    The Maybe type represents optional values: a value of type `Maybe a` is either Nothing (the empty value) or a Just whose value is of type `a`.
+
+    The implementation is provided by [sanctuary-maybe](https://github.com/sanctuary-js/sanctuary-maybe/tree/v2.1.0).
+- name: Maybe
+  id: index#Maybe
+  summary: Maybe type representative
+  description: |-
+    #### [`Maybe`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2004)` :: `[`TypeRep`](https://github.com/fantasyland/fantasy-land#type-representatives)` `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)
+
+    Maybe [type representative](https://github.com/fantasyland/fantasy-land/tree/v4.0.1#type-representatives).
+- name: Nothing
+  id: index#Nothing
+  summary: The empty value of type Maybe a
+  description: |-
+    #### [`Nothing`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2008)` :: `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a`
+
+    The empty value of type `Maybe a`.
+
+    ``` javascript
+    > S.Nothing
+    Nothing
+    ```
+- name: Just
+  id: index#Just
+  summary: Constructs a value of type Maybe a from a value of type a
+  description: |-
+    #### [`Just`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2017)` :: a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a`
+
+    Constructs a value of type `Maybe a` from a value of type `a`.
+
+    ``` javascript
+    > S.Just (42)
+    Just (42)
+    ```
+- name: isNothing
+  id: index#isNothing
+  summary: Returns true if the given Maybe is Nothing; false if it is a Just
+  description: |-
+    #### [`isNothing`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2031)` :: `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` if the given Maybe is Nothing; `false` if it is a Just.
+
+    ``` javascript
+    > S.isNothing (S.Nothing)
+    true
+
+    > S.isNothing (S.Just (42))
+    false
+    ```
+- name: isJust
+  id: index#isJust
+  summary: Returns true if the given Maybe is a Just; false if it is Nothing
+  description: |-
+    #### [`isJust`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2051)` :: `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` if the given Maybe is a Just; `false` if it is Nothing.
+
+    ``` javascript
+    > S.isJust (S.Just (42))
+    true
+
+    > S.isJust (S.Nothing)
+    false
+    ```
+- name: maybe
+  id: index#maybe
+  summary: Maybe type representative
+  description: |-
+    #### [`Maybe`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2004)` :: `[`TypeRep`](https://github.com/fantasyland/fantasy-land#type-representatives)` `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)
+
+    Maybe [type representative](https://github.com/fantasyland/fantasy-land/tree/v4.0.1#type-representatives).
+- name: maybe_
+  id: index#maybe_
+  summary: Variant of maybe that takes a thunk so the default value is only computed if required
+  description: |-
+    #### [`maybe_`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2099)` :: (() -> b) -> (a -> b) -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a -> b`
+
+    Variant of [`maybe`](#maybe) that takes a thunk so the default value is only computed if required.
+
+    ``` javascript
+    > function fib(n) { return n <= 1 ? n : fib (n - 2) + fib (n - 1); }
+    undefined
+
+    > S.maybe_ (() => fib (30)) (Math.sqrt) (S.Just (1000000))
+    1000
+
+    > S.maybe_ (() => fib (30)) (Math.sqrt) (S.Nothing)
+    832040
+    ```
+- name: fromMaybe
+  id: index#fromMaybe
+  summary: Takes a default value and a Maybe, and returns the Maybe's value if the Maybe is a Just; the default value otherwise
+  description: |-
+    #### [`fromMaybe`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2126)` :: a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a -> a`
+
+    Takes a default value and a Maybe, and returns the Maybe's value if the Maybe is a Just; the default value otherwise.
+
+    See also [`maybe`](#maybe), [`fromMaybe_`](#fromMaybe_), and [`maybeToNullable`](#maybeToNullable).
+
+    ``` javascript
+    > S.fromMaybe (0) (S.Just (42))
+    42
+
+    > S.fromMaybe (0) (S.Nothing)
+    0
+    ```
+- name: fromMaybe_
+  id: index#fromMaybe_
+  summary: Variant of fromMaybe that takes a thunk so the default value is only computed if required
+  description: |-
+    #### [`fromMaybe_`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2147)` :: (() -> a) -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a -> a`
+
+    Variant of [`fromMaybe`](#fromMaybe) that takes a thunk so the default value is only computed if required.
+
+    ``` javascript
+    > function fib(n) { return n <= 1 ? n : fib (n - 2) + fib (n - 1); }
+    undefined
+
+    > S.fromMaybe_ (() => fib (30)) (S.Just (1000000))
+    1000000
+
+    > S.fromMaybe_ (() => fib (30)) (S.Nothing)
+    832040
+    ```
+- name: justs
+  id: index#justs
+  summary: Discards each element that is Nothing, and unwraps each element that is a Just
+  description: |-
+    #### [`justs`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2167)` :: (`[`Filterable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Filterable)` f, `[`Functor`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Functor)` f) => f (`[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a) -> f a`
+
+    Discards each element that is Nothing, and unwraps each element that is a Just. Related to Haskell's `catMaybes` function.
+
+    See also [`lefts`](#lefts) and [`rights`](#rights).
+
+    ``` javascript
+    > S.justs ([S.Just ('foo'), S.Nothing, S.Just ('baz')])
+    ["foo", "baz"]
+    ```
+- name: mapMaybe
+  id: index#mapMaybe
+  summary: Takes a function and a structure, applies the function to each element of the structure, and returns the "successful" results
+  description: |-
+    #### [`mapMaybe`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2187)` :: (`[`Filterable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Filterable)` f, `[`Functor`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Functor)` f) => (a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` b) -> f a -> f b`
+
+    Takes a function and a structure, applies the function to each element of the structure, and returns the "successful" results. If the result of applying the function to an element is Nothing, the result is discarded; if the result is a Just, the Just's value is included.
+
+    ``` javascript
+    > S.mapMaybe (S.head) ([[], [1, 2, 3], [], [4, 5, 6], []])
+    [1, 4]
+
+    > S.mapMaybe (S.head) ({x: [1, 2, 3], y: [], z: [4, 5, 6]})
+    {"x": 1, "z": 4}
+    ```
+- name: maybeToNullable
+  id: index#maybeToNullable
+  summary: Returns the given Maybe's value if the Maybe is a Just; null otherwise
+  description: |-
+    #### [`maybeToNullable`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2207)` :: `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a -> `[`Nullable`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Nullable)` a`
+
+    Returns the given Maybe's value if the Maybe is a Just; `null` otherwise. [Nullable](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Nullable) is defined in [sanctuary-def](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0).
+
+    See also [`fromMaybe`](#fromMaybe).
+
+    ``` javascript
+    > S.maybeToNullable (S.Just (42))
+    42
+
+    > S.maybeToNullable (S.Nothing)
+    null
+    ```
+- name: maybeToEither
+  id: index#maybeToEither
+  summary: Converts a Maybe to an Either
+  description: |-
+    #### [`maybeToEither`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2230)` :: a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` b -> `[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` a b`
+
+    Converts a Maybe to an Either. Nothing becomes a Left (containing the first argument); a Just becomes a Right.
+
+    See also [`eitherToMaybe`](#eitherToMaybe).
+
+    ``` javascript
+    > S.maybeToEither ('Expecting an integer') (S.parseInt (10) ('xyz'))
+    Left ("Expecting an integer")
+
+    > S.maybeToEither ('Expecting an integer') (S.parseInt (10) ('42'))
+    Right (42)
+    ```
+
+    ### Either
+
+    The Either type represents values with two possibilities: a value of type `Either a b` is either a Left whose value is of type `a` or a Right whose value is of type `b`.
+
+    The implementation is provided by [sanctuary-either](https://github.com/sanctuary-js/sanctuary-either/tree/v2.1.0).
+- name: Either
+  id: index#Either
+  summary: Either type representative
+  description: |-
+    #### [`Either`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2261)` :: `[`TypeRep`](https://github.com/fantasyland/fantasy-land#type-representatives)` `[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)
+
+    Either [type representative](https://github.com/fantasyland/fantasy-land/tree/v4.0.1#type-representatives).
+- name: Left
+  id: index#Left
+  summary: Constructs a value of type Either a b from a value of type a
+  description: |-
+    #### [`Left`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2265)` :: a -> `[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` a b`
+
+    Constructs a value of type `Either a b` from a value of type `a`.
+
+    ``` javascript
+    > S.Left ('Cannot divide by zero')
+    Left ("Cannot divide by zero")
+    ```
+- name: Right
+  id: index#Right
+  summary: Constructs a value of type Either a b from a value of type b
+  description: |-
+    #### [`Right`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2279)` :: b -> `[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` a b`
+
+    Constructs a value of type `Either a b` from a value of type `b`.
+
+    ``` javascript
+    > S.Right (42)
+    Right (42)
+    ```
+- name: isLeft
+  id: index#isLeft
+  summary: Returns true if the given Either is a Left; false if it is a Right
+  description: |-
+    #### [`isLeft`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2293)` :: `[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` a b -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` if the given Either is a Left; `false` if it is a Right.
+
+    ``` javascript
+    > S.isLeft (S.Left ('Cannot divide by zero'))
+    true
+
+    > S.isLeft (S.Right (42))
+    false
+    ```
+- name: isRight
+  id: index#isRight
+  summary: Returns true if the given Either is a Right; false if it is a Left
+  description: |-
+    #### [`isRight`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2313)` :: `[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` a b -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` if the given Either is a Right; `false` if it is a Left.
+
+    ``` javascript
+    > S.isRight (S.Right (42))
+    true
+
+    > S.isRight (S.Left ('Cannot divide by zero'))
+    false
+    ```
+- name: either
+  id: index#either
+  summary: Either type representative
+  description: |-
+    #### [`Either`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2261)` :: `[`TypeRep`](https://github.com/fantasyland/fantasy-land#type-representatives)` `[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)
+
+    Either [type representative](https://github.com/fantasyland/fantasy-land/tree/v4.0.1#type-representatives).
+- name: fromLeft
+  id: index#fromLeft
+  summary: Takes a default value and an Either, and returns the Left value if the Either is a Left; the default value otherwise
+  description: |-
+    #### [`fromLeft`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2362)` :: a -> `[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` a b -> a`
+
+    Takes a default value and an Either, and returns the Left value if the Either is a Left; the default value otherwise.
+
+    See also [`either`](#either) and [`fromRight`](#fromRight).
+
+    ``` javascript
+    > S.fromLeft ('abc') (S.Left ('xyz'))
+    "xyz"
+
+    > S.fromLeft ('abc') (S.Right (123))
+    "abc"
+    ```
+- name: fromRight
+  id: index#fromRight
+  summary: Takes a default value and an Either, and returns the Right value if the Either is a Right; the default value otherwise
+  description: |-
+    #### [`fromRight`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2385)` :: b -> `[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` a b -> b`
+
+    Takes a default value and an Either, and returns the Right value if the Either is a Right; the default value otherwise.
+
+    See also [`either`](#either) and [`fromLeft`](#fromLeft).
+
+    ``` javascript
+    > S.fromRight (123) (S.Right (789))
+    789
+
+    > S.fromRight (123) (S.Left ('abc'))
+    123
+    ```
+- name: fromEither
+  id: index#fromEither
+  summary: Takes a default value and an Either, and returns the Right value if the Either is a Right; the default value otherwise
+  description: |-
+    #### [`fromEither`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2408)` :: b -> `[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` a b -> b`
+
+    Takes a default value and an Either, and returns the Right value if the Either is a Right; the default value otherwise.
+
+    The behaviour of `fromEither` is likely to change in a future release. Please use [`fromRight`](#fromRight) instead.
+
+    ``` javascript
+    > S.fromEither (0) (S.Right (42))
+    42
+
+    > S.fromEither (0) (S.Left (42))
+    0
+    ```
+- name: lefts
+  id: index#lefts
+  summary: Discards each element that is a Right, and unwraps each element that is a Left
+  description: |-
+    #### [`lefts`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2432)` :: (`[`Filterable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Filterable)` f, `[`Functor`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Functor)` f) => f (`[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` a b) -> f a`
+
+    Discards each element that is a Right, and unwraps each element that is a Left.
+
+    See also [`rights`](#rights).
+
+    ``` javascript
+    > S.lefts ([S.Right (20), S.Left ('foo'), S.Right (10), S.Left ('bar')])
+    ["foo", "bar"]
+    ```
+- name: rights
+  id: index#rights
+  summary: Discards each element that is a Left, and unwraps each element that is a Right
+  description: |-
+    #### [`rights`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2449)` :: (`[`Filterable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Filterable)` f, `[`Functor`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Functor)` f) => f (`[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` a b) -> f b`
+
+    Discards each element that is a Left, and unwraps each element that is a Right.
+
+    See also [`lefts`](#lefts).
+
+    ``` javascript
+    > S.rights ([S.Right (20), S.Left ('foo'), S.Right (10), S.Left ('bar')])
+    [20, 10]
+    ```
+- name: tagBy
+  id: index#tagBy
+  summary: Takes a predicate and a value, and returns a Right of the value if it satisfies the predicate; a Left of the value otherwise
+  description: |-
+    #### [`tagBy`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2466)` :: (a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> a -> `[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` a a`
+
+    Takes a predicate and a value, and returns a Right of the value if it satisfies the predicate; a Left of the value otherwise.
+
+    ``` javascript
+    > S.tagBy (S.odd) (0)
+    Left (0)
+
+    > S.tagBy (S.odd) (1)
+    Right (1)
+    ```
+- name: encase
+  id: index#encase
+  summary: Takes a function that may throw and returns a pure function
+  description: |-
+    #### [`encase`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2487)` :: Throwing e a b -> a -> `[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` e b`
+
+    Takes a function that may throw and returns a pure function.
+
+    ``` javascript
+    > S.encase (JSON.parse) ('["foo","bar","baz"]')
+    Right (["foo", "bar", "baz"])
+
+    > S.encase (JSON.parse) ('[')
+    Left (new SyntaxError ("Unexpected end of JSON input"))
+    ```
+- name: eitherToMaybe
+  id: index#eitherToMaybe
+  summary: Converts an Either to a Maybe
+  description: |-
+    #### [`eitherToMaybe`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2513)` :: `[`Either`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Either)` a b -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` b`
+
+    Converts an Either to a Maybe. A Left becomes Nothing; a Right becomes a Just.
+
+    See also [`maybeToEither`](#maybeToEither).
+
+    ``` javascript
+    > S.eitherToMaybe (S.Left ('Cannot divide by zero'))
+    Nothing
+
+    > S.eitherToMaybe (S.Right (42))
+    Just (42)
+    ```
+
+    ### Logic
+- name: and
+  id: index#and
+  summary: null
+  description: |-
+    #### [`and`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2538)` :: `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)` -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)` -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Boolean "and".
+
+    ``` javascript
+    > S.and (false) (false)
+    false
+
+    > S.and (false) (true)
+    false
+
+    > S.and (true) (false)
+    false
+
+    > S.and (true) (true)
+    true
+    ```
+- name: or
+  id: index#or
+  summary: null
+  description: |-
+    #### [`or`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2566)` :: `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)` -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)` -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Boolean "or".
+
+    ``` javascript
+    > S.or (false) (false)
+    false
+
+    > S.or (false) (true)
+    true
+
+    > S.or (true) (false)
+    true
+
+    > S.or (true) (true)
+    true
+    ```
+- name: not
+  id: index#not
+  summary: See also complement
+  description: |-
+    #### [`not`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2594)` :: `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)` -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Boolean "not".
+
+    See also [`complement`](#complement).
+
+    ``` javascript
+    > S.not (false)
+    true
+
+    > S.not (true)
+    false
+    ```
+- name: complement
+  id: index#complement
+  summary: Takes a unary predicate and a value of any type, and returns the logical negation of applying the predicate to the value
+  description: |-
+    #### [`complement`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2616)` :: (a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Takes a unary predicate and a value of any type, and returns the logical negation of applying the predicate to the value.
+
+    See also [`not`](#not).
+
+    ``` javascript
+    > Number.isInteger (42)
+    true
+
+    > S.complement (Number.isInteger) (42)
+    false
+    ```
+- name: boolean
+  id: index#boolean
+  summary: Case analysis for the Boolean type
+  description: |-
+    #### [`boolean`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2636)` :: a -> a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)` -> a`
+
+    Case analysis for the `Boolean` type. `boolean (x) (y) (b)` evaluates to `x` if `b` is `false`; to `y` if `b` is `true`.
+
+    ``` javascript
+    > S.boolean ('no') ('yes') (false)
+    "no"
+
+    > S.boolean ('no') ('yes') (true)
+    "yes"
+    ```
+- name: ifElse
+  id: index#ifElse
+  summary: Takes a unary predicate, a unary "if" function, a unary "else" function, and a value of any type, and returns the result of applying the "if" function to the value if the value satisfies the predicate; the result of applying the "else" function to the value otherwise
+  description: |-
+    #### [`ifElse`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2661)` :: (a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> (a -> b) -> (a -> b) -> a -> b`
+
+    Takes a unary predicate, a unary "if" function, a unary "else" function, and a value of any type, and returns the result of applying the "if" function to the value if the value satisfies the predicate; the result of applying the "else" function to the value otherwise.
+
+    See also [`when`](#when) and [`unless`](#unless).
+
+    ``` javascript
+    > S.ifElse (x => x < 0) (Math.abs) (Math.sqrt) (-1)
+    1
+
+    > S.ifElse (x => x < 0) (Math.abs) (Math.sqrt) (16)
+    4
+    ```
+- name: when
+  id: index#when
+  summary: Takes a unary predicate, a unary function, and a value of any type, and returns the result of applying the function to the value if the value satisfies the predicate; the value otherwise
+  description: |-
+    #### [`when`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2693)` :: (a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> (a -> a) -> a -> a`
+
+    Takes a unary predicate, a unary function, and a value of any type, and returns the result of applying the function to the value if the value satisfies the predicate; the value otherwise.
+
+    See also [`unless`](#unless) and [`ifElse`](#ifElse).
+
+    ``` javascript
+    > S.when (x => x >= 0) (Math.sqrt) (16)
+    4
+
+    > S.when (x => x >= 0) (Math.sqrt) (-1)
+    -1
+    ```
+- name: unless
+  id: index#unless
+  summary: Takes a unary predicate, a unary function, and a value of any type, and returns the result of applying the function to the value if the value does not satisfy the predicate; the value otherwise
+  description: |-
+    #### [`unless`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2717)` :: (a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> (a -> a) -> a -> a`
+
+    Takes a unary predicate, a unary function, and a value of any type, and returns the result of applying the function to the value if the value does not satisfy the predicate; the value otherwise.
+
+    See also [`when`](#when) and [`ifElse`](#ifElse).
+
+    ``` javascript
+    > S.unless (x => x < 0) (Math.sqrt) (16)
+    4
+
+    > S.unless (x => x < 0) (Math.sqrt) (-1)
+    -1
+    ```
+
+    ### Array
+- name: array
+  id: index#array
+  summary: Case analysis for the Array a type
+  description: |-
+    #### [`array`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2743)` :: b -> (a -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` a -> b) -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` a -> b`
+
+    Case analysis for the `Array a` type.
+
+    ``` javascript
+    > S.array (S.Nothing) (head => tail => S.Just (head)) ([])
+    Nothing
+
+    > S.array (S.Nothing) (head => tail => S.Just (head)) ([1, 2, 3])
+    Just (1)
+
+    > S.array (S.Nothing) (head => tail => S.Just (tail)) ([])
+    Nothing
+
+    > S.array (S.Nothing) (head => tail => S.Just (tail)) ([1, 2, 3])
+    Just ([2, 3])
+    ```
+- name: head
+  id: index#head
+  summary: Returns Just the first element of the given structure if the structure contains at least one element; Nothing otherwise
+  description: |-
+    #### [`head`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2773)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => f a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a`
+
+    Returns Just the first element of the given structure if the structure contains at least one element; Nothing otherwise.
+
+    ``` javascript
+    > S.head ([1, 2, 3])
+    Just (1)
+
+    > S.head ([])
+    Nothing
+
+    > S.head (Cons (1) (Cons (2) (Cons (3) (Nil))))
+    Just (1)
+
+    > S.head (Nil)
+    Nothing
+    ```
+- name: last
+  id: index#last
+  summary: Returns Just the last element of the given structure if the structure contains at least one element; Nothing otherwise
+  description: |-
+    #### [`last`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2806)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => f a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a`
+
+    Returns Just the last element of the given structure if the structure contains at least one element; Nothing otherwise.
+
+    ``` javascript
+    > S.last ([1, 2, 3])
+    Just (3)
+
+    > S.last ([])
+    Nothing
+
+    > S.last (Cons (1) (Cons (2) (Cons (3) (Nil))))
+    Just (3)
+
+    > S.last (Nil)
+    Nothing
+    ```
+- name: tail
+  id: index#tail
+  summary: Returns Just all but the first of the given structure's elements if the structure contains at least one element; Nothing otherwise
+  description: |-
+    #### [`tail`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2838)` :: (`[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` f, `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f, `[`Monoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Monoid)` (f a)) => f a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` (f a)`
+
+    Returns Just all but the first of the given structure's elements if the structure contains at least one element; Nothing otherwise.
+
+    ``` javascript
+    > S.tail ([1, 2, 3])
+    Just ([2, 3])
+
+    > S.tail ([])
+    Nothing
+
+    > S.tail (Cons (1) (Cons (2) (Cons (3) (Nil))))
+    Just (Cons (2) (Cons (3) (Nil)))
+
+    > S.tail (Nil)
+    Nothing
+    ```
+- name: init
+  id: index#init
+  summary: Returns Just all but the last of the given structure's elements if the structure contains at least one element; Nothing otherwise
+  description: |-
+    #### [`init`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2872)` :: (`[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` f, `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f, `[`Monoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Monoid)` (f a)) => f a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` (f a)`
+
+    Returns Just all but the last of the given structure's elements if the structure contains at least one element; Nothing otherwise.
+
+    ``` javascript
+    > S.init ([1, 2, 3])
+    Just ([1, 2])
+
+    > S.init ([])
+    Nothing
+
+    > S.init (Cons (1) (Cons (2) (Cons (3) (Nil))))
+    Just (Cons (1) (Cons (2) (Nil)))
+
+    > S.init (Nil)
+    Nothing
+    ```
+- name: take
+  id: index#take
+  summary: Returns Just the first N elements of the given structure if N is non-negative and less than or equal to the size of the structure; Nothing otherwise
+  description: |-
+    #### [`take`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2906)` :: (`[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` f, `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f, `[`Monoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Monoid)` (f a)) => `[`Integer`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Integer)` -> f a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` (f a)`
+
+    Returns Just the first N elements of the given structure if N is non-negative and less than or equal to the size of the structure; Nothing otherwise.
+
+    ``` javascript
+    > S.take (0) (['foo', 'bar'])
+    Just ([])
+
+    > S.take (1) (['foo', 'bar'])
+    Just (["foo"])
+
+    > S.take (2) (['foo', 'bar'])
+    Just (["foo", "bar"])
+
+    > S.take (3) (['foo', 'bar'])
+    Nothing
+
+    > S.take (3) (Cons (1) (Cons (2) (Cons (3) (Cons (4) (Cons (5) (Nil))))))
+    Just (Cons (1) (Cons (2) (Cons (3) (Nil))))
+    ```
+- name: drop
+  id: index#drop
+  summary: Returns Just all but the first N elements of the given structure if N is non-negative and less than or equal to the size of the structure; Nothing otherwise
+  description: |-
+    #### [`drop`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2961)` :: (`[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` f, `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f, `[`Monoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Monoid)` (f a)) => `[`Integer`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Integer)` -> f a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` (f a)`
+
+    Returns Just all but the first N elements of the given structure if N is non-negative and less than or equal to the size of the structure; Nothing otherwise.
+
+    ``` javascript
+    > S.drop (0) (['foo', 'bar'])
+    Just (["foo", "bar"])
+
+    > S.drop (1) (['foo', 'bar'])
+    Just (["bar"])
+
+    > S.drop (2) (['foo', 'bar'])
+    Just ([])
+
+    > S.drop (3) (['foo', 'bar'])
+    Nothing
+
+    > S.drop (3) (Cons (1) (Cons (2) (Cons (3) (Cons (4) (Cons (5) (Nil))))))
+    Just (Cons (4) (Cons (5) (Nil)))
+    ```
+- name: takeLast
+  id: index#takeLast
+  summary: Returns Just the last N elements of the given structure if N is non-negative and less than or equal to the size of the structure; Nothing otherwise
+  description: |-
+    #### [`takeLast`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L2993)` :: (`[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` f, `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f, `[`Monoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Monoid)` (f a)) => `[`Integer`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Integer)` -> f a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` (f a)`
+
+    Returns Just the last N elements of the given structure if N is non-negative and less than or equal to the size of the structure; Nothing otherwise.
+
+    ``` javascript
+    > S.takeLast (0) (['foo', 'bar'])
+    Just ([])
+
+    > S.takeLast (1) (['foo', 'bar'])
+    Just (["bar"])
+
+    > S.takeLast (2) (['foo', 'bar'])
+    Just (["foo", "bar"])
+
+    > S.takeLast (3) (['foo', 'bar'])
+    Nothing
+
+    > S.takeLast (3) (Cons (1) (Cons (2) (Cons (3) (Cons (4) (Nil)))))
+    Just (Cons (2) (Cons (3) (Cons (4) (Nil))))
+    ```
+- name: dropLast
+  id: index#dropLast
+  summary: Returns Just all but the last N elements of the given structure if N is non-negative and less than or equal to the size of the structure; Nothing otherwise
+  description: |-
+    #### [`dropLast`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3026)` :: (`[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` f, `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f, `[`Monoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Monoid)` (f a)) => `[`Integer`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Integer)` -> f a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` (f a)`
+
+    Returns Just all but the last N elements of the given structure if N is non-negative and less than or equal to the size of the structure; Nothing otherwise.
+
+    ``` javascript
+    > S.dropLast (0) (['foo', 'bar'])
+    Just (["foo", "bar"])
+
+    > S.dropLast (1) (['foo', 'bar'])
+    Just (["foo"])
+
+    > S.dropLast (2) (['foo', 'bar'])
+    Just ([])
+
+    > S.dropLast (3) (['foo', 'bar'])
+    Nothing
+
+    > S.dropLast (3) (Cons (1) (Cons (2) (Cons (3) (Cons (4) (Nil)))))
+    Just (Cons (1) (Nil))
+    ```
+- name: takeWhile
+  id: index#takeWhile
+  summary: Discards the first element that does not satisfy the predicate, and all subsequent elements
+  description: |-
+    #### [`takeWhile`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3059)` :: (a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` a -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` a`
+
+    Discards the first element that does not satisfy the predicate, and all subsequent elements.
+
+    See also [`dropWhile`](#dropWhile).
+
+    ``` javascript
+    > S.takeWhile (S.odd) ([3, 3, 3, 7, 6, 3, 5, 4])
+    [3, 3, 3, 7]
+
+    > S.takeWhile (S.even) ([3, 3, 3, 7, 6, 3, 5, 4])
+    []
+    ```
+- name: dropWhile
+  id: index#dropWhile
+  summary: Retains the first element that does not satisfy the predicate, and all subsequent elements
+  description: |-
+    #### [`dropWhile`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3086)` :: (a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` a -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` a`
+
+    Retains the first element that does not satisfy the predicate, and all subsequent elements.
+
+    See also [`takeWhile`](#takeWhile).
+
+    ``` javascript
+    > S.dropWhile (S.odd) ([3, 3, 3, 7, 6, 3, 5, 4])
+    [6, 3, 5, 4]
+
+    > S.dropWhile (S.even) ([3, 3, 3, 7, 6, 3, 5, 4])
+    [3, 3, 3, 7, 6, 3, 5, 4]
+    ```
+- name: size
+  id: index#size
+  summary: Returns the number of elements of the given structure
+  description: |-
+    #### [`size`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3113)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => f a -> `[`NonNegativeInteger`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#NonNegativeInteger)
+
+    Returns the number of elements of the given structure.
+
+    ``` javascript
+    > S.size ([])
+    0
+
+    > S.size (['foo', 'bar', 'baz'])
+    3
+
+    > S.size (Nil)
+    0
+
+    > S.size (Cons ('foo') (Cons ('bar') (Cons ('baz') (Nil))))
+    3
+
+    > S.size (S.Nothing)
+    0
+
+    > S.size (S.Just ('quux'))
+    1
+
+    > S.size (S.Pair ('ignored!') ('counted!'))
+    1
+    ```
+- name: all
+  id: index#all
+  summary: Returns true iff all the elements of the structure satisfy the predicate
+  description: |-
+    #### [`all`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3145)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => (a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> f a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` [iff](https://en.wikipedia.org/wiki/If_and_only_if) all the elements of the structure satisfy the predicate.
+
+    See also [`any`](#any) and [`none`](#none).
+
+    ``` javascript
+    > S.all (S.odd) ([])
+    true
+
+    > S.all (S.odd) ([1, 3, 5])
+    true
+
+    > S.all (S.odd) ([1, 2, 3])
+    false
+    ```
+- name: any
+  id: index#any
+  summary: Returns true iff any element of the structure satisfies the predicate
+  description: |-
+    #### [`any`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3168)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => (a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> f a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` [iff](https://en.wikipedia.org/wiki/If_and_only_if) any element of the structure satisfies the predicate.
+
+    See also [`all`](#all) and [`none`](#none).
+
+    ``` javascript
+    > S.any (S.odd) ([])
+    false
+
+    > S.any (S.odd) ([2, 4, 6])
+    false
+
+    > S.any (S.odd) ([1, 2, 3])
+    true
+    ```
+- name: none
+  id: index#none
+  summary: Returns true iff none of the elements of the structure satisfies the predicate
+  description: |-
+    #### [`none`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3191)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => (a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> f a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` [iff](https://en.wikipedia.org/wiki/If_and_only_if) none of the elements of the structure satisfies the predicate.
+
+    Properties:
+
+    - `forall p :: a -> Boolean, xs :: Foldable f => f a. S.none (p) (xs) = S.not (S.any (p) (xs))`
+
+    - `forall p :: a -> Boolean, xs :: Foldable f => f a. S.none (p) (xs) = S.all (S.complement (p)) (xs)`
+
+    See also [`all`](#all) and [`any`](#any).
+
+    ``` javascript
+    > S.none (S.odd) ([])
+    true
+
+    > S.none (S.odd) ([2, 4, 6])
+    true
+
+    > S.none (S.odd) ([1, 2, 3])
+    false
+    ```
+- name: append
+  id: index#append
+  summary: Returns the result of appending the first argument to the second
+  description: |-
+    #### [`append`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3222)` :: (`[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` f, `[`Semigroup`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Semigroup)` (f a)) => a -> f a -> f a`
+
+    Returns the result of appending the first argument to the second.
+
+    See also [`prepend`](#prepend).
+
+    ``` javascript
+    > S.append (3) ([1, 2])
+    [1, 2, 3]
+
+    > S.append (3) (Cons (1) (Cons (2) (Nil)))
+    Cons (1) (Cons (2) (Cons (3) (Nil)))
+
+    > S.append ([1]) (S.Nothing)
+    Just ([1])
+
+    > S.append ([3]) (S.Just ([1, 2]))
+    Just ([1, 2, 3])
+    ```
+- name: prepend
+  id: index#prepend
+  summary: Returns the result of prepending the first argument to the second
+  description: |-
+    #### [`prepend`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3252)` :: (`[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` f, `[`Semigroup`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Semigroup)` (f a)) => a -> f a -> f a`
+
+    Returns the result of prepending the first argument to the second.
+
+    See also [`append`](#append).
+
+    ``` javascript
+    > S.prepend (1) ([2, 3])
+    [1, 2, 3]
+
+    > S.prepend (1) (Cons (2) (Cons (3) (Nil)))
+    Cons (1) (Cons (2) (Cons (3) (Nil)))
+
+    > S.prepend ([1]) (S.Nothing)
+    Just ([1])
+
+    > S.prepend ([1]) (S.Just ([2, 3]))
+    Just ([1, 2, 3])
+    ```
+- name: joinWith
+  id: index#joinWith
+  summary: Joins the strings of the second argument separated by the first argument
+  description: |-
+    #### [`joinWith`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3277)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Joins the strings of the second argument separated by the first argument.
+
+    Properties:
+
+    - `forall s :: String, t :: String. S.joinWith (s) (S.splitOn (s) (t)) = t`
+
+    See also [`splitOn`](#splitOn) and [`intercalate`](#intercalate).
+
+    ``` javascript
+    > S.joinWith (':') (['foo', 'bar', 'baz'])
+    "foo:bar:baz"
+    ```
+- name: elem
+  id: index#elem
+  summary: Takes a value and a structure and returns true iff the value is an element of the structure
+  description: |-
+    #### [`elem`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3298)` :: (`[`Setoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Setoid)` a, `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f) => a -> f a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Takes a value and a structure and returns `true` [iff](https://en.wikipedia.org/wiki/If_and_only_if) the value is an element of the structure.
+
+    See also [`find`](#find).
+
+    ``` javascript
+    > S.elem ('c') (['a', 'b', 'c'])
+    true
+
+    > S.elem ('x') (['a', 'b', 'c'])
+    false
+
+    > S.elem (3) ({x: 1, y: 2, z: 3})
+    true
+
+    > S.elem (8) ({x: 1, y: 2, z: 3})
+    false
+
+    > S.elem (0) (S.Just (0))
+    true
+
+    > S.elem (0) (S.Just (1))
+    false
+
+    > S.elem (0) (S.Nothing)
+    false
+    ```
+- name: find
+  id: index#find
+  summary: Takes a predicate and a structure and returns Just the leftmost element of the structure that satisfies the predicate; Nothing if there is no such element
+  description: |-
+    #### [`find`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3333)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => (a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> f a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a`
+
+    Takes a predicate and a structure and returns Just the leftmost element of the structure that satisfies the predicate; Nothing if there is no such element.
+
+    See also [`elem`](#elem).
+
+    ``` javascript
+    > S.find (S.lt (0)) ([1, -2, 3, -4, 5])
+    Just (-2)
+
+    > S.find (S.lt (0)) ([1, 2, 3, 4, 5])
+    Nothing
+    ```
+- name: intercalate
+  id: index#intercalate
+  summary: Curried version of Z.intercalate
+  description: |-
+    #### [`intercalate`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3365)` :: (`[`Monoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Monoid)` m, `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f) => m -> f m -> m`
+
+    Curried version of [`Z.intercalate`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#intercalate). Concatenates the elements of the given structure, separating each pair of adjacent elements with the given separator.
+
+    See also [`joinWith`](#joinWith).
+
+    ``` javascript
+    > S.intercalate (', ') ([])
+    ""
+
+    > S.intercalate (', ') (['foo', 'bar', 'baz'])
+    "foo, bar, baz"
+
+    > S.intercalate (', ') (Nil)
+    ""
+
+    > S.intercalate (', ') (Cons ('foo') (Cons ('bar') (Cons ('baz') (Nil))))
+    "foo, bar, baz"
+
+    > S.intercalate ([0, 0, 0]) ([])
+    []
+
+    > S.intercalate ([0, 0, 0]) ([[1], [2, 3], [4, 5, 6], [7, 8], [9]])
+    [1, 0, 0, 0, 2, 3, 0, 0, 0, 4, 5, 6, 0, 0, 0, 7, 8, 0, 0, 0, 9]
+    ```
+- name: foldMap
+  id: index#foldMap
+  summary: Curried version of Z.foldMap
+  description: |-
+    #### [`foldMap`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3398)` :: (`[`Monoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Monoid)` m, `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f) => `[`TypeRep`](https://github.com/fantasyland/fantasy-land#type-representatives)` m -> (a -> m) -> f a -> m`
+
+    Curried version of [`Z.foldMap`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#foldMap). Deconstructs a foldable by mapping every element to a monoid and concatenating the results.
+
+    ``` javascript
+    > S.foldMap (String) (f => f.name) ([Math.sin, Math.cos, Math.tan])
+    "sincostan"
+
+    > S.foldMap (Array) (x => [x + 1, x + 2]) ([10, 20, 30])
+    [11, 12, 21, 22, 31, 32]
+    ```
+- name: unfoldr
+  id: index#unfoldr
+  summary: Takes a function and a seed value, and returns an array generated by applying the function repeatedly
+  description: |-
+    #### [`unfoldr`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3416)` :: (b -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` (`[`Pair`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Pair)` a b)) -> b -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` a`
+
+    Takes a function and a seed value, and returns an array generated by applying the function repeatedly. The array is initially empty. The function is initially applied to the seed value. Each application of the function should result in either:
+
+    - Nothing, in which case the array is returned; or
+
+    - Just a pair, in which case the first element is appended to the array and the function is applied to the second element.
+
+    ``` javascript
+    > S.unfoldr (n => n < 1000 ? S.Just (S.Pair (n) (2 * n)) : S.Nothing) (1)
+    [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+    ```
+- name: range
+  id: index#range
+  summary: Returns an array of consecutive integers starting with the first argument and ending with the second argument minus one
+  description: |-
+    #### [`range`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3447)` :: `[`Integer`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Integer)` -> `[`Integer`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Integer)` -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` `[`Integer`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Integer)
+
+    Returns an array of consecutive integers starting with the first argument and ending with the second argument minus one. Returns `[]` if the second argument is less than or equal to the first argument.
+
+    ``` javascript
+    > S.range (0) (10)
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+    > S.range (-5) (0)
+    [-5, -4, -3, -2, -1]
+
+    > S.range (0) (-5)
+    []
+    ```
+- name: groupBy
+  id: index#groupBy
+  summary: Splits its array argument into an array of arrays of equal, adjacent elements
+  description: |-
+    #### [`groupBy`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3476)` :: (a -> a -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` a -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` (`[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` a)`
+
+    Splits its array argument into an array of arrays of equal, adjacent elements. Equality is determined by the function provided as the first argument. Its behaviour can be surprising for functions that aren't reflexive, transitive, and symmetric (see [equivalence](https://en.wikipedia.org/wiki/Equivalence_relation) relation).
+
+    Properties:
+
+    - `forall f :: a -> a -> Boolean, xs :: Array a. S.join (S.groupBy (f) (xs)) = xs`
+
+    ``` javascript
+    > S.groupBy (S.equals) ([1, 1, 2, 1, 1])
+    [[1, 1], [2], [1, 1]]
+
+    > S.groupBy (x => y => x + y === 0) ([2, -3, 3, 3, 3, 4, -4, 4])
+    [[2], [-3, 3, 3, 3], [4, -4], [4]]
+    ```
+- name: reverse
+  id: index#reverse
+  summary: Reverses the elements of the given structure
+  description: |-
+    #### [`reverse`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3515)` :: (`[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` f, `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f, `[`Monoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Monoid)` (f a)) => f a -> f a`
+
+    Reverses the elements of the given structure.
+
+    ``` javascript
+    > S.reverse ([1, 2, 3])
+    [3, 2, 1]
+
+    > S.reverse (Cons (1) (Cons (2) (Cons (3) (Nil))))
+    Cons (3) (Cons (2) (Cons (1) (Nil)))
+
+    > S.pipe ([S.splitOn (''), S.reverse, S.joinWith ('')]) ('abc')
+    "cba"
+    ```
+- name: sort
+  id: index#sort
+  summary: Performs a stable sort of the elements of the given structure, using Z.lte for comparisons
+  description: |-
+    #### [`sort`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3535)` :: (`[`Ord`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Ord)` a, `[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` m, `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` m, `[`Monoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Monoid)` (m a)) => m a -> m a`
+
+    Performs a [stable sort](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) of the elements of the given structure, using [`Z.lte`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#lte) for comparisons.
+
+    Properties:
+
+    - `S.sort (S.sort (m)) = S.sort (m)` (idempotence)
+
+    See also [`sortBy`](#sortBy).
+
+    ``` javascript
+    > S.sort (['foo', 'bar', 'baz'])
+    ["bar", "baz", "foo"]
+
+    > S.sort ([S.Left (4), S.Right (3), S.Left (2), S.Right (1)])
+    [Left (2), Left (4), Right (1), Right (3)]
+    ```
+- name: sortBy
+  id: index#sortBy
+  summary: Performs a stable sort of the elements of the given structure, using Z.lte to compare the values produced by applying the given function to each element of the structure
+  description: |-
+    #### [`sortBy`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3559)` :: (`[`Ord`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Ord)` b, `[`Applicative`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Applicative)` m, `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` m, `[`Monoid`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Monoid)` (m a)) => (a -> b) -> m a -> m a`
+
+    Performs a [stable sort](https://en.wikipedia.org/wiki/Sorting_algorithm#Stability) of the elements of the given structure, using [`Z.lte`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#lte) to compare the values produced by applying the given function to each element of the structure.
+
+    Properties:
+
+    - `S.sortBy (f) (S.sortBy (f) (m)) = S.sortBy (f) (m)` (idempotence)
+
+    See also [`sort`](#sort).
+
+    ``` javascript
+    > S.sortBy (S.prop ('rank')) ([{rank: 7, suit: 'spades'}, {rank: 5, suit: 'hearts'}, {rank: 2, suit: 'hearts'}, {rank: 5, suit: 'spades'}])
+    [{"rank": 2, "suit": "hearts"}, {"rank": 5, "suit": "hearts"}, {"rank": 5, "suit": "spades"}, {"rank": 7, "suit": "spades"}]
+
+    > S.sortBy (S.prop ('suit')) ([{rank: 7, suit: 'spades'}, {rank: 5, suit: 'hearts'}, {rank: 2, suit: 'hearts'}, {rank: 5, suit: 'spades'}])
+    [{"rank": 5, "suit": "hearts"}, {"rank": 2, "suit": "hearts"}, {"rank": 7, "suit": "spades"}, {"rank": 5, "suit": "spades"}]
+    ```
+
+    If descending order is desired, one may use [`Descending`](https://github.com/sanctuary-js/sanctuary-descending/tree/v2.1.0#Descending):
+
+    ``` javascript
+    > S.sortBy (Descending) ([83, 97, 110, 99, 116, 117, 97, 114, 121])
+    [121, 117, 116, 114, 110, 99, 97, 97, 83]
+    ```
+- name: zip
+  id: index#zip
+  summary: Returns an array of pairs of corresponding elements from the given arrays
+  description: |-
+    #### [`zip`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3607)` :: `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` a -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` b -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` (`[`Pair`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Pair)` a b)`
+
+    Returns an array of pairs of corresponding elements from the given arrays. The length of the resulting array is equal to the length of the shorter input array.
+
+    See also [`zipWith`](#zipWith).
+
+    ``` javascript
+    > S.zip (['a', 'b']) (['x', 'y', 'z'])
+    [Pair ("a") ("x"), Pair ("b") ("y")]
+
+    > S.zip ([1, 3, 5]) ([2, 4])
+    [Pair (1) (2), Pair (3) (4)]
+    ```
+- name: zipWith
+  id: index#zipWith
+  summary: Returns the result of combining, pairwise, the given arrays using the given binary function
+  description: |-
+    #### [`zipWith`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3628)` :: (a -> b -> c) -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` a -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` b -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` c`
+
+    Returns the result of combining, pairwise, the given arrays using the given binary function. The length of the resulting array is equal to the length of the shorter input array.
+
+    See also [`zip`](#zip).
+
+    ``` javascript
+    > S.zipWith (a => b => a + b) (['a', 'b']) (['x', 'y', 'z'])
+    ["ax", "by"]
+
+    > S.zipWith (a => b => [a, b]) ([1, 3, 5]) ([2, 4])
+    [[1, 2], [3, 4]]
+    ```
+
+    ### Object
+- name: prop
+  id: index#prop
+  summary: Takes a property name and an object with known properties and returns the value of the specified property
+  description: |-
+    #### [`prop`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3663)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> a -> b`
+
+    Takes a property name and an object with known properties and returns the value of the specified property. If for some reason the object lacks the specified property, a type error is thrown.
+
+    For accessing properties of uncertain objects, use [`get`](#get) instead. For accessing string map values by key, use [`value`](#value) instead.
+
+    ``` javascript
+    > S.prop ('a') ({a: 1, b: 2})
+    1
+    ```
+- name: props
+  id: index#props
+  summary: Takes a property path (an array of property names) and an object with known structure and returns the value at the given path
+  description: |-
+    #### [`props`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3690)` :: `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> a -> b`
+
+    Takes a property path (an array of property names) and an object with known structure and returns the value at the given path. If for some reason the path does not exist, a type error is thrown.
+
+    For accessing property paths of uncertain objects, use [`gets`](#gets) instead.
+
+    ``` javascript
+    > S.props (['a', 'b', 'c']) ({a: {b: {c: 1}}})
+    1
+    ```
+- name: get
+  id: index#get
+  summary: Takes a predicate, a property name, and an object and returns Just the value of the specified object property if it exists and the value satisfies the given predicate; Nothing otherwise
+  description: |-
+    #### [`get`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3719)` :: (`[`Any`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Any)` -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` b`
+
+    Takes a predicate, a property name, and an object and returns Just the value of the specified object property if it exists and the value satisfies the given predicate; Nothing otherwise.
+
+    See also [`gets`](#gets), [`prop`](#prop), and [`value`](#value).
+
+    ``` javascript
+    > S.get (S.is ($.Number)) ('x') ({x: 1, y: 2})
+    Just (1)
+
+    > S.get (S.is ($.Number)) ('x') ({x: '1', y: '2'})
+    Nothing
+
+    > S.get (S.is ($.Number)) ('x') ({})
+    Nothing
+
+    > S.get (S.is ($.Array ($.Number))) ('x') ({x: [1, 2, 3]})
+    Just ([1, 2, 3])
+
+    > S.get (S.is ($.Array ($.Number))) ('x') ({x: [1, 2, 3, null]})
+    Nothing
+    ```
+- name: gets
+  id: index#gets
+  summary: Takes a predicate, a property path (an array of property names), and an object and returns Just the value at the given path if such a path exists and the value satisfies the given predicate; Nothing otherwise
+  description: |-
+    #### [`gets`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3752)` :: (`[`Any`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Any)` -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` b`
+
+    Takes a predicate, a property path (an array of property names), and an object and returns Just the value at the given path if such a path exists and the value satisfies the given predicate; Nothing otherwise.
+
+    See also [`get`](#get).
+
+    ``` javascript
+    > S.gets (S.is ($.Number)) (['a', 'b', 'c']) ({a: {b: {c: 42}}})
+    Just (42)
+
+    > S.gets (S.is ($.Number)) (['a', 'b', 'c']) ({a: {b: {c: '42'}}})
+    Nothing
+
+    > S.gets (S.is ($.Number)) (['a', 'b', 'c']) ({})
+    Nothing
+    ```
+
+    ### StrMap
+
+    StrMap is an abbreviation of *string map*. A string map is an object, such as `{foo: 1, bar: 2, baz: 3}`, whose values are all members of the same type. Formally, a value is a member of type `StrMap a` if its [type identifier](https://github.com/sanctuary-js/sanctuary-type-identifiers/tree/v3.0.0) is `'Object'` and the values of its enumerable own properties are all members of type `a`.
+- name: value
+  id: index#value
+  summary: Retrieve the value associated with the given key in the given string map
+  description: |-
+    #### [`value`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3793)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`StrMap`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#StrMap)` a -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a`
+
+    Retrieve the value associated with the given key in the given string map.
+
+    Formally, `value (k) (m)` evaluates to `Just (m[k])` if `k` is an enumerable own property of `m`; `Nothing` otherwise.
+
+    See also [`prop`](#prop) and [`get`](#get).
+
+    ``` javascript
+    > S.value ('foo') ({foo: 1, bar: 2})
+    Just (1)
+
+    > S.value ('bar') ({foo: 1, bar: 2})
+    Just (2)
+
+    > S.value ('baz') ({foo: 1, bar: 2})
+    Nothing
+    ```
+- name: singleton
+  id: index#singleton
+  summary: Takes a string and a value of any type, and returns a string map with a single entry (mapping the key to the value)
+  description: |-
+    #### [`singleton`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3825)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> a -> `[`StrMap`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#StrMap)` a`
+
+    Takes a string and a value of any type, and returns a string map with a single entry (mapping the key to the value).
+
+    ``` javascript
+    > S.singleton ('foo') (42)
+    {"foo": 42}
+    ```
+- name: insert
+  id: index#insert
+  summary: Takes a string, a value of any type, and a string map, and returns a string map comprising all the entries of the given string map plus the entry specified by the first two arguments (which takes precedence)
+  description: |-
+    #### [`insert`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3847)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> a -> `[`StrMap`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#StrMap)` a -> `[`StrMap`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#StrMap)` a`
+
+    Takes a string, a value of any type, and a string map, and returns a string map comprising all the entries of the given string map plus the entry specified by the first two arguments (which takes precedence).
+
+    Equivalent to Haskell's `insert` function. Similar to Clojure's `assoc` function.
+
+    ``` javascript
+    > S.insert ('c') (3) ({a: 1, b: 2})
+    {"a": 1, "b": 2, "c": 3}
+
+    > S.insert ('a') (4) ({a: 1, b: 2})
+    {"a": 4, "b": 2}
+    ```
+- name: remove
+  id: index#remove
+  summary: Takes a string and a string map, and returns a string map comprising all the entries of the given string map except the one whose key matches the given string (if such a key exists)
+  description: |-
+    #### [`remove`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3876)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`StrMap`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#StrMap)` a -> `[`StrMap`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#StrMap)` a`
+
+    Takes a string and a string map, and returns a string map comprising all the entries of the given string map except the one whose key matches the given string (if such a key exists).
+
+    Equivalent to Haskell's `delete` function. Similar to Clojure's `dissoc` function.
+
+    ``` javascript
+    > S.remove ('c') ({a: 1, b: 2, c: 3})
+    {"a": 1, "b": 2}
+
+    > S.remove ('c') ({})
+    {}
+    ```
+- name: keys
+  id: index#keys
+  summary: Returns the keys of the given string map, in arbitrary order
+  description: |-
+    #### [`keys`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3905)` :: `[`StrMap`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#StrMap)` a -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Returns the keys of the given string map, in arbitrary order.
+
+    ``` javascript
+    > S.sort (S.keys ({b: 2, c: 3, a: 1}))
+    ["a", "b", "c"]
+    ```
+- name: values
+  id: index#values
+  summary: Returns the values of the given string map, in arbitrary order
+  description: |-
+    #### [`values`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3919)` :: `[`StrMap`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#StrMap)` a -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` a`
+
+    Returns the values of the given string map, in arbitrary order.
+
+    ``` javascript
+    > S.sort (S.values ({a: 1, c: 3, b: 2}))
+    [1, 2, 3]
+    ```
+- name: pairs
+  id: index#pairs
+  summary: Returns the key–value pairs of the given string map, in arbitrary order
+  description: |-
+    #### [`pairs`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3936)` :: `[`StrMap`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#StrMap)` a -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` (`[`Pair`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Pair)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` a)`
+
+    Returns the key–value pairs of the given string map, in arbitrary order.
+
+    ``` javascript
+    > S.sort (S.pairs ({b: 2, a: 1, c: 3}))
+    [Pair ("a") (1), Pair ("b") (2), Pair ("c") (3)]
+    ```
+- name: fromPairs
+  id: index#fromPairs
+  summary: Returns a string map containing the key–value pairs specified by the given Foldable
+  description: |-
+    #### [`fromPairs`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3954)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => f (`[`Pair`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Pair)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` a) -> `[`StrMap`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#StrMap)` a`
+
+    Returns a string map containing the key–value pairs specified by the given [Foldable](https://github.com/fantasyland/fantasy-land/tree/v4.0.1#foldable). If a key appears in multiple pairs, the rightmost pair takes precedence.
+
+    ``` javascript
+    > S.fromPairs ([S.Pair ('a') (1), S.Pair ('b') (2), S.Pair ('c') (3)])
+    {"a": 1, "b": 2, "c": 3}
+
+    > S.fromPairs ([S.Pair ('x') (1), S.Pair ('x') (2)])
+    {"x": 2}
+    ```
+
+    ### Number
+- name: negate
+  id: index#negate
+  summary: Negates its argument
+  description: |-
+    #### [`negate`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L3981)` :: `[`ValidNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#ValidNumber)` -> `[`ValidNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#ValidNumber)
+
+    Negates its argument.
+
+    ``` javascript
+    > S.negate (12.5)
+    -12.5
+
+    > S.negate (-42)
+    42
+    ```
+- name: add
+  id: index#add
+  summary: Returns the sum of two (finite) numbers
+  description: |-
+    #### [`add`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4001)` :: `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)` -> `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)` -> `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)
+
+    Returns the sum of two (finite) numbers.
+
+    ``` javascript
+    > S.add (1) (1)
+    2
+    ```
+- name: sum
+  id: index#sum
+  summary: Returns the sum of the given array of (finite) numbers
+  description: |-
+    #### [`sum`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4020)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => f `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)` -> `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)
+
+    Returns the sum of the given array of (finite) numbers.
+
+    ``` javascript
+    > S.sum ([1, 2, 3, 4, 5])
+    15
+
+    > S.sum ([])
+    0
+
+    > S.sum (S.Just (42))
+    42
+
+    > S.sum (S.Nothing)
+    0
+    ```
+- name: sub
+  id: index#sub
+  summary: Takes a finite number n and returns the subtract n function
+  description: |-
+    #### [`sub`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4043)` :: `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)` -> `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)` -> `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)
+
+    Takes a finite number `n` and returns the *subtract `n`* function.
+
+    ``` javascript
+    > S.map (S.sub (1)) ([1, 2, 3])
+    [0, 1, 2]
+    ```
+- name: mult
+  id: index#mult
+  summary: Returns the product of two (finite) numbers
+  description: |-
+    #### [`mult`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4062)` :: `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)` -> `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)` -> `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)
+
+    Returns the product of two (finite) numbers.
+
+    ``` javascript
+    > S.mult (4) (2)
+    8
+    ```
+- name: product
+  id: index#product
+  summary: Returns the product of the given array of (finite) numbers
+  description: |-
+    #### [`product`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4081)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => f `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)` -> `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)
+
+    Returns the product of the given array of (finite) numbers.
+
+    ``` javascript
+    > S.product ([1, 2, 3, 4, 5])
+    120
+
+    > S.product ([])
+    1
+
+    > S.product (S.Just (42))
+    42
+
+    > S.product (S.Nothing)
+    1
+    ```
+- name: div
+  id: index#div
+  summary: Takes a non-zero finite number n and returns the divide by n function
+  description: |-
+    #### [`div`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4104)` :: `[`NonZeroFiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#NonZeroFiniteNumber)` -> `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)` -> `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)
+
+    Takes a non-zero finite number `n` and returns the *divide by `n`* function.
+
+    ``` javascript
+    > S.map (S.div (2)) ([0, 1, 2, 3])
+    [0, 0.5, 1, 1.5]
+    ```
+- name: pow
+  id: index#pow
+  summary: Takes a finite number n and returns the power of n function
+  description: |-
+    #### [`pow`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4124)` :: `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)` -> `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)` -> `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)
+
+    Takes a finite number `n` and returns the *power of `n`* function.
+
+    ``` javascript
+    > S.map (S.pow (2)) ([-3, -2, -1, 0, 1, 2, 3])
+    [9, 4, 1, 0, 1, 4, 9]
+
+    > S.map (S.pow (0.5)) ([1, 4, 9, 16, 25])
+    [1, 2, 3, 4, 5]
+    ```
+- name: mean
+  id: index#mean
+  summary: Returns the mean of the given array of (finite) numbers
+  description: |-
+    #### [`mean`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4146)` :: `[`Foldable`](https://github.com/sanctuary-js/sanctuary-type-classes/tree/v12.1.0#Foldable)` f => f `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)` -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` `[`FiniteNumber`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#FiniteNumber)
+
+    Returns the mean of the given array of (finite) numbers.
+
+    ``` javascript
+    > S.mean ([1, 2, 3, 4, 5])
+    Just (3)
+
+    > S.mean ([])
+    Nothing
+
+    > S.mean (S.Just (42))
+    Just (42)
+
+    > S.mean (S.Nothing)
+    Nothing
+    ```
+
+    ### Integer
+- name: even
+  id: index#even
+  summary: Returns true if the given integer is even; false if it is odd
+  description: |-
+    #### [`even`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4183)` :: `[`Integer`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Integer)` -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` if the given integer is even; `false` if it is odd.
+
+    ``` javascript
+    > S.even (42)
+    true
+
+    > S.even (99)
+    false
+    ```
+- name: odd
+  id: index#odd
+  summary: Returns true if the given integer is odd; false if it is even
+  description: |-
+    #### [`odd`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4203)` :: `[`Integer`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Integer)` -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Returns `true` if the given integer is odd; `false` if it is even.
+
+    ``` javascript
+    > S.odd (99)
+    true
+
+    > S.odd (42)
+    false
+    ```
+
+    ### Parse
+- name: parseDate
+  id: index#parseDate
+  summary: Takes a string s and returns Just (new Date (s)) if new Date (s) evaluates to a ValidDate value; Nothing otherwise
+  description: |-
+    #### [`parseDate`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4225)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` `[`ValidDate`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#ValidDate)
+
+    Takes a string `s` and returns `Just (new Date (s))` if `new Date (s)` evaluates to a [`ValidDate`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#ValidDate) value; Nothing otherwise.
+
+    As noted in [\#488](https://github.com/sanctuary-js/sanctuary/issues/488), this function's behaviour is unspecified for some inputs! [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) warns against using the `Date` constructor to parse date strings:
+
+    > **Note:** parsing of date strings with the `Date` constructor \[…\] is strongly discouraged due to browser differences and inconsistencies. Support for RFC 2822 format strings is by convention only. Support for ISO 8601 formats differs in that date-only strings (e.g. "1970-01-01") are treated as UTC, not local.
+
+    ``` javascript
+    > S.parseDate ('2011-01-19T17:40:00Z')
+    Just (new Date ("2011-01-19T17:40:00.000Z"))
+
+    > S.parseDate ('today')
+    Nothing
+    ```
+- name: parseFloat
+  id: index#parseFloat
+  summary: Takes a string and returns Just the number represented by the string if it does in fact represent a number; Nothing otherwise
+  description: |-
+    #### [`parseFloat`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4291)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` `[`Number`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Number)
+
+    Takes a string and returns Just the number represented by the string if it does in fact represent a number; Nothing otherwise.
+
+    ``` javascript
+    > S.parseFloat ('-123.45')
+    Just (-123.45)
+
+    > S.parseFloat ('foo.bar')
+    Nothing
+    ```
+- name: parseInt
+  id: index#parseInt
+  summary: Takes a radix (an integer between 2 and 36 inclusive) and a string, and returns Just the number represented by the string if it does in fact represent a number in the base specified by the radix; Nothing otherwise
+  description: |-
+    #### [`parseInt`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4319)` :: Radix -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` `[`Integer`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Integer)
+
+    Takes a radix (an integer between 2 and 36 inclusive) and a string, and returns Just the number represented by the string if it does in fact represent a number in the base specified by the radix; Nothing otherwise.
+
+    This function is stricter than [`parseInt`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt): a string is considered to represent an integer only if all its non-prefix characters are members of the character set specified by the radix.
+
+    ``` javascript
+    > S.parseInt (10) ('-42')
+    Just (-42)
+
+    > S.parseInt (16) ('0xFF')
+    Just (255)
+
+    > S.parseInt (16) ('0xGG')
+    Nothing
+    ```
+- name: parseJson
+  id: index#parseJson
+  summary: Takes a predicate and a string that may or may not be valid JSON, and returns Just the result of applying JSON.parse to the string if the result satisfies the predicate; Nothing otherwise
+  description: |-
+    #### [`parseJson`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4359)` :: (`[`Any`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Any)` -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)`) -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` a`
+
+    Takes a predicate and a string that may or may not be valid JSON, and returns Just the result of applying `JSON.parse` to the string *if* the result satisfies the predicate; Nothing otherwise.
+
+    ``` javascript
+    > S.parseJson (S.is ($.Array ($.Integer))) ('[')
+    Nothing
+
+    > S.parseJson (S.is ($.Array ($.Integer))) ('["1","2","3"]')
+    Nothing
+
+    > S.parseJson (S.is ($.Array ($.Integer))) ('[0,1.5,3,4.5]')
+    Nothing
+
+    > S.parseJson (S.is ($.Array ($.Integer))) ('[1,2,3]')
+    Just ([1, 2, 3])
+    ```
+
+    ### RegExp
+- name: regex
+  id: index#regex
+  summary: Takes a RegexFlags and a pattern, and returns a RegExp
+  description: |-
+    #### [`regex`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4411)` :: `[`RegexFlags`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#RegexFlags)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`RegExp`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#RegExp)
+
+    Takes a [RegexFlags](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#RegexFlags) and a pattern, and returns a RegExp.
+
+    ``` javascript
+    > S.regex ('g') (':\\d+:')
+    /:\d+:/g
+    ```
+- name: regexEscape
+  id: index#regexEscape
+  summary: Takes a string that may contain regular expression metacharacters, and returns a string with those metacharacters escaped
+  description: |-
+    #### [`regexEscape`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4430)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Takes a string that may contain regular expression metacharacters, and returns a string with those metacharacters escaped.
+
+    Properties:
+
+    - `forall s :: String. S.test (S.regex ('') (S.regexEscape (s))) (s) = true`
+
+    ``` javascript
+    > S.regexEscape ('-=*{XYZ}*=-')
+    "\\-=\\*\\{XYZ\\}\\*=\\-"
+    ```
+- name: test
+  id: index#test
+  summary: Takes a pattern and a string, and returns true iff the pattern matches the string
+  description: |-
+    #### [`test`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4453)` :: `[`RegExp`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#RegExp)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Boolean`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Boolean)
+
+    Takes a pattern and a string, and returns `true` [iff](https://en.wikipedia.org/wiki/If_and_only_if) the pattern matches the string.
+
+    ``` javascript
+    > S.test (/^a/) ('abacus')
+    true
+
+    > S.test (/^a/) ('banana')
+    false
+    ```
+- name: match
+  id: index#match
+  summary: Takes a pattern and a string, and returns Just a match record if the pattern matches the string; Nothing otherwise
+  description: |-
+    #### [`match`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4476)` :: `[`NonGlobalRegExp`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#NonGlobalRegExp)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` { match :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)`, groups :: `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` (`[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)`) }`
+
+    Takes a pattern and a string, and returns Just a match record if the pattern matches the string; Nothing otherwise.
+
+    `groups :: Array (Maybe String)` acknowledges the existence of optional capturing groups.
+
+    Properties:
+
+    - `forall p :: Pattern, s :: String. S.head (S.matchAll (S.regex ('g') (p)) (s)) = S.match (S.regex ('') (p)) (s)`
+
+    See also [`matchAll`](#matchAll).
+
+    ``` javascript
+    > S.match (/(good)?bye/) ('goodbye')
+    Just ({"groups": [Just ("good")], "match": "goodbye"})
+
+    > S.match (/(good)?bye/) ('bye')
+    Just ({"groups": [Nothing], "match": "bye"})
+    ```
+- name: matchAll
+  id: index#matchAll
+  summary: Takes a pattern and a string, and returns an array of match records
+  description: |-
+    #### [`matchAll`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4511)` :: `[`GlobalRegExp`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#GlobalRegExp)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` { match :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)`, groups :: `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` (`[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)`) }`
+
+    Takes a pattern and a string, and returns an array of match records.
+
+    `groups :: Array (Maybe String)` acknowledges the existence of optional capturing groups.
+
+    See also [`match`](#match).
+
+    ``` javascript
+    > S.matchAll (/@([a-z]+)/g) ('Hello, world!')
+    []
+
+    > S.matchAll (/@([a-z]+)/g) ('Hello, @foo! Hello, @bar! Hello, @baz!')
+    [{"groups": [Just ("foo")], "match": "@foo"}, {"groups": [Just ("bar")], "match": "@bar"}, {"groups": [Just ("baz")], "match": "@baz"}]
+    ```
+
+    ### String
+- name: toUpper
+  id: index#toUpper
+  summary: Returns the upper-case equivalent of its argument
+  description: |-
+    #### [`toUpper`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4548)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Returns the upper-case equivalent of its argument.
+
+    See also [`toLower`](#toLower).
+
+    ``` javascript
+    > S.toUpper ('ABC def 123')
+    "ABC DEF 123"
+    ```
+- name: toLower
+  id: index#toLower
+  summary: Returns the lower-case equivalent of its argument
+  description: |-
+    #### [`toLower`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4564)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Returns the lower-case equivalent of its argument.
+
+    See also [`toUpper`](#toUpper).
+
+    ``` javascript
+    > S.toLower ('ABC def 123')
+    "abc def 123"
+    ```
+- name: trim
+  id: index#trim
+  summary: Strips leading and trailing whitespace characters
+  description: |-
+    #### [`trim`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4580)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Strips leading and trailing whitespace characters.
+
+    ``` javascript
+    > S.trim ('\t\t foo bar \n')
+    "foo bar"
+    ```
+- name: stripPrefix
+  id: index#stripPrefix
+  summary: Returns Just the portion of the given string (the second argument) left after removing the given prefix (the first argument) if the string starts with the prefix; Nothing otherwise
+  description: |-
+    #### [`stripPrefix`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4594)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Returns Just the portion of the given string (the second argument) left after removing the given prefix (the first argument) if the string starts with the prefix; Nothing otherwise.
+
+    See also [`stripSuffix`](#stripSuffix).
+
+    ``` javascript
+    > S.stripPrefix ('https://') ('https://sanctuary.js.org')
+    Just ("sanctuary.js.org")
+
+    > S.stripPrefix ('https://') ('http://sanctuary.js.org')
+    Nothing
+    ```
+- name: stripSuffix
+  id: index#stripSuffix
+  summary: Returns Just the portion of the given string (the second argument) left after removing the given suffix (the first argument) if the string ends with the suffix; Nothing otherwise
+  description: |-
+    #### [`stripSuffix`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4621)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Maybe`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Maybe)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Returns Just the portion of the given string (the second argument) left after removing the given suffix (the first argument) if the string ends with the suffix; Nothing otherwise.
+
+    See also [`stripPrefix`](#stripPrefix).
+
+    ``` javascript
+    > S.stripSuffix ('.md') ('README.md')
+    Just ("README")
+
+    > S.stripSuffix ('.md') ('README')
+    Nothing
+    ```
+- name: words
+  id: index#words
+  summary: Takes a string and returns the array of words the string contains (words are delimited by whitespace characters)
+  description: |-
+    #### [`words`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4648)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Takes a string and returns the array of words the string contains (words are delimited by whitespace characters).
+
+    See also [`unwords`](#unwords).
+
+    ``` javascript
+    > S.words (' foo bar baz ')
+    ["foo", "bar", "baz"]
+    ```
+- name: unwords
+  id: index#unwords
+  summary: Takes an array of words and returns the result of joining the words with separating spaces
+  description: |-
+    #### [`unwords`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4671)` :: `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Takes an array of words and returns the result of joining the words with separating spaces.
+
+    See also [`words`](#words).
+
+    ``` javascript
+    > S.unwords (['foo', 'bar', 'baz'])
+    "foo bar baz"
+    ```
+- name: lines
+  id: index#lines
+  summary: 'Takes a string and returns the array of lines the string contains (lines are delimited by newlines: ''\n'' or ''\r\n'' or ''\r'')'
+  description: |-
+    #### [`lines`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4688)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Takes a string and returns the array of lines the string contains (lines are delimited by newlines: `'\n'` or `'\r\n'` or `'\r'`). The resulting strings do not contain newlines.
+
+    See also [`unlines`](#unlines).
+
+    ``` javascript
+    > S.lines ('foo\nbar\nbaz\n')
+    ["foo", "bar", "baz"]
+    ```
+- name: unlines
+  id: index#unlines
+  summary: Takes an array of lines and returns the result of joining the lines after appending a terminating line feed ('\n') to each
+  description: |-
+    #### [`unlines`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4710)` :: `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Takes an array of lines and returns the result of joining the lines after appending a terminating line feed (`'\n'`) to each.
+
+    See also [`lines`](#lines).
+
+    ``` javascript
+    > S.unlines (['foo', 'bar', 'baz'])
+    "foo\nbar\nbaz\n"
+    ```
+- name: splitOn
+  id: index#splitOn
+  summary: Returns the substrings of its second argument separated by occurrences of its first argument
+  description: |-
+    #### [`splitOn`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4730)` :: `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)
+
+    Returns the substrings of its second argument separated by occurrences of its first argument.
+
+    See also [`joinWith`](#joinWith) and [`splitOnRegex`](#splitOnRegex).
+
+    ``` javascript
+    > S.splitOn ('::') ('foo::bar::baz')
+    ["foo", "bar", "baz"]
+    ```
+- name: splitOnRegex
+  id: index#splitOnRegex
+  summary: Takes a pattern and a string, and returns the result of splitting the string at every non-overlapping occurrence of the pattern
+  description: "#### [`splitOnRegex`](https://github.com/sanctuary-js/sanctuary/blob/v3.1.0/index.js#L4747)` :: `[`GlobalRegExp`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#GlobalRegExp)` -> `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)` -> `[`Array`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#Array)` `[`String`](https://github.com/sanctuary-js/sanctuary-def/tree/v0.22.0#String)\n\nTakes a pattern and a string, and returns the result of splitting the string at every non-overlapping occurrence of the pattern.\n\nProperties:\n\n- `forall s :: String, t :: String. S.joinWith (s) (S.splitOnRegex (S.regex ('g') (S.regexEscape (s))) (t)) = t`\n\nSee also [`splitOn`](#splitOn).\n\n``` javascript\n> S.splitOnRegex (/[,;][ ]*/g) ('foo, bar, baz')\n[\"foo\", \"bar\", \"baz\"]\n\n> S.splitOnRegex (/[,;][ ]*/g) ('foo;bar;baz')\n[\"foo\", \"bar\", \"baz\"]\n```\n\n© 2020 Sanctuary  \n© 2016 Plaid Technologies, Inc.  \nLicensed under the MIT License.  \n[https://sanctuary.js.org/](https://sanctuary.js.org/)"

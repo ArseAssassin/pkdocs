@@ -1,0 +1,48 @@
+# npm:
+#   - ramda
+#   - lodash
+#   - commander
+#   - async
+#   - glob
+#   - socket.io
+#   - ws
+#   - mongodb
+#   - cheerio
+#   - ejs
+#   - stylus
+#   - sinon
+#   - nunjucks
+python:
+  - package: pandas
+  - package: click
+  - package: urllib3
+    license: MIT
+  - package: requests
+  - package: pyyaml
+    module: yaml
+    license: MIT
+  - package: click
+  - package: numpy
+  - package: pytz
+  - package: jinja2
+    license: BSD-3-Clause
+  - package: lxml
+  - package: python-dateutil
+    module: dateutil
+    license: Apache 2.0
+  - package: pytest
+  - package: pygame
+  - package: colorama
+    license: BSD-3-Clause
+  - package: fastapi
+    license: MIT
+  - package: scrapy
+  - package: scipy
+  - package: django
+  - package: spacy
+  - package: fire
+  - package: manim
+  - package: pydantic
+    license: MIT
+  - package: sanic
+    license: MIT

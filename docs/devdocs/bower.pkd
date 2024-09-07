@@ -1,0 +1,323 @@
+---
+name: Bower
+slug: bower
+text_format: markdown
+generator: src:devdocs
+generator_command: src:devdocs
+version: null
+copyright: |-
+  © 2018 Bower contributors
+  Licensed under the MIT License.
+  https://bower.io/docs/api
+homepage: https://bower.io/
+
+---
+- name: cache
+  id: index#cache
+  summary: null
+  description: |-
+    ### cache
+
+    ``` sh
+    $ bower cache <command> [<args>]
+    ```
+
+    Manage bower cache
+
+    #### cache clean
+
+    ``` sh
+    $ bower cache clean
+    $ bower cache clean <name> [<name> ...]
+    $ bower cache clean <name>#<version> [<name>#<version> ..]
+    ```
+
+    Cleans cached packages
+
+    #### cache list
+
+    ``` sh
+    $ bower cache list
+    $ bower cache list <name> [<name> ...]
+    ```
+
+    Lists cached packages
+- name: Configuration
+  id: config
+  summary: Bower can be configured using JSON in a .bowerrc file
+  description: "# Configuration\n\nBower can be configured using JSON in a .bowerrc file. For example:\n\n``` json\n{\n  \"directory\": \"app/components/\",\n  \"timeout\": 120000,\n  \"registry\": {\n    \"search\": [\n      \"http://localhost:8000\",\n      \"https://registry.bower.io\"\n    ]\n  }\n}\n```\n\n## Placement & Order\n\nThe config is obtained by merging multiple configurations by this order of importance:\n\n- CLI arguments via `--config`\n- Environment variables\n- Local `.bowerrc `located in the current working directory\n- All `.bowerrc `files upwards the directory tree\n- `.bowerrc` file located in user’s home folder (`~`)\n- `.bowerrc` file located in the global folder (`/`)\n\nExample of CLI arguments:\n\n- `--config.endpoint-parser=<parser>`\n- `--config.storage.packages=<packages_cache_dir>`\n\nExample of valid environment variables:\n\n- `bower_endpoint_parser` is evaluated as `endpoint-parser`\n- `bower_storage__packages` is evaluated as `storage.packages`\n\nExample of valid environment variables with Array convention:\n\n- `export bower_registry__search='[http://localhost:8080, http://registry.bower.io]'; bower install`\n\n## .bowerrc specification\n\nAvailable configuration variables, in `.bowerrc` format:\n\n``` json\n{\n  \"cwd\": \"~/.my-project\",\n  \"directory\": \"bower_components\",\n  \"registry\": \"https://registry.bower.io\",\n  \"shorthand-resolver\": \"git://github.com//.git\",\n  \"proxy\": \"http://proxy.local\",\n  \"https-proxy\": \"http://proxy.local\",\n  \"ca\": \"/var/certificate.pem\",\n  \"color\": true,\n  \"timeout\": 60000,\n  \"save\": true,\n  \"save-exact\": true,\n  \"strict-ssl\": true,\n  \"storage\": {\n    \"packages\" : \"~/.bower/packages\",\n    \"registry\" : \"~/.bower/registry\",\n    \"links\" : \"~/.bower/links\"\n  },\n  \"interactive\": true,\n  \"resolvers\": [\n    \"mercurial-bower-resolver\"\n  ],\n  \"shallowCloneHosts\": [\n    \"myGitHost.example.com\"\n  ],\n  \"scripts\": {\n    \"preinstall\": \"\",\n    \"postinstall\": \"\",\n    \"preuninstall\": \"\"\n  },\n  \"ignoredDependencies\": [\n    \"jquery\"\n  ]\n}\n```\n\nA detailed description of available configuration variables can be found in [bower/spec](https://github.com/bower/spec/blob/master/config.md) repository.\n\n## Environment variables in .bowerrc\n\nOne can use environment variables in `.bowerrc`, using the following syntax `${ENV_VAR}`.\n\n``` json\n\"storage\" : {\n  \"packages\": \"/path/to/${USER}/packages\"\n}\n```\n\n## Hooks\n\nBower provides 3 separate hooks that can be used to trigger other automated tools during Bower usage. Importantly, these hooks are intended to allow external tools to help wire up the newly installed components into the parent project and other similar tasks. These hooks are not intended to provide a post-installation build step for component authors. As such, the configuration for these hooks is provided in the `.bowerrc` file in the parent project’s directory.\n\nIn `.bowerrc` do:\n\n``` js\n{\n  \"scripts\": {\n    \"preinstall\": \"<your command here>\",\n    \"postinstall\": \"<your command here>\",\n    \"preuninstall\": \"<your command here>\"\n  }\n}\n```\n\nThe value of each script hook may contain a % character. When your script is called, the % will be replaced with a space-separated list of components being installed or uninstalled.\n\nYour script will also include an environment variable `BOWER_PID` containing the PID of the parent Bower process that triggered the script. This can be used to verify that a `preinstall` and `postinstall` steps are part of the same Bower process.\n\n© 2018 Bower contributors  \nLicensed under the MIT License.  \n[https://bower.io/docs/config](https://bower.io/docs/config)"
+- name: Creating Packages
+  id: creating-packages
+  summary: Packages are defined by a manifest file bower.json
+  description: "# Creating Packages\n\n## bower.json\n\nPackages are defined by a manifest file `bower.json`. This is similar to Node’s `package.json` or Ruby’s `Gemfile`.\n\nInteractively create a `bower.json` with [`bower init`](api#init)\n\n``` bash\n$ bower init\n```\n\n## Specification\n\nDetailed specification of `bower.json` file can be found in [bower/spec](https://github.com/bower/spec/blob/master/json.md) repository.\n\n## Maintaining dependencies\n\nUsing `bower install <package> --save` will add `<package>` to your project’s bower.json `dependencies` array.\n\n``` bash\n# install package and add it to bower.json dependencies\n$ bower install <package> --save\n```\n\nSimilarly, using `bower install <package> --save-dev` will add `<package>` to your project’s bower.json `devDependencies` array.\n\n``` bash\n# install package and add it to bower.json devDependencies\n$ bower install <package> --save-dev\n```\n\n## Register\n\nRegistering your package allows others to install it with a short name, like `bower install <my-package-name>`.\n\nTo register a new package:\n\n- The package name **must** adhere to the [bower.json spec](https://github.com/bower/spec/blob/master/json.md#name).\n- There **must** be a valid `bower.json` in the project’s root directory.\n- Your package should use [semver](http://semver.org/) Git tags. The `v` prefix is allowed.\n- Your package **must** be publically available at a Git endpoint (e.g., GitHub). Remember to push your Git tags!\n- For private packages (e.g. GitHub Enterprise), please consider running a private [Bower registry](https://github.com/bower/registry).\n\nThen use [`bower register`](api#register):\n\n``` bash\n$ bower register <my-package-name> <git-endpoint>\n# for example\n$ bower register example git://github.com/user/example.git\n```\n\nNow anyone can run `bower install <my-package-name>`, and get your library installed. The Bower registry does not have authentication or user management at this point in time. It’s on a first come, first served basis.\n\nBower doesn’t support GitHub-style namespacing (`org/repo`), however you are encouraged to namespace related packages with `-`, for example, `angular-` and `paper-`.\n\nPlease do not squat on package names. Register your package and claim your name after you have a valid public repo with working code.\n\nFor package name transfers, intellectual property and other disputes, please try to resolve with the owner first. If no resolution, please submit a ticket in the [Bower Registry repo](https://github.com/bower/registry) and the Bower Core Team will assist.\n\n### Unregister\n\nYou can unregister packages with [`bower unregister`](api#unregister). You first need to authenticate with GitHub with [`bower login`](api#login) to confirm you are a contributor to the package repo.\n\n``` bash\nbower login\n# enter username and password\n? Username:\n? Password:\n# unregister packages after successful login\nbower unregister <package>\n```\n\nYou’ll likely want to [`bower cache clean`](api#cache-clean) after your change. Please remember it is generally considered bad behavior to remove versions of a library that others are depending on. Think twice :) If the above doesn’t work for you, you can [request a package be unregistered manually](https://github.com/bower/registry/issues).\n\n© 2018 Bower contributors  \nLicensed under the MIT License.  \n[https://bower.io/docs/creating-packages](https://bower.io/docs/creating-packages)"
+- name: help
+  id: index#help
+  summary: null
+  description: |-
+    ### help
+
+    ``` sh
+    $ bower help <command>
+    ```
+
+    Display help information about Bower
+- name: home
+  id: index#home
+  summary: Opens a package homepage into your favorite browser
+  description: |-
+    ### home
+
+    ``` sh
+    $ bower home
+    $ bower home <package>
+    $ bower home <package>#<version>
+    ```
+
+    Opens a package homepage into your favorite browser.
+
+    If no `<package>` is passed, opens the homepage of the local package.
+- name: info
+  id: index#info
+  summary: Displays overall information of a package or of a particular version
+  description: |-
+    ### info
+
+    ``` sh
+    $ bower info <package>
+    $ bower info <package> [<property>]
+    $ bower info <package>#<version> [<property>]
+    ```
+
+    Displays overall information of a package or of a particular version.
+- name: init
+  id: index#init
+  summary: null
+  description: |-
+    ### init
+
+    ``` sh
+    $ bower init
+    ```
+
+    Interactively create a bower.json file
+- name: install
+  id: index#install
+  summary: Installs project dependencies recursively
+  description: |-
+    ### install
+
+    ``` sh
+    $ bower install [<options>]
+    $ bower install <endpoint> [<endpoint> ..] [<options>]
+    ```
+
+    Installs project dependencies recursively.
+
+    Project dependencies consist of:
+
+    1.  `dependencies` specified in `bower.json` of project
+    2.  All “external” dependencies not specified in `bower.json`, but present in `bower_components`
+    3.  Any additional `<endpoint>` passed as an argument to this command
+
+    When `--save` flag is used, all additional endpoint are saved to `dependencies` in `bower.json`.
+
+    Bower recommends to always use `--save` flag to achieve reproducible installs between machines.
+
+    Endpoints can have multiple forms:
+
+    - `<package>`
+    - `<package>#<version>`
+    - `<name>=<package>#<version>`
+
+    Where:
+
+    - `<package>` is a package URL, physical location or registry name
+    - `<version>` is a valid range, commit, branch, etc.
+    - `<name>` is the name it should have locally.
+
+    `<package>` can be any one of the following:
+
+    |                                |                                                                                                                                                                                         |
+    |--------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | Registered package name        | `jquery` `normalize.css`                                                                                                                                                                |
+    | Git endpoint                   | `https://github.com/user/package.git` `git@github.com:user/package.git`                                                                                                                 |
+    | Git endpoint without .git      | `git+https://github.com/user/package` `git+ssh://git@github.com/user/package`                                                                                                           |
+    | Local folder                   | `my/local/folder/`                                                                                                                                                                      |
+    | Public Subversion endpoint     | `svn+http://package.googlecode.com/svn/`                                                                                                                                                |
+    | Private Subversion endpoint    | `svn+ssh://package.googlecode.com/svn/` `svn+https://package.googlecode.com/svn/`                                                                                                       |
+    | Shorthand (defaults to GitHub) | `user/package`                                                                                                                                                                          |
+    | URL                            | `http://example.com/script.js``http://example.com/style.css``http://example.com/package.zip` (contents will be extracted) `http://example.com/package.tar` (contents will be extracted) |
+
+    A version can be:
+
+    |                     |                                            |
+    |---------------------|--------------------------------------------|
+    | semver version      | `#1.2.3`                                   |
+    | version range       | `#1.2` `#~1.2.3` `#^1.2.3` `#>=1.2.3 <2.0` |
+    | Git tag             | `#<tag>`                                   |
+    | Git commit SHA      | `#<sha>`                                   |
+    | Git branch          | `#<branch>`                                |
+    | Subversion revision | `#<revision>`                              |
+
+    #### install options
+
+    - `-F`, `--force-latest`: Force latest version on conflict
+    - `-p`, `--production`: Do not install project devDependencies
+    - `-S`, `--save`: Save installed packages into the project’s bower.json dependencies
+    - `-D`, `--save-dev`: Save installed packages into the project’s bower.json devDependencies
+    - `-E`,` --save-exact`: Configure installed packages with an exact version rather than semver
+
+    &nbsp;
+- name: link
+  id: index#link
+  summary: The link functionality allows developers to easily test their packages
+  description: |-
+    ### link
+
+    ``` sh
+    $ bower link
+    $ bower link <name> [<local name>]
+    ```
+
+    The link functionality allows developers to easily test their packages. Linking is a two-step process.
+
+    Using ‘bower link’ in a project folder will create a global link. Then, in some other package, `bower link <name>` will create a link in the components folder pointing to the previously created link.
+
+    This allows you to easily test a package because changes will be reflected immediately. When the link is no longer necessary, simply remove it with `bower uninstall <name>`.
+- name: list
+  id: index#list
+  summary: List local packages and possible updates
+  description: |-
+    ### list
+
+    ``` sh
+    $ bower list [<options>]
+    ```
+
+    List local packages and possible updates.
+
+    #### list options
+
+    - `-p`, `--paths`: Generates a simple JSON source mapping
+    - `-r`, `--relative`: Make paths relative to the directory config property, which defaults to bower_components
+
+    &nbsp;
+- name: login
+  id: index#login
+  summary: Authenticate with GitHub and store credentials
+  description: |-
+    ### login
+
+    ``` sh
+    $ bower login
+    ```
+
+    Authenticate with GitHub and store credentials. Required to unregister packages.
+
+    #### login options
+
+    - `-t`, `--token`: Pass an existing GitHub auth token rather than prompting for username and password
+
+    &nbsp;
+- name: lookup
+  id: index#lookup
+  summary: null
+  description: |-
+    ### lookup
+
+    ``` sh
+    $ bower lookup <name>
+    ```
+
+    Look up a package URL by name
+- name: Pluggable Resolvers
+  id: pluggable-resolvers
+  summary: Pluggable resolvers allow you to use resolvers created by 3rd party JavaScript developers — including overriding default resolvers used by Bower
+  description: "# Pluggable Resolvers\n\nPluggable resolvers allow you to use resolvers created by 3rd party JavaScript developers — including overriding default resolvers used by Bower.\n\nFor example, resolvers can be used for:\n\n- Handling [Mercurial](https://mercurial.selenic.com/) or [Bazaar](http://bazaar.canonical.com/en/) repositories\n- Speeding up checkouts of services like [GitLab](https://about.gitlab.com/) or [Bitbucket](https://bitbucket.org/)\n- Allowing to use packages from [npm](https://www.npmjs.com/) or [component.io](https://github.com/component/component.github.io)\n- Proxying downloads through 3rd party service like [Artifactory](http://www.jfrog.com/artifactory/) or [Nexus Repository](http://www.sonatype.com/nexus-repository-oss)\n- Implementing custom private registry (hosted on GitHub?)\n- Adding authentication support for private [GitHub Enterprise](https://enterprise.github.com/) instances\n\nPluggable resolvers were introduced in Bower 1.5. Please make sure your Bower version is correct (`bower --version`).\n\n## Using\n\nA Pluggable Resolver is just an npm package that you install as `devDependency` in the `package.json` of your repository, or install globally with `npm install -g`.\n\nDeclare what Pluggable resolvers your project uses by adding entries to the `resolvers` section of [.bowerrc](config).\n\n``` json\n{\n  \"resolvers\": [\n    \"bitbucket-resolver\",\n    \"github-enterprise-resolver\"\n  ]\n}\n```\n\nBower tries to use resolvers in the order specified. If no custom resolver matches the source being processed, Bower fallbacks to default resolvers (git, github, filesystem, svn, registry).\n\nYou can find the list of available Bower resolvers on [npm website](https://www.npmjs.com/search?q=bower-resolver).\n\n## Creating\n\nAs mentioned, custom resolvers are [npm](https://www.npmjs.com/) packages with specific a API described below.\n\nThe `package.json` should not list `bower` as a `dependency` or `peerDependency` (both have undesired behavior in npm 2.x, and we don’t want you to use bower internals). Instead, you can check for proper environment in resolver’s factory by reading provided `bower.version` parameter and use any other packages on npm (like [request](https://www.npmjs.com/package/request)).\n\nPackages should list `bower-resolver` as one of the `keywords` in `package.json`. Resolvers should also follow [semver](http://semver.org/) specification.\n\nHere is how an example `package.json` of a custom resolver can look like:\n\n``` json\n{\n  \"name\": \"custom-bower-resolver\",\n  \"version\": \"1.0.0\",\n  \"keywords\": [\"bower-resolver\"],\n  \"main\": \"index.js\",\n  \"dependencies\": {\n    \"request\": \"^2.61.0\"\n  }\n}\n```\n\nThe `index.js` should export factory for resolver, as follows:\n\n``` javascript\nvar tmp = require('tmp');\n\n/**\n * Factory function for resolver\n * It is called only one time by Bower, to instantiate resolver.\n * You can instantiate here any caches or create helper functions.\n */\nmodule.exports = function resolver (bower) {\n\n  // Resolver factory returns an instance of resolver\n  return {\n\n    // Match method tells whether resolver supports given source\n    // It can return either boolean or promise of boolean\n    match: function (source) {\n      return source.indexOf('svn://') === 0\n    },\n\n    // Optional:\n    // Can resolve or normalize sources, like:\n    // \"jquery\" => \"git://github.com/jquery/jquery.git\"\n    locate: function (source) {\n      return source;\n    },\n\n    // Optional:\n    // Allows to list available versions of given source.\n    // Bower chooses matching release and passes it to \"fetch\"\n    releases: function (source) {\n      return [\n        { target: 'v1.0.0', version: '1.0.0' },\n        { target: 'v1.0.1', version: '1.0.1' }\n      ]\n    },\n\n    // It downloads package and extracts it to temporary directory\n    // You can use npm's \"tmp\" package to tmp directories\n    // See the \"Resolver API\" section for details on this method\n    fetch: function (endpoint, cached) {\n      // If cached version of package exists, re-use it\n      if (cached && cached.version) {\n        return;\n      }\n\n      var tempDir = tmp.dirSync();\n\n      // ... download package to tempDir\n\n      return {\n        tempPath: tempDir.name,\n        removeIgnores: true\n      }\n    }\n  }\n}\n```\n\nIf you need something more solid, see this real world example: [Mercurial Resolver](https://github.com/phenomnomnominal/mercurial-bower-resolver).\n\n## Resolver API\n\n### Resolver package\n\n``` javascript\nvar plugResolver = require('pluggable-resolver')\n\nvar resolver = plugResolver({\n  version: '1.5.0',\n  config: {...},\n  logger: logger\n})\n```\n\n- `resolver`: `Resolver` - instance of the resolver.\n- `version`: `String` - Bower’s version that instantiates resolver. You can validate it.\n- `config`: `Object` - Bower’s [config](config). You can ask authors to put extra configuration in it.\n- `logger`: `Object` - Bower’s [logger](https://github.com/bower/bower/tree/master/packages/bower-logger). Use it to output important warnings / information.\n\n`plugResolver()` returns an instance of the resolver with the API described below.\n\n``` javascript\nresolver.match()\nresolver.locate()\nresolver.releases()\nresolver.fetch()\n```\n\n### resolver.match()\n\nTells Bower whether to use or not use this resolver for some source.\n\n``` javascript\nvar isMatched = resolver.match( source )\n```\n\n- `source`: `String` - source from bower.json, like `git://github.com/jquery/jquery.git`\n- `isMatched`: `Boolean` - *Returns* a boolean that tells whether resolver can handle given source (either by locating them with `locate` method, or fetching it with `fetch` + optional `releases` method).\n\n`.match()` can also return a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) of the result. It’s useful e.g. for filesystem checks.\n\n### resolver.locate()\n\nAllows to implement simplified registry.\n\n``` javascript\nvar locatedSource = resolver.locate( source )\n```\n\n- `source`: `String` - source from bower.json, like `jquery/jquery`\n- `locatedSource`: `String` - *Returns* a resolved source string, like `\"git://github.com/jquery/jquery.git\"`\n\n`.locate()` can also return a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) of the result. It’s useful e.g. for remote registry calls.\n\n### resolver.releases()\n\nBower selects one matching `version` from the result and passes matching `target` field to `fetch` method.\n\n``` javascript\nvar resolvedReleases = resolver.releases( source )\n```\n\n- `source`: `String` - source from bower.json, like `git://github.com/jquery/jquery.git`\n- `resolvedReleases`: `Array` - *Returns* available releases for given source (like list of available tags on GitHub)\n  - `target`: `String` - unique target id for release (usually tag name)\n  - `version`: `String` - semantic version for the target above\n\n`.releases()` can also return a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) of the result.\n\n### resolver.fetch()\n\nDownloads given endpoint and returns path to temporary directory.\n\n``` javascript\nvar fetched = resolver.fetch( endPoint, cached )\n```\n\n- `endpoint`: `Object` - endpoint for the resource to download\n  - `name`: `String` - name of resource (like `jquery`)\n  - `source`: `String` - where to download resource from (like `git://github.com/jquery/jquery.git`)\n  - `target`: `String` - the version or release of resource to download (like `v1.0.0`)\n- `cached`: `Object` - contains information about cached resource\n  - `endpoint`: `Object` - endpoint of cached resource (the same format as above)\n  - `release`: `String` - release of cached resource\n  - `releases`: `Array` - the result of `releases` method\n  - `version`: `String` - present cached resource has been resolved as version (like `1.0.0`)\n  - `resolution`: `String` - the “resolution” returned from previous fetch call for same resource\n- `fetched`: `Object` - *Returned*\n  - `tempPath`: `String` - path to teporary directory with downloaded resource\n  - `removeIgnores`: `Boolean` - tells whether bower should remove files ignores in bower.json.\n  - `resolution`: `Object` - extra object that is saved in `.bower.json` and passed in `cached` field to the next `fetch` call. It can be used e.g. to download resources conditionally, for example by storing e-tag or last-modified time.\n\n`.fetch()` can also return a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) of the result.\n\n**If `.fetch()` returns `undefined`, then Bower re-uses cached package.**\n\n© 2018 Bower contributors  \nLicensed under the MIT License.  \n[https://bower.io/docs/pluggable-resolvers](https://bower.io/docs/pluggable-resolvers)"
+- name: prune
+  id: index#prune
+  summary: null
+  description: |-
+    ### prune
+
+    ``` sh
+    $ bower prune
+    ```
+
+    Uninstalls local extraneous packages
+- name: register
+  id: index#register
+  summary: null
+  description: |-
+    ### register
+
+    ``` sh
+    $ bower register <name> <url>
+    ```
+
+    Register a package
+- name: search
+  id: index#search
+  summary: Finds all packages or a specific package
+  description: |-
+    ### search
+
+    ``` sh
+    $ bower search
+    $ bower search <name>
+    ```
+
+    Finds all packages or a specific package.
+- name: uninstall
+  id: index#uninstall
+  summary: null
+  description: |-
+    ### uninstall
+
+    ``` sh
+    $ bower uninstall <name> [<name> ..] [<options>]
+    ```
+
+    Uninstalls a package locally from your bower_components directory
+
+    #### uninstall options
+
+    - `-S`, `--save`: Remove uninstalled packages from the project’s bower.json dependencies
+    - `-D`, `--save-dev`: Remove uninstalled packages from the project’s bower.json devDependencies
+
+    &nbsp;
+- name: unregister
+  id: index#unregister
+  summary: Unregisters a package
+  description: |-
+    ### unregister
+
+    ``` sh
+    $ bower unregister <package>
+    ```
+
+    Unregisters a package.
+- name: update
+  id: index#update
+  summary: Updates installed packages to their newest version according to bower.json
+  description: |-
+    ### update
+
+    ``` sh
+    $ bower update <name> [<name> ..] [<options>]
+    ```
+
+    Updates installed packages to their newest version according to bower.json.
+
+    #### update options
+
+    - `-F`, `--force-latest`: Force latest version on conflict
+    - `-p`, `--production`: Do not install project devDependencies
+    - `-S`, `--save`: Update `dependencies` in bower.json
+    - `-D`, `--save-dev`: Update `devDependencies` in bower.json
+
+    &nbsp;
+- name: version
+  id: index#version
+  summary: Run this in a package directory to bump the version and write the new data back to the bower.json file
+  description: "### version\n\n``` sh\n$ bower version [<newversion> | major | minor | patch]\n```\n\nRun this in a package directory to bump the version and write the new data back to the bower.json file.\n\nThe newversion argument should be a valid semver string, or a valid second argument to semver.inc (one of “build”, “patch”, “minor”, or “major”). In the second case, the existing version will be incremented by 1 in the specified field.\n\nIf run in a git repo, it will also create a version commit and tag, and fail if the repo is not clean.\n\n#### version options\n\n- `-m`, `--message`: Custom git commit and tag message\n\nIf supplied with `--message` (shorthand: `-m`) config option, bower will use it as a commit message when creating a version commit. If the message config contains %s then that will be replaced with the resulting version number. For example:\n\n``` sh\n$ bower version patch -m \"Upgrade to %s for reasons\"\n```\n\n## Options\n\n- [force](#force)\n- [json](#json)\n- [loglevel](#loglevel)\n- [offline](#offline)\n- [quiet](#quiet)\n- [silent](#silent)\n- [verbose](#verbose)\n- [allow-root](#allow-root)\n\n### force\n\n``` sh\n-f, --force\n```\n\nMakes various commands more forceful\n\n- `bower install --force` re-installs all installed components. It also forces installation even when there are non-bower directories with the same name in the components directory. Adding `--force` also bypasses the cache, and writes to the cache anyway.\n- `bower uninstall <package> --force` continues uninstallation even after a dependency conflict\n- `bower register <package> --force` and `bower unregister <package> --force` bypasses confirmation. Login is still needed.\n\n### json\n\n``` sh\n-j, --json\n```\n\nOutput consumable JSON\n\n### loglevel\n\n``` sh\n-l, --loglevel\n```\n\nWhat level of logs to report. Possible values: error, conflict, warn, action, info, debug\n\n### offline\n\n``` sh\n-o, --offline\n```\n\nDo not use network connection\n\n### quiet\n\n``` sh\n-q, --quiet\n```\n\nOnly output important information. It is an alias for `--loglevel=warn`.\n\n### silent\n\n``` sh\n-s, --silent\n```\n\nDo not output anything, besides errors. It is an alias for `--loglevel=error`. Silent is also useful if you have private components that might leak credentials to your CI environment.\n\n### verbose\n\n``` sh\n-V, --verbose\n```\n\nMakes output more verbose. It is an alias for `--loglevel=debug`.\n\n### allow-root\n\n``` sh\n--allow-root\n```\n\nAllows running commands as root. Bower is a user command, there is no need to execute it with superuser permissions. However, if you still want to run commands with sudo, use `--allow-root` option.\n\n## Consuming a package\n\nYou can use [build tools](https://bower.io/docs/tools) to easily consume Bower packages.\n\nIf you use [`bower list --paths`](#list) or `bower list --paths --json`, you will get a simple name-to-path mapping:\n\n``` sh\n$ bower list --paths\n# or\n$ bower list --paths --json\n```\n\n``` json\n{\n  \"backbone\": \"bower_components/backbone/backbone.js\",\n  \"jquery\": \"bower_components/jquery/dist/jquery.js\",\n  \"underscore\": \"bower_components/underscore/underscore.js\"\n}\n```\n\nEvery command supports the [`--json` option](#json) that makes Bower output JSON. Command result is outputted to `stdout` and error/logs to `stderr`.\n\n## Programmatic API\n\nBower provides a powerful, programmatic API. All commands can be accessed through the `bower.commands` object.\n\n``` js\nvar bower = require('bower');\n\nbower.commands\n.install(['jquery'], { save: true }, { /* custom config */ })\n.on('end', function (installed) {\n    console.log(installed);\n});\n\nbower.commands\n.search('jquery', {})\n.on('end', function (results) {\n    console.log(results);\n});\n```\n\nCommands emit four types of events: `log`, `prompt`, `end`, `error`.\n\n- `log` is emitted to report the state/progress of the command.\n- `prompt` is emitted whenever the user needs to be prompted.\n- `error` will only be emitted if something goes wrong.\n- `end` is emitted when the command successfully ends.\n\nFor a better idea of how this works, you may want to check out [our bin file](https://github.com/bower/bower/blob/master/bin/bower).\n\nWhen using Bower programmatically, prompting is disabled by default. You can enable it when calling commands with `interactive: true` in the config. This requires you to listen for the `prompt` event and handle the prompting yourself. The easiest way is to use the [inquirer](https://npmjs.org/package/inquirer) npm module like so:\n\n``` js\nvar inquirer =  require('inquirer');\n\nbower.commands\n.install(['jquery'], { save: true }, { interactive: true })\n// ..\n.on('prompt', function (prompts, callback) {\n    inquirer.prompt(prompts).then(callback);\n});\n```\n\n## Running on a continuous integration server\n\nBower will skip some interactive operations if it finds a `CI` environmental variable set to `true`. You will find that the `CI` variable is already set for you on many continuous integration servers, e.g., [CircleCI](https://circleci.com/docs/environment-variables#basics) and [Travis-CI](http://docs.travis-ci.com/user/ci-environment/#Environment-variables).\n\nYou may try to set the `CI` variable manually before running your Bower commands. On Mac or Linux, `export CI=true` and on Windows `set CI=true`\n\nIf for some reason you are unable to set the `CI` environment variable, you can alternately use the `--config.interactive=false` flag.\n\n``` sh\n$ bower install --config.interactive=false\n```\n\n## Non-interactive mode\n\nBower works by default in interactive mode. There are few ways of disabling it:\n\n- passing `CI=true` in environment\n- passing `--config.interactive=false` to Bower command\n- attaching a pipe to Bower (e.g. `bower install | cat`)\n- redirecting output to file (e.g. `bower install > logs.txt`)\n- running Bower through its [Programmatic API](#programmatic-api)\n\nWhen interactive mode is disabled:\n\n- `bower init` does not work\n- `bower register` and `bower unregister` bypass confirmation\n- `bower login` fails unless `--token` parameter is provided\n- `bower install` fails on resolution conflicts, instead of asking for choice\n- `bower uninstall` doesn’t ask for confirmation if dependency is to be removed\n\n## Using local cache\n\nBower supports installing packages from its local cache – without an internet connection – if the packages were installed before.\n\n``` sh\n$ bower install <package> --offline\n```\n\nThe content of the cache can be listed with [`bower cache list`](#cache-list):\n\n``` sh\n$ bower cache list\n```\n\nThe cache can be cleaned with [`bower cache clean`](#cache-clean):\n\n``` sh\n$ bower cache clean\n```\n\n© 2018 Bower contributors  \nLicensed under the MIT License.  \n[https://bower.io/docs/api](https://bower.io/docs/api)"
