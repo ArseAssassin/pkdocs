@@ -6,42 +6,44 @@ generator_command: src:python use "pytest"
 version: 8.1.1
 summary: 'pytest: simple powerful testing with Python'
 description: |-
-  [pytest]
+  [![pytest](https://github.com/pytest-dev/pytest/raw/main/doc/en/img/pytest_logo_curves.svg)](https://docs.pytest.org/en/stable/)
 
   ------------------------------------------------------------------------
 
-  [image]
+  [![image](https://img.shields.io/pypi/v/pytest.svg)](https://pypi.org/project/pytest/)
 
-  [image]
+  [![image](https://img.shields.io/conda/vn/conda-forge/pytest.svg)](https://anaconda.org/conda-forge/pytest)
 
-  [image]
+  [![image](https://img.shields.io/pypi/pyversions/pytest.svg)](https://pypi.org/project/pytest/)
 
-  [Code coverage Status]
+  [![Code coverage Status](https://codecov.io/gh/pytest-dev/pytest/branch/main/graph/badge.svg)](https://codecov.io/gh/pytest-dev/pytest)
 
-  [image]
+  [![image](https://github.com/pytest-dev/pytest/actions/workflows/test.yml/badge.svg)](https://github.com/pytest-dev/pytest/actions?query=workflow%3Atest)
 
-  [pre-commit.ci status]
+  [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/pytest-dev/pytest/main.svg)](https://results.pre-commit.ci/latest/github/pytest-dev/pytest/main)
 
-  [image]
+  [![image](https://www.codetriage.com/pytest-dev/pytest/badges/users.svg)](https://www.codetriage.com/pytest-dev/pytest)
 
-  [Documentation Status]
+  [![Documentation Status](https://readthedocs.org/projects/pytest/badge/?version=latest)](https://pytest.readthedocs.io/en/latest/?badge=latest)
 
-  [Discord]
+  [![Discord](https://img.shields.io/badge/Discord-pytest--dev-blue)](https://discord.com/invite/pytest-dev)
 
-  [Libera chat]
+  [![Libera chat](https://img.shields.io/badge/Libera%20chat-%23pytest-orange)](https://web.libera.chat/#pytest)
 
-  The pytest framework makes it easy to write small tests, yet scales to
+  The `pytest` framework makes it easy to write small tests, yet scales to
   support complex functional testing for applications and libraries.
 
   An example of a simple test:
 
-      # content of test_sample.py
-      def inc(x):
-          return x + 1
+  ``` python
+  # content of test_sample.py
+  def inc(x):
+      return x + 1
 
 
-      def test_answer():
-          assert inc(3) == 5
+  def test_answer():
+      assert inc(3) == 5
+  ```
 
   To execute it:
 
@@ -62,46 +64,59 @@ description: |-
       test_sample.py:5: AssertionError
       ========================== 1 failed in 0.04 seconds ===========================
 
-  Due to pytest's detailed assertion introspection, only plain assert
-  statements are used. See getting-started for more examples.
+  Due to `pytest`'s detailed assertion introspection, only plain `assert`
+  statements are used. See
+  [getting-started](https://docs.pytest.org/en/stable/getting-started.html#our-first-test-run)
+  for more examples.
 
-  Features
+  # Features
 
-  -   Detailed info on failing assert statements (no need to remember
-      self.assert* names)
-  -   Auto-discovery of test modules and functions
-  -   Modular fixtures for managing small or parametrized long-lived test
-      resources
-  -   Can run unittest (or trial) test suites out of the box
-  -   Python 3.8+ or PyPy3
-  -   Rich plugin architecture, with over 1300+ external plugins and
-      thriving community
+  - Detailed info on failing [assert
+    statements](https://docs.pytest.org/en/stable/how-to/assert.html) (no
+    need to remember `self.assert*` names)
+  - [Auto-discovery](https://docs.pytest.org/en/stable/explanation/goodpractices.html#python-test-discovery)
+    of test modules and functions
+  - [Modular
+    fixtures](https://docs.pytest.org/en/stable/explanation/fixtures.html)
+    for managing small or parametrized long-lived test resources
+  - Can run
+    [unittest](https://docs.pytest.org/en/stable/how-to/unittest.html) (or
+    trial) test suites out of the box
+  - Python 3.8+ or PyPy3
+  - Rich plugin architecture, with over 1300+ [external
+    plugins](https://docs.pytest.org/en/latest/reference/plugin_list.html)
+    and thriving community
 
-  Documentation
+  # Documentation
 
   For full documentation, including installation, tutorials and PDF
-  documents, please see https://docs.pytest.org/en/stable/.
+  documents, please see <https://docs.pytest.org/en/stable/>.
 
-  Bugs/Requests
+  # Bugs/Requests
 
-  Please use the GitHub issue tracker to submit bugs or request features.
+  Please use the [GitHub issue
+  tracker](https://github.com/pytest-dev/pytest/issues) to submit bugs or
+  request features.
 
-  Changelog
+  # Changelog
 
-  Consult the Changelog page for fixes and enhancements of each version.
+  Consult the
+  [Changelog](https://docs.pytest.org/en/stable/changelog.html) page for
+  fixes and enhancements of each version.
 
-  Support pytest
+  # Support pytest
 
-  Open Collective is an online funding platform for open and transparent
-  communities. It provides tools to raise money and share your finances in
-  full transparency.
+  [Open Collective](https://opencollective.com) is an online funding
+  platform for open and transparent communities. It provides tools to
+  raise money and share your finances in full transparency.
 
   It is the platform of choice for individuals and companies that want to
   make one-time or monthly donations directly to the project.
 
-  See more details in the pytest collective.
+  See more details in the [pytest
+  collective](https://opencollective.com/pytest).
 
-  pytest for enterprise
+  # pytest for enterprise
 
   Available as part of the Tidelift Subscription.
 
@@ -111,20 +126,23 @@ description: |-
   reduce risk, and improve code health, while paying the maintainers of
   the exact dependencies you use.
 
-  Learn more.
+  [Learn
+  more.](https://tidelift.com/subscription/pkg/pypi-pytest?utm_source=pypi-pytest&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)
 
-  Security
+  ## Security
 
   pytest has never been associated with a security vulnerability, but in
-  any case, to report a security vulnerability please use the Tidelift
-  security contact. Tidelift will coordinate the fix and disclosure.
+  any case, to report a security vulnerability please use the [Tidelift
+  security contact](https://tidelift.com/security). Tidelift will
+  coordinate the fix and disclosure.
 
-  License
+  # License
 
   Copyright Holger Krekel and others, 2004.
 
-  Distributed under the terms of the MIT license, pytest is free and open
-  source software.
+  Distributed under the terms of the
+  [MIT](https://github.com/pytest-dev/pytest/blob/main/LICENSE) license,
+  pytest is free and open source software.
 homepage: null
 license: MIT
 

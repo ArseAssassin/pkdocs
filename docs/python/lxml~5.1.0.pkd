@@ -448,7 +448,7 @@ license: BSD-3-Clause
     rest: false
   - kind: positional
     name: timeout
-    default: <object object at 0x7f1fa84b4830>
+    default: <object object at 0x7f51b2d88830>
     rest: false
   - name: cafile
     default: None

@@ -5,7 +5,281 @@ generator: src:python
 generator_command: src:python use "spacy"
 version: 3.7.4
 summary: Industrial-strength Natural Language Processing (NLP) in Python
-description: "spaCy: Industrial-strength NLP\n\nspaCy is a library for advanced Natural Language Processing in Python\nand Cython. It's built on the very latest research, and was designed\nfrom day one to be used in real products.\n\nspaCy comes with pretrained pipelines and currently supports\ntokenization and training for 70+ languages. It features\nstate-of-the-art speed and neural network models for tagging, parsing,\nnamed entity recognition, text classification and more, multi-task\nlearning with pretrained transformers like BERT, as well as a\nproduction-ready training system and easy model packaging, deployment\nand workflow management. spaCy is commercial open-source software,\nreleased under the MIT license.\n\n💫 Version 3.7 out now! Check out the release notes here.\n\n[tests] [Current Release Version] [pypi Version] [conda Version] [Python\nwheels] [Code style: black] [PyPi downloads] [Conda downloads] [spaCy on\nTwitter]\n\n📖 Documentation\n\n  Documentation                \n  ---------------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n  ⭐️ spaCy 101                 New to spaCy? Here's everything you need to know!\n  📚 Usage Guides              How to use spaCy and its features.\n  🚀 New in v3.0               New features, backwards incompatibilities and migration guide.\n  🪐 Project Templates         End-to-end workflows you can clone, modify and run.\n  🎛 API Reference              The detailed reference for spaCy's API.\n  ⏩ GPU Processing            Use spaCy with CUDA-compatible GPU processing.\n  📦 Models                    Download trained pipelines for spaCy.\n  🦙 Large Language Models     Integrate LLMs into spaCy pipelines.\n  🌌 Universe                  Plugins, extensions, demos and books from the spaCy ecosystem.\n  ⚙️ spaCy VS Code Extension   Additional tooling and features for working with spaCy's config files.\n  👩‍🏫 Online Course             Learn spaCy in this free and interactive online course.\n  📰 Blog                      Read about current spaCy and Prodigy development, releases, talks and more from Explosion.\n  📺 Videos                    Our YouTube channel with video tutorials, talks and more.\n  🛠 Changelog                  Changes and version history.\n  💝 Contribute                How to contribute to the spaCy project and code base.\n  👕 Swag                      Support us and our work with unique, custom-designed swag!\n                               Custom NLP consulting, implementation and strategic advice by spaCy’s core development team. Streamlined, production-ready, predictable and maintainable. Send us an email or take our 5-minute questionnaire, and well'be in touch! Learn more →\n\n💬 Where to ask questions\n\nThe spaCy project is maintained by the spaCy team. Please understand\nthat we won't be able to provide individual support via email. We also\nbelieve that help is much more valuable if it's shared publicly, so that\nmore people can benefit from it.\n\n  Type                          Platforms\n  ----------------------------- -------------------------------------\n  🚨 Bug Reports                GitHub Issue Tracker\n  🎁 Feature Requests & Ideas   GitHub Discussions\n  👩‍💻 Usage Questions            GitHub Discussions · Stack Overflow\n  🗯 General Discussion          GitHub Discussions\n\nFeatures\n\n-   Support for 70+ languages\n-   Trained pipelines for different languages and tasks\n-   Multi-task learning with pretrained transformers like BERT\n-   Support for pretrained word vectors and embeddings\n-   State-of-the-art speed\n-   Production-ready training system\n-   Linguistically-motivated tokenization\n-   Components for named entity recognition, part-of-speech-tagging,\n    dependency parsing, sentence segmentation, text classification,\n    lemmatization, morphological analysis, entity linking and more\n-   Easily extensible with custom components and attributes\n-   Support for custom models in PyTorch, TensorFlow and other\n    frameworks\n-   Built in visualizers for syntax and NER\n-   Easy model packaging, deployment and workflow management\n-   Robust, rigorously evaluated accuracy\n\n📖 For more details, see the facts, figures and benchmarks.\n\n⏳ Install spaCy\n\nFor detailed installation instructions, see the documentation.\n\n-   Operating system: macOS / OS X · Linux · Windows (Cygwin, MinGW,\n    Visual Studio)\n-   Python version: Python 3.7+ (only 64 bit)\n-   Package managers: pip · conda (via conda-forge)\n\npip\n\nUsing pip, spaCy releases are available as source packages and binary\nwheels. Before you install spaCy and its dependencies, make sure that\nyour pip, setuptools and wheel are up to date.\n\n    pip install -U pip setuptools wheel\n    pip install spacy\n\nTo install additional data tables for lemmatization and normalization\nyou can run pip install spacy[lookups] or install spacy-lookups-data\nseparately. The lookups package is needed to create blank models with\nlemmatization data, and to lemmatize in languages that don't yet come\nwith pretrained models and aren't powered by third-party libraries.\n\nWhen using pip it is generally recommended to install packages in a\nvirtual environment to avoid modifying system state:\n\n    python -m venv .env\n    source .env/bin/activate\n    pip install -U pip setuptools wheel\n    pip install spacy\n\nconda\n\nYou can also install spaCy from conda via the conda-forge channel. For\nthe feedstock including the build recipe and configuration, check out\nthis repository.\n\n    conda install -c conda-forge spacy\n\nUpdating spaCy\n\nSome updates to spaCy may require downloading new statistical models. If\nyou're running spaCy v2.0 or higher, you can use the validate command to\ncheck if your installed models are compatible and if not, print details\non how to update them:\n\n    pip install -U spacy\n    python -m spacy validate\n\nIf you've trained your own models, keep in mind that your training and\nruntime inputs must match. After updating spaCy, we recommend retraining\nyour models with the new version.\n\n📖 For details on upgrading from spaCy 2.x to spaCy 3.x, see the\nmigration guide.\n\n📦 Download model packages\n\nTrained pipelines for spaCy can be installed as Python packages. This\nmeans that they're a component of your application, just like any other\nmodule. Models can be installed using spaCy's download command, or\nmanually by pointing pip to a path or URL.\n\n  Documentation          \n  ---------------------- ------------------------------------------------------------------\n  Available Pipelines    Detailed pipeline descriptions, accuracy figures and benchmarks.\n  Models Documentation   Detailed usage and installation instructions.\n  Training               How to train your own pipelines on your data.\n\n    # Download best-matching version of specific model for your spaCy installation\n    python -m spacy download en_core_web_sm\n\n    # pip install .tar.gz archive or .whl from path or URL\n    pip install /Users/you/en_core_web_sm-3.0.0.tar.gz\n    pip install /Users/you/en_core_web_sm-3.0.0-py3-none-any.whl\n    pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz\n\nLoading and using models\n\nTo load a model, use spacy.load() with the model name or a path to the\nmodel data directory.\n\n    import spacy\n    nlp = spacy.load(\"en_core_web_sm\")\n    doc = nlp(\"This is a sentence.\")\n\nYou can also import a model directly via its full name and then call its\nload() method with no arguments.\n\n    import spacy\n    import en_core_web_sm\n\n    nlp = en_core_web_sm.load()\n    doc = nlp(\"This is a sentence.\")\n\n📖 For more info and examples, check out the models documentation.\n\n⚒ Compile from source\n\nThe other way to install spaCy is to clone its GitHub repository and\nbuild it from source. That is the common way if you want to make changes\nto the code base. You'll need to make sure that you have a development\nenvironment consisting of a Python distribution including header files,\na compiler, pip, virtualenv and git installed. The compiler part is the\ntrickiest. How to do that depends on your system.\n\n  Platform   \n  ---------- -----------------------------------------------------------------------------------------------------------------------------------------------------\n  Ubuntu     Install system-level dependencies via apt-get: sudo apt-get install build-essential python-dev git .\n  Mac        Install a recent version of XCode, including the so-called \"Command Line Tools\". macOS and OS X ship with Python and git preinstalled.\n  Windows    Install a version of the Visual C++ Build Tools or Visual Studio Express that matches the version that was used to compile your Python interpreter.\n\nFor more details and instructions, see the documentation on compiling\nspaCy from source and the quickstart widget to get the right commands\nfor your platform and Python version.\n\n    git clone https://github.com/explosion/spaCy\n    cd spaCy\n\n    python -m venv .env\n    source .env/bin/activate\n\n    # make sure you are using the latest pip\n    python -m pip install -U pip setuptools wheel\n\n    pip install -r requirements.txt\n    pip install --no-build-isolation --editable .\n\nTo install with extras:\n\n    pip install --no-build-isolation --editable .[lookups,cuda102]\n\n🚦 Run tests\n\nspaCy comes with an extensive test suite. In order to run the tests,\nyou'll usually want to clone the repository and build spaCy from source.\nThis will also install the required development dependencies and test\nutilities defined in the requirements.txt.\n\nAlternatively, you can run pytest on the tests from within the installed\nspacy package. Don't forget to also install the test utilities via\nspaCy's requirements.txt:\n\n    pip install -r requirements.txt\n    python -m pytest --pyargs spacy"
+description: |-
+  # spaCy: Industrial-strength NLP
+
+  spaCy is a library for **advanced Natural Language Processing** in
+  Python and Cython. It's built on the very latest research, and was
+  designed from day one to be used in real products.
+
+  spaCy comes with [pretrained pipelines](https://spacy.io/models) and
+  currently supports tokenization and training for **70+ languages**. It
+  features state-of-the-art speed and **neural network models** for
+  tagging, parsing, **named entity recognition**, **text classification**
+  and more, multi-task learning with pretrained **transformers** like
+  BERT, as well as a production-ready [**training
+  system**](https://spacy.io/usage/training) and easy model packaging,
+  deployment and workflow management. spaCy is commercial open-source
+  software, released under the [MIT
+  license](https://github.com/explosion/spaCy/blob/master/LICENSE).
+
+  💫 **Version 3.7 out now!** [Check out the release notes
+  here.](https://github.com/explosion/spaCy/releases)
+
+  [![tests](https://github.com/explosion/spaCy/actions/workflows/tests.yml/badge.svg)](https://github.com/explosion/spaCy/actions/workflows/tests.yml)
+  [![Current Release
+  Version](https://img.shields.io/github/release/explosion/spacy.svg?style=flat-square&logo=github)](https://github.com/explosion/spaCy/releases)
+  [![pypi
+  Version](https://img.shields.io/pypi/v/spacy.svg?style=flat-square&logo=pypi&logoColor=white)](https://pypi.org/project/spacy/)
+  [![conda
+  Version](https://img.shields.io/conda/vn/conda-forge/spacy.svg?style=flat-square&logo=conda-forge&logoColor=white)](https://anaconda.org/conda-forge/spacy)
+  [![Python
+  wheels](https://img.shields.io/badge/wheels-%E2%9C%93-4c1.svg?longCache=true&style=flat-square&logo=python&logoColor=white)](https://github.com/explosion/wheelwright/releases)
+  [![Code style:
+  black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/ambv/black)
+  [![PyPi
+  downloads](https://static.pepy.tech/personalized-badge/spacy?period=total&units=international_system&left_color=grey&right_color=orange&left_text=pip%20downloads)](https://pypi.org/project/spacy/)
+  [![Conda
+  downloads](https://img.shields.io/conda/dn/conda-forge/spacy?label=conda%20downloads)](https://anaconda.org/conda-forge/spacy)
+  [![spaCy on
+  Twitter](https://img.shields.io/twitter/follow/spacy_io.svg?style=social&label=Follow)](https://twitter.com/spacy_io)
+
+  ## 📖 Documentation
+
+  | Documentation                                                                       |                                                                                                                                                                                                                                                                                                  |
+  |-------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+  | ⭐️ **[spaCy 101](https://spacy.io/usage/spacy-101)**                                | New to spaCy? Here's everything you need to know!                                                                                                                                                                                                                                                |
+  | 📚 **[Usage Guides](https://spacy.io/usage/)**                                      | How to use spaCy and its features.                                                                                                                                                                                                                                                               |
+  | 🚀 **[New in v3.0](https://spacy.io/usage/v3)**                                     | New features, backwards incompatibilities and migration guide.                                                                                                                                                                                                                                   |
+  | 🪐 **[Project Templates](https://github.com/explosion/projects)**                   | End-to-end workflows you can clone, modify and run.                                                                                                                                                                                                                                              |
+  | 🎛 **[API Reference](https://spacy.io/api/)**                                        | The detailed reference for spaCy's API.                                                                                                                                                                                                                                                          |
+  | ⏩ **[GPU Processing](https://spacy.io/usage#gpu)**                                 | Use spaCy with CUDA-compatible GPU processing.                                                                                                                                                                                                                                                   |
+  | 📦 **[Models](https://spacy.io/models)**                                            | Download trained pipelines for spaCy.                                                                                                                                                                                                                                                            |
+  | 🦙 **[Large Language Models](https://spacy.io/usage/large-language-models)**        | Integrate LLMs into spaCy pipelines.                                                                                                                                                                                                                                                             |
+  | 🌌 **[Universe](https://spacy.io/universe)**                                        | Plugins, extensions, demos and books from the spaCy ecosystem.                                                                                                                                                                                                                                   |
+  | ⚙️ **[spaCy VS Code Extension](https://github.com/explosion/spacy-vscode)**         | Additional tooling and features for working with spaCy's config files.                                                                                                                                                                                                                           |
+  | 👩‍🏫 **[Online Course](https://course.spacy.io)**                                     | Learn spaCy in this free and interactive online course.                                                                                                                                                                                                                                          |
+  | 📰 **[Blog](https://explosion.ai)**                                                 | Read about current spaCy and Prodigy development, releases, talks and more from Explosion.                                                                                                                                                                                                       |
+  | 📺 **[Videos](https://www.youtube.com/c/ExplosionAI)**                              | Our YouTube channel with video tutorials, talks and more.                                                                                                                                                                                                                                        |
+  | 🛠 **[Changelog](https://spacy.io/usage#changelog)**                                 | Changes and version history.                                                                                                                                                                                                                                                                     |
+  | 💝 **[Contribute](https://github.com/explosion/spaCy/blob/master/CONTRIBUTING.md)** | How to contribute to the spaCy project and code base.                                                                                                                                                                                                                                            |
+  | 👕 **[Swag](https://explosion.ai/merch)**                                           | Support us and our work with unique, custom-designed swag!                                                                                                                                                                                                                                       |
+  |                                                                                     | Custom NLP consulting, implementation and strategic advice by spaCy’s core development team. Streamlined, production-ready, predictable and maintainable. Send us an email or take our 5-minute questionnaire, and well'be in touch! **[Learn more →](https://explosion.ai/tailored-solutions)** |
+
+  ## 💬 Where to ask questions
+
+  The spaCy project is maintained by the [spaCy
+  team](https://explosion.ai/about). Please understand that we won't be
+  able to provide individual support via email. We also believe that help
+  is much more valuable if it's shared publicly, so that more people can
+  benefit from it.
+
+  | Type                            | Platforms                                                                                                                                 |
+  |---------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+  | 🚨 **Bug Reports**              | [GitHub Issue Tracker](https://github.com/explosion/spaCy/issues)                                                                         |
+  | 🎁 **Feature Requests & Ideas** | [GitHub Discussions](https://github.com/explosion/spaCy/discussions)                                                                      |
+  | 👩‍💻 **Usage Questions**          | [GitHub Discussions](https://github.com/explosion/spaCy/discussions) · [Stack Overflow](https://stackoverflow.com/questions/tagged/spacy) |
+  | 🗯 **General Discussion**        | [GitHub Discussions](https://github.com/explosion/spaCy/discussions)                                                                      |
+
+  ## Features
+
+  - Support for **70+ languages**
+  - **Trained pipelines** for different languages and tasks
+  - Multi-task learning with pretrained **transformers** like BERT
+  - Support for pretrained **word vectors** and embeddings
+  - State-of-the-art speed
+  - Production-ready **training system**
+  - Linguistically-motivated **tokenization**
+  - Components for named **entity recognition**, part-of-speech-tagging,
+    dependency parsing, sentence segmentation, **text classification**,
+    lemmatization, morphological analysis, entity linking and more
+  - Easily extensible with **custom components** and attributes
+  - Support for custom models in **PyTorch**, **TensorFlow** and other
+    frameworks
+  - Built in **visualizers** for syntax and NER
+  - Easy **model packaging**, deployment and workflow management
+  - Robust, rigorously evaluated accuracy
+
+  📖 **For more details, see the [facts, figures and
+  benchmarks](https://spacy.io/usage/facts-figures).**
+
+  ## ⏳ Install spaCy
+
+  For detailed installation instructions, see the
+  [documentation](https://spacy.io/usage).
+
+  - **Operating system**: macOS / OS X · Linux · Windows (Cygwin, MinGW,
+    Visual Studio)
+  - **Python version**: Python 3.7+ (only 64 bit)
+  - **Package managers**: [pip](https://pypi.org/project/spacy/) ·
+    [conda](https://anaconda.org/conda-forge/spacy) (via `conda-forge`)
+
+  ### pip
+
+  Using pip, spaCy releases are available as source packages and binary
+  wheels. Before you install spaCy and its dependencies, make sure that
+  your `pip`, `setuptools` and `wheel` are up to date.
+
+  ``` bash
+  pip install -U pip setuptools wheel
+  pip install spacy
+  ```
+
+  To install additional data tables for lemmatization and normalization
+  you can run `pip install spacy[lookups]` or install
+  [`spacy-lookups-data`](https://github.com/explosion/spacy-lookups-data)
+  separately. The lookups package is needed to create blank models with
+  lemmatization data, and to lemmatize in languages that don't yet come
+  with pretrained models and aren't powered by third-party libraries.
+
+  When using pip it is generally recommended to install packages in a
+  virtual environment to avoid modifying system state:
+
+  ``` bash
+  python -m venv .env
+  source .env/bin/activate
+  pip install -U pip setuptools wheel
+  pip install spacy
+  ```
+
+  ### conda
+
+  You can also install spaCy from `conda` via the `conda-forge` channel.
+  For the feedstock including the build recipe and configuration, check
+  out [this repository](https://github.com/conda-forge/spacy-feedstock).
+
+  ``` bash
+  conda install -c conda-forge spacy
+  ```
+
+  ### Updating spaCy
+
+  Some updates to spaCy may require downloading new statistical models. If
+  you're running spaCy v2.0 or higher, you can use the `validate` command
+  to check if your installed models are compatible and if not, print
+  details on how to update them:
+
+  ``` bash
+  pip install -U spacy
+  python -m spacy validate
+  ```
+
+  If you've trained your own models, keep in mind that your training and
+  runtime inputs must match. After updating spaCy, we recommend
+  **retraining your models** with the new version.
+
+  📖 **For details on upgrading from spaCy 2.x to spaCy 3.x, see the
+  [migration guide](https://spacy.io/usage/v3#migrating).**
+
+  ## 📦 Download model packages
+
+  Trained pipelines for spaCy can be installed as **Python packages**.
+  This means that they're a component of your application, just like any
+  other module. Models can be installed using spaCy's
+  [`download`](https://spacy.io/api/cli#download) command, or manually by
+  pointing pip to a path or URL.
+
+  | Documentation                                             |                                                                  |
+  |-----------------------------------------------------------|------------------------------------------------------------------|
+  | **[Available Pipelines](https://spacy.io/models)**        | Detailed pipeline descriptions, accuracy figures and benchmarks. |
+  | **[Models Documentation](https://spacy.io/usage/models)** | Detailed usage and installation instructions.                    |
+  | **[Training](https://spacy.io/usage/training)**           | How to train your own pipelines on your data.                    |
+
+  ``` bash
+  # Download best-matching version of specific model for your spaCy installation
+  python -m spacy download en_core_web_sm
+
+  # pip install .tar.gz archive or .whl from path or URL
+  pip install /Users/you/en_core_web_sm-3.0.0.tar.gz
+  pip install /Users/you/en_core_web_sm-3.0.0-py3-none-any.whl
+  pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz
+  ```
+
+  ### Loading and using models
+
+  To load a model, use
+  [`spacy.load()`](https://spacy.io/api/top-level#spacy.load) with the
+  model name or a path to the model data directory.
+
+  ``` python
+  import spacy
+  nlp = spacy.load("en_core_web_sm")
+  doc = nlp("This is a sentence.")
+  ```
+
+  You can also `import` a model directly via its full name and then call
+  its `load()` method with no arguments.
+
+  ``` python
+  import spacy
+  import en_core_web_sm
+
+  nlp = en_core_web_sm.load()
+  doc = nlp("This is a sentence.")
+  ```
+
+  📖 **For more info and examples, check out the [models
+  documentation](https://spacy.io/docs/usage/models).**
+
+  ## ⚒ Compile from source
+
+  The other way to install spaCy is to clone its [GitHub
+  repository](https://github.com/explosion/spaCy) and build it from
+  source. That is the common way if you want to make changes to the code
+  base. You'll need to make sure that you have a development environment
+  consisting of a Python distribution including header files, a compiler,
+  [pip](https://pip.pypa.io/en/latest/installing/),
+  [virtualenv](https://virtualenv.pypa.io/en/latest/) and
+  [git](https://git-scm.com) installed. The compiler part is the
+  trickiest. How to do that depends on your system.
+
+  | Platform    |                                                                                                                                                                                                                                                                     |
+  |-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+  | **Ubuntu**  | Install system-level dependencies via `apt-get`: `sudo apt-get install build-essential python-dev git` .                                                                                                                                                            |
+  | **Mac**     | Install a recent version of [XCode](https://developer.apple.com/xcode/), including the so-called "Command Line Tools". macOS and OS X ship with Python and git preinstalled.                                                                                        |
+  | **Windows** | Install a version of the [Visual C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) or [Visual Studio Express](https://visualstudio.microsoft.com/vs/express/) that matches the version that was used to compile your Python interpreter. |
+
+  For more details and instructions, see the documentation on [compiling
+  spaCy from source](https://spacy.io/usage#source) and the [quickstart
+  widget](https://spacy.io/usage#section-quickstart) to get the right
+  commands for your platform and Python version.
+
+  ``` bash
+  git clone https://github.com/explosion/spaCy
+  cd spaCy
+
+  python -m venv .env
+  source .env/bin/activate
+
+  # make sure you are using the latest pip
+  python -m pip install -U pip setuptools wheel
+
+  pip install -r requirements.txt
+  pip install --no-build-isolation --editable .
+  ```
+
+  To install with extras:
+
+  ``` bash
+  pip install --no-build-isolation --editable .[lookups,cuda102]
+  ```
+
+  ## 🚦 Run tests
+
+  spaCy comes with an [extensive test suite](spacy/tests). In order to run
+  the tests, you'll usually want to clone the repository and build spaCy
+  from source. This will also install the required development
+  dependencies and test utilities defined in the
+  [`requirements.txt`](requirements.txt).
+
+  Alternatively, you can run `pytest` on the tests from within the
+  installed `spacy` package. Don't forget to also install the test
+  utilities via spaCy's [`requirements.txt`](requirements.txt):
+
+  ``` bash
+  pip install -r requirements.txt
+  python -m pytest --pyargs spacy
+  ```
 homepage: https://spacy.io
 license: MIT
 
@@ -9800,19 +10074,19 @@ license: MIT
     rest: false
   - kind: positional
     name: config_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193d7d0>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe559ad0>
     rest: false
   - kind: positional
     name: output_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193d890>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe559b90>
     rest: false
   - kind: positional
     name: code_path
-    default: <typer.models.OptionInfo object at 0x7f0e6193d950>
+    default: <typer.models.OptionInfo object at 0x7f38fe559c50>
     rest: false
   - kind: positional
     name: verbose
-    default: <typer.models.OptionInfo object at 0x7f0e6193d9d0>
+    default: <typer.models.OptionInfo object at 0x7f38fe559cd0>
     rest: false
   - type: '?'
   inherits_from: null
@@ -18995,19 +19269,19 @@ license: MIT
     rest: false
   - kind: positional
     name: config_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193d7d0>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe559ad0>
     rest: false
   - kind: positional
     name: output_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193d890>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe559b90>
     rest: false
   - kind: positional
     name: code_path
-    default: <typer.models.OptionInfo object at 0x7f0e6193d950>
+    default: <typer.models.OptionInfo object at 0x7f38fe559c50>
     rest: false
   - kind: positional
     name: verbose
-    default: <typer.models.OptionInfo object at 0x7f0e6193d9d0>
+    default: <typer.models.OptionInfo object at 0x7f38fe559cd0>
     rest: false
   - type: '?'
   inherits_from: null
@@ -19974,35 +20248,35 @@ license: MIT
     rest: false
   - kind: positional
     name: model
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193e950>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe55ac90>
     rest: false
   - kind: positional
     name: data_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193ea10>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe55ad50>
     rest: false
   - kind: positional
     name: batch_size
-    default: <typer.models.OptionInfo object at 0x7f0e6193eb10>
+    default: <typer.models.OptionInfo object at 0x7f38fe55ae50>
     rest: false
   - kind: positional
     name: no_shuffle
-    default: <typer.models.OptionInfo object at 0x7f0e6193eb90>
+    default: <typer.models.OptionInfo object at 0x7f38fe55aed0>
     rest: false
   - kind: positional
     name: use_gpu
-    default: <typer.models.OptionInfo object at 0x7f0e6193ec50>
+    default: <typer.models.OptionInfo object at 0x7f38fe55af90>
     rest: false
   - kind: positional
     name: n_batches
-    default: <typer.models.OptionInfo object at 0x7f0e6193ecd0>
+    default: <typer.models.OptionInfo object at 0x7f38fe55b010>
     rest: false
   - kind: positional
     name: warmup_epochs
-    default: <typer.models.OptionInfo object at 0x7f0e6193ed90>
+    default: <typer.models.OptionInfo object at 0x7f38fe55b0d0>
     rest: false
   - kind: positional
     name: code_path
-    default: <typer.models.OptionInfo object at 0x7f0e6193ee50>
+    default: <typer.models.OptionInfo object at 0x7f38fe55b190>
     rest: false
   - type: '?'
   inherits_from: null
@@ -20018,7 +20292,7 @@ license: MIT
     rest: false
   - kind: positional
     name: statistic
-    default: <function mean at 0x7f0e66e73c40>
+    default: <function mean at 0x7f3903a87c40>
     rest: false
   - kind: positional
     name: iterations
@@ -20949,35 +21223,35 @@ license: MIT
     rest: false
   - kind: positional
     name: model
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193e950>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe55ac90>
     rest: false
   - kind: positional
     name: data_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193ea10>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe55ad50>
     rest: false
   - kind: positional
     name: batch_size
-    default: <typer.models.OptionInfo object at 0x7f0e6193eb10>
+    default: <typer.models.OptionInfo object at 0x7f38fe55ae50>
     rest: false
   - kind: positional
     name: no_shuffle
-    default: <typer.models.OptionInfo object at 0x7f0e6193eb90>
+    default: <typer.models.OptionInfo object at 0x7f38fe55aed0>
     rest: false
   - kind: positional
     name: use_gpu
-    default: <typer.models.OptionInfo object at 0x7f0e6193ec50>
+    default: <typer.models.OptionInfo object at 0x7f38fe55af90>
     rest: false
   - kind: positional
     name: n_batches
-    default: <typer.models.OptionInfo object at 0x7f0e6193ecd0>
+    default: <typer.models.OptionInfo object at 0x7f38fe55b010>
     rest: false
   - kind: positional
     name: warmup_epochs
-    default: <typer.models.OptionInfo object at 0x7f0e6193ed90>
+    default: <typer.models.OptionInfo object at 0x7f38fe55b0d0>
     rest: false
   - kind: positional
     name: code_path
-    default: <typer.models.OptionInfo object at 0x7f0e6193ee50>
+    default: <typer.models.OptionInfo object at 0x7f38fe55b190>
     rest: false
   - type: '?'
   inherits_from: null
@@ -21815,23 +22089,23 @@ license: MIT
     rest: false
   - kind: positional
     name: config_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e616b3dd0>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe2de210>
     rest: false
   - kind: positional
     name: output_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e616b3f50>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe2ddf10>
     rest: false
   - kind: positional
     name: code_path
-    default: <typer.models.OptionInfo object at 0x7f0e616b3d50>
+    default: <typer.models.OptionInfo object at 0x7f38fe2dd6d0>
     rest: false
   - kind: positional
     name: verbose
-    default: <typer.models.OptionInfo object at 0x7f0e616b0610>
+    default: <typer.models.OptionInfo object at 0x7f38fe2de510>
     rest: false
   - kind: positional
     name: use_gpu
-    default: <typer.models.OptionInfo object at 0x7f0e616b07d0>
+    default: <typer.models.OptionInfo object at 0x7f38fe2ddc90>
     rest: false
   - type: '?'
   inherits_from: null
@@ -21863,23 +22137,23 @@ license: MIT
     rest: false
   - kind: positional
     name: config_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e616b3550>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe2ddd90>
     rest: false
   - kind: positional
     name: output_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e616b3350>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe2ddf50>
     rest: false
   - kind: positional
     name: code_path
-    default: <typer.models.OptionInfo object at 0x7f0e616b3790>
+    default: <typer.models.OptionInfo object at 0x7f38fe2dd250>
     rest: false
   - kind: positional
     name: verbose
-    default: <typer.models.OptionInfo object at 0x7f0e616b38d0>
+    default: <typer.models.OptionInfo object at 0x7f38fe2dde10>
     rest: false
   - kind: positional
     name: use_gpu
-    default: <typer.models.OptionInfo object at 0x7f0e616b3c10>
+    default: <typer.models.OptionInfo object at 0x7f38fe2de110>
     rest: false
   - type: '?'
   inherits_from: null
@@ -21894,43 +22168,43 @@ license: MIT
   signatures:
   - kind: positional
     name: lang
-    default: <typer.models.ArgumentInfo object at 0x7f0e616b2910>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe2dd510>
     rest: false
   - kind: positional
     name: vectors_loc
-    default: <typer.models.ArgumentInfo object at 0x7f0e616b2c50>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe2dd9d0>
     rest: false
   - kind: positional
     name: output_dir
-    default: <typer.models.ArgumentInfo object at 0x7f0e616b2c90>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe2dd190>
     rest: false
   - kind: positional
     name: prune
-    default: <typer.models.OptionInfo object at 0x7f0e616b2cd0>
+    default: <typer.models.OptionInfo object at 0x7f38fe2dd690>
     rest: false
   - kind: positional
     name: truncate
-    default: <typer.models.OptionInfo object at 0x7f0e616b20d0>
+    default: <typer.models.OptionInfo object at 0x7f38fe2ddad0>
     rest: false
   - kind: positional
     name: mode
-    default: <typer.models.OptionInfo object at 0x7f0e616b2f50>
+    default: <typer.models.OptionInfo object at 0x7f38fe2dd7d0>
     rest: false
   - kind: positional
     name: name
-    default: <typer.models.OptionInfo object at 0x7f0e616b3150>
+    default: <typer.models.OptionInfo object at 0x7f38fe2ddcd0>
     rest: false
   - kind: positional
     name: verbose
-    default: <typer.models.OptionInfo object at 0x7f0e616b3290>
+    default: <typer.models.OptionInfo object at 0x7f38fe2dd550>
     rest: false
   - kind: positional
     name: jsonl_loc
-    default: <typer.models.OptionInfo object at 0x7f0e616b3410>
+    default: <typer.models.OptionInfo object at 0x7f38fe2dd8d0>
     rest: false
   - kind: positional
     name: attr
-    default: <typer.models.OptionInfo object at 0x7f0e616b3250>
+    default: <typer.models.OptionInfo object at 0x7f38fe2dd990>
     rest: false
   - type: '?'
   inherits_from: null
@@ -22023,23 +22297,23 @@ license: MIT
     rest: false
   - kind: positional
     name: config_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e616b3550>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe2ddd90>
     rest: false
   - kind: positional
     name: output_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e616b3350>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe2ddf50>
     rest: false
   - kind: positional
     name: code_path
-    default: <typer.models.OptionInfo object at 0x7f0e616b3790>
+    default: <typer.models.OptionInfo object at 0x7f38fe2dd250>
     rest: false
   - kind: positional
     name: verbose
-    default: <typer.models.OptionInfo object at 0x7f0e616b38d0>
+    default: <typer.models.OptionInfo object at 0x7f38fe2dde10>
     rest: false
   - kind: positional
     name: use_gpu
-    default: <typer.models.OptionInfo object at 0x7f0e616b3c10>
+    default: <typer.models.OptionInfo object at 0x7f38fe2de110>
     rest: false
   - type: '?'
   inherits_from: null
@@ -22996,15 +23270,15 @@ license: MIT
     rest: false
   - kind: positional
     name: project_dir
-    default: <typer.models.ArgumentInfo object at 0x7f0e62af8a10>
+    default: <typer.models.ArgumentInfo object at 0x7f38ff1ac810>
     rest: false
   - kind: positional
     name: sparse_checkout
-    default: <typer.models.OptionInfo object at 0x7f0e62af86d0>
+    default: <typer.models.OptionInfo object at 0x7f38ff1ca650>
     rest: false
   - kind: positional
     name: extra
-    default: <typer.models.OptionInfo object at 0x7f0e61da7910>
+    default: <typer.models.OptionInfo object at 0x7f38ff6e0bd0>
     rest: false
   - type: '?'
   inherits_from: null
@@ -23587,23 +23861,23 @@ license: MIT
     rest: false
   - kind: positional
     name: name
-    default: <typer.models.ArgumentInfo object at 0x7f0e619277d0>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe53fa90>
     rest: false
   - kind: positional
     name: dest
-    default: <typer.models.ArgumentInfo object at 0x7f0e61927750>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe53fa10>
     rest: false
   - kind: positional
     name: repo
-    default: <typer.models.OptionInfo object at 0x7f0e61927810>
+    default: <typer.models.OptionInfo object at 0x7f38fe53fad0>
     rest: false
   - kind: positional
     name: branch
-    default: <typer.models.OptionInfo object at 0x7f0e61927890>
+    default: <typer.models.OptionInfo object at 0x7f38fe53fb50>
     rest: false
   - kind: positional
     name: sparse_checkout
-    default: <typer.models.OptionInfo object at 0x7f0e61927850>
+    default: <typer.models.OptionInfo object at 0x7f38fe53fb10>
     rest: false
   - type: '?'
   inherits_from: null
@@ -24331,15 +24605,15 @@ license: MIT
   signatures:
   - kind: positional
     name: project_dir
-    default: <typer.models.ArgumentInfo object at 0x7f0e619384d0>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe550750>
     rest: false
   - kind: positional
     name: output_file
-    default: <typer.models.OptionInfo object at 0x7f0e61938510>
+    default: <typer.models.OptionInfo object at 0x7f38fe550790>
     rest: false
   - kind: positional
     name: no_emoji
-    default: <typer.models.OptionInfo object at 0x7f0e619385d0>
+    default: <typer.models.OptionInfo object at 0x7f38fe550850>
     rest: false
   - type: '?'
   inherits_from: null
@@ -24949,23 +25223,23 @@ license: MIT
   signatures:
   - kind: positional
     name: project_dir
-    default: <typer.models.ArgumentInfo object at 0x7f0e61938cd0>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe550f50>
     rest: false
   - kind: positional
     name: workflow
-    default: <typer.models.ArgumentInfo object at 0x7f0e61938d10>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe550f90>
     rest: false
   - kind: positional
     name: verbose
-    default: <typer.models.OptionInfo object at 0x7f0e61939610>
+    default: <typer.models.OptionInfo object at 0x7f38fe551890>
     rest: false
   - kind: positional
     name: quiet
-    default: <typer.models.OptionInfo object at 0x7f0e61939690>
+    default: <typer.models.OptionInfo object at 0x7f38fe551910>
     rest: false
   - kind: positional
     name: force
-    default: <typer.models.OptionInfo object at 0x7f0e61939710>
+    default: <typer.models.OptionInfo object at 0x7f38fe551990>
     rest: false
   - type: '?'
   inherits_from: null
@@ -25483,11 +25757,11 @@ license: MIT
   signatures:
   - kind: positional
     name: remote
-    default: <typer.models.ArgumentInfo object at 0x7f0e61939f10>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe552190>
     rest: false
   - kind: positional
     name: project_dir
-    default: <typer.models.ArgumentInfo object at 0x7f0e61939ed0>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe552150>
     rest: false
   - type: '?'
   inherits_from: null
@@ -25793,11 +26067,11 @@ license: MIT
   signatures:
   - kind: positional
     name: remote
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193c6d0>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe558990>
     rest: false
   - kind: positional
     name: project_dir
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193c710>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe5589d0>
     rest: false
   - type: '?'
   inherits_from: null
@@ -26747,23 +27021,23 @@ license: MIT
     rest: false
   - kind: positional
     name: subcommand
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193bf10>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe5581d0>
     rest: false
   - kind: positional
     name: project_dir
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193bf50>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe558210>
     rest: false
   - kind: positional
     name: force
-    default: <typer.models.OptionInfo object at 0x7f0e6193bf90>
+    default: <typer.models.OptionInfo object at 0x7f38fe558250>
     rest: false
   - kind: positional
     name: dry
-    default: <typer.models.OptionInfo object at 0x7f0e6193bed0>
+    default: <typer.models.OptionInfo object at 0x7f38fe558190>
     rest: false
   - kind: positional
     name: show_help
-    default: <typer.models.OptionInfo object at 0x7f0e6193c090>
+    default: <typer.models.OptionInfo object at 0x7f38fe558310>
     rest: false
   - type: '?'
   inherits_from: null
@@ -27688,23 +27962,23 @@ license: MIT
     rest: false
   - kind: positional
     name: config_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e616e0790>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe3fb1d0>
     rest: false
   - kind: positional
     name: output_path
-    default: <typer.models.OptionInfo object at 0x7f0e616e0a50>
+    default: <typer.models.OptionInfo object at 0x7f38fe2fd290>
     rest: false
   - kind: positional
     name: code_path
-    default: <typer.models.OptionInfo object at 0x7f0e616e0bd0>
+    default: <typer.models.OptionInfo object at 0x7f38fe2fd350>
     rest: false
   - kind: positional
     name: verbose
-    default: <typer.models.OptionInfo object at 0x7f0e616e0b50>
+    default: <typer.models.OptionInfo object at 0x7f38fe2fd3d0>
     rest: false
   - kind: positional
     name: use_gpu
-    default: <typer.models.OptionInfo object at 0x7f0e616e0d50>
+    default: <typer.models.OptionInfo object at 0x7f38fe2fd390>
     rest: false
   - type: '?'
   inherits_from: null
@@ -27772,23 +28046,23 @@ license: MIT
     rest: false
   - kind: positional
     name: config_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e616e0790>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe3fb1d0>
     rest: false
   - kind: positional
     name: output_path
-    default: <typer.models.OptionInfo object at 0x7f0e616e0a50>
+    default: <typer.models.OptionInfo object at 0x7f38fe2fd290>
     rest: false
   - kind: positional
     name: code_path
-    default: <typer.models.OptionInfo object at 0x7f0e616e0bd0>
+    default: <typer.models.OptionInfo object at 0x7f38fe2fd350>
     rest: false
   - kind: positional
     name: verbose
-    default: <typer.models.OptionInfo object at 0x7f0e616e0b50>
+    default: <typer.models.OptionInfo object at 0x7f38fe2fd3d0>
     rest: false
   - kind: positional
     name: use_gpu
-    default: <typer.models.OptionInfo object at 0x7f0e616e0d50>
+    default: <typer.models.OptionInfo object at 0x7f38fe2fd390>
     rest: false
   - type: '?'
   inherits_from: null
@@ -39735,7 +40009,7 @@ license: MIT
     rest: false
   - kind: positional
     name: default
-    default: <object object at 0x7f0e89c6b990>
+    default: <object object at 0x7f392687f990>
     rest: false
   - type: '?'
   inherits_from: null
@@ -43997,7 +44271,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: init_W
-    default: <function glorot_uniform_init at 0x7f0e636c14e0>
+    default: <function glorot_uniform_init at 0x7f39002d54e0>
     rest: false
     kind: kw-only
   - name: key_attr
@@ -48796,7 +49070,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: init_W
-    default: <function glorot_uniform_init at 0x7f0e636c14e0>
+    default: <function glorot_uniform_init at 0x7f39002d54e0>
     rest: false
     kind: kw-only
   - name: key_attr
@@ -51778,7 +52052,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: init_W
-    default: <function glorot_uniform_init at 0x7f0e636c14e0>
+    default: <function glorot_uniform_init at 0x7f39002d54e0>
     rest: false
     kind: kw-only
   - name: key_attr
@@ -52721,7 +52995,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: init_W
-    default: <function glorot_uniform_init at 0x7f0e636c14e0>
+    default: <function glorot_uniform_init at 0x7f39002d54e0>
     rest: false
     kind: kw-only
   - name: key_attr
@@ -57283,7 +57557,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: init_W
-    default: <function glorot_uniform_init at 0x7f0e636c14e0>
+    default: <function glorot_uniform_init at 0x7f39002d54e0>
     rest: false
     kind: kw-only
   - name: key_attr
@@ -62953,7 +63227,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: <function attribute_ruler_score at 0x7f0e63796840>
+    default: <function attribute_ruler_score at 0x7f3900082840>
     rest: false
     kind: kw-only
   - type: AttributeRuler
@@ -64274,7 +64548,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: <function lemmatizer_score at 0x7f0e62b2b380>
+    default: <function lemmatizer_score at 0x7f38ff73f380>
     rest: false
     kind: kw-only
   - type: EditTreeLemmatizer
@@ -64763,7 +65037,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: <function entity_linker_score at 0x7f0e62b2b240>
+    default: <function entity_linker_score at 0x7f38ff73f240>
     rest: false
     kind: kw-only
   - name: use_gold_ents
@@ -66212,7 +66486,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: matcher_fuzzy_compare
-    default: <cyfunction levenshtein_compare at 0x7f0e634071d0>
+    default: <cyfunction levenshtein_compare at 0x7f390001b1d0>
     rest: false
     kind: kw-only
   - name: validate
@@ -66232,7 +66506,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: <function entity_ruler_score at 0x7f0e62557560>
+    default: <function entity_ruler_score at 0x7f38ff173560>
     rest: false
     kind: kw-only
   - type: EntityRuler
@@ -66631,7 +66905,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: <cyfunction morphologizer_score at 0x7f0e6257cd40>
+    default: <cyfunction morphologizer_score at 0x7f38ff194d40>
     rest: false
     kind: kw-only
   - type: Morphologizer
@@ -67117,7 +67391,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: <function lemmatizer_score at 0x7f0e62b2b380>
+    default: <function lemmatizer_score at 0x7f38ff73f380>
     rest: false
     kind: kw-only
   - type: Lemmatizer
@@ -67484,7 +67758,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: <function textcat_multilabel_score at 0x7f0e625b8ea0>
+    default: <function textcat_multilabel_score at 0x7f38ff1d0ea0>
     rest: false
     kind: kw-only
   - type: MultiLabel_TextCategorizer
@@ -68152,7 +68426,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: <cyfunction senter_score at 0x7f0e6257f370>
+    default: <cyfunction senter_score at 0x7f38ff197370>
     rest: false
     kind: kw-only
   - type: SentenceRecognizer
@@ -68610,7 +68884,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: <cyfunction senter_score at 0x7f0e6257f370>
+    default: <cyfunction senter_score at 0x7f38ff197370>
     rest: false
     kind: kw-only
   - type: Sentencizer
@@ -68914,7 +69188,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: <function spancat_score at 0x7f0e6256d1c0>
+    default: <function spancat_score at 0x7f38ff1851c0>
     rest: false
     kind: kw-only
   - type: SpanCategorizer
@@ -69472,7 +69746,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: <function span_finder_score at 0x7f0e6256cae0>
+    default: <function span_finder_score at 0x7f38ff184ae0>
     rest: false
     kind: kw-only
   - type: SpanFinder
@@ -69968,7 +70242,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: ents_filter
-    default: <function filter_chain_spans at 0x7f0e63555580>
+    default: <function filter_chain_spans at 0x7f3900169580>
     rest: false
     kind: kw-only
   - name: phrase_matcher_attr
@@ -69976,7 +70250,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: matcher_fuzzy_compare
-    default: <cyfunction levenshtein_compare at 0x7f0e634071d0>
+    default: <cyfunction levenshtein_compare at 0x7f390001b1d0>
     rest: false
     kind: kw-only
   - name: validate
@@ -69988,7 +70262,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: functools.partial(<function overlapping_labeled_spans_score at 0x7f0e6256f240>, spans_key='ruler')
+    default: functools.partial(<function overlapping_labeled_spans_score at 0x7f38ff187240>, spans_key='ruler')
     rest: false
     kind: kw-only
   - type: SpanRuler
@@ -70410,7 +70684,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: <cyfunction tagger_score at 0x7f0e6257c040>
+    default: <cyfunction tagger_score at 0x7f38ff194040>
     rest: false
     kind: kw-only
   - name: neg_prefix
@@ -70879,7 +71153,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: scorer
-    default: <function textcat_score at 0x7f0e625b8220>
+    default: <function textcat_score at 0x7f38ff1d0220>
     rest: false
     kind: kw-only
   - type: TextCategorizer
@@ -85299,19 +85573,19 @@ license: MIT
     rest: false
   - kind: positional
     name: config_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193d7d0>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe559ad0>
     rest: false
   - kind: positional
     name: output_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193d890>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe559b90>
     rest: false
   - kind: positional
     name: code_path
-    default: <typer.models.OptionInfo object at 0x7f0e6193d950>
+    default: <typer.models.OptionInfo object at 0x7f38fe559c50>
     rest: false
   - kind: positional
     name: verbose
-    default: <typer.models.OptionInfo object at 0x7f0e6193d9d0>
+    default: <typer.models.OptionInfo object at 0x7f38fe559cd0>
     rest: false
   - type: '?'
   inherits_from: null
@@ -85329,35 +85603,35 @@ license: MIT
     rest: false
   - kind: positional
     name: model
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193e950>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe55ac90>
     rest: false
   - kind: positional
     name: data_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e6193ea10>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe55ad50>
     rest: false
   - kind: positional
     name: batch_size
-    default: <typer.models.OptionInfo object at 0x7f0e6193eb10>
+    default: <typer.models.OptionInfo object at 0x7f38fe55ae50>
     rest: false
   - kind: positional
     name: no_shuffle
-    default: <typer.models.OptionInfo object at 0x7f0e6193eb90>
+    default: <typer.models.OptionInfo object at 0x7f38fe55aed0>
     rest: false
   - kind: positional
     name: use_gpu
-    default: <typer.models.OptionInfo object at 0x7f0e6193ec50>
+    default: <typer.models.OptionInfo object at 0x7f38fe55af90>
     rest: false
   - kind: positional
     name: n_batches
-    default: <typer.models.OptionInfo object at 0x7f0e6193ecd0>
+    default: <typer.models.OptionInfo object at 0x7f38fe55b010>
     rest: false
   - kind: positional
     name: warmup_epochs
-    default: <typer.models.OptionInfo object at 0x7f0e6193ed90>
+    default: <typer.models.OptionInfo object at 0x7f38fe55b0d0>
     rest: false
   - kind: positional
     name: code_path
-    default: <typer.models.OptionInfo object at 0x7f0e6193ee50>
+    default: <typer.models.OptionInfo object at 0x7f38fe55b190>
     rest: false
   - type: '?'
   inherits_from: null
@@ -85783,23 +86057,23 @@ license: MIT
     rest: false
   - kind: positional
     name: config_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e616b3550>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe2ddd90>
     rest: false
   - kind: positional
     name: output_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e616b3350>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe2ddf50>
     rest: false
   - kind: positional
     name: code_path
-    default: <typer.models.OptionInfo object at 0x7f0e616b3790>
+    default: <typer.models.OptionInfo object at 0x7f38fe2dd250>
     rest: false
   - kind: positional
     name: verbose
-    default: <typer.models.OptionInfo object at 0x7f0e616b38d0>
+    default: <typer.models.OptionInfo object at 0x7f38fe2dde10>
     rest: false
   - kind: positional
     name: use_gpu
-    default: <typer.models.OptionInfo object at 0x7f0e616b3c10>
+    default: <typer.models.OptionInfo object at 0x7f38fe2de110>
     rest: false
   - type: '?'
   inherits_from: null
@@ -86181,23 +86455,23 @@ license: MIT
     rest: false
   - kind: positional
     name: config_path
-    default: <typer.models.ArgumentInfo object at 0x7f0e616e0790>
+    default: <typer.models.ArgumentInfo object at 0x7f38fe3fb1d0>
     rest: false
   - kind: positional
     name: output_path
-    default: <typer.models.OptionInfo object at 0x7f0e616e0a50>
+    default: <typer.models.OptionInfo object at 0x7f38fe2fd290>
     rest: false
   - kind: positional
     name: code_path
-    default: <typer.models.OptionInfo object at 0x7f0e616e0bd0>
+    default: <typer.models.OptionInfo object at 0x7f38fe2fd350>
     rest: false
   - kind: positional
     name: verbose
-    default: <typer.models.OptionInfo object at 0x7f0e616e0b50>
+    default: <typer.models.OptionInfo object at 0x7f38fe2fd3d0>
     rest: false
   - kind: positional
     name: use_gpu
-    default: <typer.models.OptionInfo object at 0x7f0e616e0d50>
+    default: <typer.models.OptionInfo object at 0x7f38fe2fd390>
     rest: false
   - type: '?'
   inherits_from: null
@@ -88626,7 +88900,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: init_W
-    default: <function glorot_uniform_init at 0x7f0e636c14e0>
+    default: <function glorot_uniform_init at 0x7f39002d54e0>
     rest: false
     kind: kw-only
   - name: key_attr

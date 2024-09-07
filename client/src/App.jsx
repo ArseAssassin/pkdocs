@@ -217,8 +217,8 @@ function DocPage({ doc, symbolId }) {
 
       { headers.description &&
         <div className="doc-symbol">
-          <h1>{ headers.name }</h1>
-          <Markdown>{ headers.description }</Markdown>
+          <h1>{ headers.name } { headers.version }</h1>
+          <pre>{ headers.description }</pre>
         </div>
       }
 

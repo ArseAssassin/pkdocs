@@ -6,7 +6,7 @@ generator_command: src:python use "jinja2"
 version: 3.1.4
 summary: A very fast and expressive template engine.
 description: |-
-  Jinja
+  # Jinja
 
   Jinja is a fast, expressive, extensible templating engine. Special
   placeholders in the template allow writing code similar to Python
@@ -14,25 +14,24 @@ description: |-
 
   It includes:
 
-  -   Template inheritance and inclusion.
-  -   Define and import macros within templates.
-  -   HTML templates can use autoescaping to prevent XSS from untrusted
-      user input.
-  -   A sandboxed environment can safely render untrusted templates.
-  -   AsyncIO support for generating templates and calling async
-      functions.
-  -   I18N support with Babel.
-  -   Templates are compiled to optimized Python code just-in-time and
-      cached, or can be compiled ahead-of-time.
-  -   Exceptions point to the correct line in templates to make debugging
-      easier.
-  -   Extensible filters, tests, functions, and even syntax.
+  - Template inheritance and inclusion.
+  - Define and import macros within templates.
+  - HTML templates can use autoescaping to prevent XSS from untrusted user
+    input.
+  - A sandboxed environment can safely render untrusted templates.
+  - AsyncIO support for generating templates and calling async functions.
+  - I18N support with Babel.
+  - Templates are compiled to optimized Python code just-in-time and
+    cached, or can be compiled ahead-of-time.
+  - Exceptions point to the correct line in templates to make debugging
+    easier.
+  - Extensible filters, tests, functions, and even syntax.
 
   Jinja's philosophy is that while application logic belongs in Python if
   possible, it shouldn't make the template designer's job difficult by
   restricting functionality too much.
 
-  In A Nutshell
+  ## In A Nutshell
 
   .. code-block:: jinja
 
@@ -46,12 +45,12 @@ description: |-
         </ul>
       {% endblock %}
 
-  Donate
+  ## Donate
 
   The Pallets organization develops and supports Jinja and other popular
   packages. In order to grow the community of contributors and users, and
-  allow the maintainers to devote more time to the projects, please donate
-  today.
+  allow the maintainers to devote more time to the projects, [please
+  donate today](https://palletsprojects.com/donate).
 homepage: null
 license: BSD-3-Clause
 

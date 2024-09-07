@@ -6,11 +6,32 @@ generator_command: src:python use "fastapi"
 version: 0.110.2
 summary: FastAPI framework, high performance, easy to learn, fast to code, ready for production
 description: |-
+  <p align="center">
+    <a href="https://fastapi.tiangolo.com"><img src="https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png" alt="FastAPI"></a>
+  </p>
+  <p align="center">
+      <em>FastAPI framework, high performance, easy to learn, fast to code, ready for production</em>
+  </p>
+  <p align="center">
+  <a href="https://github.com/tiangolo/fastapi/actions?query=workflow%3ATest+event%3Apush+branch%3Amaster" target="_blank">
+      <img src="https://github.com/tiangolo/fastapi/workflows/Test/badge.svg?event=push&branch=master" alt="Test">
+  </a>
+  <a href="https://coverage-badge.samuelcolvin.workers.dev/redirect/tiangolo/fastapi" target="_blank">
+      <img src="https://coverage-badge.samuelcolvin.workers.dev/tiangolo/fastapi.svg" alt="Coverage">
+  </a>
+  <a href="https://pypi.org/project/fastapi" target="_blank">
+      <img src="https://img.shields.io/pypi/v/fastapi?color=%2334D058&label=pypi%20package" alt="Package version">
+  </a>
+  <a href="https://pypi.org/project/fastapi" target="_blank">
+      <img src="https://img.shields.io/pypi/pyversions/fastapi.svg?color=%2334D058" alt="Supported Python versions">
+  </a>
+  </p>
+
   ------------------------------------------------------------------------
 
-  Documentation: https://fastapi.tiangolo.com
+  **Documentation**: <https://fastapi.tiangolo.com>
 
-  Source Code: https://github.com/tiangolo/fastapi
+  **Source Code**: <https://github.com/tiangolo/fastapi>
 
   ------------------------------------------------------------------------
 
@@ -19,273 +40,336 @@ description: |-
 
   The key features are:
 
-  -   Fast: Very high performance, on par with NodeJS and Go (thanks to
-      Starlette and Pydantic). One of the fastest Python frameworks
-      available.
-  -   Fast to code: Increase the speed to develop features by about 200%
-      to 300%. *
-  -   Fewer bugs: Reduce about 40% of human (developer) induced errors. *
-  -   Intuitive: Great editor support. Completion everywhere. Less time
-      debugging.
-  -   Easy: Designed to be easy to use and learn. Less time reading docs.
-  -   Short: Minimize code duplication. Multiple features from each
-      parameter declaration. Fewer bugs.
-  -   Robust: Get production-ready code. With automatic interactive
-      documentation.
-  -   Standards-based: Based on (and fully compatible with) the open
-      standards for APIs: OpenAPI (previously known as Swagger) and JSON
-      Schema.
+  - **Fast**: Very high performance, on par with **NodeJS** and **Go**
+    (thanks to Starlette and Pydantic). [One of the fastest Python
+    frameworks available](#performance).
+  - **Fast to code**: Increase the speed to develop features by about 200%
+    to 300%. \*
+  - **Fewer bugs**: Reduce about 40% of human (developer) induced errors.
+    \*
+  - **Intuitive**: Great editor support. Completion everywhere. Less time
+    debugging.
+  - **Easy**: Designed to be easy to use and learn. Less time reading
+    docs.
+  - **Short**: Minimize code duplication. Multiple features from each
+    parameter declaration. Fewer bugs.
+  - **Robust**: Get production-ready code. With automatic interactive
+    documentation.
+  - **Standards-based**: Based on (and fully compatible with) the open
+    standards for APIs: OpenAPI (previously known as Swagger) and JSON
+    Schema.
 
-  * estimation based on tests on an internal development team, building
+  \* estimation based on tests on an internal development team, building
   production applications.
 
-  Sponsors
+  ## Sponsors
+
+  <!-- sponsors -->
+
+  <!-- /sponsors -->
 
   Other sponsors
 
-  Opinions
+  ## Opinions
 
-  "[...] I'm using FastAPI a ton these days. [...] I'm actually planning
-  to use it for all of my team's ML services at Microsoft. Some of them
-  are getting integrated into the core Windows product and some Office
-  products."
+  "*\[...\] I'm using **FastAPI** a ton these days. \[...\] I'm actually
+  planning to use it for all of my team's **ML services at Microsoft**.
+  Some of them are getting integrated into the core **Windows** product
+  and some **Office** products.*"
 
-  ------------------------------------------------------------------------
-
-  "We adopted the FastAPI library to spawn a REST server that can be
-  queried to obtain predictions. [for Ludwig]"
+  <div style="text-align: right; margin-right: 10%;">Kabir Khan - <strong>Microsoft</strong> <a href="https://github.com/tiangolo/fastapi/pull/26" target="_blank"><small>(ref)</small></a></div>
 
   ------------------------------------------------------------------------
 
-  "Netflix is pleased to announce the open-source release of our crisis
-  management orchestration framework: Dispatch! [built with FastAPI]"
+  "*We adopted the **FastAPI** library to spawn a **REST** server that can
+  be queried to obtain **predictions**. \[for Ludwig\]*"
+
+  <div style="text-align: right; margin-right: 10%;">Piero Molino, Yaroslav Dudin, and Sai Sumanth Miryala - <strong>Uber</strong> <a href="https://eng.uber.com/ludwig-v0-2/" target="_blank"><small>(ref)</small></a></div>
 
   ------------------------------------------------------------------------
 
-  "I’m over the moon excited about FastAPI. It’s so fun!"
+  "***Netflix** is pleased to announce the open-source release of our
+  **crisis management** orchestration framework: **Dispatch**! \[built
+  with **FastAPI**\]*"
+
+  <div style="text-align: right; margin-right: 10%;">Kevin Glisson, Marc Vilanova, Forest Monsen - <strong>Netflix</strong> <a href="https://netflixtechblog.com/introducing-dispatch-da4b8a2a8072" target="_blank"><small>(ref)</small></a></div>
 
   ------------------------------------------------------------------------
 
-  "Honestly, what you've built looks super solid and polished. In many
-  ways, it's what I wanted Hug to be - it's really inspiring to see
-  someone build that."
+  "*I’m over the moon excited about **FastAPI**. It’s so fun!*"
+
+  <div style="text-align: right; margin-right: 10%;">Brian Okken - <strong><a href="https://pythonbytes.fm/episodes/show/123/time-to-right-the-py-wrongs?time_in_sec=855" target="_blank">Python Bytes</a> podcast host</strong> <a href="https://twitter.com/brianokken/status/1112220079972728832" target="_blank"><small>(ref)</small></a></div>
 
   ------------------------------------------------------------------------
 
-  "If you're looking to learn one modern framework for building REST APIs,
-  check out FastAPI [...] It's fast, easy to use and easy to learn [...]"
+  "*Honestly, what you've built looks super solid and polished. In many
+  ways, it's what I wanted **Hug** to be - it's really inspiring to see
+  someone build that.*"
 
-  "We've switched over to FastAPI for our APIs [...] I think you'll like
-  it [...]"
-
-  ------------------------------------------------------------------------
-
-  "If anyone is looking to build a production Python API, I would highly
-  recommend FastAPI. It is beautifully designed, simple to use and highly
-  scalable, it has become a key component in our API first development
-  strategy and is driving many automations and services such as our
-  Virtual TAC Engineer."
+  <div style="text-align: right; margin-right: 10%;">Timothy Crosley - <strong><a href="https://www.hug.rest/" target="_blank">Hug</a> creator</strong> <a href="https://news.ycombinator.com/item?id=19455465" target="_blank"><small>(ref)</small></a></div>
 
   ------------------------------------------------------------------------
 
-  Typer, the FastAPI of CLIs
+  "*If you're looking to learn one **modern framework** for building REST
+  APIs, check out **FastAPI** \[...\] It's fast, easy to use and easy to
+  learn \[...\]*"
+
+  "*We've switched over to **FastAPI** for our **APIs** \[...\] I think
+  you'll like it \[...\]*"
+
+  <div style="text-align: right; margin-right: 10%;">Ines Montani - Matthew Honnibal - <strong><a href="https://explosion.ai" target="_blank">Explosion AI</a> founders - <a href="https://spacy.io" target="_blank">spaCy</a> creators</strong> <a href="https://twitter.com/_inesmontani/status/1144173225322143744" target="_blank"><small>(ref)</small></a> - <a href="https://twitter.com/honnibal/status/1144031421859655680" target="_blank"><small>(ref)</small></a></div>
+
+  ------------------------------------------------------------------------
+
+  "*If anyone is looking to build a production Python API, I would highly
+  recommend **FastAPI**. It is **beautifully designed**, **simple to use**
+  and **highly scalable**, it has become a **key component** in our API
+  first development strategy and is driving many automations and services
+  such as our Virtual TAC Engineer.*"
+
+  <div style="text-align: right; margin-right: 10%;">Deon Pillsbury - <strong>Cisco</strong> <a href="https://www.linkedin.com/posts/deonpillsbury_cisco-cx-python-activity-6963242628536487936-trAp/" target="_blank"><small>(ref)</small></a></div>
+
+  ------------------------------------------------------------------------
+
+  ## **Typer**, the FastAPI of CLIs
 
   If you are building a CLI app to be used in the terminal instead of a
-  web API, check out Typer.
+  web API, check out **Typer**.
 
-  Typer is FastAPI's little sibling. And it's intended to be the FastAPI
-  of CLIs. ⌨️ 🚀
+  **Typer** is FastAPI's little sibling. And it's intended to be the
+  **FastAPI of CLIs**. ⌨️ 🚀
 
-  Requirements
+  ## Requirements
 
   Python 3.8+
 
   FastAPI stands on the shoulders of giants:
 
-  -   Starlette for the web parts.
-  -   Pydantic for the data parts.
+  - Starlette for the web parts.
+  - Pydantic for the data parts.
 
-  Installation
+  ## Installation
 
-      $ pip install fastapi
+  <div class="termy">
 
-      ---> 100%
+  ``` console
+  $ pip install fastapi
+
+  ---> 100%
+  ```
+
+  </div>
 
   You will also need an ASGI server, for production such as Uvicorn or
   Hypercorn.
 
-      $ pip install "uvicorn[standard]"
+  <div class="termy">
 
-      ---> 100%
+  ``` console
+  $ pip install "uvicorn[standard]"
 
-  Example
+  ---> 100%
+  ```
 
-  Create it
+  </div>
 
-  -   Create a file main.py with:
+  ## Example
 
-      from typing import Union
+  ### Create it
 
-      from fastapi import FastAPI
+  - Create a file `main.py` with:
 
-      app = FastAPI()
+  ``` Python
+  from typing import Union
 
+  from fastapi import FastAPI
 
-      @app.get("/")
-      def read_root():
-          return {"Hello": "World"}
-
-
-      @app.get("/items/{item_id}")
-      def read_item(item_id: int, q: Union[str, None] = None):
-          return {"item_id": item_id, "q": q}
-
-  If your code uses async / await, use async def:
-
-      from typing import Union
-
-      from fastapi import FastAPI
-
-      app = FastAPI()
+  app = FastAPI()
 
 
-      @app.get("/")
-      async def read_root():
-          return {"Hello": "World"}
+  @app.get("/")
+  def read_root():
+      return {"Hello": "World"}
 
 
-      @app.get("/items/{item_id}")
-      async def read_item(item_id: int, q: Union[str, None] = None):
-          return {"item_id": item_id, "q": q}
+  @app.get("/items/{item_id}")
+  def read_item(item_id: int, q: Union[str, None] = None):
+      return {"item_id": item_id, "q": q}
+  ```
 
-  Note:
+  <details markdown="1">
+  <summary>Or use <code>async def</code>...</summary>
 
-  If you don't know, check the "In a hurry?" section about async and await
-  in the docs.
+  If your code uses `async` / `await`, use `async def`:
 
-  Run it
+  ``` Python
+  from typing import Union
+
+  from fastapi import FastAPI
+
+  app = FastAPI()
+
+
+  @app.get("/")
+  async def read_root():
+      return {"Hello": "World"}
+
+
+  @app.get("/items/{item_id}")
+  async def read_item(item_id: int, q: Union[str, None] = None):
+      return {"item_id": item_id, "q": q}
+  ```
+
+  **Note**:
+
+  If you don't know, check the *"In a hurry?"* section about `async` and
+  `await` in the docs.
+
+  </details>
+
+  ### Run it
 
   Run the server with:
 
-      $ uvicorn main:app --reload
+  <div class="termy">
 
-      INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-      INFO:     Started reloader process [28720]
-      INFO:     Started server process [28722]
-      INFO:     Waiting for application startup.
-      INFO:     Application startup complete.
+  ``` console
+  $ uvicorn main:app --reload
 
-  The command uvicorn main:app refers to:
+  INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+  INFO:     Started reloader process [28720]
+  INFO:     Started server process [28722]
+  INFO:     Waiting for application startup.
+  INFO:     Application startup complete.
+  ```
 
-  -   main: the file main.py (the Python "module").
-  -   app: the object created inside of main.py with the line
-      app = FastAPI().
-  -   --reload: make the server restart after code changes. Only do this
-      for development.
+  </div>
 
-  Check it
+  <details markdown="1">
+  <summary>About the command <code>uvicorn main:app --reload</code>...</summary>
 
-  Open your browser at http://127.0.0.1:8000/items/5?q=somequery.
+  The command `uvicorn main:app` refers to:
+
+  - `main`: the file `main.py` (the Python "module").
+  - `app`: the object created inside of `main.py` with the line
+    `app = FastAPI()`.
+  - `--reload`: make the server restart after code changes. Only do this
+    for development.
+
+  </details>
+
+  ### Check it
+
+  Open your browser at <http://127.0.0.1:8000/items/5?q=somequery>.
 
   You will see the JSON response as:
 
-      {"item_id": 5, "q": "somequery"}
+  ``` JSON
+  {"item_id": 5, "q": "somequery"}
+  ```
 
   You already created an API that:
 
-  -   Receives HTTP requests in the paths / and /items/{item_id}.
-  -   Both paths take GET operations (also known as HTTP methods).
-  -   The path /items/{item_id} has a path parameter item_id that should
-      be an int.
-  -   The path /items/{item_id} has an optional str query parameter q.
+  - Receives HTTP requests in the *paths* `/` and `/items/{item_id}`.
+  - Both *paths* take `GET` operations (also known as HTTP *methods*).
+  - The *path* `/items/{item_id}` has a *path parameter* `item_id` that
+    should be an `int`.
+  - The *path* `/items/{item_id}` has an optional `str` *query parameter*
+    `q`.
 
-  Interactive API docs
+  ### Interactive API docs
 
-  Now go to http://127.0.0.1:8000/docs.
+  Now go to <http://127.0.0.1:8000/docs>.
 
   You will see the automatic interactive API documentation (provided by
   Swagger UI):
 
-  [Swagger UI]
+  ![Swagger
+  UI](https://fastapi.tiangolo.com/img/index/index-01-swagger-ui-simple.png)
 
-  Alternative API docs
+  ### Alternative API docs
 
-  And now, go to http://127.0.0.1:8000/redoc.
+  And now, go to <http://127.0.0.1:8000/redoc>.
 
   You will see the alternative automatic documentation (provided by
   ReDoc):
 
-  [ReDoc]
+  ![ReDoc](https://fastapi.tiangolo.com/img/index/index-02-redoc-simple.png)
 
-  Example upgrade
+  ## Example upgrade
 
-  Now modify the file main.py to receive a body from a PUT request.
+  Now modify the file `main.py` to receive a body from a `PUT` request.
 
   Declare the body using standard Python types, thanks to Pydantic.
 
-      from typing import Union
+  ``` Python
+  from typing import Union
 
-      from fastapi import FastAPI
-      from pydantic import BaseModel
+  from fastapi import FastAPI
+  from pydantic import BaseModel
 
-      app = FastAPI()
-
-
-      class Item(BaseModel):
-          name: str
-          price: float
-          is_offer: Union[bool, None] = None
+  app = FastAPI()
 
 
-      @app.get("/")
-      def read_root():
-          return {"Hello": "World"}
+  class Item(BaseModel):
+      name: str
+      price: float
+      is_offer: Union[bool, None] = None
 
 
-      @app.get("/items/{item_id}")
-      def read_item(item_id: int, q: Union[str, None] = None):
-          return {"item_id": item_id, "q": q}
+  @app.get("/")
+  def read_root():
+      return {"Hello": "World"}
 
 
-      @app.put("/items/{item_id}")
-      def update_item(item_id: int, item: Item):
-          return {"item_name": item.name, "item_id": item_id}
+  @app.get("/items/{item_id}")
+  def read_item(item_id: int, q: Union[str, None] = None):
+      return {"item_id": item_id, "q": q}
 
-  The server should reload automatically (because you added --reload to
-  the uvicorn command above).
 
-  Interactive API docs upgrade
+  @app.put("/items/{item_id}")
+  def update_item(item_id: int, item: Item):
+      return {"item_name": item.name, "item_id": item_id}
+  ```
 
-  Now go to http://127.0.0.1:8000/docs.
+  The server should reload automatically (because you added `--reload` to
+  the `uvicorn` command above).
 
-  -   The interactive API documentation will be automatically updated,
-      including the new body:
+  ### Interactive API docs upgrade
 
-  [Swagger UI]
+  Now go to <http://127.0.0.1:8000/docs>.
 
-  -   Click on the button "Try it out", it allows you to fill the
-      parameters and directly interact with the API:
+  - The interactive API documentation will be automatically updated,
+    including the new body:
 
-  [Swagger UI interaction]
+  ![Swagger
+  UI](https://fastapi.tiangolo.com/img/index/index-03-swagger-02.png)
 
-  -   Then click on the "Execute" button, the user interface will
-      communicate with your API, send the parameters, get the results and
-      show them on the screen:
+  - Click on the button "Try it out", it allows you to fill the parameters
+    and directly interact with the API:
 
-  [Swagger UI interaction]
+  ![Swagger UI
+  interaction](https://fastapi.tiangolo.com/img/index/index-04-swagger-03.png)
 
-  Alternative API docs upgrade
+  - Then click on the "Execute" button, the user interface will
+    communicate with your API, send the parameters, get the results and
+    show them on the screen:
 
-  And now, go to http://127.0.0.1:8000/redoc.
+  ![Swagger UI
+  interaction](https://fastapi.tiangolo.com/img/index/index-05-swagger-04.png)
 
-  -   The alternative documentation will also reflect the new query
-      parameter and body:
+  ### Alternative API docs upgrade
 
-  [ReDoc]
+  And now, go to <http://127.0.0.1:8000/redoc>.
 
-  Recap
+  - The alternative documentation will also reflect the new query
+    parameter and body:
 
-  In summary, you declare once the types of parameters, body, etc. as
+  ![ReDoc](https://fastapi.tiangolo.com/img/index/index-06-redoc-02.png)
+
+  ### Recap
+
+  In summary, you declare **once** the types of parameters, body, etc. as
   function parameters.
 
   You do that with standard modern Python types.
@@ -293,71 +377,76 @@ description: |-
   You don't have to learn a new syntax, the methods or classes of a
   specific library, etc.
 
-  Just standard Python 3.8+.
+  Just standard **Python 3.8+**.
 
-  For example, for an int:
+  For example, for an `int`:
 
-      item_id: int
+  ``` Python
+  item_id: int
+  ```
 
-  or for a more complex Item model:
+  or for a more complex `Item` model:
 
-      item: Item
+  ``` Python
+  item: Item
+  ```
 
   ...and with that single declaration you get:
 
-  -   Editor support, including:
-      -   Completion.
-      -   Type checks.
-  -   Validation of data:
-      -   Automatic and clear errors when the data is invalid.
-      -   Validation even for deeply nested JSON objects.
-  -   Conversion of input data: coming from the network to Python data and
-      types. Reading from:
-      -   JSON.
-      -   Path parameters.
-      -   Query parameters.
-      -   Cookies.
-      -   Headers.
-      -   Forms.
-      -   Files.
-  -   Conversion of output data: converting from Python data and types to
-      network data (as JSON):
-      -   Convert Python types (str, int, float, bool, list, etc).
-      -   datetime objects.
-      -   UUID objects.
-      -   Database models.
-      -   ...and many more.
-  -   Automatic interactive API documentation, including 2 alternative
-      user interfaces:
-      -   Swagger UI.
-      -   ReDoc.
+  - Editor support, including:
+    - Completion.
+    - Type checks.
+  - Validation of data:
+    - Automatic and clear errors when the data is invalid.
+    - Validation even for deeply nested JSON objects.
+  - Conversion of input data: coming from the network to Python data and
+    types. Reading from:
+    - JSON.
+    - Path parameters.
+    - Query parameters.
+    - Cookies.
+    - Headers.
+    - Forms.
+    - Files.
+  - Conversion of output data: converting from Python data and types to
+    network data (as JSON):
+    - Convert Python types (`str`, `int`, `float`, `bool`, `list`, etc).
+    - `datetime` objects.
+    - `UUID` objects.
+    - Database models.
+    - ...and many more.
+  - Automatic interactive API documentation, including 2 alternative user
+    interfaces:
+    - Swagger UI.
+    - ReDoc.
 
   ------------------------------------------------------------------------
 
-  Coming back to the previous code example, FastAPI will:
+  Coming back to the previous code example, **FastAPI** will:
 
-  -   Validate that there is an item_id in the path for GET and PUT
-      requests.
-  -   Validate that the item_id is of type int for GET and PUT requests.
-      -   If it is not, the client will see a useful, clear error.
-  -   Check if there is an optional query parameter named q (as in
-      http://127.0.0.1:8000/items/foo?q=somequery) for GET requests.
-      -   As the q parameter is declared with = None, it is optional.
-      -   Without the None it would be required (as is the body in the
-          case with PUT).
-  -   For PUT requests to /items/{item_id}, Read the body as JSON:
-      -   Check that it has a required attribute name that should be a
-          str.
-      -   Check that it has a required attribute price that has to be a
-          float.
-      -   Check that it has an optional attribute is_offer, that should be
-          a bool, if present.
-      -   All this would also work for deeply nested JSON objects.
-  -   Convert from and to JSON automatically.
-  -   Document everything with OpenAPI, that can be used by:
-      -   Interactive documentation systems.
-      -   Automatic client code generation systems, for many languages.
-  -   Provide 2 interactive documentation web interfaces directly.
+  - Validate that there is an `item_id` in the path for `GET` and `PUT`
+    requests.
+  - Validate that the `item_id` is of type `int` for `GET` and `PUT`
+    requests.
+    - If it is not, the client will see a useful, clear error.
+  - Check if there is an optional query parameter named `q` (as in
+    `http://127.0.0.1:8000/items/foo?q=somequery`) for `GET` requests.
+    - As the `q` parameter is declared with `= None`, it is optional.
+    - Without the `None` it would be required (as is the body in the case
+      with `PUT`).
+  - For `PUT` requests to `/items/{item_id}`, Read the body as JSON:
+    - Check that it has a required attribute `name` that should be a
+      `str`.
+    - Check that it has a required attribute `price` that has to be a
+      `float`.
+    - Check that it has an optional attribute `is_offer`, that should be a
+      `bool`, if present.
+    - All this would also work for deeply nested JSON objects.
+  - Convert from and to JSON automatically.
+  - Document everything with OpenAPI, that can be used by:
+    - Interactive documentation systems.
+    - Automatic client code generation systems, for many languages.
+  - Provide 2 interactive documentation web interfaces directly.
 
   ------------------------------------------------------------------------
 
@@ -366,78 +455,86 @@ description: |-
 
   Try changing the line with:
 
-          return {"item_name": item.name, "item_id": item_id}
+  ``` Python
+      return {"item_name": item.name, "item_id": item_id}
+  ```
 
   ...from:
 
-              ... "item_name": item.name ...
+  ``` Python
+          ... "item_name": item.name ...
+  ```
 
   ...to:
 
-              ... "item_price": item.price ...
+  ``` Python
+          ... "item_price": item.price ...
+  ```
 
   ...and see how your editor will auto-complete the attributes and know
   their types:
 
-  [editor support]
+  ![editor
+  support](https://fastapi.tiangolo.com/img/vscode-completion.png)
 
   For a more complete example including more features, see the Tutorial -
   User Guide.
 
-  Spoiler alert: the tutorial - user guide includes:
+  **Spoiler alert**: the tutorial - user guide includes:
 
-  -   Declaration of parameters from other different places as: headers,
-      cookies, form fields and files.
-  -   How to set validation constraints as maximum_length or regex.
-  -   A very powerful and easy to use Dependency Injection system.
-  -   Security and authentication, including support for OAuth2 with JWT
-      tokens and HTTP Basic auth.
-  -   More advanced (but equally easy) techniques for declaring deeply
-      nested JSON models (thanks to Pydantic).
-  -   GraphQL integration with Strawberry and other libraries.
-  -   Many extra features (thanks to Starlette) as:
-      -   WebSockets
-      -   extremely easy tests based on HTTPX and pytest
-      -   CORS
-      -   Cookie Sessions
-      -   ...and more.
+  - Declaration of **parameters** from other different places as:
+    **headers**, **cookies**, **form fields** and **files**.
+  - How to set **validation constraints** as `maximum_length` or `regex`.
+  - A very powerful and easy to use **Dependency Injection** system.
+  - Security and authentication, including support for **OAuth2** with
+    **JWT tokens** and **HTTP Basic** auth.
+  - More advanced (but equally easy) techniques for declaring **deeply
+    nested JSON models** (thanks to Pydantic).
+  - **GraphQL** integration with Strawberry and other libraries.
+  - Many extra features (thanks to Starlette) as:
+    - **WebSockets**
+    - extremely easy tests based on HTTPX and `pytest`
+    - **CORS**
+    - **Cookie Sessions**
+    - ...and more.
 
-  Performance
+  ## Performance
 
-  Independent TechEmpower benchmarks show FastAPI applications running
+  Independent TechEmpower benchmarks show **FastAPI** applications running
   under Uvicorn as one of the fastest Python frameworks available, only
-  below Starlette and Uvicorn themselves (used internally by FastAPI). (*)
+  below Starlette and Uvicorn themselves (used internally by FastAPI).
+  (\*)
 
   To understand more about it, see the section Benchmarks.
 
-  Optional Dependencies
+  ## Optional Dependencies
 
   Used by Pydantic:
 
-  -   email_validator - for email validation.
-  -   pydantic-settings - for settings management.
-  -   pydantic-extra-types - for extra types to be used with Pydantic.
+  - email_validator - for email validation.
+  - pydantic-settings - for settings management.
+  - pydantic-extra-types - for extra types to be used with Pydantic.
 
   Used by Starlette:
 
-  -   httpx - Required if you want to use the TestClient.
-  -   jinja2 - Required if you want to use the default template
-      configuration.
-  -   python-multipart - Required if you want to support form "parsing",
-      with request.form().
-  -   itsdangerous - Required for SessionMiddleware support.
-  -   pyyaml - Required for Starlette's SchemaGenerator support (you
-      probably don't need it with FastAPI).
+  - httpx - Required if you want to use the `TestClient`.
+  - jinja2 - Required if you want to use the default template
+    configuration.
+  - python-multipart - Required if you want to support form "parsing",
+    with `request.form()`.
+  - itsdangerous - Required for `SessionMiddleware` support.
+  - pyyaml - Required for Starlette's `SchemaGenerator` support (you
+    probably don't need it with FastAPI).
 
   Used by FastAPI / Starlette:
 
-  -   uvicorn - for the server that loads and serves your application.
-  -   orjson - Required if you want to use ORJSONResponse.
-  -   ujson - Required if you want to use UJSONResponse.
+  - uvicorn - for the server that loads and serves your application.
+  - orjson - Required if you want to use `ORJSONResponse`.
+  - ujson - Required if you want to use `UJSONResponse`.
 
-  You can install all of these with pip install "fastapi[all]".
+  You can install all of these with `pip install "fastapi[all]"`.
 
-  License
+  ## License
 
   This project is licensed under the terms of the MIT license.
 homepage: null
@@ -497,7 +594,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: default_response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbe1d0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d6a1d0>
     rest: false
     kind: kw-only
   - name: responses
@@ -549,7 +646,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbe150>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d6a150>
     rest: false
     kind: kw-only
   - type: APIRouter
@@ -574,7 +671,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbf390>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d6b390>
     rest: false
     kind: kw-only
   - name: status_code
@@ -646,7 +743,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbf490>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d6b490>
     rest: false
     kind: kw-only
   - name: name
@@ -666,7 +763,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbf4d0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d6b4d0>
     rest: false
     kind: kw-only
   - type: '?'
@@ -790,7 +887,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbf750>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d6b750>
     rest: false
     kind: kw-only
   - name: status_code
@@ -862,7 +959,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbf6d0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d6b6d0>
     rest: false
     kind: kw-only
   - name: name
@@ -878,7 +975,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbf790>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d6b790>
     rest: false
     kind: kw-only
   - type: '?'
@@ -938,7 +1035,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4a90>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70a90>
     rest: false
     kind: kw-only
   - name: status_code
@@ -1006,7 +1103,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4b10>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70b10>
     rest: false
     kind: kw-only
   - name: name
@@ -1022,7 +1119,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4b50>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70b50>
     rest: false
     kind: kw-only
   - type: '?'
@@ -1058,7 +1155,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbfcd0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d6bcd0>
     rest: false
     kind: kw-only
   - name: status_code
@@ -1126,7 +1223,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbfd50>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d6bd50>
     rest: false
     kind: kw-only
   - name: name
@@ -1142,7 +1239,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbfd90>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d6bd90>
     rest: false
     kind: kw-only
   - type: '?'
@@ -1183,7 +1280,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4c50>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70c50>
     rest: false
     kind: kw-only
   - name: status_code
@@ -1251,7 +1348,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4c90>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70c90>
     rest: false
     kind: kw-only
   - name: name
@@ -1267,7 +1364,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4cd0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70cd0>
     rest: false
     kind: kw-only
   - type: '?'
@@ -1344,7 +1441,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: default_response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbf950>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d6b950>
     rest: false
     kind: kw-only
   - name: responses
@@ -1364,7 +1461,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbf9d0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d6b9d0>
     rest: false
     kind: kw-only
   - type: '?'
@@ -1488,7 +1585,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4b90>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70b90>
     rest: false
     kind: kw-only
   - name: status_code
@@ -1556,7 +1653,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4bd0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70bd0>
     rest: false
     kind: kw-only
   - name: name
@@ -1572,7 +1669,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4c10>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70c10>
     rest: false
     kind: kw-only
   - type: '?'
@@ -1613,7 +1710,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4d10>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70d10>
     rest: false
     kind: kw-only
   - name: status_code
@@ -1681,7 +1778,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4d50>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70d50>
     rest: false
     kind: kw-only
   - name: name
@@ -1697,7 +1794,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4d90>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70d90>
     rest: false
     kind: kw-only
   - type: '?'
@@ -1738,7 +1835,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc49d0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d709d0>
     rest: false
     kind: kw-only
   - name: status_code
@@ -1806,7 +1903,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4a10>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70a10>
     rest: false
     kind: kw-only
   - name: name
@@ -1822,7 +1919,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4a50>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70a50>
     rest: false
     kind: kw-only
   - type: '?'
@@ -1863,7 +1960,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4910>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70910>
     rest: false
     kind: kw-only
   - name: status_code
@@ -1931,7 +2028,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4990>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70990>
     rest: false
     kind: kw-only
   - name: name
@@ -1947,7 +2044,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4790>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70790>
     rest: false
     kind: kw-only
   - type: '?'
@@ -2045,7 +2142,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4dd0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70dd0>
     rest: false
     kind: kw-only
   - name: status_code
@@ -2113,7 +2210,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4e10>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70e10>
     rest: false
     kind: kw-only
   - name: name
@@ -2129,7 +2226,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc4e50>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d70e50>
     rest: false
     kind: kw-only
   - type: '?'
@@ -2640,7 +2737,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: default_response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bc6a10>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d72a10>
     rest: false
     kind: kw-only
   - name: redirect_slashes
@@ -2732,7 +2829,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e852ccad0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79b478ad0>
     rest: false
     kind: kw-only
   - name: separate_input_output_schemas
@@ -2761,7 +2858,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f2bd0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999ebd0>
     rest: false
     kind: kw-only
   - name: status_code
@@ -2833,7 +2930,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f2c50>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999ec50>
     rest: false
     kind: kw-only
   - name: name
@@ -2845,7 +2942,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f2c90>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999ec90>
     rest: false
     kind: kw-only
   - type: '?'
@@ -3005,7 +3102,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f2dd0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999edd0>
     rest: false
     kind: kw-only
   - name: status_code
@@ -3077,7 +3174,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f2d50>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999ed50>
     rest: false
     kind: kw-only
   - name: name
@@ -3089,7 +3186,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f2e10>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999ee10>
     rest: false
     kind: kw-only
   - type: '?'
@@ -3134,7 +3231,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3490>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f490>
     rest: false
     kind: kw-only
   - name: status_code
@@ -3202,7 +3299,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f34d0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f4d0>
     rest: false
     kind: kw-only
   - name: name
@@ -3218,7 +3315,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3550>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f550>
     rest: false
     kind: kw-only
   - type: '?'
@@ -3294,7 +3391,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3190>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f190>
     rest: false
     kind: kw-only
   - name: status_code
@@ -3362,7 +3459,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3250>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f250>
     rest: false
     kind: kw-only
   - name: name
@@ -3378,7 +3475,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f31d0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f1d0>
     rest: false
     kind: kw-only
   - type: '?'
@@ -3411,7 +3508,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3690>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f690>
     rest: false
     kind: kw-only
   - name: status_code
@@ -3479,7 +3576,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f36d0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f6d0>
     rest: false
     kind: kw-only
   - name: name
@@ -3495,7 +3592,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3750>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f750>
     rest: false
     kind: kw-only
   - type: '?'
@@ -3579,7 +3676,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: default_response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f2e50>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999ee50>
     rest: false
     kind: kw-only
   - name: callbacks
@@ -3587,7 +3684,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f2e90>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999ee90>
     rest: false
     kind: kw-only
   - type: '?'
@@ -3720,7 +3817,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3590>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f590>
     rest: false
     kind: kw-only
   - name: status_code
@@ -3788,7 +3885,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f35d0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f5d0>
     rest: false
     kind: kw-only
   - name: name
@@ -3804,7 +3901,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3650>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f650>
     rest: false
     kind: kw-only
   - type: '?'
@@ -3842,7 +3939,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3790>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f790>
     rest: false
     kind: kw-only
   - name: status_code
@@ -3910,7 +4007,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f37d0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f7d0>
     rest: false
     kind: kw-only
   - name: name
@@ -3926,7 +4023,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3850>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f850>
     rest: false
     kind: kw-only
   - type: '?'
@@ -3964,7 +4061,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3390>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f390>
     rest: false
     kind: kw-only
   - name: status_code
@@ -4032,7 +4129,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f33d0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f3d0>
     rest: false
     kind: kw-only
   - name: name
@@ -4048,7 +4145,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3450>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f450>
     rest: false
     kind: kw-only
   - type: '?'
@@ -4086,7 +4183,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3290>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f290>
     rest: false
     kind: kw-only
   - name: status_code
@@ -4154,7 +4251,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f32d0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f2d0>
     rest: false
     kind: kw-only
   - name: name
@@ -4170,7 +4267,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3350>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f350>
     rest: false
     kind: kw-only
   - type: '?'
@@ -4255,7 +4352,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3890>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f890>
     rest: false
     kind: kw-only
   - name: status_code
@@ -4323,7 +4420,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f38d0>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f8d0>
     rest: false
     kind: kw-only
   - name: name
@@ -4339,7 +4436,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e837f3950>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79999f950>
     rest: false
     kind: kw-only
   - type: '?'
@@ -5153,11 +5250,11 @@ license: MIT
     rest: false
   - kind: positional
     name: receive
-    default: <function empty_receive at 0x7f7e83e13100>
+    default: <function empty_receive at 0x7fa799fbf100>
     rest: false
   - kind: positional
     name: send
-    default: <function empty_send at 0x7f7e83ccba60>
+    default: <function empty_send at 0x7fa799e77a60>
     rest: false
   - type: Request
   inherits_from:
@@ -8287,7 +8384,7 @@ license: MIT
     default: null
     rest: false
   - name: response_model
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbd490>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d69490>
     rest: false
     kind: kw-only
   - name: status_code
@@ -8363,7 +8460,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbd550>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d69550>
     rest: false
     kind: kw-only
   - name: dependency_overrides_provider
@@ -8379,7 +8476,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: generate_unique_id_function
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e83bbd590>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa799d69590>
     rest: false
     kind: kw-only
   - type: APIRoute
@@ -10731,7 +10828,7 @@ license: MIT
     rest: false
   - kind: positional
     name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e848e0490>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79aa8c490>
     rest: false
   - kind: positional
     name: response_field
@@ -72504,7 +72601,7 @@ license: MIT
     rest: false
   - kind: positional
     name: response_class
-    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7f7e848e0490>
+    default: <fastapi.datastructures.DefaultPlaceholder object at 0x7fa79aa8c490>
     rest: false
   - kind: positional
     name: response_field
@@ -73240,7 +73337,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: timeout
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: extensions
@@ -73298,7 +73395,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: auth
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: follow_redirects
@@ -73310,7 +73407,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: timeout
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: extensions
@@ -73356,7 +73453,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: auth
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: follow_redirects
@@ -73368,7 +73465,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: timeout
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: extensions
@@ -73407,7 +73504,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: auth
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: follow_redirects
@@ -73419,7 +73516,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: timeout
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: extensions
@@ -73484,7 +73581,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: auth
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: follow_redirects
@@ -73496,7 +73593,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: timeout
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: extensions
@@ -73558,7 +73655,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: auth
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: follow_redirects
@@ -73570,7 +73667,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: timeout
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: extensions
@@ -73632,7 +73729,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: auth
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: follow_redirects
@@ -73644,7 +73741,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: timeout
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: extensions
@@ -73699,7 +73796,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: auth
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: follow_redirects
@@ -73711,7 +73808,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: timeout
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: extensions
@@ -73781,7 +73878,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: auth
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: follow_redirects
@@ -73793,7 +73890,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: timeout
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: extensions
@@ -73832,11 +73929,11 @@ license: MIT
     rest: false
     kind: kw-only
   - name: auth
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - name: follow_redirects
-    default: <httpx._client.UseClientDefault object at 0x7f7e826d26d0>
+    default: <httpx._client.UseClientDefault object at 0x7fa79887e890>
     rest: false
     kind: kw-only
   - type: '?'

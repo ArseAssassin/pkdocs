@@ -6,7 +6,7 @@ generator_command: src:python use "click"
 version: 8.1.7
 summary: Composable command line interface toolkit
 description: |-
-  $ click_
+  # \$ click\_
 
   Click is a Python package for creating beautiful command line interfaces
   in a composable way with as little code as necessary. It's the "Command
@@ -19,52 +19,59 @@ description: |-
 
   Click in three points:
 
-  -   Arbitrary nesting of commands
-  -   Automatic help page generation
-  -   Supports lazy loading of subcommands at runtime
+  - Arbitrary nesting of commands
+  - Automatic help page generation
+  - Supports lazy loading of subcommands at runtime
 
-  Installing
+  ## Installing
 
-  Install and update using pip:
+  Install and update using
+  [pip](https://pip.pypa.io/en/stable/getting-started/):
 
-      $ pip install -U click
+  ``` text
+  $ pip install -U click
+  ```
 
-  A Simple Example
+  ## A Simple Example
 
-      import click
+  ``` python
+  import click
 
-      @click.command()
-      @click.option("--count", default=1, help="Number of greetings.")
-      @click.option("--name", prompt="Your name", help="The person to greet.")
-      def hello(count, name):
-          """Simple program that greets NAME for a total of COUNT times."""
-          for _ in range(count):
-              click.echo(f"Hello, {name}!")
+  @click.command()
+  @click.option("--count", default=1, help="Number of greetings.")
+  @click.option("--name", prompt="Your name", help="The person to greet.")
+  def hello(count, name):
+      """Simple program that greets NAME for a total of COUNT times."""
+      for _ in range(count):
+          click.echo(f"Hello, {name}!")
 
-      if __name__ == '__main__':
-          hello()
+  if __name__ == '__main__':
+      hello()
+  ```
 
-      $ python hello.py --count=3
-      Your name: Click
-      Hello, Click!
-      Hello, Click!
-      Hello, Click!
+  ``` text
+  $ python hello.py --count=3
+  Your name: Click
+  Hello, Click!
+  Hello, Click!
+  Hello, Click!
+  ```
 
-  Donate
+  ## Donate
 
   The Pallets organization develops and supports Click and other popular
   packages. In order to grow the community of contributors and users, and
-  allow the maintainers to devote more time to the projects, please donate
-  today.
+  allow the maintainers to devote more time to the projects, [please
+  donate today](https://palletsprojects.com/donate).
 
-  Links
+  ## Links
 
-  -   Documentation: https://click.palletsprojects.com/
-  -   Changes: https://click.palletsprojects.com/changes/
-  -   PyPI Releases: https://pypi.org/project/click/
-  -   Source Code: https://github.com/pallets/click
-  -   Issue Tracker: https://github.com/pallets/click/issues
-  -   Chat: https://discord.gg/pallets
+  - Documentation: <https://click.palletsprojects.com/>
+  - Changes: <https://click.palletsprojects.com/changes/>
+  - PyPI Releases: <https://pypi.org/project/click/>
+  - Source Code: <https://github.com/pallets/click>
+  - Issue Tracker: <https://github.com/pallets/click/issues>
+  - Chat: <https://discord.gg/pallets>
 homepage: https://palletsprojects.com/p/click/
 license: BSD-3-Clause
 
