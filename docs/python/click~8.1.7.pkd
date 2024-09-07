@@ -4,9 +4,9 @@ text_format: rst
 generator: src:python
 generator_command: src:python use "click"
 version: 8.1.7
-description: |
-  \$ click\_
-  ==========
+summary: Composable command line interface toolkit
+description: |-
+  $ click_
 
   Click is a Python package for creating beautiful command line interfaces
   in a composable way with as little code as necessary. It's the "Command
@@ -23,23 +23,13 @@ description: |
   -   Automatic help page generation
   -   Supports lazy loading of subcommands at runtime
 
-
   Installing
-  ----------
 
-  Install and update using `pip`_:
-
-  .. code-block:: text
+  Install and update using pip:
 
       $ pip install -U click
 
-  .. _pip: https://pip.pypa.io/en/stable/getting-started/
-
-
   A Simple Example
-  ----------------
-
-  .. code-block:: python
 
       import click
 
@@ -54,28 +44,20 @@ description: |
       if __name__ == '__main__':
           hello()
 
-  .. code-block:: text
-
       $ python hello.py --count=3
       Your name: Click
       Hello, Click!
       Hello, Click!
       Hello, Click!
 
-
   Donate
-  ------
 
   The Pallets organization develops and supports Click and other popular
   packages. In order to grow the community of contributors and users, and
-  allow the maintainers to devote more time to the projects, `please
-  donate today`_.
-
-  .. _please donate today: https://palletsprojects.com/donate
-
+  allow the maintainers to devote more time to the projects, please donate
+  today.
 
   Links
-  -----
 
   -   Documentation: https://click.palletsprojects.com/
   -   Changes: https://click.palletsprojects.com/changes/

@@ -4,6 +4,7 @@ text_format: rst
 generator: src:python
 generator_command: src:python use "lxml"
 version: 5.1.0
+summary: Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API.
 description: |+
   lxml is a Pythonic, mature binding for the libxml2 and libxslt libraries.  It
   provides safe and convenient access to these libraries using the ElementTree
@@ -447,7 +448,7 @@ license: BSD-3-Clause
     rest: false
   - kind: positional
     name: timeout
-    default: <object object at 0x7f67e3200830>
+    default: <object object at 0x7f1fa84b4830>
     rest: false
   - name: cafile
     default: None

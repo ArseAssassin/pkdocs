@@ -4,85 +4,82 @@ text_format: rst
 generator: src:python
 generator_command: src:python use "requests"
 version: 2.31.0
-description: |
-  # Requests
+summary: Python HTTP for Humans.
+description: |-
+  Requests
 
-  **Requests** is a simple, yet elegant, HTTP library.
+  Requests is a simple, yet elegant, HTTP library.
 
-  ```python
-  >>> import requests
-  >>> r = requests.get('https://httpbin.org/basic-auth/user/pass', auth=('user', 'pass'))
-  >>> r.status_code
-  200
-  >>> r.headers['content-type']
-  'application/json; charset=utf8'
-  >>> r.encoding
-  'utf-8'
-  >>> r.text
-  '{"authenticated": true, ...'
-  >>> r.json()
-  {'authenticated': True, ...}
-  ```
+      >>> import requests
+      >>> r = requests.get('https://httpbin.org/basic-auth/user/pass', auth=('user', 'pass'))
+      >>> r.status_code
+      200
+      >>> r.headers['content-type']
+      'application/json; charset=utf8'
+      >>> r.encoding
+      'utf-8'
+      >>> r.text
+      '{"authenticated": true, ...'
+      >>> r.json()
+      {'authenticated': True, ...}
 
-  Requests allows you to send HTTP/1.1 requests extremely easily. There’s no need to manually add query strings to your URLs, or to form-encode your `PUT` & `POST` data — but nowadays, just use the `json` method!
+  Requests allows you to send HTTP/1.1 requests extremely easily. There’s
+  no need to manually add query strings to your URLs, or to form-encode
+  your PUT & POST data — but nowadays, just use the json method!
 
-  Requests is one of the most downloaded Python packages today, pulling in around `30M downloads / week`— according to GitHub, Requests is currently [depended upon](https://github.com/psf/requests/network/dependents?package_id=UGFja2FnZS01NzA4OTExNg%3D%3D) by `1,000,000+` repositories. You may certainly put your trust in this code.
+  Requests is one of the most downloaded Python packages today, pulling in
+  around 30M downloads / week— according to GitHub, Requests is currently
+  depended upon by 1,000,000+ repositories. You may certainly put your
+  trust in this code.
 
-  [![Downloads](https://pepy.tech/badge/requests/month)](https://pepy.tech/project/requests)
-  [![Supported Versions](https://img.shields.io/pypi/pyversions/requests.svg)](https://pypi.org/project/requests)
-  [![Contributors](https://img.shields.io/github/contributors/psf/requests.svg)](https://github.com/psf/requests/graphs/contributors)
+  [Downloads] [Supported Versions] [Contributors]
 
-  ## Installing Requests and Supported Versions
+  Installing Requests and Supported Versions
 
   Requests is available on PyPI:
 
-  ```console
-  $ python -m pip install requests
-  ```
+      $ python -m pip install requests
 
   Requests officially supports Python 3.7+.
 
-  ## Supported Features & Best–Practices
+  Supported Features & Best–Practices
 
-  Requests is ready for the demands of building robust and reliable HTTP–speaking applications, for the needs of today.
+  Requests is ready for the demands of building robust and reliable
+  HTTP–speaking applications, for the needs of today.
 
-  - Keep-Alive & Connection Pooling
-  - International Domains and URLs
-  - Sessions with Cookie Persistence
-  - Browser-style TLS/SSL Verification
-  - Basic & Digest Authentication
-  - Familiar `dict`–like Cookies
-  - Automatic Content Decompression and Decoding
-  - Multi-part File Uploads
-  - SOCKS Proxy Support
-  - Connection Timeouts
-  - Streaming Downloads
-  - Automatic honoring of `.netrc`
-  - Chunked HTTP Requests
+  -   Keep-Alive & Connection Pooling
+  -   International Domains and URLs
+  -   Sessions with Cookie Persistence
+  -   Browser-style TLS/SSL Verification
+  -   Basic & Digest Authentication
+  -   Familiar dict–like Cookies
+  -   Automatic Content Decompression and Decoding
+  -   Multi-part File Uploads
+  -   SOCKS Proxy Support
+  -   Connection Timeouts
+  -   Streaming Downloads
+  -   Automatic honoring of .netrc
+  -   Chunked HTTP Requests
 
-  ## API Reference and User Guide available on [Read the Docs](https://requests.readthedocs.io)
+  API Reference and User Guide available on Read the Docs
 
-  [![Read the Docs](https://raw.githubusercontent.com/psf/requests/main/ext/ss.png)](https://requests.readthedocs.io)
+  [Read the Docs]
 
-  ## Cloning the repository
+  Cloning the repository
 
-  When cloning the Requests repository, you may need to add the `-c
-  fetch.fsck.badTimezone=ignore` flag to avoid an error about a bad commit (see
-  [this issue](https://github.com/psf/requests/issues/2690) for more background):
+  When cloning the Requests repository, you may need to add the
+  -c fetch.fsck.badTimezone=ignore flag to avoid an error about a bad
+  commit (see this issue for more background):
 
-  ```shell
-  git clone -c fetch.fsck.badTimezone=ignore https://github.com/psf/requests.git
-  ```
+      git clone -c fetch.fsck.badTimezone=ignore https://github.com/psf/requests.git
 
   You can also apply this setting to your global Git config:
 
-  ```shell
-  git config --global fetch.fsck.badTimezone ignore
-  ```
+      git config --global fetch.fsck.badTimezone ignore
 
-  ---
+  ------------------------------------------------------------------------
 
-  [![Kenneth Reitz](https://raw.githubusercontent.com/psf/requests/main/ext/kr.png)](https://kennethreitz.org) [![Python Software Foundation](https://raw.githubusercontent.com/psf/requests/main/ext/psf.png)](https://www.python.org/psf)
+  [Kenneth Reitz] [Python Software Foundation]
 homepage: https://requests.readthedocs.io
 license: Apache 2.0
 
@@ -2688,7 +2685,7 @@ license: Apache 2.0
     rest: false
   - kind: positional
     name: default
-    default: <object object at 0x7fa487ea8160>
+    default: <object object at 0x7fc67ebb4160>
     rest: false
   - type: '?'
   inherits_from: null
@@ -6645,7 +6642,7 @@ license: Apache 2.0
     rest: false
   - kind: positional
     name: default
-    default: <object object at 0x7fa487ea8160>
+    default: <object object at 0x7fc67ebb4160>
     rest: false
   - type: '?'
   inherits_from: null
@@ -9127,7 +9124,7 @@ license: Apache 2.0
     rest: false
   - kind: positional
     name: default
-    default: <object object at 0x7fa487ea8160>
+    default: <object object at 0x7fc67ebb4160>
     rest: false
   - type: '?'
   inherits_from: null
@@ -10600,7 +10597,7 @@ license: Apache 2.0
     rest: false
   - kind: positional
     name: quote_via
-    default: <function quote_plus at 0x7fa487b6b2e0>
+    default: <function quote_plus at 0x7fc67e6a99e0>
     rest: false
   - type: '?'
   inherits_from: null
@@ -12511,7 +12508,7 @@ license: Apache 2.0
     rest: false
   - kind: positional
     name: quote_via
-    default: <function quote_plus at 0x7fa487b6b2e0>
+    default: <function quote_plus at 0x7fc67e6a99e0>
     rest: false
   - type: '?'
   inherits_from: null
@@ -15134,7 +15131,7 @@ license: Apache 2.0
     rest: false
   - kind: positional
     name: quote_via
-    default: <function quote_plus at 0x7fa487b6b2e0>
+    default: <function quote_plus at 0x7fc67e6a99e0>
     rest: false
   - type: '?'
   inherits_from: null
@@ -15492,13 +15489,6 @@ license: Apache 2.0
   ns: null
   description: Module containing bug report helper(s).
   summary: Module containing bug report helper(s)
-  signatures: null
-  inherits_from: null
-- name: chardet
-  kind: const
-  ns: requests.help
-  description: null
-  summary: ''
   signatures: null
   inherits_from: null
 - name: info
@@ -15983,7 +15973,7 @@ license: Apache 2.0
     rest: false
   - kind: positional
     name: quote_via
-    default: <function quote_plus at 0x7fa487b6b2e0>
+    default: <function quote_plus at 0x7fc67e6a99e0>
     rest: false
   - type: '?'
   inherits_from: null

@@ -4,6 +4,7 @@ text_format: rst
 generator: src:python
 generator_command: src:python use "scrapy"
 version: 2.11.2
+summary: A high-level Web Crawling and Web Scraping framework
 description: ".. image:: https://scrapy.org/img/scrapylogo.png\n   :target: https://scrapy.org/\n   \n======\nScrapy\n======\n\n.. image:: https://img.shields.io/pypi/v/Scrapy.svg\n   :target: https://pypi.python.org/pypi/Scrapy\n   :alt: PyPI Version\n\n.. image:: https://img.shields.io/pypi/pyversions/Scrapy.svg\n   :target: https://pypi.python.org/pypi/Scrapy\n   :alt: Supported Python Versions\n\n.. image:: https://github.com/scrapy/scrapy/workflows/Ubuntu/badge.svg\n   :target: https://github.com/scrapy/scrapy/actions?query=workflow%3AUbuntu\n   :alt: Ubuntu\n\n.. .. image:: https://github.com/scrapy/scrapy/workflows/macOS/badge.svg\n   .. :target: https://github.com/scrapy/scrapy/actions?query=workflow%3AmacOS\n   .. :alt: macOS\n\n\n.. image:: https://github.com/scrapy/scrapy/workflows/Windows/badge.svg\n   :target: https://github.com/scrapy/scrapy/actions?query=workflow%3AWindows\n   :alt: Windows\n\n.. image:: https://img.shields.io/badge/wheel-yes-brightgreen.svg\n   :target: https://pypi.python.org/pypi/Scrapy\n   :alt: Wheel Status\n\n.. image:: https://img.shields.io/codecov/c/github/scrapy/scrapy/master.svg\n   :target: https://codecov.io/github/scrapy/scrapy?branch=master\n   :alt: Coverage report\n\n.. image:: https://anaconda.org/conda-forge/scrapy/badges/version.svg\n   :target: https://anaconda.org/conda-forge/scrapy\n   :alt: Conda Version\n\n\nOverview\n========\n\nScrapy is a BSD-licensed fast high-level web crawling and web scraping framework, used to\ncrawl websites and extract structured data from their pages. It can be used for\na wide range of purposes, from data mining to monitoring and automated testing.\n\nScrapy is maintained by Zyte_ (formerly Scrapinghub) and `many other\ncontributors`_.\n\n.. _many other contributors: https://github.com/scrapy/scrapy/graphs/contributors\n.. _Zyte: https://www.zyte.com/\n\nCheck the Scrapy homepage at https://scrapy.org for more information,\nincluding a list of features.\n\n\nRequirements\n============\n\n* Python 3.8+\n* Works on Linux, Windows, macOS, BSD\n\nInstall\n=======\n\nThe quick way:\n\n.. code:: bash\n\n    pip install scrapy\n\nSee the install section in the documentation at\nhttps://docs.scrapy.org/en/latest/intro/install.html for more details.\n\nDocumentation\n=============\n\nDocumentation is available online at https://docs.scrapy.org/ and in the ``docs``\ndirectory.\n\nReleases\n========\n\nYou can check https://docs.scrapy.org/en/latest/news.html for the release notes.\n\nCommunity (blog, twitter, mail list, IRC)\n=========================================\n\nSee https://scrapy.org/community/ for details.\n\nContributing\n============\n\nSee https://docs.scrapy.org/en/master/contributing.html for details.\n\nCode of Conduct\n---------------\n\nPlease note that this project is released with a Contributor `Code of Conduct <https://github.com/scrapy/scrapy/blob/master/CODE_OF_CONDUCT.md>`_.\n\nBy participating in this project you agree to abide by its terms.\nPlease report unacceptable behavior to opensource@zyte.com.\n\nCompanies using Scrapy\n======================\n\nSee https://scrapy.org/companies/ for a list.\n\nCommercial Support\n==================\n\nSee https://scrapy.org/support/ for details.\n"
 homepage: https://scrapy.org
 license: BSD
@@ -657,7 +658,7 @@ license: BSD
     rest: false
   - kind: positional
     name: root
-    default: <object object at 0x7fa9743b1650>
+    default: <object object at 0x7f883733d650>
     rest: false
   - type: Selector
   inherits_from:
@@ -1543,7 +1544,7 @@ license: BSD
     rest: false
   - kind: positional
     name: default
-    default: <object object at 0x7fa9743b0160>
+    default: <object object at 0x7f883733c160>
     rest: false
   - type: '?'
   inherits_from: null
@@ -2308,7 +2309,7 @@ license: BSD
     rest: false
   - kind: positional
     name: default
-    default: <object object at 0x7fa9743b1d40>
+    default: <object object at 0x7f883733dd40>
     rest: false
   - type: '?'
   inherits_from: null
@@ -2515,7 +2516,7 @@ license: BSD
     rest: false
   - kind: positional
     name: convert
-    default: <function update_classpath at 0x7fa9729e1a80>
+    default: <function update_classpath at 0x7f88357ac180>
     rest: false
   - type: '?'
   inherits_from: null
@@ -7166,7 +7167,7 @@ license: BSD
     rest: false
   - kind: positional
     name: default
-    default: <object object at 0x7fa9743b1d40>
+    default: <object object at 0x7f883733dd40>
     rest: false
   - type: '?'
   inherits_from: null
@@ -9902,7 +9903,7 @@ license: BSD
     rest: false
   - kind: positional
     name: convert
-    default: <function update_classpath at 0x7fa9729e1a80>
+    default: <function update_classpath at 0x7f88357ac180>
     rest: false
   - type: '?'
   inherits_from: null
@@ -12557,7 +12558,7 @@ license: BSD
     rest: false
   - kind: positional
     name: convert
-    default: <function update_classpath at 0x7fa9729e1a80>
+    default: <function update_classpath at 0x7f88357ac180>
     rest: false
   - type: '?'
   inherits_from: null
@@ -16058,7 +16059,7 @@ license: BSD
     rest: false
   - kind: positional
     name: convert
-    default: <function update_classpath at 0x7fa9729e1a80>
+    default: <function update_classpath at 0x7f88357ac180>
     rest: false
   - type: '?'
   inherits_from: null
@@ -17991,7 +17992,7 @@ license: BSD
     rest: false
   - kind: positional
     name: default
-    default: <object object at 0x7fa9743b0160>
+    default: <object object at 0x7f883733c160>
     rest: false
   - type: '?'
   inherits_from: null
@@ -24074,7 +24075,7 @@ license: BSD
     rest: false
   - kind: positional
     name: quote_via
-    default: <function quote_plus at 0x7fa9740732e0>
+    default: <function quote_plus at 0x7f8836e299e0>
     rest: false
   - type: '?'
   inherits_from: null
@@ -26422,7 +26423,7 @@ license: BSD
     rest: false
   - kind: positional
     name: default
-    default: <object object at 0x7fa9743b0160>
+    default: <object object at 0x7f883733c160>
     rest: false
   - type: '?'
   inherits_from: null
@@ -28300,7 +28301,7 @@ license: BSD
     rest: false
   - kind: positional
     name: key
-    default: <function <lambda> at 0x7fa973d09da0>
+    default: <function <lambda> at 0x7f8836cf04a0>
     rest: false
   - type: '?'
   inherits_from: null
@@ -34028,7 +34029,7 @@ license: BSD
     rest: false
   - kind: positional
     name: convert
-    default: <function update_classpath at 0x7fa9729e1a80>
+    default: <function update_classpath at 0x7f88357ac180>
     rest: false
   - type: '?'
   inherits_from: null
@@ -38269,7 +38270,7 @@ license: BSD
     rest: false
   - kind: positional
     name: _openfunc
-    default: <function open at 0x7fa97305ff60>
+    default: <function open at 0x7f8835e2a660>
     rest: false
   - type: '?'
   inherits_from: null
@@ -41694,11 +41695,11 @@ license: BSD
     rest: false
     kind: kw-only
   - name: interpolation
-    default: <object object at 0x7fa9743b1d10>
+    default: <object object at 0x7f883733dd10>
     rest: false
     kind: kw-only
   - name: converters
-    default: <object object at 0x7fa9743b1d10>
+    default: <object object at 0x7f883733dd10>
     rest: false
     kind: kw-only
   - type: ConfigParser
@@ -41844,7 +41845,7 @@ license: BSD
     rest: false
     kind: kw-only
   - name: fallback
-    default: <object object at 0x7fa9743b1d10>
+    default: <object object at 0x7f883733dd10>
     rest: false
     kind: kw-only
   - type: '?'
@@ -41876,7 +41877,7 @@ license: BSD
     rest: false
     kind: kw-only
   - name: fallback
-    default: <object object at 0x7fa9743b1d10>
+    default: <object object at 0x7f883733dd10>
     rest: false
     kind: kw-only
   - type: '?'
@@ -41908,7 +41909,7 @@ license: BSD
     rest: false
     kind: kw-only
   - name: fallback
-    default: <object object at 0x7fa9743b1d10>
+    default: <object object at 0x7f883733dd10>
     rest: false
     kind: kw-only
   - type: '?'
@@ -41940,7 +41941,7 @@ license: BSD
     rest: false
     kind: kw-only
   - name: fallback
-    default: <object object at 0x7fa9743b1d10>
+    default: <object object at 0x7f883733dd10>
     rest: false
     kind: kw-only
   - type: '?'
@@ -42008,7 +42009,7 @@ license: BSD
     rest: false
   - kind: positional
     name: section
-    default: <object object at 0x7fa9743b1d10>
+    default: <object object at 0x7f883733dd10>
     rest: false
   - kind: positional
     name: raw
@@ -42082,7 +42083,7 @@ license: BSD
     rest: false
   - kind: positional
     name: default
-    default: <object object at 0x7fa9743b0160>
+    default: <object object at 0x7f883733c160>
     rest: false
   - type: '?'
   inherits_from: null
@@ -42525,7 +42526,7 @@ license: BSD
     rest: false
   - kind: positional
     name: convert
-    default: <function update_classpath at 0x7fa9729e1a80>
+    default: <function update_classpath at 0x7f88357ac180>
     rest: false
   - type: '?'
   inherits_from: null
@@ -44105,7 +44106,7 @@ license: BSD
     rest: false
   - kind: positional
     name: scheduler
-    default: <function _defaultScheduler at 0x7fa972abb560>
+    default: <function _defaultScheduler at 0x7f8835899c60>
     rest: false
   - kind: positional
     name: started
@@ -49083,7 +49084,7 @@ license: BSD
     rest: false
   - kind: positional
     name: key
-    default: <function <lambda> at 0x7fa973d09da0>
+    default: <function <lambda> at 0x7f8836cf04a0>
     rest: false
   - type: '?'
   inherits_from: null
@@ -51806,7 +51807,7 @@ license: BSD
     rest: false
   - kind: positional
     name: _openfunc
-    default: <function open at 0x7fa97305ff60>
+    default: <function open at 0x7f8835e2a660>
     rest: false
   - type: '?'
   inherits_from: null
@@ -52109,7 +52110,7 @@ license: BSD
     rest: false
   - kind: positional
     name: default
-    default: <object object at 0x7fa9743b0160>
+    default: <object object at 0x7f883733c160>
     rest: false
   - type: '?'
   inherits_from: null
@@ -52260,7 +52261,7 @@ license: BSD
     rest: false
   - kind: positional
     name: _w
-    default: <built-in method match of re.Pattern object at 0x7fa97416c040>
+    default: <built-in method match of re.Pattern object at 0x7f883711c110>
     rest: false
   - type: '?'
   inherits_from: null

@@ -3,6 +3,7 @@ name: pyyaml
 text_format: rst
 generator: src:python
 generator_command: src:python use "yaml"
+description: ''
 version: 6.0.1
 license: MIT
 

@@ -50,7 +50,7 @@ function useGet(url) {
 
 
 function useDocs(slug) {
-  let docs = useGet(`${REPO}/${slug}.pkd`)
+  let docs = useGet(`${REPO}/${slug}`)
   let [parsed, setParsed] = useState([])
 
   useEffect(() => {
@@ -85,9 +85,9 @@ function DoctableSearch({ selectedDoc }) {
         getQueriedItems={ (query) =>
           docs
           .filter((it) =>
-            it.slug.toLowerCase().indexOf(query) > -1
+            it.path.toLowerCase().indexOf(query) > -1
           )
-          .map((it) => ({ ...it, id: it.slug, url: `/${it.slug}` }))
+          .map((it) => ({ ...it, id: it.path, url: `/${it.path}` }))
         }
         renderListItem={ (it) =>
           <div className='doctable-search__result'>
@@ -134,6 +134,9 @@ function ListSymbols({ doc, docs, autofocus }) {
 
   let docsWithIds = docs.map((it, idx) =>
     ({ ...it, id: idx, url: `/${doc}/${idx}` })
+  ).filter((it) =>
+    (it.summary || '') != '' ||
+    (it.description || '') != ''
   )
 
   let searchRanking = (it='') => {
@@ -185,7 +188,7 @@ function ListSymbols({ doc, docs, autofocus }) {
 function CopyrightNotice({ headers }) {
   return <div className="doc-copyright">
     { headers.name } documentation {'\n'}
-    { headers.copyright }
+    { headers.copyright || `licensed under ${headers.license}` }
   </div>
 }
 
@@ -211,6 +214,14 @@ function DocPage({ doc, symbolId }) {
   if (!symbolId) {
     return <div>
       {symbolSearch}
+
+      { headers.description &&
+        <div className="doc-symbol">
+          <h1>{ headers.name }</h1>
+          <Markdown>{ headers.description }</Markdown>
+        </div>
+      }
+
 
       <CopyrightNotice headers={ headers } />
     </div>
@@ -281,13 +292,19 @@ function App() {
         <a href='https://github.com/ArseAssassin/pikadoc'>pkDocs on GitHub</a>
       </nav>
       <Router hook={ useHashLocation }>
-        <Route path='/:doc?/:symbol?'>
-          {(params) => <DoctableSearch selectedDoc={ params.doc } />}
+        <Route path='/:gen?/:doc?/:symbol?'>
+          {(params) =>
+            <DoctableSearch
+              selectedDoc={
+                params.gen && params.doc
+                  ? params.gen + '/' + params.doc
+                  : undefined
+              } />}
         </Route>
         <Switch>
           <Route path='/' component={ FrontPage } />
-          <Route path='/:doc/:symbol?'>
-            {(params) => <DocPage doc={ params.doc } symbolId={ params.symbol } />}
+          <Route path='/:gen/:doc/:symbol?'>
+            {(params) => <DocPage doc={ params.gen + '/' + params.doc } symbolId={ params.symbol } />}
           </Route>
         </Switch>
       </Router>

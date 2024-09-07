@@ -3,6 +3,7 @@ name: python-dateutil
 text_format: rst
 generator: src:python
 generator_command: src:python use "dateutil"
+description: ''
 version: 2.9.0.post0
 license: Apache 2.0
 

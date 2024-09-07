@@ -4,6 +4,7 @@ text_format: rst
 generator: src:python
 generator_command: src:python use "sanic"
 version: 23.12.0
+summary: A web server and web framework that's written to go fast. Build fast. Run fast.
 description: |
   .. image:: https://raw.githubusercontent.com/sanic-org/sanic-assets/master/png/sanic-framework-logo-400x97.png
       :alt: Sanic | Build fast. Run fast.
@@ -25916,7 +25917,7 @@ license: MIT
     rest: false
   - kind: positional
     name: quote_via
-    default: <function quote_plus at 0x7f5b32924c20>
+    default: <function quote_plus at 0x7f9f6cff59e0>
     rest: false
   - type: '?'
   inherits_from: null
@@ -32168,11 +32169,11 @@ license: MIT
   summary: Return an object to identify dataclass fields
   signatures:
   - name: default
-    default: <dataclasses._MISSING_TYPE object at 0x7f5b31ee2650>
+    default: <dataclasses._MISSING_TYPE object at 0x7f9f6c5ab950>
     rest: false
     kind: kw-only
   - name: default_factory
-    default: <dataclasses._MISSING_TYPE object at 0x7f5b31ee2650>
+    default: <dataclasses._MISSING_TYPE object at 0x7f9f6c5ab950>
     rest: false
     kind: kw-only
   - name: init
@@ -32196,7 +32197,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: kw_only
-    default: <dataclasses._MISSING_TYPE object at 0x7f5b31ee2650>
+    default: <dataclasses._MISSING_TYPE object at 0x7f9f6c5ab950>
     rest: false
     kind: kw-only
   - type: '?'
@@ -49834,7 +49835,7 @@ license: MIT
     rest: false
   - kind: positional
     name: signal
-    default: <sanic.models.server_types.Signal object at 0x7f5b31966310>
+    default: <sanic.models.server_types.Signal object at 0x7f9f6c0c3d50>
     rest: false
   - kind: positional
     name: state
@@ -50020,7 +50021,7 @@ license: MIT
     rest: false
   - kind: positional
     name: signal
-    default: <sanic.models.server_types.Signal object at 0x7f5b311fed10>
+    default: <sanic.models.server_types.Signal object at 0x7f9f6b8c8e90>
     rest: false
   - kind: positional
     name: state
@@ -51624,11 +51625,11 @@ license: MIT
   summary: Return an object to identify dataclass fields
   signatures:
   - name: default
-    default: <dataclasses._MISSING_TYPE object at 0x7f5b31ee2650>
+    default: <dataclasses._MISSING_TYPE object at 0x7f9f6c5ab950>
     rest: false
     kind: kw-only
   - name: default_factory
-    default: <dataclasses._MISSING_TYPE object at 0x7f5b31ee2650>
+    default: <dataclasses._MISSING_TYPE object at 0x7f9f6c5ab950>
     rest: false
     kind: kw-only
   - name: init
@@ -51652,7 +51653,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: kw_only
-    default: <dataclasses._MISSING_TYPE object at 0x7f5b31ee2650>
+    default: <dataclasses._MISSING_TYPE object at 0x7f9f6c5ab950>
     rest: false
     kind: kw-only
   - type: '?'
@@ -55682,7 +55683,7 @@ license: MIT
     rest: false
   - kind: positional
     name: signal
-    default: <sanic.models.server_types.Signal object at 0x7f5b31966310>
+    default: <sanic.models.server_types.Signal object at 0x7f9f6c0c3d50>
     rest: false
   - kind: positional
     name: state
@@ -56458,7 +56459,7 @@ license: MIT
     rest: false
     kind: kw-only
   - name: submodule_search_locations
-    default: <object object at 0x7f5b32e1c0c0>
+    default: <object object at 0x7f9f6d5080c0>
     rest: false
     kind: kw-only
   - type: '?'
@@ -60771,7 +60772,7 @@ license: MIT
     rest: false
   - kind: positional
     name: signal
-    default: <sanic.models.server_types.Signal object at 0x7f5b311fed10>
+    default: <sanic.models.server_types.Signal object at 0x7f9f6b8c8e90>
     rest: false
   - kind: positional
     name: state

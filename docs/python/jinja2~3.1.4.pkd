@@ -4,8 +4,9 @@ text_format: rst
 generator: src:python
 generator_command: src:python use "jinja2"
 version: 3.1.4
-description: |+
-  # Jinja
+summary: A very fast and expressive template engine.
+description: |-
+  Jinja
 
   Jinja is a fast, expressive, extensible templating engine. Special
   placeholders in the template allow writing code similar to Python
@@ -31,8 +32,7 @@ description: |+
   possible, it shouldn't make the template designer's job difficult by
   restricting functionality too much.
 
-
-  ## In A Nutshell
+  In A Nutshell
 
   .. code-block:: jinja
 
@@ -46,16 +46,12 @@ description: |+
         </ul>
       {% endblock %}
 
-
-  ## Donate
+  Donate
 
   The Pallets organization develops and supports Jinja and other popular
   packages. In order to grow the community of contributors and users, and
-  allow the maintainers to devote more time to the projects, [please
-  donate today][].
-
-  [please donate today]: https://palletsprojects.com/donate
-
+  allow the maintainers to devote more time to the projects, please donate
+  today.
 homepage: null
 license: BSD-3-Clause
 

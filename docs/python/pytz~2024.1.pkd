@@ -4,6 +4,7 @@ text_format: rst
 generator: src:python
 generator_command: src:python use "pytz"
 version: '2024.1'
+summary: World timezone definitions, modern and historical
 description: |
   pytz - World Timezone Definitions for Python
   ============================================
