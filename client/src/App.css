@@ -23,8 +23,8 @@
 
 .doc-symbol__body h1 { font-size: 150%; margin: 0 0 1em 0; }
 .doc-symbol__body h2 { font-size: 125%; margin: 0 0 1em 0; }
-.doc-symbol__body h3 { font-size: 100%; margin: 0 0 .5em 0; }
-.doc-symbol__body h4 { font-size: 90%; margin: 0 0 .5em 0; }
+.doc-symbol__body h3 { font-size: 110%; margin: 0 0 .5em 0; }
+.doc-symbol__body h4 { font-size: 100%; margin: 0 0 .5em 0; }
 .doc-symbol__body h5 { font-size: 85%; margin: 0 0 .5em 0; }
 .doc-symbol__body h6 { font-size: 80%; margin: 0 0 .5em 0; }
 
@@ -56,13 +56,30 @@
   margin: 0 0 2em 0;
 }
 
+.doc-symbol table table {
+  margin: 0;
+}
+
 .doc-symbol td,
 .doc-symbol th,
-.doc-symbol pre {
+.doc-symbol__body pre {
   background-color: #ffe9;
   border: 1px solid #cc8;
   border-radius: 3px;
   padding: 10px;
+}
+
+.doc-symbol img {
+  max-width: 100%;
+}
+
+.doc-frontpage .doc-symbol img {
+  max-width: 20em;
+}
+
+.doc-symbol td td, .doc-symbol td th {
+/*  border: 0;*/
+/*  vertical-align: top;*/
 }
 
 .doc-symbol pre:has(> .doc-symbol__syntax-highlighter) {
@@ -154,6 +171,22 @@
   max-width: 50em;
 }
 
+.doc-search__result-kind {
+  float:right;
+}
+
+.doc-search__result-ns {
+  font-size: 70%;
+}
+
+.doc-search__result-signatures {
+  color: #666;
+}
+
+.search-dropdown__result--selected .doc-search__result-signatures {
+  color: #fff;
+}
+
 .loader__wrapper {
   position: fixed;
   top: 0;
@@ -163,4 +196,31 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.loader__notice {
+  color: #888;
+  font-size: 80%;
+  text-align: center;
+}
+
+.something-missing {
+  max-width: 40em;
+  margin: 0 auto;
+  font-size: 115%;
+}
+
+.error-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  z-index: -10;
 }
