@@ -3,6 +3,7 @@ name: python-dateutil
 text_format: rst
 generator: src:python
 generator_command: src:python use "dateutil"
+language: python
 description: ''
 version: 2.9.0.post0
 license: Apache 2.0
@@ -61,15 +62,16 @@ license: Apache 2.0
     `The Calendar FAQ: Easter <https://www.tondering.dk/claus/cal/easter.php>`_
   summary: This method was ported from the work done by GM Arts,
   signatures:
-  - kind: positional
-    name: year
-    default: null
-    rest: false
-  - kind: positional
-    name: method
-    default: '3'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: year
+      default: null
+      rest: false
+    - kind: positional
+      name: method
+      default: '3'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: EASTER_JULIAN
   kind: const
@@ -223,15 +225,16 @@ license: Apache 2.0
         your system.
   summary: Parse a string in one of the supported formats, using the
   signatures:
-  - kind: positional
-    name: timestr
-    default: null
-    rest: false
-  - kind: positional
-    name: parserinfo
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: timestr
+      default: null
+      rest: false
+    - kind: positional
+      name: parserinfo
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: parser
   kind: class
@@ -239,15 +242,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: info
-    default: None
-    rest: false
-  - type: parser
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: info
+      default: None
+      rest: false
+    - type: parser
+      kind: return
   inherits_from: null
 - name: parser.parse
   kind: method
@@ -314,27 +318,28 @@ license: Apache 2.0
         your system.
   summary: Parse the date/time string into a :class:`datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: timestr
-    default: null
-    rest: false
-  - kind: positional
-    name: default
-    default: None
-    rest: false
-  - kind: positional
-    name: ignoretz
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: tzinfos
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: timestr
+      default: null
+      rest: false
+    - kind: positional
+      name: default
+      default: None
+      rest: false
+    - kind: positional
+      name: ignoretz
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: tzinfos
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: parserinfo
   kind: class
@@ -356,19 +361,20 @@ license: Apache 2.0
         Default is ``False``.
   summary: Class which handles what inputs are accepted
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dayfirst
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: yearfirst
-    default: 'False'
-    rest: false
-  - type: parserinfo
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dayfirst
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: yearfirst
+      default: 'False'
+      rest: false
+    - type: parserinfo
+      kind: return
   inherits_from: null
 - name: parserinfo.AMPM
   kind: property
@@ -469,15 +475,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: parserinfo.convertyear
   kind: method
@@ -487,19 +494,20 @@ license: Apache 2.0
     range of self._year (current local time)
   summary: Converts two-digit years to year within [-50, 49]
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: year
-    default: null
-    rest: false
-  - kind: positional
-    name: century_specified
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: year
+      default: null
+      rest: false
+    - kind: positional
+      name: century_specified
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: parserinfo.hms
   kind: method
@@ -507,15 +515,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: parserinfo.jump
   kind: method
@@ -523,15 +532,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: parserinfo.month
   kind: method
@@ -539,15 +549,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: parserinfo.pertain
   kind: method
@@ -555,15 +566,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: parserinfo.tzoffset
   kind: method
@@ -571,15 +583,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: parserinfo.utczone
   kind: method
@@ -587,15 +600,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: parserinfo.validate
   kind: method
@@ -603,15 +617,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: res
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: res
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: parserinfo.weekday
   kind: method
@@ -619,15 +634,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: isoparse
   kind: method
@@ -706,15 +722,16 @@ license: Apache 2.0
     .. versionadded:: 2.7.0
   summary: Parse an ISO-8601 datetime string into a :class:`datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: str_in
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: str_in
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: isoparser
   kind: class
@@ -722,15 +739,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: sep
-    default: None
-    rest: false
-  - type: isoparser
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: sep
+      default: None
+      rest: false
+    - type: isoparser
+      kind: return
   inherits_from: null
 - name: isoparser.isoparse
   kind: method
@@ -809,15 +827,16 @@ license: Apache 2.0
     .. versionadded:: 2.7.0
   summary: Parse an ISO-8601 datetime string into a :class:`datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: str_in
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: str_in
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: isoparser.parse_isodate
   kind: method
@@ -832,15 +851,16 @@ license: Apache 2.0
         Returns a :class:`datetime.date` object
   summary: Parse the date portion of an ISO string
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: str_in
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: str_in
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: isoparser.parse_isotime
   kind: method
@@ -855,15 +875,16 @@ license: Apache 2.0
         Returns a :class:`datetime.time` object
   summary: Parse the time portion of an ISO string
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: str_in
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: str_in
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: isoparser.parse_tzstr
   kind: method
@@ -885,15 +906,16 @@ license: Apache 2.0
         specified) offsets equivalent to UTC.
   summary: Parse a valid ISO time zone string
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: str_in
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: str_in
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ParserError
   kind: class
@@ -1070,95 +1092,96 @@ license: Apache 2.0
     no effect.
   summary: The relativedelta type is designed to be applied to an existing datetime and
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt1
-    default: None
-    rest: false
-  - kind: positional
-    name: dt2
-    default: None
-    rest: false
-  - kind: positional
-    name: years
-    default: '0'
-    rest: false
-  - kind: positional
-    name: months
-    default: '0'
-    rest: false
-  - kind: positional
-    name: days
-    default: '0'
-    rest: false
-  - kind: positional
-    name: leapdays
-    default: '0'
-    rest: false
-  - kind: positional
-    name: weeks
-    default: '0'
-    rest: false
-  - kind: positional
-    name: hours
-    default: '0'
-    rest: false
-  - kind: positional
-    name: minutes
-    default: '0'
-    rest: false
-  - kind: positional
-    name: seconds
-    default: '0'
-    rest: false
-  - kind: positional
-    name: microseconds
-    default: '0'
-    rest: false
-  - kind: positional
-    name: year
-    default: None
-    rest: false
-  - kind: positional
-    name: month
-    default: None
-    rest: false
-  - kind: positional
-    name: day
-    default: None
-    rest: false
-  - kind: positional
-    name: weekday
-    default: None
-    rest: false
-  - kind: positional
-    name: yearday
-    default: None
-    rest: false
-  - kind: positional
-    name: nlyearday
-    default: None
-    rest: false
-  - kind: positional
-    name: hour
-    default: None
-    rest: false
-  - kind: positional
-    name: minute
-    default: None
-    rest: false
-  - kind: positional
-    name: second
-    default: None
-    rest: false
-  - kind: positional
-    name: microsecond
-    default: None
-    rest: false
-  - type: relativedelta
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt1
+      default: None
+      rest: false
+    - kind: positional
+      name: dt2
+      default: None
+      rest: false
+    - kind: positional
+      name: years
+      default: '0'
+      rest: false
+    - kind: positional
+      name: months
+      default: '0'
+      rest: false
+    - kind: positional
+      name: days
+      default: '0'
+      rest: false
+    - kind: positional
+      name: leapdays
+      default: '0'
+      rest: false
+    - kind: positional
+      name: weeks
+      default: '0'
+      rest: false
+    - kind: positional
+      name: hours
+      default: '0'
+      rest: false
+    - kind: positional
+      name: minutes
+      default: '0'
+      rest: false
+    - kind: positional
+      name: seconds
+      default: '0'
+      rest: false
+    - kind: positional
+      name: microseconds
+      default: '0'
+      rest: false
+    - kind: positional
+      name: year
+      default: None
+      rest: false
+    - kind: positional
+      name: month
+      default: None
+      rest: false
+    - kind: positional
+      name: day
+      default: None
+      rest: false
+    - kind: positional
+      name: weekday
+      default: None
+      rest: false
+    - kind: positional
+      name: yearday
+      default: None
+      rest: false
+    - kind: positional
+      name: nlyearday
+      default: None
+      rest: false
+    - kind: positional
+      name: hour
+      default: None
+      rest: false
+    - kind: positional
+      name: minute
+      default: None
+      rest: false
+    - kind: positional
+      name: second
+      default: None
+      rest: false
+    - kind: positional
+      name: microsecond
+      default: None
+      rest: false
+    - type: relativedelta
+      kind: return
   inherits_from: null
 - name: relativedelta.normalized
   kind: method
@@ -1174,11 +1197,12 @@ license: Apache 2.0
         Returns a :class:`dateutil.relativedelta.relativedelta` object.
   summary: Return a version of this object represented entirely using integer
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: relativedelta.weeks
   kind: property
@@ -1193,15 +1217,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TU
   kind: callable
@@ -1209,15 +1234,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WE
   kind: callable
@@ -1225,15 +1251,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TH
   kind: callable
@@ -1241,15 +1268,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FR
   kind: callable
@@ -1257,15 +1285,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SA
   kind: callable
@@ -1273,15 +1302,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SU
   kind: callable
@@ -1289,15 +1319,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rrule
   kind: module
@@ -1316,79 +1347,80 @@ license: Apache 2.0
   description: "That's the base of the rrule operation. It accepts all the keywords\ndefined in the RFC as its constructor parameters (except byday,\nwhich was renamed to byweekday) and more. The constructor prototype is::\n\n        rrule(freq)\n\nWhere freq must be one of YEARLY, MONTHLY, WEEKLY, DAILY, HOURLY, MINUTELY,\nor SECONDLY.\n\n.. note::\n    Per RFC section 3.3.10, recurrence instances falling on invalid dates\n    and times are ignored rather than coerced:\n\n        Recurrence rules may generate recurrence instances with an invalid\n        date (e.g., February 30) or nonexistent local time (e.g., 1:30 AM\n        on a day where the local time is moved forward by an hour at 1:00\n        AM).  Such recurrence instances MUST be ignored and MUST NOT be\n        counted as part of the recurrence set.\n\n    This can lead to possibly surprising behavior when, for example, the\n    start date occurs at the end of the month:\n\n    >>> from dateutil.rrule import rrule, MONTHLY\n    >>> from datetime import datetime\n    >>> start_date = datetime(2014, 12, 31)\n    >>> list(rrule(freq=MONTHLY, count=4, dtstart=start_date))\n    ... # doctest: +NORMALIZE_WHITESPACE\n    [datetime.datetime(2014, 12, 31, 0, 0),\n     datetime.datetime(2015, 1, 31, 0, 0),\n     datetime.datetime(2015, 3, 31, 0, 0),\n     datetime.datetime(2015, 5, 31, 0, 0)]\n\nAdditionally, it supports the following keyword arguments:\n\n:param dtstart:\n    The recurrence start. Besides being the base for the recurrence,\n    missing parameters in the final recurrence instances will also be\n    extracted from this date. If not given, datetime.now() will be used\n    instead.\n:param interval:\n    The interval between each freq iteration. For example, when using\n    YEARLY, an interval of 2 means once every two years, but with HOURLY,\n    it means once every two hours. The default interval is 1.\n:param wkst:\n    The week start day. Must be one of the MO, TU, WE constants, or an\n    integer, specifying the first day of the week. This will affect\n    recurrences based on weekly periods. The default week start is got\n    from calendar.firstweekday(), and may be modified by\n    calendar.setfirstweekday().\n:param count:\n    If given, this determines how many occurrences will be generated.\n\n    .. note::\n        As of version 2.5.0, the use of the keyword ``until`` in conjunction\n        with ``count`` is deprecated, to make sure ``dateutil`` is fully\n        compliant with `RFC-5545 Sec. 3.3.10 <https://tools.ietf.org/\n        html/rfc5545#section-3.3.10>`_. Therefore, ``until`` and ``count``\n        **must not** occur in the same call to ``rrule``.\n:param until:\n    If given, this must be a datetime instance specifying the upper-bound\n    limit of the recurrence. The last recurrence in the rule is the greatest\n    datetime that is less than or equal to the value specified in the\n    ``until`` parameter.\n\n    .. note::\n        As of version 2.5.0, the use of the keyword ``until`` in conjunction\n        with ``count`` is deprecated, to make sure ``dateutil`` is fully\n        compliant with `RFC-5545 Sec. 3.3.10 <https://tools.ietf.org/\n        html/rfc5545#section-3.3.10>`_. Therefore, ``until`` and ``count``\n        **must not** occur in the same call to ``rrule``.\n:param bysetpos:\n    If given, it must be either an integer, or a sequence of integers,\n    positive or negative. Each given integer will specify an occurrence\n    number, corresponding to the nth occurrence of the rule inside the\n    frequency period. For example, a bysetpos of -1 if combined with a\n    MONTHLY frequency, and a byweekday of (MO, TU, WE, TH, FR), will\n    result in the last work day of every month.\n:param bymonth:\n    If given, it must be either an integer, or a sequence of integers,\n    meaning the months to apply the recurrence to.\n:param bymonthday:\n    If given, it must be either an integer, or a sequence of integers,\n    meaning the month days to apply the recurrence to.\n:param byyearday:\n    If given, it must be either an integer, or a sequence of integers,\n    meaning the year days to apply the recurrence to.\n:param byeaster:\n    If given, it must be either an integer, or a sequence of integers,\n    positive or negative. Each integer will define an offset from the\n    Easter Sunday. Passing the offset 0 to byeaster will yield the Easter\n    Sunday itself. This is an extension to the RFC specification.\n:param byweekno:\n    If given, it must be either an integer, or a sequence of integers,\n    meaning the week numbers to apply the recurrence to. Week numbers\n    have the meaning described in ISO8601, that is, the first week of\n    the year is that containing at least four days of the new year.\n:param byweekday:\n    If given, it must be either an integer (0 == MO), a sequence of\n    integers, one of the weekday constants (MO, TU, etc), or a sequence\n    of these constants. When given, these variables will define the\n    weekdays where the recurrence will be applied. It's also possible to\n    use an argument n for the weekday instances, which will mean the nth\n    occurrence of this weekday in the period. For example, with MONTHLY,\n    or with YEARLY and BYMONTH, using FR(+1) in byweekday will specify the\n    first friday of the month where the recurrence happens. Notice that in\n    the RFC documentation, this is specified as BYDAY, but was renamed to\n    avoid the ambiguity of that keyword.\n:param byhour:\n    If given, it must be either an integer, or a sequence of integers,\n    meaning the hours to apply the recurrence to.\n:param byminute:\n    If given, it must be either an integer, or a sequence of integers,\n    meaning the minutes to apply the recurrence to.\n:param bysecond:\n    If given, it must be either an integer, or a sequence of integers,\n    meaning the seconds to apply the recurrence to.\n:param cache:\n    If given, it must be a boolean value specifying to enable or disable\n    caching of results. If you will use the same rrule instance multiple\n    times, enabling caching will improve the performance considerably.\n "
   summary: That's the base of the rrule operation
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: freq
-    default: null
-    rest: false
-  - kind: positional
-    name: dtstart
-    default: None
-    rest: false
-  - kind: positional
-    name: interval
-    default: '1'
-    rest: false
-  - kind: positional
-    name: wkst
-    default: None
-    rest: false
-  - kind: positional
-    name: count
-    default: None
-    rest: false
-  - kind: positional
-    name: until
-    default: None
-    rest: false
-  - kind: positional
-    name: bysetpos
-    default: None
-    rest: false
-  - kind: positional
-    name: bymonth
-    default: None
-    rest: false
-  - kind: positional
-    name: bymonthday
-    default: None
-    rest: false
-  - kind: positional
-    name: byyearday
-    default: None
-    rest: false
-  - kind: positional
-    name: byeaster
-    default: None
-    rest: false
-  - kind: positional
-    name: byweekno
-    default: None
-    rest: false
-  - kind: positional
-    name: byweekday
-    default: None
-    rest: false
-  - kind: positional
-    name: byhour
-    default: None
-    rest: false
-  - kind: positional
-    name: byminute
-    default: None
-    rest: false
-  - kind: positional
-    name: bysecond
-    default: None
-    rest: false
-  - kind: positional
-    name: cache
-    default: 'False'
-    rest: false
-  - type: rrule
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: freq
+      default: null
+      rest: false
+    - kind: positional
+      name: dtstart
+      default: None
+      rest: false
+    - kind: positional
+      name: interval
+      default: '1'
+      rest: false
+    - kind: positional
+      name: wkst
+      default: None
+      rest: false
+    - kind: positional
+      name: count
+      default: None
+      rest: false
+    - kind: positional
+      name: until
+      default: None
+      rest: false
+    - kind: positional
+      name: bysetpos
+      default: None
+      rest: false
+    - kind: positional
+      name: bymonth
+      default: None
+      rest: false
+    - kind: positional
+      name: bymonthday
+      default: None
+      rest: false
+    - kind: positional
+      name: byyearday
+      default: None
+      rest: false
+    - kind: positional
+      name: byeaster
+      default: None
+      rest: false
+    - kind: positional
+      name: byweekno
+      default: None
+      rest: false
+    - kind: positional
+      name: byweekday
+      default: None
+      rest: false
+    - kind: positional
+      name: byhour
+      default: None
+      rest: false
+    - kind: positional
+      name: byminute
+      default: None
+      rest: false
+    - kind: positional
+      name: bysecond
+      default: None
+      rest: false
+    - kind: positional
+      name: cache
+      default: 'False'
+      rest: false
+    - type: rrule
+      kind: return
   inherits_from:
   - <class 'dateutil.rrule.rrulebase'>
 - name: rrule.after
@@ -1397,19 +1429,20 @@ license: Apache 2.0
   description: "Returns the first recurrence after the given datetime instance. The\ninc keyword defines what happens if dt is an occurrence. With\ninc=True, if dt itself is an occurrence, it will be returned.  "
   summary: Returns the first recurrence after the given datetime instance
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: inc
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: inc
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rrule.before
   kind: method
@@ -1417,19 +1450,20 @@ license: Apache 2.0
   description: "Returns the last recurrence before the given datetime instance. The\ninc keyword defines what happens if dt is an occurrence. With\ninc=True, if dt itself is an occurrence, it will be returned. "
   summary: Returns the last recurrence before the given datetime instance
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: inc
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: inc
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rrule.between
   kind: method
@@ -1437,27 +1471,28 @@ license: Apache 2.0
   description: "Returns all the occurrences of the rrule between after and before.\nThe inc keyword defines what happens if after and/or before are\nthemselves occurrences. With inc=True, they will be included in the\nlist, if they are found in the recurrence set. "
   summary: Returns all the occurrences of the rrule between after and before
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: after
-    default: null
-    rest: false
-  - kind: positional
-    name: before
-    default: null
-    rest: false
-  - kind: positional
-    name: inc
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: count
-    default: '1'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: after
+      default: null
+      rest: false
+    - kind: positional
+      name: before
+      default: null
+      rest: false
+    - kind: positional
+      name: inc
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: count
+      default: '1'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rrule.count
   kind: method
@@ -1465,11 +1500,12 @@ license: Apache 2.0
   description: "Returns the number of recurrences in this set. It will have go\nthrough the whole recurrence, if this hasn't been done before. "
   summary: Returns the number of recurrences in this set
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rrule.replace
   kind: method
@@ -1479,11 +1515,12 @@ license: Apache 2.0
     values by whichever keyword arguments are specified.
   summary: Return new rrule with same attributes except for those attributes given new
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rrule.xafter
   kind: method
@@ -1506,23 +1543,24 @@ license: Apache 2.0
     :yields: Yields a sequence of `datetime` objects.
   summary: Generator which yields up to `count` recurrences after the given
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: count
-    default: None
-    rest: false
-  - kind: positional
-    name: inc
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: count
+      default: None
+      rest: false
+    - kind: positional
+      name: inc
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rruleset
   kind: class
@@ -1530,15 +1568,16 @@ license: Apache 2.0
   description: "The rruleset type allows more complex recurrence setups, mixing\nmultiple rules, dates, exclusion rules, and exclusion dates. The type\nconstructor takes the following keyword arguments:\n\n:param cache: If True, caching of results will be enabled, improving\n              performance of multiple queries considerably. "
   summary: The rruleset type allows more complex recurrence setups, mixing
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: cache
-    default: 'False'
-    rest: false
-  - type: rruleset
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: cache
+      default: 'False'
+      rest: false
+    - type: rruleset
+      kind: return
   inherits_from:
   - <class 'dateutil.rrule.rrulebase'>
 - name: rruleset.after
@@ -1547,19 +1586,20 @@ license: Apache 2.0
   description: "Returns the first recurrence after the given datetime instance. The\ninc keyword defines what happens if dt is an occurrence. With\ninc=True, if dt itself is an occurrence, it will be returned.  "
   summary: Returns the first recurrence after the given datetime instance
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: inc
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: inc
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rruleset.before
   kind: method
@@ -1567,19 +1607,20 @@ license: Apache 2.0
   description: "Returns the last recurrence before the given datetime instance. The\ninc keyword defines what happens if dt is an occurrence. With\ninc=True, if dt itself is an occurrence, it will be returned. "
   summary: Returns the last recurrence before the given datetime instance
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: inc
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: inc
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rruleset.between
   kind: method
@@ -1587,27 +1628,28 @@ license: Apache 2.0
   description: "Returns all the occurrences of the rrule between after and before.\nThe inc keyword defines what happens if after and/or before are\nthemselves occurrences. With inc=True, they will be included in the\nlist, if they are found in the recurrence set. "
   summary: Returns all the occurrences of the rrule between after and before
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: after
-    default: null
-    rest: false
-  - kind: positional
-    name: before
-    default: null
-    rest: false
-  - kind: positional
-    name: inc
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: count
-    default: '1'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: after
+      default: null
+      rest: false
+    - kind: positional
+      name: before
+      default: null
+      rest: false
+    - kind: positional
+      name: inc
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: count
+      default: '1'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rruleset.count
   kind: method
@@ -1615,11 +1657,12 @@ license: Apache 2.0
   description: "Returns the number of recurrences in this set. It will have go\nthrough the whole recurrence, if this hasn't been done before. "
   summary: Returns the number of recurrences in this set
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rruleset.exdate
   kind: method
@@ -1627,11 +1670,12 @@ license: Apache 2.0
   description: "Include the given datetime instance in the recurrence set\nexclusion list. Dates included that way will not be generated,\neven if some inclusive rrule or rdate matches them. "
   summary: Include the given datetime instance in the recurrence set
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rruleset.exrule
   kind: method
@@ -1642,11 +1686,12 @@ license: Apache 2.0
     be generated, even if some inclusive rrule or rdate matches them.
   summary: Include the given rrule instance in the recurrence set exclusion
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rruleset.rdate
   kind: method
@@ -1654,11 +1699,12 @@ license: Apache 2.0
   description: "Include the given :py:class:`datetime` instance in the recurrence\nset generation. "
   summary: Include the given :py:class:`datetime` instance in the recurrence
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rruleset.rrule
   kind: method
@@ -1666,11 +1712,12 @@ license: Apache 2.0
   description: "Include the given :py:class:`rrule` instance in the recurrence set\ngeneration. "
   summary: Include the given :py:class:`rrule` instance in the recurrence set
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rruleset.xafter
   kind: method
@@ -1693,23 +1740,24 @@ license: Apache 2.0
     :yields: Yields a sequence of `datetime` objects.
   summary: Generator which yields up to `count` recurrences after the given
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: count
-    default: None
-    rest: false
-  - kind: positional
-    name: inc
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: count
+      default: None
+      rest: false
+    - kind: positional
+      name: inc
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: rrulestr
   kind: callable
@@ -1759,15 +1807,16 @@ license: Apache 2.0
         :class:`dateutil.rrule.rrule`
   summary: Parses a string representation of a recurrence rule or set of
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: s
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: s
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: YEARLY
   kind: const
@@ -1824,15 +1873,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TU
   kind: callable
@@ -1840,15 +1890,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WE
   kind: callable
@@ -1856,15 +1907,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TH
   kind: callable
@@ -1872,15 +1924,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FR
   kind: callable
@@ -1888,15 +1941,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SA
   kind: callable
@@ -1904,15 +1958,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SU
   kind: callable
@@ -1920,15 +1975,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tz
   kind: module
@@ -1978,11 +2034,12 @@ license: Apache 2.0
             True
   summary: This is a tzinfo object that represents the UTC time zone
   signatures:
-  - kind: positional
-    name: cls
-    default: null
-    rest: false
-  - type: tzutc
+  - - kind: positional
+      name: cls
+      default: null
+      rest: false
+    - type: tzutc
+      kind: return
   inherits_from:
   - <class 'datetime.tzinfo'>
 - name: tzutc.dst
@@ -1991,15 +2048,16 @@ license: Apache 2.0
   description: datetime -> DST offset as timedelta positive east of UTC.
   summary: datetime -> DST offset as timedelta positive east of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzutc.fromutc
   kind: method
@@ -2009,15 +2067,16 @@ license: Apache 2.0
     any valid :py:class:`datetime.datetime` object.
   summary: Fast track version of fromutc() returns the original ``dt`` object for
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzutc.is_ambiguous
   kind: method
@@ -2036,15 +2095,16 @@ license: Apache 2.0
     .. versionadded:: 2.6.0
   summary: Whether or not the "wall time" of a given datetime is ambiguous in this
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzutc.tzname
   kind: method
@@ -2052,15 +2112,16 @@ license: Apache 2.0
   description: datetime -> string name of time zone.
   summary: datetime -> string name of time zone
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzutc.utcoffset
   kind: method
@@ -2068,15 +2129,16 @@ license: Apache 2.0
   description: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   summary: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzoffset
   kind: class
@@ -2091,19 +2153,20 @@ license: Apache 2.0
         as a :py:class:`datetime.timedelta` object).
   summary: A simple class for representing a fixed offset from UTC
   signatures:
-  - kind: positional
-    name: cls
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - kind: positional
-    name: offset
-    default: null
-    rest: false
-  - type: tzoffset
+  - - kind: positional
+      name: cls
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - kind: positional
+      name: offset
+      default: null
+      rest: false
+    - type: tzoffset
+      kind: return
   inherits_from:
   - <class 'datetime.tzinfo'>
 - name: tzoffset.dst
@@ -2112,15 +2175,16 @@ license: Apache 2.0
   description: datetime -> DST offset as timedelta positive east of UTC.
   summary: datetime -> DST offset as timedelta positive east of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzoffset.fromutc
   kind: method
@@ -2128,15 +2192,16 @@ license: Apache 2.0
   description: datetime in UTC -> datetime in local time.
   summary: datetime in UTC -> datetime in local time
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzoffset.is_ambiguous
   kind: method
@@ -2153,15 +2218,16 @@ license: Apache 2.0
     .. versionadded:: 2.6.0
   summary: Whether or not the "wall time" of a given datetime is ambiguous in this
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzoffset.tzname
   kind: method
@@ -2169,15 +2235,16 @@ license: Apache 2.0
   description: datetime -> string name of time zone.
   summary: datetime -> string name of time zone
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzoffset.utcoffset
   kind: method
@@ -2185,15 +2252,16 @@ license: Apache 2.0
   description: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   summary: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzlocal
   kind: class
@@ -2201,11 +2269,12 @@ license: Apache 2.0
   description: A :class:`tzinfo` subclass built around the ``time`` timezone functions.
   summary: A :class:`tzinfo` subclass built around the ``time`` timezone functions
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: tzlocal
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: tzlocal
+      kind: return
   inherits_from:
   - <class 'dateutil.tz._common._tzinfo'>
   - <class 'datetime.tzinfo'>
@@ -2215,15 +2284,16 @@ license: Apache 2.0
   description: datetime -> DST offset as timedelta positive east of UTC.
   summary: datetime -> DST offset as timedelta positive east of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzlocal.fromutc
   kind: method
@@ -2241,15 +2311,16 @@ license: Apache 2.0
         A timezone-aware :class:`datetime.datetime` object.
   summary: Given a timezone-aware datetime in a given timezone, calculates a
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzlocal.is_ambiguous
   kind: method
@@ -2268,15 +2339,16 @@ license: Apache 2.0
     .. versionadded:: 2.6.0
   summary: Whether or not the "wall time" of a given datetime is ambiguous in this
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzlocal.tzname
   kind: method
@@ -2284,15 +2356,16 @@ license: Apache 2.0
   description: datetime -> string name of time zone.
   summary: datetime -> string name of time zone
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzlocal.utcoffset
   kind: method
@@ -2300,15 +2373,16 @@ license: Apache 2.0
   description: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   summary: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzfile
   kind: class
@@ -2383,19 +2457,20 @@ license: Apache 2.0
         1944-02-07 00:00:00-04:00
   summary: This is a ``tzinfo`` subclass that allows one to use the ``tzfile(5)``
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: fileobj
-    default: null
-    rest: false
-  - kind: positional
-    name: filename
-    default: None
-    rest: false
-  - type: tzfile
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: fileobj
+      default: null
+      rest: false
+    - kind: positional
+      name: filename
+      default: None
+      rest: false
+    - type: tzfile
+      kind: return
   inherits_from:
   - <class 'dateutil.tz._common._tzinfo'>
   - <class 'datetime.tzinfo'>
@@ -2405,15 +2480,16 @@ license: Apache 2.0
   description: datetime -> DST offset as timedelta positive east of UTC.
   summary: datetime -> DST offset as timedelta positive east of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzfile.fromutc
   kind: method
@@ -2436,15 +2512,16 @@ license: Apache 2.0
         wall time in ``self``'s time zone.
   summary: The ``tzfile`` implementation of :py:func:`datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzfile.is_ambiguous
   kind: method
@@ -2463,19 +2540,20 @@ license: Apache 2.0
     .. versionadded:: 2.6.0
   summary: Whether or not the "wall time" of a given datetime is ambiguous in this
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: idx
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: idx
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzfile.tzname
   kind: method
@@ -2483,15 +2561,16 @@ license: Apache 2.0
   description: datetime -> string name of time zone.
   summary: datetime -> string name of time zone
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzfile.utcoffset
   kind: method
@@ -2499,15 +2578,16 @@ license: Apache 2.0
   description: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   summary: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzrange
   kind: class
@@ -2586,35 +2666,36 @@ license: Apache 2.0
         True
   summary: The ``tzrange`` object is a time zone specified by a set of offsets and
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: stdabbr
-    default: null
-    rest: false
-  - kind: positional
-    name: stdoffset
-    default: None
-    rest: false
-  - kind: positional
-    name: dstabbr
-    default: None
-    rest: false
-  - kind: positional
-    name: dstoffset
-    default: None
-    rest: false
-  - kind: positional
-    name: start
-    default: None
-    rest: false
-  - kind: positional
-    name: end
-    default: None
-    rest: false
-  - type: tzrange
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: stdabbr
+      default: null
+      rest: false
+    - kind: positional
+      name: stdoffset
+      default: None
+      rest: false
+    - kind: positional
+      name: dstabbr
+      default: None
+      rest: false
+    - kind: positional
+      name: dstoffset
+      default: None
+      rest: false
+    - kind: positional
+      name: start
+      default: None
+      rest: false
+    - kind: positional
+      name: end
+      default: None
+      rest: false
+    - type: tzrange
+      kind: return
   inherits_from:
   - <class 'dateutil.tz._common.tzrangebase'>
   - <class 'dateutil.tz._common._tzinfo'>
@@ -2625,15 +2706,16 @@ license: Apache 2.0
   description: datetime -> DST offset as timedelta positive east of UTC.
   summary: datetime -> DST offset as timedelta positive east of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzrange.fromutc
   kind: method
@@ -2641,15 +2723,16 @@ license: Apache 2.0
   description: 'Given a datetime in UTC, return local time '
   summary: 'Given a datetime in UTC, return local time '
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzrange.is_ambiguous
   kind: method
@@ -2668,15 +2751,16 @@ license: Apache 2.0
     .. versionadded:: 2.6.0
   summary: Whether or not the "wall time" of a given datetime is ambiguous in this
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzrange.transitions
   kind: method
@@ -2695,15 +2779,16 @@ license: Apache 2.0
         ``None`` for fixed offset zones.
   summary: For a given year, get the DST on and off transition times, expressed
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: year
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: year
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzrange.tzname
   kind: method
@@ -2711,15 +2796,16 @@ license: Apache 2.0
   description: datetime -> string name of time zone.
   summary: datetime -> string name of time zone
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzrange.utcoffset
   kind: method
@@ -2727,15 +2813,16 @@ license: Apache 2.0
   description: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   summary: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzstr
   kind: class
@@ -2782,19 +2869,20 @@ license: Apache 2.0
         https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html
   summary: '``tzstr`` objects are time zone objects specified by a time-zone string as'
   signatures:
-  - kind: positional
-    name: cls
-    default: null
-    rest: false
-  - kind: positional
-    name: s
-    default: null
-    rest: false
-  - kind: positional
-    name: posix_offset
-    default: 'False'
-    rest: false
-  - type: tzstr
+  - - kind: positional
+      name: cls
+      default: null
+      rest: false
+    - kind: positional
+      name: s
+      default: null
+      rest: false
+    - kind: positional
+      name: posix_offset
+      default: 'False'
+      rest: false
+    - type: tzstr
+      kind: return
   inherits_from:
   - <class 'dateutil.tz.tz.tzrange'>
   - <class 'dateutil.tz._common.tzrangebase'>
@@ -2806,15 +2894,16 @@ license: Apache 2.0
   description: datetime -> DST offset as timedelta positive east of UTC.
   summary: datetime -> DST offset as timedelta positive east of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzstr.fromutc
   kind: method
@@ -2822,15 +2911,16 @@ license: Apache 2.0
   description: 'Given a datetime in UTC, return local time '
   summary: 'Given a datetime in UTC, return local time '
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzstr.is_ambiguous
   kind: method
@@ -2849,15 +2939,16 @@ license: Apache 2.0
     .. versionadded:: 2.6.0
   summary: Whether or not the "wall time" of a given datetime is ambiguous in this
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzstr.transitions
   kind: method
@@ -2876,15 +2967,16 @@ license: Apache 2.0
         ``None`` for fixed offset zones.
   summary: For a given year, get the DST on and off transition times, expressed
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: year
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: year
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzstr.tzname
   kind: method
@@ -2892,15 +2984,16 @@ license: Apache 2.0
   description: datetime -> string name of time zone.
   summary: datetime -> string name of time zone
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzstr.utcoffset
   kind: method
@@ -2908,15 +3001,16 @@ license: Apache 2.0
   description: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   summary: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzical
   kind: class
@@ -2932,15 +3026,16 @@ license: Apache 2.0
     .. _`RFC 5545`: https://tools.ietf.org/html/rfc5545
   summary: This object is designed to parse an iCalendar-style ``VTIMEZONE`` structure
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: fileobj
-    default: null
-    rest: false
-  - type: tzical
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: fileobj
+      default: null
+      rest: false
+    - type: tzical
+      kind: return
   inherits_from: null
 - name: tzical.get
   kind: method
@@ -2963,15 +3058,16 @@ license: Apache 2.0
         not found.
   summary: Retrieve a :py:class:`datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: tzid
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: tzid
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzical.keys
   kind: method
@@ -2979,11 +3075,12 @@ license: Apache 2.0
   description: Retrieves the available time zones as a list.
   summary: Retrieves the available time zones as a list
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: tzwin
   kind: const
@@ -3072,15 +3169,16 @@ license: Apache 2.0
         https://blog.ganssle.io/articles/2018/02/aware-datetime-arithmetic.html
   summary: Retrieve a time zone object from a string representation
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: enfold
   kind: function
@@ -3103,15 +3201,16 @@ license: Apache 2.0
     .. versionadded:: 2.6.0
   summary: Provides a unified interface for assigning the ``fold`` attribute to
   signatures:
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: fold
-    default: '1'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: fold
+      default: '1'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: datetime_ambiguous
   kind: function
@@ -3136,15 +3235,16 @@ license: Apache 2.0
     .. versionadded:: 2.6.0
   summary: Given a datetime and a time zone, determine whether or not a given datetime
   signatures:
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: tz
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: tz
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: datetime_exists
   kind: function
@@ -3168,15 +3268,16 @@ license: Apache 2.0
     .. versionadded:: 2.7.0
   summary: Given a datetime and a time zone, determine whether or not a given datetime
   signatures:
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: tz
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: tz
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: resolve_imaginary
   kind: function
@@ -3217,11 +3318,12 @@ license: Apache 2.0
     .. versionadded:: 2.7.0
   summary: Given a datetime that may be imaginary, return an existing datetime
   signatures:
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: UTC
   kind: const
@@ -3553,15 +3655,16 @@ license: Apache 2.0
         Returns an aware :py:class:`datetime.datetime`.
   summary: Sets the ``tzinfo`` parameter on naive datetimes only
   signatures:
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: tzinfo
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: tzinfo
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: time
   kind: class
@@ -3712,11 +3815,12 @@ license: Apache 2.0
         at midnight.
   summary: Returns a :py:class:`datetime` representing the current day at midnight
   signatures:
-  - kind: positional
-    name: tzinfo
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: tzinfo
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: unicode_literals
   kind: const
@@ -3733,19 +3837,20 @@ license: Apache 2.0
     to be considered equal.
   summary: Useful for comparing two datetimes that may have a negligible difference
   signatures:
-  - kind: positional
-    name: dt1
-    default: null
-    rest: false
-  - kind: positional
-    name: dt2
-    default: null
-    rest: false
-  - kind: positional
-    name: delta
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: dt1
+      default: null
+      rest: false
+    - kind: positional
+      name: dt2
+      default: null
+      rest: false
+    - kind: positional
+      name: delta
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: zoneinfo
   kind: module
@@ -3773,11 +3878,12 @@ license: Apache 2.0
     .. versionadded:: 2.6
   summary: This is a convenience function which provides a :class:`ZoneInfoFile`
   signatures:
-  - kind: positional
-    name: new_instance
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: new_instance
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: gettz
   kind: function
@@ -3809,11 +3915,12 @@ license: Apache 2.0
         dateutil-provided zoneinfo.
   summary: This retrieves a time zone from the local zoneinfo tarball that is packaged
   signatures:
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: name
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: gettz_db_metadata
   kind: function
@@ -3831,7 +3938,8 @@ license: Apache 2.0
         query the attribute ``zoneinfo.ZoneInfoFile.metadata``.
   summary: Get the zonefile metadata
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: dateutil.easter
   kind: module
@@ -3879,15 +3987,16 @@ license: Apache 2.0
     `The Calendar FAQ: Easter <https://www.tondering.dk/claus/cal/easter.php>`_
   summary: This method was ported from the work done by GM Arts,
   signatures:
-  - kind: positional
-    name: year
-    default: null
-    rest: false
-  - kind: positional
-    name: method
-    default: '3'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: year
+      default: null
+      rest: false
+    - kind: positional
+      name: method
+      default: '3'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: EASTER_JULIAN
   kind: const
@@ -4041,15 +4150,16 @@ license: Apache 2.0
         your system.
   summary: Parse a string in one of the supported formats, using the
   signatures:
-  - kind: positional
-    name: timestr
-    default: null
-    rest: false
-  - kind: positional
-    name: parserinfo
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: timestr
+      default: null
+      rest: false
+    - kind: positional
+      name: parserinfo
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: isoparse
   kind: method
@@ -4128,15 +4238,16 @@ license: Apache 2.0
     .. versionadded:: 2.7.0
   summary: Parse an ISO-8601 datetime string into a :class:`datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: str_in
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: str_in
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: dateutil.relativedelta
   kind: module
@@ -4151,15 +4262,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TU
   kind: callable
@@ -4167,15 +4279,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WE
   kind: callable
@@ -4183,15 +4296,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TH
   kind: callable
@@ -4199,15 +4313,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FR
   kind: callable
@@ -4215,15 +4330,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SA
   kind: callable
@@ -4231,15 +4347,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SU
   kind: callable
@@ -4247,15 +4364,16 @@ license: Apache 2.0
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: dateutil.rrule
   kind: module
@@ -4316,15 +4434,16 @@ license: Apache 2.0
         :class:`dateutil.rrule.rrule`
   summary: Parses a string representation of a recurrence rule or set of
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: s
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: s
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: YEARLY
   kind: const
@@ -4381,15 +4500,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TU
   kind: callable
@@ -4397,15 +4517,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WE
   kind: callable
@@ -4413,15 +4534,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TH
   kind: callable
@@ -4429,15 +4551,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FR
   kind: callable
@@ -4445,15 +4568,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SA
   kind: callable
@@ -4461,15 +4585,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SU
   kind: callable
@@ -4477,15 +4602,16 @@ license: Apache 2.0
   description: This version of weekday does not allow n = 0.
   summary: This version of weekday does not allow n = 0
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: dateutil.tz
   kind: module
@@ -4587,15 +4713,16 @@ license: Apache 2.0
         https://blog.ganssle.io/articles/2018/02/aware-datetime-arithmetic.html
   summary: Retrieve a time zone object from a string representation
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: enfold
   kind: function
@@ -4618,15 +4745,16 @@ license: Apache 2.0
     .. versionadded:: 2.6.0
   summary: Provides a unified interface for assigning the ``fold`` attribute to
   signatures:
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: fold
-    default: '1'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: fold
+      default: '1'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: datetime_ambiguous
   kind: function
@@ -4651,15 +4779,16 @@ license: Apache 2.0
     .. versionadded:: 2.6.0
   summary: Given a datetime and a time zone, determine whether or not a given datetime
   signatures:
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: tz
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: tz
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: datetime_exists
   kind: function
@@ -4683,15 +4812,16 @@ license: Apache 2.0
     .. versionadded:: 2.7.0
   summary: Given a datetime and a time zone, determine whether or not a given datetime
   signatures:
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: tz
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: tz
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: resolve_imaginary
   kind: function
@@ -4732,11 +4862,12 @@ license: Apache 2.0
     .. versionadded:: 2.7.0
   summary: Given a datetime that may be imaginary, return an existing datetime
   signatures:
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: UTC
   kind: const
@@ -4788,15 +4919,16 @@ license: Apache 2.0
         Returns an aware :py:class:`datetime.datetime`.
   summary: Sets the ``tzinfo`` parameter on naive datetimes only
   signatures:
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: tzinfo
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: tzinfo
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: today
   kind: function
@@ -4812,11 +4944,12 @@ license: Apache 2.0
         at midnight.
   summary: Returns a :py:class:`datetime` representing the current day at midnight
   signatures:
-  - kind: positional
-    name: tzinfo
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: tzinfo
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: unicode_literals
   kind: const
@@ -4833,19 +4966,20 @@ license: Apache 2.0
     to be considered equal.
   summary: Useful for comparing two datetimes that may have a negligible difference
   signatures:
-  - kind: positional
-    name: dt1
-    default: null
-    rest: false
-  - kind: positional
-    name: dt2
-    default: null
-    rest: false
-  - kind: positional
-    name: delta
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: dt1
+      default: null
+      rest: false
+    - kind: positional
+      name: dt2
+      default: null
+      rest: false
+    - kind: positional
+      name: delta
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: dateutil.zoneinfo
   kind: module
@@ -4873,11 +5007,12 @@ license: Apache 2.0
     .. versionadded:: 2.6
   summary: This is a convenience function which provides a :class:`ZoneInfoFile`
   signatures:
-  - kind: positional
-    name: new_instance
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: new_instance
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: gettz
   kind: function
@@ -4909,11 +5044,12 @@ license: Apache 2.0
         dateutil-provided zoneinfo.
   summary: This retrieves a time zone from the local zoneinfo tarball that is packaged
   signatures:
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: name
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: gettz_db_metadata
   kind: function
@@ -4931,5 +5067,6 @@ license: Apache 2.0
         query the attribute ``zoneinfo.ZoneInfoFile.metadata``.
   summary: Get the zonefile metadata
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null

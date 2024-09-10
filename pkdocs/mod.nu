@@ -30,20 +30,28 @@ export def sync-devdocs [savePath:string, maxFileSize:string='1Mb'] {
   }
 }
 
-# export def sync-npm [savePath:string] {
-#   let packages = $in
+export def do-npm [] {
+  let savePath = '/output/npm'
+  open /pkdocs/feed.yml
+  |get npm
+  |each {|package|
+    let fileName = (
+      npm show $package.package
+      |parse "{name} |{rest}"
+      |get 0.name
+      |str trim
+    ) + '.pkd'
 
-#   $packages
-#   |each {|package|
-#     let latest = npm view $package|parse '{name}@{version} {rest}'|get 0.version
-#     let path = $savePath|path join ($package + $"@($latest).pkd")
-#     if (not ($path|path exists)) {
-#       doc src:npm use $package
-#       doc save $path
-#       doc pkd-about|select name version
-#     }
-#   }
-# }
+    let filePath = $savePath|path join $fileName
+
+    if (not ($filePath|path exists)) {
+      print $package
+      doc src:npm use $package.package
+      doc save $filePath
+      $filePath
+    }
+  }
+}
 
 export def 'do-pip 1' [] {
   open /pkdocs/feed.yml|get python|install-pip-packages

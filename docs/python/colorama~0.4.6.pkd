@@ -3,6 +3,7 @@ name: colorama
 text_format: rst
 generator: src:python
 generator_command: src:python use "colorama"
+language: python
 version: 0.4.6
 summary: Cross-platform colored terminal text.
 description: "[![Latest Version](https://img.shields.io/pypi/v/colorama.svg)](https://pypi.org/project/colorama/)\n\n[![Supported Python versions](https://img.shields.io/pypi/pyversions/colorama.svg)](https://pypi.org/project/colorama/)\n\n[![Build Status](https://github.com/tartley/colorama/actions/workflows/test.yml/badge.svg)](https://github.com/tartley/colorama/actions/workflows/test.yml)\n\n# Colorama\n\nMakes ANSI escape character sequences (for producing colored terminal\ntext and cursor positioning) work under MS Windows.\n\n[PyPI for releases](https://pypi.org/project/colorama/) \\| [Github for\nsource](https://github.com/tartley/colorama) \\| [Colorama for enterprise\non\nTidelift](https://github.com/tartley/colorama/blob/master/ENTERPRISE.md)\n\nIf you find Colorama useful, please\n[![Donate with Paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=2MZ9D2GMLYCUJ&item_name=Colorama&currency_code=USD)\nto the authors. Thank you!\n\n## Installation\n\nTested on CPython 2.7, 3.7, 3.8, 3.9 and 3.10 and Pypy 2.7 and 3.8.\n\nNo requirements other than the standard library.\n\n``` bash\npip install colorama\n# or\nconda install -c anaconda colorama\n```\n\n## Description\n\nANSI escape character sequences have long been used to produce colored\nterminal text and cursor positioning on Unix and Macs. Colorama makes\nthis work on Windows, too, by wrapping `stdout`, stripping ANSI\nsequences it finds (which would appear as gobbledygook in the output),\nand converting them into the appropriate win32 calls to modify the state\nof the terminal. On other platforms, Colorama does nothing.\n\nThis has the upshot of providing a simple cross-platform API for\nprinting colored terminal text from Python, and has the happy\nside-effect that existing applications or libraries which use ANSI\nsequences to produce colored output on Linux or Macs can now also work\non Windows, simply by calling `colorama.just_fix_windows_console()`\n(since v0.4.6) or `colorama.init()` (all versions, but may have other\nside-effects – see below).\n\nAn alternative approach is to install `ansi.sys` on Windows machines,\nwhich provides the same behaviour for all applications running in\nterminals. Colorama is intended for situations where that isn't easy\n(e.g., maybe your app doesn't have an installer.)\n\nDemo scripts in the source code repository print some colored text using\nANSI sequences. Compare their output under Gnome-terminal's built in\nANSI handling, versus on Windows Command-Prompt using Colorama:\n\n![ANSI sequences on Ubuntu under gnome-terminal.](https://github.com/tartley/colorama/raw/master/screenshots/ubuntu-demo.png)\n\n![Same ANSI sequences on Windows, using Colorama.](https://github.com/tartley/colorama/raw/master/screenshots/windows-demo.png)\n\nThese screenshots show that, on Windows, Colorama does not support ANSI\n'dim text'; it looks the same as 'normal text'.\n\n## Usage\n\n### Initialisation\n\nIf the only thing you want from Colorama is to get ANSI escapes to work\non Windows, then run:\n\n``` python\nfrom colorama import just_fix_windows_console\njust_fix_windows_console()\n```\n\nIf you're on a recent version of Windows 10 or better, and your\nstdout/stderr are pointing to a Windows console, then this will flip the\nmagic configuration switch to enable Windows' built-in ANSI support.\n\nIf you're on an older version of Windows, and your stdout/stderr are\npointing to a Windows console, then this will wrap `sys.stdout` and/or\n`sys.stderr` in a magic file object that intercepts ANSI escape\nsequences and issues the appropriate Win32 calls to emulate them.\n\nIn all other circumstances, it does nothing whatsoever. Basically the\nidea is that this makes Windows act like Unix with respect to ANSI\nescape handling.\n\nIt's safe to call this function multiple times. It's safe to call this\nfunction on non-Windows platforms, but it won't do anything. It's safe\nto call this function when one or both of your stdout/stderr are\nredirected to a file – it won't do anything to those streams.\n\nAlternatively, you can use the older interface with more features (but\nalso more potential footguns):\n\n``` python\nfrom colorama import init\ninit()\n```\n\nThis does the same thing as `just_fix_windows_console`, except for the\nfollowing differences:\n\n- It's not safe to call `init` multiple times; you can end up with\n  multiple layers of wrapping and broken ANSI support.\n- Colorama will apply a heuristic to guess whether stdout/stderr support\n  ANSI, and if it thinks they don't, then it will wrap `sys.stdout` and\n  `sys.stderr` in a magic file object that strips out ANSI escape\n  sequences before printing them. This happens on all platforms, and can\n  be convenient if you want to write your code to emit ANSI escape\n  sequences unconditionally, and let Colorama decide whether they should\n  actually be output. But note that Colorama's heuristic is not\n  particularly clever.\n- `init` also accepts explicit keyword args to enable/disable various\n  functionality – see below.\n\nTo stop using Colorama before your program exits, simply call\n`deinit()`. This will restore `stdout` and `stderr` to their original\nvalues, so that Colorama is disabled. To resume using Colorama again,\ncall `reinit()`; it is cheaper than calling `init()` again (but does the\nsame thing).\n\nMost users should depend on `colorama >= 0.4.6`, and use\n`just_fix_windows_console`. The old `init` interface will be supported\nindefinitely for backwards compatibility, but we don't plan to fix any\nissues with it, also for backwards compatibility.\n\n### Colored Output\n\nCross-platform printing of colored text can then be done using\nColorama's constant shorthand for ANSI escape sequences. These are\ndeliberately rudimentary, see below.\n\n``` python\nfrom colorama import Fore, Back, Style\nprint(Fore.RED + 'some red text')\nprint(Back.GREEN + 'and with a green background')\nprint(Style.DIM + 'and in dim text')\nprint(Style.RESET_ALL)\nprint('back to normal now')\n```\n\n...or simply by manually printing ANSI sequences from your own code:\n\n``` python\nprint('\\033[31m' + 'some red text')\nprint('\\033[39m') # and reset to default color\n```\n\n...or, Colorama can be used in conjunction with existing ANSI libraries\nsuch as the venerable [Termcolor](https://pypi.org/project/termcolor/)\nthe fabulous [Blessings](https://pypi.org/project/blessings/), or the\nincredible [\\_Rich](https://pypi.org/project/rich/).\n\nIf you wish Colorama's Fore, Back and Style constants were more capable,\nthen consider using one of the above highly capable libraries to\ngenerate colors, etc, and use Colorama just for its primary purpose: to\nconvert those ANSI sequences to also work on Windows:\n\nSIMILARLY, do not send PRs adding the generation of new ANSI types to\nColorama. We are only interested in converting ANSI codes to win32 API\ncalls, not shortcuts like the above to generate ANSI characters.\n\n``` python\nfrom colorama import just_fix_windows_console\nfrom termcolor import colored\n\n# use Colorama to make Termcolor work on Windows too\njust_fix_windows_console()\n\n# then use Termcolor for all colored text output\nprint(colored('Hello, World!', 'green', 'on_red'))\n```\n\nAvailable formatting constants are:\n\n    Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.\n    Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.\n    Style: DIM, NORMAL, BRIGHT, RESET_ALL\n\n`Style.RESET_ALL` resets foreground, background, and brightness.\nColorama will perform this reset automatically on program exit.\n\nThese are fairly well supported, but not part of the standard:\n\n    Fore: LIGHTBLACK_EX, LIGHTRED_EX, LIGHTGREEN_EX, LIGHTYELLOW_EX, LIGHTBLUE_EX, LIGHTMAGENTA_EX, LIGHTCYAN_EX, LIGHTWHITE_EX\n    Back: LIGHTBLACK_EX, LIGHTRED_EX, LIGHTGREEN_EX, LIGHTYELLOW_EX, LIGHTBLUE_EX, LIGHTMAGENTA_EX, LIGHTCYAN_EX, LIGHTWHITE_EX\n\n### Cursor Positioning\n\nANSI codes to reposition the cursor are supported. See `demos/demo06.py`\nfor an example of how to generate them.\n\n### Init Keyword Args\n\n`init()` accepts some `**kwargs` to override default behaviour.\n\ninit(autoreset=False):  \nIf you find yourself repeatedly sending reset sequences to turn off\ncolor changes at the end of every print, then `init(autoreset=True)`\nwill automate that:\n\n``` python\nfrom colorama import init\ninit(autoreset=True)\nprint(Fore.RED + 'some red text')\nprint('automatically back to default color again')\n```\n\ninit(strip=None):  \nPass `True` or `False` to override whether ANSI codes should be stripped\nfrom the output. The default behaviour is to strip if on Windows or if\noutput is redirected (not a tty).\n\ninit(convert=None):  \nPass `True` or `False` to override whether to convert ANSI codes in the\noutput into win32 calls. The default behaviour is to convert if on\nWindows and output is to a tty (terminal).\n\ninit(wrap=True):  \nOn Windows, Colorama works by replacing `sys.stdout` and `sys.stderr`\nwith proxy objects, which override the `.write()` method to do their\nwork. If this wrapping causes you problems, then this can be disabled by\npassing `init(wrap=False)`. The default behaviour is to wrap if\n`autoreset` or `strip` or `convert` are True.\n\nWhen wrapping is disabled, colored printing on non-Windows platforms\nwill continue to work as normal. To do cross-platform colored output,\nyou can use Colorama's `AnsiToWin32` proxy directly:\n\n``` python\nimport sys\nfrom colorama import init, AnsiToWin32\ninit(wrap=False)\nstream = AnsiToWin32(sys.stderr).stream\n\n# Python 2\nprint >>stream, Fore.BLUE + 'blue text on stderr'\n\n# Python 3\nprint(Fore.BLUE + 'blue text on stderr', file=stream)\n```\n\n### Recognised ANSI Sequences\n\nANSI sequences generally take the form:\n\n    ESC [ <param> ; <param> ... <command>\n\nWhere `<param>` is an integer, and `<command>` is a single letter. Zero\nor more params are passed to a `<command>`. If no params are passed, it\nis generally synonymous with passing a single zero. No spaces exist in\nthe sequence; they have been inserted here simply to read more easily.\n\nThe only ANSI sequences that Colorama converts into win32 calls are:\n\n    ESC [ 0 m       # reset all (colors and brightness)\n    ESC [ 1 m       # bright\n    ESC [ 2 m       # dim (looks same as normal brightness)\n    ESC [ 22 m      # normal brightness\n\n    # FOREGROUND:\n    ESC [ 30 m      # black\n    ESC [ 31 m      # red\n    ESC [ 32 m      # green\n    ESC [ 33 m      # yellow\n    ESC [ 34 m      # blue\n    ESC [ 35 m      # magenta\n    ESC [ 36 m      # cyan\n    ESC [ 37 m      # white\n    ESC [ 39 m      # reset\n\n    # BACKGROUND\n    ESC [ 40 m      # black\n    ESC [ 41 m      # red\n    ESC [ 42 m      # green\n    ESC [ 43 m      # yellow\n    ESC [ 44 m      # blue\n    ESC [ 45 m      # magenta\n    ESC [ 46 m      # cyan\n    ESC [ 47 m      # white\n    ESC [ 49 m      # reset\n\n    # cursor positioning\n    ESC [ y;x H     # position cursor at x across, y down\n    ESC [ y;x f     # position cursor at x across, y down\n    ESC [ n A       # move cursor n lines up\n    ESC [ n B       # move cursor n lines down\n    ESC [ n C       # move cursor n characters forward\n    ESC [ n D       # move cursor n characters backward\n\n    # clear the screen\n    ESC [ mode J    # clear the screen\n\n    # clear the line\n    ESC [ mode K    # clear the line\n\nMultiple numeric params to the `'m'` command can be combined into a\nsingle sequence:\n\n    ESC [ 36 ; 45 ; 1 m     # bright cyan text on magenta background\n\nAll other ANSI sequences of the form\n`ESC [ <param> ; <param> ... <command>` are silently stripped from the\noutput on Windows.\n\nAny other form of ANSI sequence, such as single-character codes or\nalternative initial characters, are not recognised or stripped. It would\nbe cool to add them though. Let me know if it would be useful for you,\nvia the Issues on GitHub.\n\n## Status & Known Problems\n\nI've personally only tested it on Windows XP (CMD, Console2), Ubuntu\n(gnome-terminal, xterm), and OS X.\n\nSome valid ANSI sequences aren't recognised.\n\nIf you're hacking on the code, see\n[README-hacking.md](README-hacking.md). ESPECIALLY, see the explanation\nthere of why we do not want PRs that allow Colorama to generate new\ntypes of ANSI codes.\n\nSee outstanding issues and wish-list:\n<https://github.com/tartley/colorama/issues>\n\nIf anything doesn't work for you, or doesn't do what you expected or\nhoped for, I'd love to hear about it on that issues list, would be\ndelighted by patches, and would be happy to grant commit access to\nanyone who submits a working patch or two.\n\n## License\n\nCopyright Jonathan Hartley & Arnon Yaari, 2013-2020. BSD 3-Clause\nlicense; see LICENSE file.\n\n## Professional support\n\n|                                                                                                                                                                                                                                                  |                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n| [![Tidelift](https://cdn2.hubspot.net/hubfs/4008838/website/logos/logos_for_download/Tidelift_primary-shorthand-logo.png)](https://tidelift.com/subscription/pkg/pypi-colorama?utm_source=pypi-colorama&utm_medium=referral&utm_campaign=readme) | Professional support for colorama is available as part of the [Tidelift Subscription](https://tidelift.com/subscription/pkg/pypi-colorama?utm_source=pypi-colorama&utm_medium=referral&utm_campaign=readme). Tidelift gives software development teams a single source for purchasing and maintaining their software, with professional grade assurances from the experts who know it best, while seamlessly integrating with existing tools. |\n\n## Thanks\n\nSee the CHANGELOG for more thanks!\n\n- Marc Schlaich (schlamar) for a `setup.py` fix for Python2.5.\n- Marc Abramowitz, reported & fixed a crash on exit with closed\n  `stdout`, providing a solution to issue \\#7's setuptools/distutils\n  debate, and other fixes.\n- User 'eryksun', for guidance on correctly instantiating\n  `ctypes.windll`.\n- Matthew McCormick for politely pointing out a longstanding crash on\n  non-Win.\n- Ben Hoyt, for a magnificent fix under 64-bit Windows.\n- Jesse at Empty Square for submitting a fix for examples in the README.\n- User 'jamessp', an observant documentation fix for cursor positioning.\n- User 'vaal1239', Dave Mckee & Lackner Kristof for a tiny but\n  much-needed Win7 fix.\n- Julien Stuyck, for wisely suggesting Python3 compatible updates to\n  README.\n- Daniel Griffith for multiple fabulous patches.\n- Oscar Lesta for a valuable fix to stop ANSI chars being sent to\n  non-tty output.\n- Roger Binns, for many suggestions, valuable feedback, & bug reports.\n- Tim Golden for thought and much appreciated feedback on the initial\n  idea.\n- User 'Zearin' for updates to the README file.\n- John Szakmeister for adding support for light colors\n- Charles Merriam for adding documentation to demos\n- Jurko for a fix on 64-bit Windows CPython2.5 w/o ctypes\n- Florian Bruhin for a fix when stdout or stderr are None\n- Thomas Weininger for fixing ValueError on Windows\n- Remi Rampin for better Github integration and fixes to the README file\n- Simeon Visser for closing a file handle using 'with' and updating\n  classifiers to include Python 3.3 and 3.4\n- Andy Neff for fixing RESET of LIGHT_EX colors.\n- Jonathan Hartley for the initial idea and implementation."
@@ -26,27 +27,28 @@ license: BSD-3-Clause
     win32 function calls.
   summary: Implements a 'write()' method which, on Windows, will strip ANSI character
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: wrapped
-    default: null
-    rest: false
-  - kind: positional
-    name: convert
-    default: None
-    rest: false
-  - kind: positional
-    name: strip
-    default: None
-    rest: false
-  - kind: positional
-    name: autoreset
-    default: 'False'
-    rest: false
-  - type: AnsiToWin32
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: wrapped
+      default: null
+      rest: false
+    - kind: positional
+      name: convert
+      default: None
+      rest: false
+    - kind: positional
+      name: strip
+      default: None
+      rest: false
+    - kind: positional
+      name: autoreset
+      default: 'False'
+      rest: false
+    - type: AnsiToWin32
+      kind: return
   inherits_from: null
 - name: AnsiToWin32.ANSI_CSI_RE
   kind: property
@@ -68,19 +70,20 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: command
-    default: null
-    rest: false
-  - kind: positional
-    name: params
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: command
+      default: null
+      rest: false
+    - kind: positional
+      name: params
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiToWin32.convert_ansi
   kind: method
@@ -88,19 +91,20 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: paramstring
-    default: null
-    rest: false
-  - kind: positional
-    name: command
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: paramstring
+      default: null
+      rest: false
+    - kind: positional
+      name: command
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiToWin32.convert_osc
   kind: method
@@ -108,15 +112,16 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: text
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: text
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiToWin32.extract_params
   kind: method
@@ -124,19 +129,20 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: command
-    default: null
-    rest: false
-  - kind: positional
-    name: paramstring
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: command
+      default: null
+      rest: false
+    - kind: positional
+      name: paramstring
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiToWin32.flush
   kind: method
@@ -144,11 +150,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiToWin32.get_win32_calls
   kind: method
@@ -156,11 +163,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiToWin32.reset_all
   kind: method
@@ -168,11 +176,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiToWin32.should_wrap
   kind: method
@@ -185,11 +194,12 @@ license: BSD-3-Clause
     autoreset has been requested using kwargs to init()
   summary: True if this class is actually needed
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiToWin32.write
   kind: method
@@ -197,15 +207,16 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: text
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: text
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiToWin32.write_and_convert
   kind: method
@@ -216,15 +227,16 @@ license: BSD-3-Clause
     calls.
   summary: Write the given text to our wrapped stream, stripping any ANSI
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: text
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: text
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiToWin32.write_plain_text
   kind: method
@@ -232,23 +244,24 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: text
-    default: null
-    rest: false
-  - kind: positional
-    name: start
-    default: null
-    rest: false
-  - kind: positional
-    name: end
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: text
+      default: null
+      rest: false
+    - kind: positional
+      name: start
+      default: null
+      rest: false
+    - kind: positional
+      name: end
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Back
   kind: const
@@ -293,11 +306,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: AnsiBack
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: AnsiBack
+      kind: return
   inherits_from:
   - <class 'colorama.ansi.AnsiCodes'>
 - name: AnsiBack.BLACK
@@ -663,11 +677,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: AnsiCodes
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: AnsiCodes
+      kind: return
   inherits_from: null
 - name: AnsiCursor
   kind: class
@@ -675,7 +690,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: AnsiCursor
+  - - type: AnsiCursor
+      kind: return
   inherits_from: null
 - name: AnsiCursor.BACK
   kind: method
@@ -683,15 +699,16 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: '1'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: '1'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiCursor.DOWN
   kind: method
@@ -699,15 +716,16 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: '1'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: '1'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiCursor.FORWARD
   kind: method
@@ -715,15 +733,16 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: '1'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: '1'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiCursor.POS
   kind: method
@@ -731,19 +750,20 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: x
-    default: '1'
-    rest: false
-  - kind: positional
-    name: y
-    default: '1'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: x
+      default: '1'
+      rest: false
+    - kind: positional
+      name: y
+      default: '1'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiCursor.UP
   kind: method
@@ -751,15 +771,16 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: n
-    default: '1'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: n
+      default: '1'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: AnsiFore
   kind: class
@@ -767,11 +788,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: AnsiFore
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: AnsiFore
+      kind: return
   inherits_from:
   - <class 'colorama.ansi.AnsiCodes'>
 - name: AnsiFore.BLACK
@@ -1137,11 +1159,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: AnsiStyle
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: AnsiStyle
+      kind: return
   inherits_from:
   - <class 'colorama.ansi.AnsiCodes'>
 - name: AnsiStyle.BRIGHT
@@ -1283,11 +1306,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: mode
-    default: '2'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: mode
+      default: '2'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: clear_screen
   kind: function
@@ -1295,11 +1319,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: mode
-    default: '2'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: mode
+      default: '2'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: code_to_chars
   kind: function
@@ -1307,11 +1332,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: code
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: code
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: set_title
   kind: function
@@ -1319,11 +1345,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: title
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: title
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ansitowin32
   kind: module
@@ -1348,19 +1375,20 @@ license: BSD-3-Clause
     Converter instance.
   summary: Wraps a stream (such as stdout), acting as a transparent proxy for all
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: wrapped
-    default: null
-    rest: false
-  - kind: positional
-    name: converter
-    default: null
-    rest: false
-  - type: StreamWrapper
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: wrapped
+      default: null
+      rest: false
+    - kind: positional
+      name: converter
+      default: null
+      rest: false
+    - type: StreamWrapper
+      kind: return
   inherits_from: null
 - name: StreamWrapper.closed
   kind: property
@@ -1375,11 +1403,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: StreamWrapper.write
   kind: method
@@ -1387,15 +1416,16 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: text
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: text
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Style
   kind: const
@@ -1410,7 +1440,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: WinColor
+  - - type: WinColor
+      kind: return
   inherits_from: null
 - name: WinColor.BLACK
   kind: property
@@ -1586,7 +1617,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: WinStyle
+  - - type: WinStyle
+      kind: return
   inherits_from: null
 - name: WinStyle.BRIGHT
   kind: property
@@ -1657,11 +1689,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: WinTerm
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: WinTerm
+      kind: return
   inherits_from: null
 - name: WinTerm.back
   kind: method
@@ -1669,23 +1702,24 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: back
-    default: None
-    rest: false
-  - kind: positional
-    name: light
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: on_stderr
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: back
+      default: None
+      rest: false
+    - kind: positional
+      name: light
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: on_stderr
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WinTerm.cursor_adjust
   kind: method
@@ -1693,23 +1727,24 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: x
-    default: null
-    rest: false
-  - kind: positional
-    name: y
-    default: null
-    rest: false
-  - kind: positional
-    name: on_stderr
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: x
+      default: null
+      rest: false
+    - kind: positional
+      name: y
+      default: null
+      rest: false
+    - kind: positional
+      name: on_stderr
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WinTerm.erase_line
   kind: method
@@ -1717,19 +1752,20 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: mode
-    default: '0'
-    rest: false
-  - kind: positional
-    name: on_stderr
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: mode
+      default: '0'
+      rest: false
+    - kind: positional
+      name: on_stderr
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WinTerm.erase_screen
   kind: method
@@ -1737,19 +1773,20 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: mode
-    default: '0'
-    rest: false
-  - kind: positional
-    name: on_stderr
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: mode
+      default: '0'
+      rest: false
+    - kind: positional
+      name: on_stderr
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WinTerm.fore
   kind: method
@@ -1757,23 +1794,24 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: fore
-    default: None
-    rest: false
-  - kind: positional
-    name: light
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: on_stderr
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: fore
+      default: None
+      rest: false
+    - kind: positional
+      name: light
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: on_stderr
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WinTerm.get_attrs
   kind: method
@@ -1781,11 +1819,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WinTerm.get_position
   kind: method
@@ -1793,15 +1832,16 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: handle
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: handle
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WinTerm.reset_all
   kind: method
@@ -1809,15 +1849,16 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: on_stderr
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: on_stderr
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WinTerm.set_attrs
   kind: method
@@ -1825,15 +1866,16 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WinTerm.set_console
   kind: method
@@ -1841,19 +1883,20 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: attrs
-    default: None
-    rest: false
-  - kind: positional
-    name: on_stderr
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: attrs
+      default: None
+      rest: false
+    - kind: positional
+      name: on_stderr
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WinTerm.set_cursor_position
   kind: method
@@ -1861,19 +1904,20 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: position
-    default: None
-    rest: false
-  - kind: positional
-    name: on_stderr
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: position
+      default: None
+      rest: false
+    - kind: positional
+      name: on_stderr
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WinTerm.set_title
   kind: method
@@ -1881,15 +1925,16 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: title
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: title
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WinTerm.style
   kind: method
@@ -1897,19 +1942,20 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: style
-    default: None
-    rest: false
-  - kind: positional
-    name: on_stderr
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: style
+      default: None
+      rest: false
+    - kind: positional
+      name: on_stderr
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: enable_vt_processing
   kind: function
@@ -1917,11 +1963,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: fd
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: fd
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: winapi_test
   kind: function
@@ -1929,7 +1976,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: windll
   kind: const
@@ -1951,7 +1999,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: deinit
   kind: function
@@ -1959,7 +2008,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: init
   kind: function
@@ -1967,23 +2017,24 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: autoreset
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: convert
-    default: None
-    rest: false
-  - kind: positional
-    name: strip
-    default: None
-    rest: false
-  - kind: positional
-    name: wrap
-    default: 'True'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: autoreset
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: convert
+      default: None
+      rest: false
+    - kind: positional
+      name: strip
+      default: None
+      rest: false
+    - kind: positional
+      name: wrap
+      default: 'True'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: initialise
   kind: module
@@ -2005,7 +2056,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: deinit
   kind: function
@@ -2013,7 +2065,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: fixed_windows_console
   kind: const
@@ -2028,23 +2081,24 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: autoreset
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: convert
-    default: None
-    rest: false
-  - kind: positional
-    name: strip
-    default: None
-    rest: false
-  - kind: positional
-    name: wrap
-    default: 'True'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: autoreset
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: convert
+      default: None
+      rest: false
+    - kind: positional
+      name: strip
+      default: None
+      rest: false
+    - kind: positional
+      name: wrap
+      default: 'True'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: just_fix_windows_console
   kind: function
@@ -2052,7 +2106,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: orig_stderr
   kind: const
@@ -2074,7 +2129,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: reset_all
   kind: function
@@ -2082,7 +2138,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: wrap_stream
   kind: function
@@ -2090,27 +2147,28 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: stream
-    default: null
-    rest: false
-  - kind: positional
-    name: convert
-    default: null
-    rest: false
-  - kind: positional
-    name: strip
-    default: null
-    rest: false
-  - kind: positional
-    name: autoreset
-    default: null
-    rest: false
-  - kind: positional
-    name: wrap
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: stream
+      default: null
+      rest: false
+    - kind: positional
+      name: convert
+      default: null
+      rest: false
+    - kind: positional
+      name: strip
+      default: null
+      rest: false
+    - kind: positional
+      name: autoreset
+      default: null
+      rest: false
+    - kind: positional
+      name: wrap
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: wrapped_stderr
   kind: const
@@ -2132,7 +2190,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: reinit
   kind: function
@@ -2140,7 +2199,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: win32
   kind: module
@@ -2162,15 +2222,16 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dlltype
-    default: null
-    rest: false
-  - type: LibraryLoader
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dlltype
+      default: null
+      rest: false
+    - type: LibraryLoader
+      kind: return
   inherits_from: null
 - name: LibraryLoader.LoadLibrary
   kind: method
@@ -2178,15 +2239,16 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: STDERR
   kind: const
@@ -2208,7 +2270,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: winapi_test
   kind: function
@@ -2216,7 +2279,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: windll
   kind: const
@@ -2238,11 +2302,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: fd
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: fd
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: get_osfhandle
   kind: function
@@ -2250,11 +2315,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: _
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: _
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: colorama.ansi
   kind: module
@@ -2320,11 +2386,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: mode
-    default: '2'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: mode
+      default: '2'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: clear_screen
   kind: function
@@ -2332,11 +2399,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: mode
-    default: '2'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: mode
+      default: '2'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: code_to_chars
   kind: function
@@ -2344,11 +2412,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: code
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: code
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: set_title
   kind: function
@@ -2356,11 +2425,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: title
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: title
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: colorama.ansitowin32
   kind: module
@@ -2389,11 +2459,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: fd
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: fd
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: winapi_test
   kind: function
@@ -2401,7 +2472,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: windll
   kind: const
@@ -2437,7 +2509,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: deinit
   kind: function
@@ -2445,7 +2518,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: fixed_windows_console
   kind: const
@@ -2460,23 +2534,24 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: autoreset
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: convert
-    default: None
-    rest: false
-  - kind: positional
-    name: strip
-    default: None
-    rest: false
-  - kind: positional
-    name: wrap
-    default: 'True'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: autoreset
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: convert
+      default: None
+      rest: false
+    - kind: positional
+      name: strip
+      default: None
+      rest: false
+    - kind: positional
+      name: wrap
+      default: 'True'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: just_fix_windows_console
   kind: function
@@ -2484,7 +2559,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: orig_stderr
   kind: const
@@ -2506,7 +2582,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: reset_all
   kind: function
@@ -2514,7 +2591,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: wrap_stream
   kind: function
@@ -2522,27 +2600,28 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: stream
-    default: null
-    rest: false
-  - kind: positional
-    name: convert
-    default: null
-    rest: false
-  - kind: positional
-    name: strip
-    default: null
-    rest: false
-  - kind: positional
-    name: autoreset
-    default: null
-    rest: false
-  - kind: positional
-    name: wrap
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: stream
+      default: null
+      rest: false
+    - kind: positional
+      name: convert
+      default: null
+      rest: false
+    - kind: positional
+      name: strip
+      default: null
+      rest: false
+    - kind: positional
+      name: autoreset
+      default: null
+      rest: false
+    - kind: positional
+      name: wrap
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: wrapped_stderr
   kind: const
@@ -2599,7 +2678,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: winapi_test
   kind: function
@@ -2607,7 +2687,8 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: windll
   kind: const
@@ -2629,11 +2710,12 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: fd
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: fd
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: get_osfhandle
   kind: function
@@ -2641,9 +2723,10 @@ license: BSD-3-Clause
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: _
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: _
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null

@@ -1,17 +1,12 @@
-# npm:
-#   - ramda
-#   - lodash
-#   - commander
-#   - async
-#   - glob
-#   - socket.io
-#   - ws
-#   - mongodb
-#   - cheerio
-#   - ejs
-#   - stylus
-#   - sinon
-#   - nunjucks
+npm:
+  - package: ramda
+  - package: lodash
+  - package: commander
+  - package: async
+  - package: glob
+  - package: socket.io
+  - package: ws
+  - package: mongodb
 python:
   - package: pandas
   - package: click

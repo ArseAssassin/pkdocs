@@ -3,6 +3,7 @@ name: fire
 text_format: rst
 generator: src:python
 generator_command: src:python use "fire"
+language: python
 version: 0.5.0
 summary: A library for automatically generating command line interfaces.
 description: |
@@ -58,23 +59,24 @@ license: Apache Software License
           FireExit with code 0 if successful.
   summary: This function, Fire, is the main entrypoint for Python Fire
   signatures:
-  - kind: positional
-    name: component
-    default: None
-    rest: false
-  - kind: positional
-    name: command
-    default: None
-    rest: false
-  - kind: positional
-    name: name
-    default: None
-    rest: false
-  - kind: positional
-    name: serialize
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: None
+      rest: false
+    - kind: positional
+      name: command
+      default: None
+      rest: false
+    - kind: positional
+      name: name
+      default: None
+      rest: false
+    - kind: positional
+      name: serialize
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: fire.completion
   kind: module
@@ -99,15 +101,16 @@ license: Apache Software License
       A list of completions for a command that would so far return the component.
   summary: Gives possible Fire command completions for the component
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - kind: positional
-    name: verbose
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - kind: positional
+      name: verbose
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: MemberVisible
   kind: function
@@ -136,27 +139,28 @@ license: Apache Software License
       A boolean value indicating whether the member should be included.
   summary: Returns whether a member should be included in auto-completion or help
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - kind: positional
-    name: member
-    default: null
-    rest: false
-  - kind: positional
-    name: class_attrs
-    default: None
-    rest: false
-  - kind: positional
-    name: verbose
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - kind: positional
+      name: member
+      default: null
+      rest: false
+    - kind: positional
+      name: class_attrs
+      default: None
+      rest: false
+    - kind: positional
+      name: verbose
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Script
   kind: function
@@ -164,23 +168,24 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - kind: positional
-    name: default_options
-    default: None
-    rest: false
-  - kind: positional
-    name: shell
-    default: bash
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: name
+      default: null
+      rest: false
+    - kind: positional
+      name: component
+      default: null
+      rest: false
+    - kind: positional
+      name: default_options
+      default: None
+      rest: false
+    - kind: positional
+      name: shell
+      default: bash
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: VisibleMembers
   kind: function
@@ -204,19 +209,20 @@ license: Apache Software License
       A list of tuples (member_name, member) of all members of the component.
   summary: Returns a list of the members of the given component
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - kind: positional
-    name: class_attrs
-    default: None
-    rest: false
-  - kind: positional
-    name: verbose
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - kind: positional
+      name: class_attrs
+      default: None
+      rest: false
+    - kind: positional
+      name: verbose
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -333,7 +339,8 @@ license: Apache Software License
       http://www.w3.org/2003/entities/iso8879doc/isobox.html
   summary: Box/line drawing characters
   signatures:
-  - type: BoxLineCharacters
+  - - type: BoxLineCharacters
+      kind: return
   inherits_from: null
 - name: BoxLineCharactersAscii
   kind: class
@@ -341,7 +348,8 @@ license: Apache Software License
   description: ASCII Box/line drawing characters.
   summary: ASCII Box/line drawing characters
   signatures:
-  - type: BoxLineCharactersAscii
+  - - type: BoxLineCharactersAscii
+      kind: return
   inherits_from:
   - <class 'fire.console.console_attr.BoxLineCharacters'>
 - name: BoxLineCharactersAscii.d_dl
@@ -724,7 +732,8 @@ license: Apache Software License
   description: ASCII Box/line drawing characters.
   summary: ASCII Box/line drawing characters
   signatures:
-  - type: BoxLineCharactersScreenReader
+  - - type: BoxLineCharactersScreenReader
+      kind: return
   inherits_from:
   - <class 'fire.console.console_attr.BoxLineCharactersAscii'>
   - <class 'fire.console.console_attr.BoxLineCharacters'>
@@ -1108,7 +1117,8 @@ license: Apache Software License
   description: unicode Box/line drawing characters (cp437 compatible unicode).
   summary: unicode Box/line drawing characters (cp437 compatible unicode)
   signatures:
-  - type: BoxLineCharactersUnicode
+  - - type: BoxLineCharactersUnicode
+      kind: return
   inherits_from:
   - <class 'fire.console.console_attr.BoxLineCharacters'>
 - name: BoxLineCharactersUnicode.d_dl
@@ -1499,23 +1509,24 @@ license: Apache Software License
         justify=lambda s: s.center(10)
   summary: Resource string colorizer
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: string
-    default: null
-    rest: false
-  - kind: positional
-    name: color
-    default: null
-    rest: false
-  - kind: positional
-    name: justify
-    default: None
-    rest: false
-  - type: Colorizer
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: string
+      default: null
+      rest: false
+    - kind: positional
+      name: color
+      default: null
+      rest: false
+    - kind: positional
+      name: justify
+      default: None
+      rest: false
+    - type: Colorizer
+      kind: return
   inherits_from: null
 - name: Colorizer.Render
   kind: method
@@ -1529,19 +1540,20 @@ license: Apache Software License
       justify: The justification function, self._justify if None.
   summary: Renders the string as self
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: stream
-    default: null
-    rest: false
-  - kind: positional
-    name: justify
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: stream
+      default: null
+      rest: false
+    - kind: positional
+      name: justify
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr
   kind: class
@@ -1571,19 +1583,20 @@ license: Apache Software License
       _term_size: The terminal (x, y) dimensions in characters.
   summary: Console attribute and special drawing characters and functions accessor
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: encoding
-    default: None
-    rest: false
-  - kind: positional
-    name: suppress_output
-    default: 'False'
-    rest: false
-  - type: ConsoleAttr
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: encoding
+      default: None
+      rest: false
+    - kind: positional
+      name: suppress_output
+      default: 'False'
+      rest: false
+    - type: ConsoleAttr
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.Colorize
   kind: method
@@ -1601,23 +1614,24 @@ license: Apache Software License
       str, The colorized string that can be printed to the console.
   summary: Generates a colorized string, optionally justified
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: string
-    default: null
-    rest: false
-  - kind: positional
-    name: color
-    default: null
-    rest: false
-  - kind: positional
-    name: justify
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: string
+      default: null
+      rest: false
+    - kind: positional
+      name: color
+      default: null
+      rest: false
+    - kind: positional
+      name: justify
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.ConvertOutputToUnicode
   kind: method
@@ -1635,15 +1649,16 @@ license: Apache Software License
       The console output string buf converted to unicode.
   summary: Converts a console output string buf to unicode
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: buf
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: buf
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.DisplayWidth
   kind: method
@@ -1658,15 +1673,16 @@ license: Apache Software License
       The display width of buf, handling unicode and ANSI controls.
   summary: Returns the display width of buf, handling unicode and ANSI controls
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: buf
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: buf
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.GetBoxLineCharacters
   kind: method
@@ -1681,11 +1697,12 @@ license: Apache Software License
       A BoxLineCharacters object for the console output device.
   summary: Returns the box/line drawing characters object
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.GetBullets
   kind: method
@@ -1701,11 +1718,12 @@ license: Apache Software License
       A tuple of bullet characters.
   summary: Returns the bullet characters list
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.GetControlSequenceIndicator
   kind: method
@@ -1718,11 +1736,12 @@ license: Apache Software License
       supported.
   summary: Returns the control sequence indicator string
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.GetControlSequenceLen
   kind: method
@@ -1740,15 +1759,16 @@ license: Apache Software License
       start with a control sequence.
   summary: Returns the control sequence length at the beginning of buf
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: buf
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: buf
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.GetEncoding
   kind: method
@@ -1756,11 +1776,12 @@ license: Apache Software License
   description: Returns the current encoding.
   summary: Returns the current encoding
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.GetFontCode
   kind: method
@@ -1779,19 +1800,20 @@ license: Apache Software License
         to the console output to control the font settings.
   summary: Returns a font code string for 0 or more embellishments
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: bold
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: italic
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: bold
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: italic
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.GetProgressTrackerSymbols
   kind: method
@@ -1803,11 +1825,12 @@ license: Apache Software License
       A ProgressTrackerSymbols object for the console output device.
   summary: Returns the progress tracker characters object
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.GetRawKey
   kind: method
@@ -1820,11 +1843,12 @@ license: Apache Software License
       character.
   summary: Reads one key press from stdin with no echo
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.GetTermIdentifier
   kind: method
@@ -1836,11 +1860,12 @@ license: Apache Software License
       str: A str that describes the console's text capabilities
   summary: Returns the TERM environment variable for the console
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.GetTermSize
   kind: method
@@ -1852,11 +1877,12 @@ license: Apache Software License
       (x, y): A tuple of the terminal x and y dimensions.
   summary: Returns the terminal (x, y) dimensions in characters
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.SplitIntoNormalAndControl
   kind: method
@@ -1872,15 +1898,16 @@ license: Apache Software License
       A list of (normal_string, control_sequence) tuples.
   summary: Returns a list of (normal_string, control_sequence) tuples from buf
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: buf
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: buf
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.SplitLine
   kind: method
@@ -1897,19 +1924,20 @@ license: Apache Software License
       A list of chunks, all but the last with display width == width.
   summary: Splits line into width length chunks
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: line
-    default: null
-    rest: false
-  - kind: positional
-    name: width
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: line
+      default: null
+      rest: false
+    - kind: positional
+      name: width
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ConsoleAttr.SupportsAnsi
   kind: method
@@ -1917,11 +1945,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Decode
   kind: function
@@ -1939,15 +1968,16 @@ license: Apache Software License
       A text string representation of the data.
   summary: Converts the given string, bytes, or object to a text string
   signatures:
-  - kind: positional
-    name: data
-    default: null
-    rest: false
-  - kind: positional
-    name: encoding
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: data
+      default: null
+      rest: false
+    - kind: positional
+      name: encoding
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: EncodeToBytes
   kind: function
@@ -1969,11 +1999,12 @@ license: Apache Software License
       A bytes string representation of the data.
   summary: Encode data to bytes
   signatures:
-  - kind: positional
-    name: data
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: data
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: GetCharacterDisplayWidth
   kind: function
@@ -1993,11 +2024,12 @@ license: Apache Software License
       The monospaced terminal display width of char: either 0, 1, or 2.
   summary: Returns the monospaced terminal display width of char
   signatures:
-  - kind: positional
-    name: char
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: char
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: GetConsoleAttr
   kind: function
@@ -2024,15 +2056,16 @@ license: Apache Software License
       The global ConsoleAttr state object.
   summary: Gets the console attribute state
   signatures:
-  - kind: positional
-    name: encoding
-    default: None
-    rest: false
-  - kind: positional
-    name: reset
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: encoding
+      default: None
+      rest: false
+    - kind: positional
+      name: reset
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ProgressTrackerSymbols
   kind: class
@@ -2040,7 +2073,8 @@ license: Apache Software License
   description: Characters used by progress trackers.
   summary: Characters used by progress trackers
   signatures:
-  - type: ProgressTrackerSymbols
+  - - type: ProgressTrackerSymbols
+      kind: return
   inherits_from: null
 - name: ProgressTrackerSymbolsAscii
   kind: class
@@ -2048,7 +2082,8 @@ license: Apache Software License
   description: Characters used by progress trackers.
   summary: Characters used by progress trackers
   signatures:
-  - type: ProgressTrackerSymbolsAscii
+  - - type: ProgressTrackerSymbolsAscii
+      kind: return
   inherits_from:
   - <class 'fire.console.console_attr.ProgressTrackerSymbols'>
 - name: ProgressTrackerSymbolsAscii.failed
@@ -2153,7 +2188,8 @@ license: Apache Software License
   description: Characters used by progress trackers.
   summary: Characters used by progress trackers
   signatures:
-  - type: ProgressTrackerSymbolsUnicode
+  - - type: ProgressTrackerSymbolsUnicode
+      kind: return
   inherits_from:
   - <class 'fire.console.console_attr.ProgressTrackerSymbols'>
 - name: ProgressTrackerSymbolsUnicode.failed
@@ -2248,11 +2284,12 @@ license: Apache Software License
       The global ConsoleAttr state object.
   summary: Resets the console attribute state to the console default
   signatures:
-  - kind: positional
-    name: encoding
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: encoding
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SafeText
   kind: function
@@ -2260,19 +2297,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: data
-    default: null
-    rest: false
-  - kind: positional
-    name: encoding
-    default: None
-    rest: false
-  - kind: positional
-    name: escape
-    default: 'True'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: data
+      default: null
+      rest: false
+    - kind: positional
+      name: encoding
+      default: None
+      rest: false
+    - kind: positional
+      name: escape
+      default: 'True'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -2299,7 +2337,8 @@ license: Apache Software License
       that always returns None if stdin does not support it.
   summary: Returns a function that reads one keypress from stdin with no echo
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: GetTermSize
   kind: function
@@ -2314,7 +2353,8 @@ license: Apache Software License
       (columns, lines): A tuple containing the terminal x and y dimensions.
   summary: Gets the terminal x and y dimensions in characters
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -2355,15 +2395,16 @@ license: Apache Software License
       A text string representing the decoded byte string.
   summary: Returns string with non-ascii characters decoded to UNICODE
   signatures:
-  - kind: positional
-    name: data
-    default: null
-    rest: false
-  - kind: positional
-    name: encoding
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: data
+      default: null
+      rest: false
+    - kind: positional
+      name: encoding
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Encode
   kind: function
@@ -2379,15 +2420,16 @@ license: Apache Software License
       str, The binary string.
   summary: Encode the text string to a byte string
   signatures:
-  - kind: positional
-    name: string
-    default: null
-    rest: false
-  - kind: positional
-    name: encoding
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: string
+      default: null
+      rest: false
+    - kind: positional
+      name: encoding
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: EncodeEnv
   kind: function
@@ -2403,15 +2445,16 @@ license: Apache Software License
       {bytes: bytes}, The environment to pass to subprocess.
   summary: Encodes all the key value pairs in env in preparation for subprocess
   signatures:
-  - kind: positional
-    name: env
-    default: null
-    rest: false
-  - kind: positional
-    name: encoding
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: env
+      default: null
+      rest: false
+    - kind: positional
+      name: encoding
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: GetEncodedValue
   kind: function
@@ -2428,19 +2471,20 @@ license: Apache Software License
       The decoded value of the env var name.
   summary: Returns the decoded value of the env var name
   signatures:
-  - kind: positional
-    name: env
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - kind: positional
-    name: default
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: env
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - kind: positional
+      name: default
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SetEncodedValue
   kind: function
@@ -2456,23 +2500,24 @@ license: Apache Software License
       encoding: str, The encoding to use or None to try to infer it.
   summary: Sets the value of name in env to an encoded value
   signatures:
-  - kind: positional
-    name: env
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - kind: positional
-    name: encoding
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: env
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - kind: positional
+      name: encoding
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -2522,23 +2567,24 @@ license: Apache Software License
   description: Attributes to use to style text with.
   summary: Attributes to use to style text with
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: format_str
-    default: None
-    rest: false
-  - kind: positional
-    name: color
-    default: None
-    rest: false
-  - kind: positional
-    name: attrs
-    default: None
-    rest: false
-  - type: TextAttributes
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: format_str
+      default: None
+      rest: false
+    - kind: positional
+      name: color
+      default: None
+      rest: false
+    - kind: positional
+      name: attrs
+      default: None
+      rest: false
+    - type: TextAttributes
+      kind: return
   inherits_from: null
 - name: TextAttributes.attrs
   kind: property
@@ -2567,39 +2613,40 @@ license: Apache Software License
   description: Defines text types that can be used for styling text.
   summary: Defines text types that can be used for styling text
   signatures:
-  - kind: positional
-    name: cls
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - kind: positional
-    name: names
-    default: None
-    rest: false
-  - name: module
-    default: None
-    rest: false
-    kind: kw-only
-  - name: qualname
-    default: None
-    rest: false
-    kind: kw-only
-  - name: type
-    default: None
-    rest: false
-    kind: kw-only
-  - name: start
-    default: '1'
-    rest: false
-    kind: kw-only
-  - name: boundary
-    default: None
-    rest: false
-    kind: kw-only
-  - type: TextTypes
+  - - kind: positional
+      name: cls
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - kind: positional
+      name: names
+      default: None
+      rest: false
+    - name: module
+      default: None
+      rest: false
+      kind: kw-only
+    - name: qualname
+      default: None
+      rest: false
+      kind: kw-only
+    - name: type
+      default: None
+      rest: false
+      kind: kw-only
+    - name: start
+      default: '1'
+      rest: false
+      kind: kw-only
+    - name: boundary
+      default: None
+      rest: false
+      kind: kw-only
+    - type: TextTypes
+      kind: return
   inherits_from:
   - <enum '_TextTypes'>
   - <enum 'Enum'>
@@ -2609,11 +2656,12 @@ license: Apache Software License
   description: Defines text types that can be used for styling text.
   summary: Defines text types that can be used for styling text
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TextTypes.INFO
   kind: callable
@@ -2621,11 +2669,12 @@ license: Apache Software License
   description: Defines text types that can be used for styling text.
   summary: Defines text types that can be used for styling text
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TextTypes.OUTPUT
   kind: callable
@@ -2633,11 +2682,12 @@ license: Apache Software License
   description: Defines text types that can be used for styling text.
   summary: Defines text types that can be used for styling text
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TextTypes.PT_FAILURE
   kind: callable
@@ -2645,11 +2695,12 @@ license: Apache Software License
   description: Defines text types that can be used for styling text.
   summary: Defines text types that can be used for styling text
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TextTypes.PT_SUCCESS
   kind: callable
@@ -2657,11 +2708,12 @@ license: Apache Software License
   description: Defines text types that can be used for styling text.
   summary: Defines text types that can be used for styling text
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TextTypes.RESOURCE_NAME
   kind: callable
@@ -2669,11 +2721,12 @@ license: Apache Software License
   description: Defines text types that can be used for styling text.
   summary: Defines text types that can be used for styling text
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TextTypes.URI
   kind: callable
@@ -2681,11 +2734,12 @@ license: Apache Software License
   description: Defines text types that can be used for styling text.
   summary: Defines text types that can be used for styling text
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TextTypes.URL
   kind: callable
@@ -2693,11 +2747,12 @@ license: Apache Software License
   description: Defines text types that can be used for styling text.
   summary: Defines text types that can be used for styling text
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TextTypes.USER_INPUT
   kind: callable
@@ -2705,11 +2760,12 @@ license: Apache Software License
   description: Defines text types that can be used for styling text.
   summary: Defines text types that can be used for styling text
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: TypedText
   kind: class
@@ -2717,19 +2773,20 @@ license: Apache Software License
   description: Text with a semantic type that will be used for styling.
   summary: Text with a semantic type that will be used for styling
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: texts
-    default: null
-    rest: false
-  - kind: positional
-    name: text_type
-    default: None
-    rest: false
-  - type: TypedText
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: texts
+      default: null
+      rest: false
+    - kind: positional
+      name: text_type
+      default: None
+      rest: false
+    - type: TypedText
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -2784,19 +2841,20 @@ license: Apache Software License
       True if the current terminal session is interactive.
   summary: Determines if the current terminal session is interactive
   signatures:
-  - kind: positional
-    name: output
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: error
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: heuristic
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: output
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: error
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: heuristic
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: More
   kind: function
@@ -2811,23 +2869,24 @@ license: Apache Software License
       check_pager: Checks the PAGER env var and uses it if True.
   summary: Run a user specified pager or fall back to the internal pager
   signatures:
-  - kind: positional
-    name: contents
-    default: null
-    rest: false
-  - kind: positional
-    name: out
-    default: null
-    rest: false
-  - kind: positional
-    name: prompt
-    default: None
-    rest: false
-  - kind: positional
-    name: check_pager
-    default: 'True'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: contents
+      default: null
+      rest: false
+    - kind: positional
+      name: out
+      default: null
+      rest: false
+    - kind: positional
+      name: prompt
+      default: None
+      rest: false
+    - kind: positional
+      name: check_pager
+      default: 'True'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -2871,23 +2930,24 @@ license: Apache Software License
       _width: The termonal width in characters.
   summary: A simple console text pager
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: contents
-    default: null
-    rest: false
-  - kind: positional
-    name: out
-    default: None
-    rest: false
-  - kind: positional
-    name: prompt
-    default: None
-    rest: false
-  - type: Pager
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: contents
+      default: null
+      rest: false
+    - kind: positional
+      name: out
+      default: None
+      rest: false
+    - kind: positional
+      name: prompt
+      default: None
+      rest: false
+    - type: Pager
+      kind: return
   inherits_from: null
 - name: Pager.HELP_TEXT
   kind: property
@@ -2925,11 +2985,12 @@ license: Apache Software License
   description: Run the pager.
   summary: Run the pager
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -2992,23 +3053,24 @@ license: Apache Software License
         not allowed, or if there's an internal error.
   summary: Searches for `executable` in the directories listed in `path` or $PATH
   signatures:
-  - kind: positional
-    name: executable
-    default: null
-    rest: false
-  - kind: positional
-    name: path
-    default: None
-    rest: false
-  - kind: positional
-    name: pathext
-    default: None
-    rest: false
-  - kind: positional
-    name: allow_extensions
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: executable
+      default: null
+      rest: false
+    - kind: positional
+      name: path
+      default: None
+      rest: false
+    - kind: positional
+      name: pathext
+      default: None
+      rest: false
+    - kind: positional
+      name: allow_extensions
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -3037,7 +3099,8 @@ license: Apache Software License
   description: An enum representing the system architecture you are running on.
   summary: An enum representing the system architecture you are running on
   signatures:
-  - type: Architecture
+  - - type: Architecture
+      kind: return
   inherits_from: null
 - name: Architecture.AllValues
   kind: method
@@ -3049,7 +3112,8 @@ license: Apache Software License
       list, All the enum values.
   summary: Gets all possible enum values
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: Architecture.Current
   kind: method
@@ -3062,7 +3126,8 @@ license: Apache Software License
       be determined.
   summary: Determines the current system architecture
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: Architecture.FromId
   kind: method
@@ -3083,15 +3148,16 @@ license: Apache Software License
       is None.
   summary: Gets the enum corresponding to the given architecture id
   signatures:
-  - kind: positional
-    name: architecture_id
-    default: null
-    rest: false
-  - kind: positional
-    name: error_on_unknown
-    default: 'True'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: architecture_id
+      default: null
+      rest: false
+    - kind: positional
+      name: error_on_unknown
+      default: 'True'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Architecture.arm
   kind: property
@@ -3161,23 +3227,24 @@ license: Apache Software License
   description: Exception for when a string could not be parsed to a valid enum value.
   summary: Exception for when a string could not be parsed to a valid enum value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: given
-    default: null
-    rest: false
-  - kind: positional
-    name: enum_type
-    default: null
-    rest: false
-  - kind: positional
-    name: options
-    default: null
-    rest: false
-  - type: InvalidEnumValue
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: given
+      default: null
+      rest: false
+    - kind: positional
+      name: enum_type
+      default: null
+      rest: false
+    - kind: positional
+      name: options
+      default: null
+      rest: false
+    - type: InvalidEnumValue
+      kind: return
   inherits_from:
   - <class 'fire.console.platforms.Error'>
   - <class 'Exception'>
@@ -3213,7 +3280,8 @@ license: Apache Software License
   description: An enum representing the operating system you are running on.
   summary: An enum representing the operating system you are running on
   signatures:
-  - type: OperatingSystem
+  - - type: OperatingSystem
+      kind: return
   inherits_from: null
 - name: OperatingSystem.AllValues
   kind: method
@@ -3225,7 +3293,8 @@ license: Apache Software License
       list, All the enum values.
   summary: Gets all possible enum values
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: OperatingSystem.CYGWIN
   kind: property
@@ -3245,7 +3314,8 @@ license: Apache Software License
       cannot be determined.
   summary: Determines the current operating system
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: OperatingSystem.FromId
   kind: method
@@ -3266,15 +3336,16 @@ license: Apache Software License
       input is None.
   summary: Gets the enum corresponding to the given operating system id
   signatures:
-  - kind: positional
-    name: os_id
-    default: null
-    rest: false
-  - kind: positional
-    name: error_on_unknown
-    default: 'True'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: os_id
+      default: null
+      rest: false
+    - kind: positional
+      name: error_on_unknown
+      default: 'True'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: OperatingSystem.IsWindows
   kind: method
@@ -3282,7 +3353,8 @@ license: Apache Software License
   description: Returns True if the current operating system is Windows.
   summary: Returns True if the current operating system is Windows
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: OperatingSystem.LINUX
   kind: property
@@ -3318,19 +3390,20 @@ license: Apache Software License
   description: Holds an operating system and architecture.
   summary: Holds an operating system and architecture
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: operating_system
-    default: null
-    rest: false
-  - kind: positional
-    name: architecture
-    default: null
-    rest: false
-  - type: Platform
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: operating_system
+      default: null
+      rest: false
+    - kind: positional
+      name: architecture
+      default: null
+      rest: false
+    - type: Platform
+      kind: return
   inherits_from: null
 - name: Platform.AsyncPopenArgs
   kind: method
@@ -3355,11 +3428,12 @@ license: Apache Software License
       {str:}, The args for spawning an async process using Popen on this OS.
   summary: Returns the args for spawning an async process using Popen on this OS
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Platform.Current
   kind: method
@@ -3376,15 +3450,16 @@ license: Apache Software License
       can be None if it could not be determined.
   summary: Determines the current platform you are running on
   signatures:
-  - kind: positional
-    name: os_override
-    default: None
-    rest: false
-  - kind: positional
-    name: arch_override
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: os_override
+      default: None
+      rest: false
+    - kind: positional
+      name: arch_override
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Platform.UserAgentFragment
   kind: method
@@ -3402,11 +3477,12 @@ license: Apache Software License
       str, The fragment of the User-Agent string.
   summary: Generates the fragment of the User-Agent that represents the OS
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: PythonVersion
   kind: class
@@ -3421,15 +3497,16 @@ license: Apache Software License
     "supported").
   summary: Class to validate the Python version we are using
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: version
-    default: None
-    rest: false
-  - type: PythonVersion
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: version
+      default: None
+      rest: false
+    - type: PythonVersion
+      kind: return
   inherits_from: null
 - name: PythonVersion.ENV_VAR_MESSAGE
   kind: property
@@ -3472,19 +3549,20 @@ license: Apache Software License
       bool, True if the version is valid, False otherwise.
   summary: Ensure that the Python version we are using is compatible
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: allow_py3
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: raise_exception
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: allow_py3
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: raise_exception
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: PythonVersion.MIN_REQUIRED_PY2_VERSION
   kind: property
@@ -3531,15 +3609,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: allow_py3
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: allow_py3
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -3624,19 +3703,20 @@ license: Apache Software License
   description: Returns the text of the completion script for a Fire CLI.
   summary: Returns the text of the completion script for a Fire CLI
   signatures:
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - kind: positional
-    name: shell
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: name
+      default: null
+      rest: false
+    - kind: positional
+      name: component
+      default: null
+      rest: false
+    - kind: positional
+      name: shell
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Display
   kind: function
@@ -3644,15 +3724,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: lines
-    default: null
-    rest: false
-  - kind: positional
-    name: out
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: lines
+      default: null
+      rest: false
+    - kind: positional
+      name: out
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Fire
   kind: function
@@ -3689,23 +3770,24 @@ license: Apache Software License
           FireExit with code 0 if successful.
   summary: This function, Fire, is the main entrypoint for Python Fire
   signatures:
-  - kind: positional
-    name: component
-    default: None
-    rest: false
-  - kind: positional
-    name: command
-    default: None
-    rest: false
-  - kind: positional
-    name: name
-    default: None
-    rest: false
-  - kind: positional
-    name: serialize
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: None
+      rest: false
+    - kind: positional
+      name: command
+      default: None
+      rest: false
+    - kind: positional
+      name: name
+      default: None
+      rest: false
+    - kind: positional
+      name: serialize
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireError
   kind: class
@@ -3758,19 +3840,20 @@ license: Apache Software License
     will cause the client program to exit without a stacktrace.
   summary: An exception raised by Fire to the client in the case of a FireError
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: code
-    default: null
-    rest: false
-  - kind: positional
-    name: component_trace
-    default: null
-    rest: false
-  - type: FireExit
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: code
+      default: null
+      rest: false
+    - kind: positional
+      name: component_trace
+      default: null
+      rest: false
+    - type: FireExit
+      kind: return
   inherits_from:
   - <class 'SystemExit'>
   - <class 'BaseException'>
@@ -3869,19 +3952,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: obj
-    default: null
-    rest: false
-  - kind: positional
-    name: available_space
-    default: null
-    rest: false
-  - kind: positional
-    name: line_length
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: obj
+      default: null
+      rest: false
+    - kind: positional
+      name: available_space
+      default: null
+      rest: false
+    - kind: positional
+      name: line_length
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: GetStringTypeDescription
   kind: function
@@ -3903,19 +3987,20 @@ license: Apache Software License
       A description for input object.
   summary: Returns the predefined description for string obj
   signatures:
-  - kind: positional
-    name: obj
-    default: null
-    rest: false
-  - kind: positional
-    name: available_space
-    default: null
-    rest: false
-  - kind: positional
-    name: line_length
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: obj
+      default: null
+      rest: false
+    - kind: positional
+      name: available_space
+      default: null
+      rest: false
+    - kind: positional
+      name: line_length
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: GetStringTypeSummary
   kind: function
@@ -3937,19 +4022,20 @@ license: Apache Software License
       A summary for the input object.
   summary: Returns a custom summary for string type objects
   signatures:
-  - kind: positional
-    name: obj
-    default: null
-    rest: false
-  - kind: positional
-    name: available_space
-    default: null
-    rest: false
-  - kind: positional
-    name: line_length
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: obj
+      default: null
+      rest: false
+    - kind: positional
+      name: available_space
+      default: null
+      rest: false
+    - kind: positional
+      name: line_length
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: GetSummary
   kind: function
@@ -3957,19 +4043,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: obj
-    default: null
-    rest: false
-  - kind: positional
-    name: available_space
-    default: null
-    rest: false
-  - kind: positional
-    name: line_length
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: obj
+      default: null
+      rest: false
+    - kind: positional
+      name: available_space
+      default: null
+      rest: false
+    - kind: positional
+      name: line_length
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: NeedsCustomDescription
   kind: function
@@ -3991,11 +4078,12 @@ license: Apache Software License
       Whether the component should use a custom description and summary.
   summary: Whether the component should use a custom description and summary
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: STRING_DESC_PREFIX
   kind: const
@@ -4076,11 +4164,12 @@ license: Apache Software License
       A dictionary mapping property strings to their value.
   summary: Gets metadata attached to the function `fn` as an attribute
   signatures:
-  - kind: positional
-    name: fn
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: fn
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: GetParseFns
   kind: function
@@ -4088,11 +4177,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: fn
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: fn
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SetParseFn
   kind: function
@@ -4108,11 +4198,12 @@ license: Apache Software License
       The decorated function, which now has metadata telling Fire how to perform.
   summary: Sets the fn for Fire to use to parse args when calling the decorated fn
   signatures:
-  - kind: positional
-    name: fn
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: fn
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SetParseFns
   kind: function
@@ -4134,7 +4225,8 @@ license: Apache Software License
       The decorated function, which now has metadata telling Fire how to perform.
   summary: Set the fns for Fire to use to parse args when calling the decorated fn
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -4205,23 +4297,24 @@ license: Apache Software License
   description: ArgInfo(name, type, description)
   summary: ArgInfo(name, type, description)
   signatures:
-  - kind: positional
-    name: _cls
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: None
-    rest: false
-  - kind: positional
-    name: type
-    default: None
-    rest: false
-  - kind: positional
-    name: description
-    default: None
-    rest: false
-  - type: ArgInfo
+  - - kind: positional
+      name: _cls
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: None
+      rest: false
+    - kind: positional
+      name: type
+      default: None
+      rest: false
+    - kind: positional
+      name: description
+      default: None
+      rest: false
+    - type: ArgInfo
+      kind: return
   inherits_from:
   - <class 'fire.docstrings.ArgInfo'>
   - <class 'tuple'>
@@ -4231,15 +4324,16 @@ license: Apache Software License
   description: Return number of occurrences of value.
   summary: Return number of occurrences of value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ArgInfo.description
   kind: property
@@ -4257,23 +4351,24 @@ license: Apache Software License
     Raises ValueError if the value is not present.
   summary: Return first index of value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - kind: positional
-    name: start
-    default: '0'
-    rest: false
-  - kind: positional
-    name: stop
-    default: '9223372036854775807'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - kind: positional
+      name: start
+      default: '0'
+      rest: false
+    - kind: positional
+      name: stop
+      default: '9223372036854775807'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ArgInfo.name
   kind: property
@@ -4295,35 +4390,36 @@ license: Apache Software License
   description: DocstringInfo(summary, description, args, returns, yields, raises)
   summary: DocstringInfo(summary, description, args, returns, yields, raises)
   signatures:
-  - kind: positional
-    name: _cls
-    default: null
-    rest: false
-  - kind: positional
-    name: summary
-    default: None
-    rest: false
-  - kind: positional
-    name: description
-    default: None
-    rest: false
-  - kind: positional
-    name: args
-    default: None
-    rest: false
-  - kind: positional
-    name: returns
-    default: None
-    rest: false
-  - kind: positional
-    name: yields
-    default: None
-    rest: false
-  - kind: positional
-    name: raises
-    default: None
-    rest: false
-  - type: DocstringInfo
+  - - kind: positional
+      name: _cls
+      default: null
+      rest: false
+    - kind: positional
+      name: summary
+      default: None
+      rest: false
+    - kind: positional
+      name: description
+      default: None
+      rest: false
+    - kind: positional
+      name: args
+      default: None
+      rest: false
+    - kind: positional
+      name: returns
+      default: None
+      rest: false
+    - kind: positional
+      name: yields
+      default: None
+      rest: false
+    - kind: positional
+      name: raises
+      default: None
+      rest: false
+    - type: DocstringInfo
+      kind: return
   inherits_from:
   - <class 'fire.docstrings.DocstringInfo'>
   - <class 'tuple'>
@@ -4340,15 +4436,16 @@ license: Apache Software License
   description: Return number of occurrences of value.
   summary: Return number of occurrences of value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: DocstringInfo.description
   kind: property
@@ -4366,23 +4463,24 @@ license: Apache Software License
     Raises ValueError if the value is not present.
   summary: Return first index of value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - kind: positional
-    name: start
-    default: '0'
-    rest: false
-  - kind: positional
-    name: stop
-    default: '9223372036854775807'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - kind: positional
+      name: start
+      default: '0'
+      rest: false
+    - kind: positional
+      name: stop
+      default: '9223372036854775807'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: DocstringInfo.raises
   kind: property
@@ -4454,39 +4552,40 @@ license: Apache Software License
     attributes -- see the documentation for details.
   summary: Create a collection of name/value pairs
   signatures:
-  - kind: positional
-    name: cls
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - kind: positional
-    name: names
-    default: None
-    rest: false
-  - name: module
-    default: None
-    rest: false
-    kind: kw-only
-  - name: qualname
-    default: None
-    rest: false
-    kind: kw-only
-  - name: type
-    default: None
-    rest: false
-    kind: kw-only
-  - name: start
-    default: '1'
-    rest: false
-    kind: kw-only
-  - name: boundary
-    default: None
-    rest: false
-    kind: kw-only
-  - type: Formats
+  - - kind: positional
+      name: cls
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - kind: positional
+      name: names
+      default: None
+      rest: false
+    - name: module
+      default: None
+      rest: false
+      kind: kw-only
+    - name: qualname
+      default: None
+      rest: false
+      kind: kw-only
+    - name: type
+      default: None
+      rest: false
+      kind: kw-only
+    - name: start
+      default: '1'
+      rest: false
+      kind: kw-only
+    - name: boundary
+      default: None
+      rest: false
+      kind: kw-only
+    - type: Formats
+      kind: return
   inherits_from:
   - <enum 'Enum'>
 - name: Formats.GOOGLE
@@ -4530,23 +4629,24 @@ license: Apache Software License
   description: ArgInfo(name, type, description)
   summary: ArgInfo(name, type, description)
   signatures:
-  - kind: positional
-    name: _cls
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: None
-    rest: false
-  - kind: positional
-    name: type
-    default: None
-    rest: false
-  - kind: positional
-    name: description
-    default: None
-    rest: false
-  - type: KwargInfo
+  - - kind: positional
+      name: _cls
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: None
+      rest: false
+    - kind: positional
+      name: type
+      default: None
+      rest: false
+    - kind: positional
+      name: description
+      default: None
+      rest: false
+    - type: KwargInfo
+      kind: return
   inherits_from:
   - <class 'fire.docstrings.ArgInfo'>
   - <class 'fire.docstrings.ArgInfo'>
@@ -4557,15 +4657,16 @@ license: Apache Software License
   description: Return number of occurrences of value.
   summary: Return number of occurrences of value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: KwargInfo.description
   kind: property
@@ -4583,23 +4684,24 @@ license: Apache Software License
     Raises ValueError if the value is not present.
   summary: Return first index of value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - kind: positional
-    name: start
-    default: '0'
-    rest: false
-  - kind: positional
-    name: stop
-    default: '9223372036854775807'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - kind: positional
+      name: start
+      default: '0'
+      rest: false
+    - kind: positional
+      name: stop
+      default: '9223372036854775807'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: KwargInfo.name
   kind: property
@@ -4643,19 +4745,20 @@ license: Apache Software License
   description: Return the value for key if key is in the dictionary, else default.
   summary: Return the value for key if key is in the dictionary, else default
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: key
-    default: null
-    rest: false
-  - kind: positional
-    name: default
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: key
+      default: null
+      rest: false
+    - kind: positional
+      name: default
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Namespace.items
   kind: callable
@@ -4692,11 +4795,12 @@ license: Apache Software License
     Raises KeyError if the dict is empty.
   summary: Remove and return a (key, value) pair as a 2-tuple
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Namespace.setdefault
   kind: callable
@@ -4707,19 +4811,20 @@ license: Apache Software License
     Return the value for key if key is in the dictionary, else default.
   summary: Insert key with a value of default if key is not in the dictionary
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: key
-    default: null
-    rest: false
-  - kind: positional
-    name: default
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: key
+      default: null
+      rest: false
+    - kind: positional
+      name: default
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Namespace.update
   kind: callable
@@ -4788,39 +4893,40 @@ license: Apache Software License
     attributes -- see the documentation for details.
   summary: Create a collection of name/value pairs
   signatures:
-  - kind: positional
-    name: cls
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - kind: positional
-    name: names
-    default: None
-    rest: false
-  - name: module
-    default: None
-    rest: false
-    kind: kw-only
-  - name: qualname
-    default: None
-    rest: false
-    kind: kw-only
-  - name: type
-    default: None
-    rest: false
-    kind: kw-only
-  - name: start
-    default: '1'
-    rest: false
-    kind: kw-only
-  - name: boundary
-    default: None
-    rest: false
-    kind: kw-only
-  - type: Sections
+  - - kind: positional
+      name: cls
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - kind: positional
+      name: names
+      default: None
+      rest: false
+    - name: module
+      default: None
+      rest: false
+      kind: kw-only
+    - name: qualname
+      default: None
+      rest: false
+      kind: kw-only
+    - name: type
+      default: None
+      rest: false
+      kind: kw-only
+    - name: start
+      default: '1'
+      rest: false
+      kind: kw-only
+    - name: boundary
+      default: None
+      rest: false
+      kind: kw-only
+    - type: Sections
+      kind: return
   inherits_from:
   - <enum 'Enum'>
 - name: Sections.ARGS
@@ -4927,11 +5033,12 @@ license: Apache Software License
       A DocstringInfo containing information about the docstring.
   summary: Returns DocstringInfo about the given docstring
   signatures:
-  - kind: positional
-    name: docstring
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: docstring
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: print_function
   kind: const
@@ -4953,11 +5060,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: text
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: text
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: BoldUnderline
   kind: function
@@ -4965,11 +5073,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: text
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: text
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: DoubleQuote
   kind: function
@@ -4977,11 +5086,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: text
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: text
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ELLIPSIS
   kind: const
@@ -4996,19 +5106,20 @@ license: Apache Software License
   description: Truncates text from the middle with ellipsis.
   summary: Truncates text from the middle with ellipsis
   signatures:
-  - kind: positional
-    name: text
-    default: null
-    rest: false
-  - kind: positional
-    name: available_space
-    default: null
-    rest: false
-  - kind: positional
-    name: line_length
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: text
+      default: null
+      rest: false
+    - kind: positional
+      name: available_space
+      default: null
+      rest: false
+    - kind: positional
+      name: line_length
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: EllipsisTruncate
   kind: function
@@ -5016,19 +5127,20 @@ license: Apache Software License
   description: Truncate text from the end with ellipsis.
   summary: Truncate text from the end with ellipsis
   signatures:
-  - kind: positional
-    name: text
-    default: null
-    rest: false
-  - kind: positional
-    name: available_space
-    default: null
-    rest: false
-  - kind: positional
-    name: line_length
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: text
+      default: null
+      rest: false
+    - kind: positional
+      name: available_space
+      default: null
+      rest: false
+    - kind: positional
+      name: line_length
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Error
   kind: function
@@ -5036,11 +5148,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: text
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: text
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Indent
   kind: function
@@ -5048,15 +5161,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: text
-    default: null
-    rest: false
-  - kind: positional
-    name: spaces
-    default: '2'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: text
+      default: null
+      rest: false
+    - kind: positional
+      name: spaces
+      default: '2'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Underline
   kind: function
@@ -5064,11 +5178,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: text
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: text
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WrappedJoin
   kind: function
@@ -5076,19 +5191,20 @@ license: Apache Software License
   description: Joins the items by the separator, wrapping lines at the given width.
   summary: Joins the items by the separator, wrapping lines at the given width
   signatures:
-  - kind: positional
-    name: items
-    default: null
-    rest: false
-  - kind: positional
-    name: separator
-    default: ' | '
-    rest: false
-  - kind: positional
-    name: width
-    default: '80'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: items
+      default: null
+      rest: false
+    - kind: positional
+      name: separator
+      default: ' | '
+      rest: false
+    - kind: positional
+      name: width
+      default: '80'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -5138,7 +5254,8 @@ license: Apache Software License
   description: Enables ANSI processing on Windows or disables it as needed.
   summary: Enables ANSI processing on Windows or disables it as needed
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: print_function
   kind: const
@@ -5188,7 +5305,8 @@ license: Apache Software License
   description: Enables ANSI processing on Windows or disables it as needed.
   summary: Enables ANSI processing on Windows or disables it as needed
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: print_function
   kind: const
@@ -5225,19 +5343,20 @@ license: Apache Software License
   description: A group of actions of the same kind.
   summary: A group of actions of the same kind
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - kind: positional
-    name: plural
-    default: null
-    rest: false
-  - type: ActionGroup
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - kind: positional
+      name: plural
+      default: null
+      rest: false
+    - type: ActionGroup
+      kind: return
   inherits_from: null
 - name: ActionGroup.Add
   kind: method
@@ -5245,19 +5364,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - kind: positional
-    name: member
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - kind: positional
+      name: member
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ActionGroup.GetItems
   kind: method
@@ -5265,11 +5385,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: HelpText
   kind: function
@@ -5287,19 +5408,20 @@ license: Apache Software License
       The full help screen as a string.
   summary: Gets the help string for the current component, suitable for a help screen
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - kind: positional
-    name: trace
-    default: None
-    rest: false
-  - kind: positional
-    name: verbose
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - kind: positional
+      name: trace
+      default: None
+      rest: false
+    - kind: positional
+      name: verbose
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LINE_LENGTH
   kind: const
@@ -5337,19 +5459,20 @@ license: Apache Software License
       String suitable for display in an error screen.
   summary: Returns usage text for the given component
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - kind: positional
-    name: trace
-    default: None
-    rest: false
-  - kind: positional
-    name: verbose
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - kind: positional
+      name: trace
+      default: None
+      rest: false
+    - kind: positional
+      name: verbose
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -5385,39 +5508,40 @@ license: Apache Software License
   description: The arguments of a function, as in Python 3's inspect.FullArgSpec.
   summary: The arguments of a function, as in Python 3's inspect
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: args
-    default: None
-    rest: false
-  - kind: positional
-    name: varargs
-    default: None
-    rest: false
-  - kind: positional
-    name: varkw
-    default: None
-    rest: false
-  - kind: positional
-    name: defaults
-    default: None
-    rest: false
-  - kind: positional
-    name: kwonlyargs
-    default: None
-    rest: false
-  - kind: positional
-    name: kwonlydefaults
-    default: None
-    rest: false
-  - kind: positional
-    name: annotations
-    default: None
-    rest: false
-  - type: FullArgSpec
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: args
+      default: None
+      rest: false
+    - kind: positional
+      name: varargs
+      default: None
+      rest: false
+    - kind: positional
+      name: varkw
+      default: None
+      rest: false
+    - kind: positional
+      name: defaults
+      default: None
+      rest: false
+    - kind: positional
+      name: kwonlyargs
+      default: None
+      rest: false
+    - kind: positional
+      name: kwonlydefaults
+      default: None
+      rest: false
+    - kind: positional
+      name: annotations
+      default: None
+      rest: false
+    - type: FullArgSpec
+      kind: return
   inherits_from: null
 - name: GetClassAttrsDict
   kind: function
@@ -5425,11 +5549,12 @@ license: Apache Software License
   description: Gets the attributes of the component class, as a dict with name keys.
   summary: Gets the attributes of the component class, as a dict with name keys
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: GetFileAndLine
   kind: function
@@ -5445,11 +5570,12 @@ license: Apache Software License
       lineno: The line number where component is defined.
   summary: Returns the filename and line number of component
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: GetFullArgSpec
   kind: function
@@ -5457,11 +5583,12 @@ license: Apache Software License
   description: Returns a FullArgSpec describing the given callable.
   summary: Returns a FullArgSpec describing the given callable
   signatures:
-  - kind: positional
-    name: fn
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: fn
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Info
   kind: function
@@ -5486,11 +5613,12 @@ license: Apache Software License
       A dict with information about the component.
   summary: Returns a dict with information about the given component
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: IsCoroutineFunction
   kind: function
@@ -5498,11 +5626,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: fn
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: fn
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: IsNamedTuple
   kind: function
@@ -5523,11 +5652,12 @@ license: Apache Software License
       True if the component is a namedtuple or False otherwise.
   summary: Return true if the component is a namedtuple
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Py2GetArgSpec
   kind: function
@@ -5535,11 +5665,12 @@ license: Apache Software License
   description: A wrapper around getargspec that tries both fn and fn.__call__.
   summary: A wrapper around getargspec that tries both fn and fn
   signatures:
-  - kind: positional
-    name: fn
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: fn
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Py3GetFullArgSpec
   kind: function
@@ -5559,11 +5690,12 @@ license: Apache Software License
       An inspect.FullArgSpec namedtuple with the full arg spec of the function.
   summary: A alternative to the builtin getfullargspec
   signatures:
-  - kind: positional
-    name: fn
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: fn
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -5611,15 +5743,16 @@ license: Apache Software License
       verbose: Whether to include 'hidden' members, those keys starting with _.
   summary: Drops into a Python REPL with variables available as local variables
   signatures:
-  - kind: positional
-    name: variables
-    default: null
-    rest: false
-  - kind: positional
-    name: verbose
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: variables
+      default: null
+      rest: false
+    - kind: positional
+      name: verbose
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -5655,7 +5788,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: DefaultParseValue
   kind: function
@@ -5673,11 +5807,12 @@ license: Apache Software License
       The parsed value, of the type determined most appropriate.
   summary: The default argument parsing function used by Fire CLIs
   signatures:
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: value
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SeparateFlagArgs
   kind: function
@@ -5695,11 +5830,12 @@ license: Apache Software License
       A tuple with the Fire args (a list), followed by the Flag args (a list).
   summary: Splits a list of args into those for Flags and those for Fire
   signatures:
-  - kind: positional
-    name: args
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: args
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -5735,7 +5871,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: Annotations
+  - - type: Annotations
+      kind: return
   inherits_from: null
 - name: Annotations.double
   kind: method
@@ -5743,15 +5880,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: count
-    default: '0'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: count
+      default: '0'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Annotations.triple
   kind: method
@@ -5759,15 +5897,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: count
-    default: '0'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: count
+      default: '0'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: BinaryCanvas
   kind: class
@@ -5775,15 +5914,16 @@ license: Apache Software License
   description: A canvas with which to make binary art, one bit at a time.
   summary: A canvas with which to make binary art, one bit at a time
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: size
-    default: '10'
-    rest: false
-  - type: BinaryCanvas
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: size
+      default: '10'
+      rest: false
+    - type: BinaryCanvas
+      kind: return
   inherits_from: null
 - name: BinaryCanvas.move
   kind: method
@@ -5791,19 +5931,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: row
-    default: null
-    rest: false
-  - kind: positional
-    name: col
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: row
+      default: null
+      rest: false
+    - kind: positional
+      name: col
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: BinaryCanvas.off
   kind: method
@@ -5811,11 +5952,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: BinaryCanvas.on
   kind: method
@@ -5823,11 +5965,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: BinaryCanvas.set
   kind: method
@@ -5835,15 +5978,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: BinaryCanvas.show
   kind: method
@@ -5851,11 +5995,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: BoolConverter
   kind: class
@@ -5863,7 +6008,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: BoolConverter
+  - - type: BoolConverter
+      kind: return
   inherits_from: null
 - name: BoolConverter.as_bool
   kind: method
@@ -5871,15 +6017,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: arg
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: arg
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: CALLABLE_WITH_KEYWORD_ARGUMENT
   kind: callable
@@ -5887,11 +6034,12 @@ license: Apache Software License
   description: Test class for supporting callable.
   summary: Test class for supporting callable
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: CallableWithKeywordArgument
   kind: class
@@ -5899,7 +6047,8 @@ license: Apache Software License
   description: Test class for supporting callable.
   summary: Test class for supporting callable
   signatures:
-  - type: CallableWithKeywordArgument
+  - - type: CallableWithKeywordArgument
+      kind: return
   inherits_from: null
 - name: CallableWithKeywordArgument.print_msg
   kind: method
@@ -5907,15 +6056,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: msg
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: msg
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: CallableWithPositionalArgs
   kind: class
@@ -5923,7 +6073,8 @@ license: Apache Software License
   description: Test class for supporting callable.
   summary: Test class for supporting callable
   signatures:
-  - type: CallableWithPositionalArgs
+  - - type: CallableWithPositionalArgs
+      kind: return
   inherits_from: null
 - name: CallableWithPositionalArgs.TEST
   kind: property
@@ -5952,15 +6103,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: x
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: x
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: CapitalizedArgNames
   kind: class
@@ -5968,7 +6120,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: CapitalizedArgNames
+  - - type: CapitalizedArgNames
+      kind: return
   inherits_from: null
 - name: CapitalizedArgNames.sum
   kind: method
@@ -5976,19 +6129,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: Delta
-    default: '1.0'
-    rest: false
-  - kind: positional
-    name: Gamma
-    default: '2.0'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: Delta
+      default: '1.0'
+      rest: false
+    - kind: positional
+      name: Gamma
+      default: '2.0'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: CircularReference
   kind: class
@@ -5996,7 +6150,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: CircularReference
+  - - type: CircularReference
+      kind: return
   inherits_from: null
 - name: CircularReference.create
   kind: method
@@ -6004,11 +6159,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ClassWithDocstring
   kind: class
@@ -6019,15 +6175,16 @@ license: Apache Software License
     This is some detail description of this test class.
   summary: Test class for testing help text output
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: message
-    default: Hello!
-    rest: false
-  - type: ClassWithDocstring
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: message
+      default: Hello!
+      rest: false
+    - type: ClassWithDocstring
+      kind: return
   inherits_from: null
 - name: ClassWithDocstring.print_msg
   kind: method
@@ -6035,15 +6192,16 @@ license: Apache Software License
   description: Prints a message.
   summary: Prints a message
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: msg
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: msg
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ClassWithMultilineDocstring
   kind: class
@@ -6055,7 +6213,8 @@ license: Apache Software License
     multiple lines for testing line breaking in help text.
   summary: Test class for testing help text output with multiline docstring
   signatures:
-  - type: ClassWithMultilineDocstring
+  - - type: ClassWithMultilineDocstring
+      kind: return
   inherits_from: null
 - name: ClassWithMultilineDocstring.example_generator
   kind: method
@@ -6077,11 +6236,12 @@ license: Apache Software License
         [0, 1, 2, 3]
   summary: Generators have a ``Yields`` section instead of a ``Returns`` section
   signatures:
-  - kind: positional
-    name: n
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: n
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Color
   kind: class
@@ -6125,39 +6285,40 @@ license: Apache Software License
     attributes -- see the documentation for details.
   summary: Create a collection of name/value pairs
   signatures:
-  - kind: positional
-    name: cls
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - kind: positional
-    name: names
-    default: None
-    rest: false
-  - name: module
-    default: None
-    rest: false
-    kind: kw-only
-  - name: qualname
-    default: None
-    rest: false
-    kind: kw-only
-  - name: type
-    default: None
-    rest: false
-    kind: kw-only
-  - name: start
-    default: '1'
-    rest: false
-    kind: kw-only
-  - name: boundary
-    default: None
-    rest: false
-    kind: kw-only
-  - type: Color
+  - - kind: positional
+      name: cls
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - kind: positional
+      name: names
+      default: None
+      rest: false
+    - name: module
+      default: None
+      rest: false
+      kind: kw-only
+    - name: qualname
+      default: None
+      rest: false
+      kind: kw-only
+    - name: type
+      default: None
+      rest: false
+      kind: kw-only
+    - name: start
+      default: '1'
+      rest: false
+      kind: kw-only
+    - name: boundary
+      default: None
+      rest: false
+      kind: kw-only
+    - type: Color
+      kind: return
   inherits_from:
   - <enum 'Enum'>
 - name: Color.BLUE
@@ -6201,7 +6362,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: DefaultMethod
+  - - type: DefaultMethod
+      kind: return
   inherits_from: null
 - name: DefaultMethod.double
   kind: method
@@ -6209,15 +6371,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: number
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: number
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Empty
   kind: class
@@ -6225,7 +6388,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: Empty
+  - - type: Empty
+      kind: return
   inherits_from: null
 - name: EmptyDictOutput
   kind: class
@@ -6233,7 +6397,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: EmptyDictOutput
+  - - type: EmptyDictOutput
+      kind: return
   inherits_from: null
 - name: EmptyDictOutput.nothing_printable
   kind: method
@@ -6241,11 +6406,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: EmptyDictOutput.totally_empty
   kind: method
@@ -6253,11 +6419,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ErrorInConstructor
   kind: class
@@ -6265,15 +6432,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: value
-    rest: false
-  - type: ErrorInConstructor
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: value
+      rest: false
+    - type: ErrorInConstructor
+      kind: return
   inherits_from: null
 - name: ErrorRaiser
   kind: class
@@ -6281,7 +6449,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: ErrorRaiser
+  - - type: ErrorRaiser
+      kind: return
   inherits_from: null
 - name: ErrorRaiser.fail
   kind: method
@@ -6289,11 +6458,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: HasStaticAndClassMethods
   kind: class
@@ -6301,15 +6471,16 @@ license: Apache Software License
   description: A class with a static method and a class method.
   summary: A class with a static method and a class method
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: instance_state
-    default: null
-    rest: false
-  - type: HasStaticAndClassMethods
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: instance_state
+      default: null
+      rest: false
+    - type: HasStaticAndClassMethods
+      kind: return
   inherits_from: null
 - name: HasStaticAndClassMethods.CLASS_STATE
   kind: property
@@ -6338,15 +6509,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: cls
-    default: null
-    rest: false
-  - kind: positional
-    name: args
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: cls
+      default: null
+      rest: false
+    - kind: positional
+      name: args
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: HasStaticAndClassMethods.static_fn
   kind: method
@@ -6354,11 +6526,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: args
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: args
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: InstanceVars
   kind: class
@@ -6366,19 +6539,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: arg1
-    default: null
-    rest: false
-  - kind: positional
-    name: arg2
-    default: null
-    rest: false
-  - type: InstanceVars
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: arg1
+      default: null
+      rest: false
+    - kind: positional
+      name: arg2
+      default: null
+      rest: false
+    - type: InstanceVars
+      kind: return
   inherits_from: null
 - name: InstanceVars.run
   kind: method
@@ -6386,19 +6560,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: arg1
-    default: null
-    rest: false
-  - kind: positional
-    name: arg2
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: arg1
+      default: null
+      rest: false
+    - kind: positional
+      name: arg2
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: InvalidProperty
   kind: class
@@ -6406,7 +6581,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: InvalidProperty
+  - - type: InvalidProperty
+      kind: return
   inherits_from: null
 - name: InvalidProperty.double
   kind: method
@@ -6414,15 +6590,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: number
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: number
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: InvalidProperty.prop
   kind: property
@@ -6437,7 +6614,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: Kwargs
+  - - type: Kwargs
+      kind: return
   inherits_from: null
 - name: Kwargs.props
   kind: method
@@ -6445,11 +6623,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Kwargs.run
   kind: method
@@ -6457,19 +6636,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: positional
-    default: null
-    rest: false
-  - kind: positional
-    name: named
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: positional
+      default: null
+      rest: false
+    - kind: positional
+      name: named
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Kwargs.upper
   kind: method
@@ -6477,11 +6657,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: MixedDefaults
   kind: class
@@ -6489,7 +6670,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: MixedDefaults
+  - - type: MixedDefaults
+      kind: return
   inherits_from: null
 - name: MixedDefaults.identity
   kind: method
@@ -6497,19 +6679,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: alpha
-    default: null
-    rest: false
-  - kind: positional
-    name: beta
-    default: '0'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: alpha
+      default: null
+      rest: false
+    - kind: positional
+      name: beta
+      default: '0'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: MixedDefaults.sum
   kind: method
@@ -6517,19 +6700,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: alpha
-    default: '0'
-    rest: false
-  - kind: positional
-    name: beta
-    default: '0'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: alpha
+      default: '0'
+      rest: false
+    - kind: positional
+      name: beta
+      default: '0'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: MixedDefaults.ten
   kind: method
@@ -6537,11 +6721,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: NamedTuple
   kind: class
@@ -6549,7 +6734,8 @@ license: Apache Software License
   description: Functions returning named tuples used for testing.
   summary: Functions returning named tuples used for testing
   signatures:
-  - type: NamedTuple
+  - - type: NamedTuple
+      kind: return
   inherits_from: null
 - name: NamedTuple.matching_names
   kind: method
@@ -6557,11 +6743,12 @@ license: Apache Software License
   description: Field name equals value.
   summary: Field name equals value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: NamedTuple.point
   kind: method
@@ -6569,11 +6756,12 @@ license: Apache Software License
   description: Point example straight from Python docs.
   summary: Point example straight from Python docs
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: NamedTuplePoint
   kind: class
@@ -6581,19 +6769,20 @@ license: Apache Software License
   description: NamedTuplePoint(x, y)
   summary: NamedTuplePoint(x, y)
   signatures:
-  - kind: positional
-    name: _cls
-    default: null
-    rest: false
-  - kind: positional
-    name: x
-    default: null
-    rest: false
-  - kind: positional
-    name: y
-    default: null
-    rest: false
-  - type: NamedTuplePoint
+  - - kind: positional
+      name: _cls
+      default: null
+      rest: false
+    - kind: positional
+      name: x
+      default: null
+      rest: false
+    - kind: positional
+      name: y
+      default: null
+      rest: false
+    - type: NamedTuplePoint
+      kind: return
   inherits_from:
   - <class 'tuple'>
 - name: NamedTuplePoint.count
@@ -6602,15 +6791,16 @@ license: Apache Software License
   description: Return number of occurrences of value.
   summary: Return number of occurrences of value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: NamedTuplePoint.index
   kind: callable
@@ -6621,23 +6811,24 @@ license: Apache Software License
     Raises ValueError if the value is not present.
   summary: Return first index of value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - kind: positional
-    name: start
-    default: '0'
-    rest: false
-  - kind: positional
-    name: stop
-    default: '9223372036854775807'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - kind: positional
+      name: start
+      default: '0'
+      rest: false
+    - kind: positional
+      name: stop
+      default: '9223372036854775807'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: NamedTuplePoint.x
   kind: property
@@ -6659,7 +6850,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: NoDefaults
+  - - type: NoDefaults
+      kind: return
   inherits_from: null
 - name: NoDefaults.double
   kind: method
@@ -6667,15 +6859,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: count
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: count
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: NoDefaults.triple
   kind: method
@@ -6683,15 +6876,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: count
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: count
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: NonComparable
   kind: class
@@ -6699,7 +6893,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: NonComparable
+  - - type: NonComparable
+      kind: return
   inherits_from: null
 - name: NumberDefaults
   kind: class
@@ -6707,7 +6902,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: NumberDefaults
+  - - type: NumberDefaults
+      kind: return
   inherits_from: null
 - name: NumberDefaults.integer_reciprocal
   kind: method
@@ -6715,15 +6911,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: divisor
-    default: '10'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: divisor
+      default: '10'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: NumberDefaults.reciprocal
   kind: method
@@ -6731,15 +6928,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: divisor
-    default: '10.0'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: divisor
+      default: '10.0'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: OldStyleEmpty
   kind: class
@@ -6747,7 +6945,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: OldStyleEmpty
+  - - type: OldStyleEmpty
+      kind: return
   inherits_from: null
 - name: OldStyleWithDefaults
   kind: class
@@ -6755,7 +6954,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: OldStyleWithDefaults
+  - - type: OldStyleWithDefaults
+      kind: return
   inherits_from: null
 - name: OldStyleWithDefaults.double
   kind: method
@@ -6763,15 +6963,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: count
-    default: '0'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: count
+      default: '0'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: OldStyleWithDefaults.triple
   kind: method
@@ -6779,15 +6980,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: count
-    default: '0'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: count
+      default: '0'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: OrderedDictionary
   kind: class
@@ -6795,7 +6997,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: OrderedDictionary
+  - - type: OrderedDictionary
+      kind: return
   inherits_from: null
 - name: OrderedDictionary.empty
   kind: method
@@ -6803,11 +7006,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: OrderedDictionary.non_empty
   kind: method
@@ -6815,11 +7019,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: ReturnsObj
   kind: class
@@ -6827,7 +7032,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: ReturnsObj
+  - - type: ReturnsObj
+      kind: return
   inherits_from: null
 - name: ReturnsObj.get_obj
   kind: method
@@ -6835,11 +7041,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SUBDICT
   kind: const
@@ -6854,7 +7061,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: SimilarArgNames
+  - - type: SimilarArgNames
+      kind: return
   inherits_from: null
 - name: SimilarArgNames.identity
   kind: method
@@ -6862,19 +7070,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: bool_one
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: bool_two
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: bool_one
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: bool_two
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SimilarArgNames.identity2
   kind: method
@@ -6882,19 +7091,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: a
-    default: None
-    rest: false
-  - kind: positional
-    name: alpha
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: a
+      default: None
+      rest: false
+    - kind: positional
+      name: alpha
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SubPoint
   kind: class
@@ -6902,19 +7112,20 @@ license: Apache Software License
   description: Used for verifying subclasses of namedtuples behave as intended.
   summary: Used for verifying subclasses of namedtuples behave as intended
   signatures:
-  - kind: positional
-    name: _cls
-    default: null
-    rest: false
-  - kind: positional
-    name: x
-    default: null
-    rest: false
-  - kind: positional
-    name: y
-    default: null
-    rest: false
-  - type: SubPoint
+  - - kind: positional
+      name: _cls
+      default: null
+      rest: false
+    - kind: positional
+      name: x
+      default: null
+      rest: false
+    - kind: positional
+      name: y
+      default: null
+      rest: false
+    - type: SubPoint
+      kind: return
   inherits_from:
   - <class 'fire.test_components.NamedTuplePoint'>
   - <class 'tuple'>
@@ -6924,11 +7135,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SubPoint.count
   kind: callable
@@ -6936,15 +7148,16 @@ license: Apache Software License
   description: Return number of occurrences of value.
   summary: Return number of occurrences of value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SubPoint.index
   kind: callable
@@ -6955,23 +7168,24 @@ license: Apache Software License
     Raises ValueError if the value is not present.
   summary: Return first index of value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - kind: positional
-    name: start
-    default: '0'
-    rest: false
-  - kind: positional
-    name: stop
-    default: '9223372036854775807'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - kind: positional
+      name: start
+      default: '0'
+      rest: false
+    - kind: positional
+      name: stop
+      default: '9223372036854775807'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: SubPoint.x
   kind: property
@@ -7015,19 +7229,20 @@ license: Apache Software License
   description: Return the value for key if key is in the dictionary, else default.
   summary: Return the value for key if key is in the dictionary, else default
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: key
-    default: null
-    rest: false
-  - kind: positional
-    name: default
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: key
+      default: null
+      rest: false
+    - kind: positional
+      name: default
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Subdict.items
   kind: callable
@@ -7064,11 +7279,12 @@ license: Apache Software License
     Raises KeyError if the dict is empty.
   summary: Remove and return a (key, value) pair as a 2-tuple
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Subdict.setdefault
   kind: callable
@@ -7079,19 +7295,20 @@ license: Apache Software License
     Return the value for key if key is in the dictionary, else default.
   summary: Insert key with a value of default if key is not in the dictionary
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: key
-    default: null
-    rest: false
-  - kind: positional
-    name: default
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: key
+      default: null
+      rest: false
+    - kind: positional
+      name: default
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Subdict.update
   kind: callable
@@ -7117,11 +7334,12 @@ license: Apache Software License
   description: Test class for testing Python Fire with properties of various types.
   summary: Test class for testing Python Fire with properties of various types
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: TypedProperties
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: TypedProperties
+      kind: return
   inherits_from: null
 - name: Underscores
   kind: class
@@ -7129,11 +7347,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: Underscores
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: Underscores
+      kind: return
   inherits_from: null
 - name: Underscores.underscore_function
   kind: method
@@ -7141,15 +7360,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: underscore_arg
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: underscore_arg
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: VarArgs
   kind: class
@@ -7157,7 +7377,8 @@ license: Apache Software License
   description: Test class for testing Python Fire with a property with varargs.
   summary: Test class for testing Python Fire with a property with varargs
   signatures:
-  - type: VarArgs
+  - - type: VarArgs
+      kind: return
   inherits_from: null
 - name: VarArgs.cumsums
   kind: method
@@ -7165,11 +7386,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: VarArgs.varchars
   kind: method
@@ -7177,19 +7399,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: alpha
-    default: '0'
-    rest: false
-  - kind: positional
-    name: beta
-    default: '0'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: alpha
+      default: '0'
+      rest: false
+    - kind: positional
+      name: beta
+      default: '0'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WithDefaults
   kind: class
@@ -7197,7 +7420,8 @@ license: Apache Software License
   description: Class with functions that have default arguments.
   summary: Class with functions that have default arguments
   signatures:
-  - type: WithDefaults
+  - - type: WithDefaults
+      kind: return
   inherits_from: null
 - name: WithDefaults.double
   kind: method
@@ -7212,15 +7436,16 @@ license: Apache Software License
       A number that is the double of count.
   summary: Returns the input multiplied by 2
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: count
-    default: '0'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: count
+      default: '0'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WithDefaults.text
   kind: method
@@ -7228,15 +7453,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: string
-    default: '00010203040506070809101112131415161718192021222324252627282930313233343536373839'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: string
+      default: '00010203040506070809101112131415161718192021222324252627282930313233343536373839'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WithDefaults.triple
   kind: method
@@ -7244,15 +7470,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: count
-    default: '0'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: count
+      default: '0'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WithHelpArg
   kind: class
@@ -7260,15 +7487,16 @@ license: Apache Software License
   description: Test class for testing when class has a help= arg.
   summary: Test class for testing when class has a help= arg
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: help
-    default: 'True'
-    rest: false
-  - type: WithHelpArg
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: help
+      default: 'True'
+      rest: false
+    - type: WithHelpArg
+      kind: return
   inherits_from: null
 - name: WithInit
   kind: class
@@ -7276,11 +7504,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: WithInit
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: WithInit
+      kind: return
   inherits_from: null
 - name: absolute_import
   kind: const
@@ -7295,7 +7524,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: division
   kind: const
@@ -7322,7 +7552,8 @@ license: Apache Software License
       True.
   summary: This has code in the docstring
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: fn_with_kwarg
   kind: function
@@ -7335,15 +7566,16 @@ license: Apache Software License
     :key arg3: Description of arg3.
   summary: Function with kwarg
   signatures:
-  - kind: positional
-    name: arg1
-    default: null
-    rest: false
-  - kind: positional
-    name: arg2
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: arg1
+      default: null
+      rest: false
+    - kind: positional
+      name: arg2
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: fn_with_kwarg_and_defaults
   kind: function
@@ -7356,19 +7588,20 @@ license: Apache Software License
     :key arg3: Description of arg3.
   summary: Function with kwarg and defaults
   signatures:
-  - kind: positional
-    name: arg1
-    default: null
-    rest: false
-  - kind: positional
-    name: arg2
-    default: null
-    rest: false
-  - kind: positional
-    name: opt
-    default: 'True'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: arg1
+      default: null
+      rest: false
+    - kind: positional
+      name: arg2
+      default: null
+      rest: false
+    - kind: positional
+      name: opt
+      default: 'True'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: fn_with_multiple_defaults
   kind: function
@@ -7381,19 +7614,20 @@ license: Apache Software License
     :key late: Description of late.
   summary: Function with kwarg and defaults
   signatures:
-  - kind: positional
-    name: first
-    default: first
-    rest: false
-  - kind: positional
-    name: last
-    default: last
-    rest: false
-  - kind: positional
-    name: late
-    default: late
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: first
+      default: first
+      rest: false
+    - kind: positional
+      name: last
+      default: last
+      rest: false
+    - kind: positional
+      name: late
+      default: late
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: function_with_help
   kind: function
@@ -7401,11 +7635,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: help
-    default: 'True'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: help
+      default: 'True'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: function_with_keyword_arguments
   kind: function
@@ -7413,15 +7648,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: arg1
-    default: null
-    rest: false
-  - kind: positional
-    name: arg2
-    default: '3'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: arg1
+      default: null
+      rest: false
+    - kind: positional
+      name: arg2
+      default: '3'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: function_with_varargs
   kind: function
@@ -7438,19 +7674,20 @@ license: Apache Software License
       The unlimited positional args.
   summary: Function with varargs
   signatures:
-  - kind: positional
-    name: arg1
-    default: null
-    rest: false
-  - kind: positional
-    name: arg2
-    default: null
-    rest: false
-  - kind: positional
-    name: arg3
-    default: '1'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: arg1
+      default: null
+      rest: false
+    - kind: positional
+      name: arg2
+      default: null
+      rest: false
+    - kind: positional
+      name: arg3
+      default: '1'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: identity
   kind: function
@@ -7458,23 +7695,24 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: arg1
-    default: null
-    rest: false
-  - kind: positional
-    name: arg2
-    default: null
-    rest: false
-  - kind: positional
-    name: arg3
-    default: '10'
-    rest: false
-  - kind: positional
-    name: arg4
-    default: '20'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: arg1
+      default: null
+      rest: false
+    - kind: positional
+      name: arg2
+      default: null
+      rest: false
+    - kind: positional
+      name: arg3
+      default: '10'
+      rest: false
+    - kind: positional
+      name: arg4
+      default: '20'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: multiplier_with_docstring
   kind: function
@@ -7489,15 +7727,16 @@ license: Apache Software License
       Multiplication of num by rate
   summary: Multiplies num by rate
   signatures:
-  - kind: positional
-    name: num
-    default: null
-    rest: false
-  - kind: positional
-    name: rate
-    default: '2'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: num
+      default: null
+      rest: false
+    - kind: positional
+      name: rate
+      default: '2'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: print_function
   kind: const
@@ -7519,7 +7758,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: HelpTextComponent
+  - - type: HelpTextComponent
+      kind: return
   inherits_from: null
 - name: HelpTextComponent.identity
   kind: method
@@ -7527,19 +7767,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - name: alpha
-    default: null
-    rest: false
-    kind: kw-only
-  - name: beta
-    default: '0'
-    rest: false
-    kind: kw-only
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - name: alpha
+      default: null
+      rest: false
+      kind: kw-only
+    - name: beta
+      default: '0'
+      rest: false
+      kind: kw-only
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: KeywordOnly
   kind: class
@@ -7547,7 +7788,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: KeywordOnly
+  - - type: KeywordOnly
+      kind: return
   inherits_from: null
 - name: KeywordOnly.double
   kind: method
@@ -7555,15 +7797,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - name: count
-    default: null
-    rest: false
-    kind: kw-only
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - name: count
+      default: null
+      rest: false
+      kind: kw-only
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: KeywordOnly.triple
   kind: method
@@ -7571,15 +7814,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - name: count
-    default: null
-    rest: false
-    kind: kw-only
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - name: count
+      default: null
+      rest: false
+      kind: kw-only
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: KeywordOnly.with_default
   kind: method
@@ -7587,15 +7831,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - name: x
-    default: x
-    rest: false
-    kind: kw-only
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - name: x
+      default: x
+      rest: false
+      kind: kw-only
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LruCacheDecoratedMethod
   kind: class
@@ -7603,7 +7848,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: LruCacheDecoratedMethod
+  - - type: LruCacheDecoratedMethod
+      kind: return
   inherits_from: null
 - name: LruCacheDecoratedMethod.lru_cache_in_class
   kind: callable
@@ -7627,11 +7873,12 @@ license: Apache Software License
     To specify a variable-length tuple of homogeneous type, use Tuple[T, ...].
   summary: Deprecated alias to builtins
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WithAsyncio
   kind: class
@@ -7639,7 +7886,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: WithAsyncio
+  - - type: WithAsyncio
+      kind: return
   inherits_from: null
 - name: WithAsyncio.double
   kind: method
@@ -7647,15 +7895,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: count
-    default: '0'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: count
+      default: '0'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WithDefaultsAndTypes
   kind: class
@@ -7663,7 +7912,8 @@ license: Apache Software License
   description: Class with functions that have default arguments and types.
   summary: Class with functions that have default arguments and types
   signatures:
-  - type: WithDefaultsAndTypes
+  - - type: WithDefaultsAndTypes
+      kind: return
   inherits_from: null
 - name: WithDefaultsAndTypes.double
   kind: method
@@ -7678,15 +7928,16 @@ license: Apache Software License
       A number that is the double of count.
   summary: Returns the input multiplied by 2
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: count
-    default: '0'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: count
+      default: '0'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WithDefaultsAndTypes.get_int
   kind: method
@@ -7694,15 +7945,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WithTypes
   kind: class
@@ -7710,7 +7962,8 @@ license: Apache Software License
   description: Class with functions that have default arguments and types.
   summary: Class with functions that have default arguments and types
   signatures:
-  - type: WithTypes
+  - - type: WithTypes
+      kind: return
   inherits_from: null
 - name: WithTypes.double
   kind: method
@@ -7725,15 +7978,16 @@ license: Apache Software License
       A number that is the double of count.
   summary: Returns the input multiplied by 2
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: count
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: count
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: WithTypes.long_type
   kind: method
@@ -7741,15 +7995,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: long_obj
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: long_obj
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: identity
   kind: function
@@ -7757,39 +8012,40 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: arg1
-    default: null
-    rest: false
-  - kind: positional
-    name: arg2
-    default: null
-    rest: false
-  - kind: positional
-    name: arg3
-    default: '10'
-    rest: false
-  - kind: positional
-    name: arg4
-    default: '20'
-    rest: false
-  - name: arg6
-    default: null
-    rest: false
-    kind: kw-only
-  - name: arg7
-    default: null
-    rest: false
-    kind: kw-only
-  - name: arg8
-    default: '30'
-    rest: false
-    kind: kw-only
-  - name: arg9
-    default: '40'
-    rest: false
-    kind: kw-only
-  - type: '?'
+  - - kind: positional
+      name: arg1
+      default: null
+      rest: false
+    - kind: positional
+      name: arg2
+      default: null
+      rest: false
+    - kind: positional
+      name: arg3
+      default: '10'
+      rest: false
+    - kind: positional
+      name: arg4
+      default: '20'
+      rest: false
+    - name: arg6
+      default: null
+      rest: false
+      kind: kw-only
+    - name: arg7
+      default: null
+      rest: false
+      kind: kw-only
+    - name: arg8
+      default: '30'
+      rest: false
+      kind: kw-only
+    - name: arg9
+      default: '40'
+      rest: false
+      kind: kw-only
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: lru_cache_decorated
   kind: callable
@@ -7804,11 +8060,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: f
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: f
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: simple_frozenset
   kind: function
@@ -7816,7 +8073,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: simple_set
   kind: function
@@ -7824,7 +8082,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: fire.test_components_bin
   kind: module
@@ -7856,7 +8115,8 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: print_function
   kind: const
@@ -7887,11 +8147,12 @@ license: Apache Software License
     To specify a variable-length tuple of homogeneous type, use Tuple[T, ...].
   summary: Deprecated alias to builtins
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: identity
   kind: function
@@ -7899,39 +8160,40 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: arg1
-    default: null
-    rest: false
-  - kind: positional
-    name: arg2
-    default: null
-    rest: false
-  - kind: positional
-    name: arg3
-    default: '10'
-    rest: false
-  - kind: positional
-    name: arg4
-    default: '20'
-    rest: false
-  - name: arg6
-    default: null
-    rest: false
-    kind: kw-only
-  - name: arg7
-    default: null
-    rest: false
-    kind: kw-only
-  - name: arg8
-    default: '30'
-    rest: false
-    kind: kw-only
-  - name: arg9
-    default: '40'
-    rest: false
-    kind: kw-only
-  - type: '?'
+  - - kind: positional
+      name: arg1
+      default: null
+      rest: false
+    - kind: positional
+      name: arg2
+      default: null
+      rest: false
+    - kind: positional
+      name: arg3
+      default: '10'
+      rest: false
+    - kind: positional
+      name: arg4
+      default: '20'
+      rest: false
+    - name: arg6
+      default: null
+      rest: false
+      kind: kw-only
+    - name: arg7
+      default: null
+      rest: false
+      kind: kw-only
+    - name: arg8
+      default: '30'
+      rest: false
+      kind: kw-only
+    - name: arg9
+      default: '40'
+      rest: false
+      kind: kw-only
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: lru_cache_decorated
   kind: callable
@@ -7997,35 +8259,36 @@ license: Apache Software License
     may be instantiating a class, calling a routine, or accessing a property.
   summary: A FireTrace represents the steps taken during a single Fire execution
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: initial_component
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: None
-    rest: false
-  - kind: positional
-    name: separator
-    default: '-'
-    rest: false
-  - kind: positional
-    name: verbose
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: show_help
-    default: 'False'
-    rest: false
-  - kind: positional
-    name: show_trace
-    default: 'False'
-    rest: false
-  - type: FireTrace
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: initial_component
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: None
+      rest: false
+    - kind: positional
+      name: separator
+      default: '-'
+      rest: false
+    - kind: positional
+      name: verbose
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: show_help
+      default: 'False'
+      rest: false
+    - kind: positional
+      name: show_trace
+      default: 'False'
+      rest: false
+    - type: FireTrace
+      kind: return
   inherits_from: null
 - name: FireTrace.AddAccessedProperty
   kind: method
@@ -8033,31 +8296,32 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - kind: positional
-    name: target
-    default: null
-    rest: false
-  - kind: positional
-    name: args
-    default: null
-    rest: false
-  - kind: positional
-    name: filename
-    default: null
-    rest: false
-  - kind: positional
-    name: lineno
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: component
+      default: null
+      rest: false
+    - kind: positional
+      name: target
+      default: null
+      rest: false
+    - kind: positional
+      name: args
+      default: null
+      rest: false
+    - kind: positional
+      name: filename
+      default: null
+      rest: false
+    - kind: positional
+      name: lineno
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTrace.AddCalledComponent
   kind: method
@@ -8077,39 +8341,40 @@ license: Apache Software License
       action: The value to include as the action in the FireTraceElement.
   summary: Adds an element to the trace indicating that a component was called
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - kind: positional
-    name: target
-    default: null
-    rest: false
-  - kind: positional
-    name: args
-    default: null
-    rest: false
-  - kind: positional
-    name: filename
-    default: null
-    rest: false
-  - kind: positional
-    name: lineno
-    default: null
-    rest: false
-  - kind: positional
-    name: capacity
-    default: null
-    rest: false
-  - kind: positional
-    name: action
-    default: Called callable
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: component
+      default: null
+      rest: false
+    - kind: positional
+      name: target
+      default: null
+      rest: false
+    - kind: positional
+      name: args
+      default: null
+      rest: false
+    - kind: positional
+      name: filename
+      default: null
+      rest: false
+    - kind: positional
+      name: lineno
+      default: null
+      rest: false
+    - kind: positional
+      name: capacity
+      default: null
+      rest: false
+    - kind: positional
+      name: action
+      default: Called callable
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTrace.AddCompletionScript
   kind: method
@@ -8117,15 +8382,16 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: script
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: script
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTrace.AddError
   kind: method
@@ -8133,19 +8399,20 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: error
-    default: null
-    rest: false
-  - kind: positional
-    name: args
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: error
+      default: null
+      rest: false
+    - kind: positional
+      name: args
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTrace.AddInteractiveMode
   kind: method
@@ -8153,11 +8420,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTrace.AddSeparator
   kind: method
@@ -8185,11 +8453,12 @@ license: Apache Software License
     default value for arg2.
   summary: Marks that the most recent element of the trace used a separator
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTrace.GetCommand
   kind: method
@@ -8204,15 +8473,16 @@ license: Apache Software License
       A string representing a Fire CLI command that would produce this trace.
   summary: Returns the command representing the trace up to this point
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: include_separators
-    default: 'True'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: include_separators
+      default: 'True'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTrace.GetLastHealthyElement
   kind: method
@@ -8226,11 +8496,12 @@ license: Apache Software License
       The last element of the trace that is not an error.
   summary: Returns the last element of the trace that is not an error
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTrace.GetResult
   kind: method
@@ -8238,11 +8509,12 @@ license: Apache Software License
   description: Returns the component from the last element of the trace.
   summary: Returns the component from the last element of the trace
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTrace.HasError
   kind: method
@@ -8250,11 +8522,12 @@ license: Apache Software License
   description: Returns whether the Fire execution encountered a Fire usage error.
   summary: Returns whether the Fire execution encountered a Fire usage error
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTrace.NeedsSeparatingHyphenHyphen
   kind: method
@@ -8273,15 +8546,16 @@ license: Apache Software License
       True for needed '--', False otherwise.
   summary: Returns whether a the trace need '--' before '--help'
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: flag
-    default: help
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: flag
+      default: help
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTrace.NeedsSeparator
   kind: method
@@ -8302,11 +8576,12 @@ license: Apache Software License
       component referred to by the command the same when adding additional args.
   summary: Returns whether a separator should be added to the command
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTraceElement
   kind: class
@@ -8318,43 +8593,44 @@ license: Apache Software License
     accessing of an object member.
   summary: A FireTraceElement represents a single step taken by a Fire execution
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: component
-    default: None
-    rest: false
-  - kind: positional
-    name: action
-    default: None
-    rest: false
-  - kind: positional
-    name: target
-    default: None
-    rest: false
-  - kind: positional
-    name: args
-    default: None
-    rest: false
-  - kind: positional
-    name: filename
-    default: None
-    rest: false
-  - kind: positional
-    name: lineno
-    default: None
-    rest: false
-  - kind: positional
-    name: error
-    default: None
-    rest: false
-  - kind: positional
-    name: capacity
-    default: None
-    rest: false
-  - type: FireTraceElement
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: component
+      default: None
+      rest: false
+    - kind: positional
+      name: action
+      default: None
+      rest: false
+    - kind: positional
+      name: target
+      default: None
+      rest: false
+    - kind: positional
+      name: args
+      default: None
+      rest: false
+    - kind: positional
+      name: filename
+      default: None
+      rest: false
+    - kind: positional
+      name: lineno
+      default: None
+      rest: false
+    - kind: positional
+      name: error
+      default: None
+      rest: false
+    - kind: positional
+      name: capacity
+      default: None
+      rest: false
+    - type: FireTraceElement
+      kind: return
   inherits_from: null
 - name: FireTraceElement.AddSeparator
   kind: method
@@ -8362,11 +8638,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTraceElement.ErrorAsStr
   kind: method
@@ -8374,11 +8651,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTraceElement.HasCapacity
   kind: method
@@ -8386,11 +8664,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTraceElement.HasError
   kind: method
@@ -8398,11 +8677,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FireTraceElement.HasSeparator
   kind: method
@@ -8410,11 +8690,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: INITIAL_COMPONENT
   kind: const
@@ -8486,11 +8767,12 @@ license: Apache Software License
       Whether `component` has a custom __str__ method.
   summary: Determines if a component has a custom __str__ method
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: IsCommand
   kind: function
@@ -8498,11 +8780,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: IsGroup
   kind: function
@@ -8510,11 +8793,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: IsSimpleGroup
   kind: function
@@ -8532,11 +8816,12 @@ license: Apache Software License
       purposes.
   summary: If a group is simple enough, then we treat it as a value in PrintResult
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: IsValue
   kind: function
@@ -8544,11 +8829,12 @@ license: Apache Software License
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: component
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: component
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: VALUE_TYPES
   kind: const

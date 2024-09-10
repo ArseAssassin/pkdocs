@@ -3,6 +3,7 @@ name: pytz
 text_format: rst
 generator: src:python
 generator_command: src:python use "pytz"
+language: python
 version: '2024.1'
 summary: World timezone definitions, modern and historical
 description: |
@@ -671,11 +672,12 @@ license: MIT
     Unknown
   summary: Return a datetime
   signatures:
-  - kind: positional
-    name: zone
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: zone
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: utc
   kind: const
@@ -720,15 +722,16 @@ license: MIT
     Pacific/Chatham
   summary: Map ISO 3166 country code to a list of timezone names commonly used
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: iso3166_code
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: iso3166_code
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: country_names
   kind: const
@@ -1038,15 +1041,16 @@ license: MIT
         True
   summary: return a fixed-offset timezone based off a number of minutes
   signatures:
-  - kind: positional
-    name: offset
-    default: null
-    rest: false
-  - kind: positional
-    name: _tzinfos
-    default: '{}'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: offset
+      default: null
+      rest: false
+    - kind: positional
+      name: _tzinfos
+      default: '{}'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: pytz.exceptions
   kind: module
@@ -1073,7 +1077,8 @@ license: MIT
     methods except for __getitem__, __iter__, and __len__.
   summary: A Mapping is a generic container for associating key/value
   signatures:
-  - type: Mapping
+  - - type: Mapping
+      kind: return
   inherits_from:
   - <class 'collections.abc.Collection'>
   - <class 'collections.abc.Sized'>
@@ -1085,19 +1090,20 @@ license: MIT
   description: D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None.
   summary: D
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: key
-    default: null
-    rest: false
-  - kind: positional
-    name: default
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: key
+      default: null
+      rest: false
+    - kind: positional
+      name: default
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: DictMixin.items
   kind: method
@@ -1105,11 +1111,12 @@ license: MIT
   description: D.items() -> a set-like object providing a view on D's items
   summary: D
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: DictMixin.keys
   kind: method
@@ -1117,11 +1124,12 @@ license: MIT
   description: D.keys() -> a set-like object providing a view on D's keys
   summary: D
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: DictMixin.values
   kind: method
@@ -1129,11 +1137,12 @@ license: MIT
   description: D.values() -> an object providing a view on D's values
   summary: D
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyDict
   kind: class
@@ -1141,7 +1150,8 @@ license: MIT
   description: Dictionary populated on first use.
   summary: Dictionary populated on first use
   signatures:
-  - type: LazyDict
+  - - type: LazyDict
+      kind: return
   inherits_from:
   - <class 'collections.abc.Mapping'>
   - <class 'collections.abc.Collection'>
@@ -1161,19 +1171,20 @@ license: MIT
   description: D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None.
   summary: D
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: key
-    default: null
-    rest: false
-  - kind: positional
-    name: default
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: key
+      default: null
+      rest: false
+    - kind: positional
+      name: default
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyDict.items
   kind: method
@@ -1181,11 +1192,12 @@ license: MIT
   description: D.items() -> a set-like object providing a view on D's items
   summary: D
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyDict.keys
   kind: method
@@ -1193,11 +1205,12 @@ license: MIT
   description: D.keys() -> a set-like object providing a view on D's keys
   summary: D
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyDict.values
   kind: method
@@ -1205,11 +1218,12 @@ license: MIT
   description: D.values() -> an object providing a view on D's values
   summary: D
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyList
   kind: class
@@ -1217,15 +1231,16 @@ license: MIT
   description: List populated on first use.
   summary: List populated on first use
   signatures:
-  - kind: positional
-    name: cls
-    default: null
-    rest: false
-  - kind: positional
-    name: fill_iter
-    default: None
-    rest: false
-  - type: LazyList
+  - - kind: positional
+      name: cls
+      default: null
+      rest: false
+    - kind: positional
+      name: fill_iter
+      default: None
+      rest: false
+    - type: LazyList
+      kind: return
   inherits_from:
   - <class 'list'>
 - name: LazyList.append
@@ -1234,15 +1249,16 @@ license: MIT
   description: Append object to the end of the list.
   summary: Append object to the end of the list
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: object
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: object
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyList.clear
   kind: callable
@@ -1250,11 +1266,12 @@ license: MIT
   description: Remove all items from list.
   summary: Remove all items from list
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyList.copy
   kind: callable
@@ -1262,11 +1279,12 @@ license: MIT
   description: Return a shallow copy of the list.
   summary: Return a shallow copy of the list
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyList.count
   kind: callable
@@ -1274,15 +1292,16 @@ license: MIT
   description: Return number of occurrences of value.
   summary: Return number of occurrences of value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyList.extend
   kind: callable
@@ -1290,15 +1309,16 @@ license: MIT
   description: Extend list by appending elements from the iterable.
   summary: Extend list by appending elements from the iterable
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: iterable
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: iterable
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyList.index
   kind: callable
@@ -1309,23 +1329,24 @@ license: MIT
     Raises ValueError if the value is not present.
   summary: Return first index of value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - kind: positional
-    name: start
-    default: '0'
-    rest: false
-  - kind: positional
-    name: stop
-    default: '9223372036854775807'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - kind: positional
+      name: start
+      default: '0'
+      rest: false
+    - kind: positional
+      name: stop
+      default: '9223372036854775807'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyList.insert
   kind: callable
@@ -1333,19 +1354,20 @@ license: MIT
   description: Insert object before index.
   summary: Insert object before index
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: index
-    default: null
-    rest: false
-  - kind: positional
-    name: object
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: index
+      default: null
+      rest: false
+    - kind: positional
+      name: object
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyList.pop
   kind: callable
@@ -1356,15 +1378,16 @@ license: MIT
     Raises IndexError if list is empty or index is out of range.
   summary: Remove and return item at index (default last)
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: index
-    default: '-1'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: index
+      default: '-1'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyList.remove
   kind: callable
@@ -1375,15 +1398,16 @@ license: MIT
     Raises ValueError if the value is not present.
   summary: Remove first occurrence of value
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: value
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: value
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyList.reverse
   kind: callable
@@ -1391,11 +1415,12 @@ license: MIT
   description: Reverse *IN PLACE*.
   summary: Reverse *IN PLACE*
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazyList.sort
   kind: callable
@@ -1412,19 +1437,20 @@ license: MIT
     The reverse flag can be set to sort in descending order.
   summary: Sort the list in ascending order and return None
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - name: key
-    default: None
-    rest: false
-    kind: kw-only
-  - name: reverse
-    default: 'False'
-    rest: false
-    kind: kw-only
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - name: key
+      default: None
+      rest: false
+      kind: kw-only
+    - name: reverse
+      default: 'False'
+      rest: false
+      kind: kw-only
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazySet
   kind: class
@@ -1432,15 +1458,16 @@ license: MIT
   description: Set populated on first use.
   summary: Set populated on first use
   signatures:
-  - kind: positional
-    name: cls
-    default: null
-    rest: false
-  - kind: positional
-    name: fill_iter
-    default: None
-    rest: false
-  - type: LazySet
+  - - kind: positional
+      name: cls
+      default: null
+      rest: false
+    - kind: positional
+      name: fill_iter
+      default: None
+      rest: false
+    - type: LazySet
+      kind: return
   inherits_from:
   - <class 'set'>
 - name: LazySet.add
@@ -1525,15 +1552,16 @@ license: MIT
   description: Test whether every element in the set is in other.
   summary: Test whether every element in the set is in other
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: other
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: other
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazySet.issuperset
   kind: callable
@@ -1541,15 +1569,16 @@ license: MIT
   description: Test whether every element in other is in the set.
   summary: Test whether every element in other is in the set
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: other
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: other
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LazySet.pop
   kind: callable
@@ -1616,7 +1645,8 @@ license: MIT
     acquired it.
   summary: Factory function that returns a new reentrant lock
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: pytz.reference
   kind: module
@@ -1634,19 +1664,20 @@ license: MIT
   description: Fixed offset in minutes east from UTC.
   summary: Fixed offset in minutes east from UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: offset
-    default: null
-    rest: false
-  - kind: positional
-    name: name
-    default: null
-    rest: false
-  - type: FixedOffset
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: offset
+      default: null
+      rest: false
+    - kind: positional
+      name: name
+      default: null
+      rest: false
+    - type: FixedOffset
+      kind: return
   inherits_from:
   - <class 'datetime.tzinfo'>
 - name: FixedOffset.dst
@@ -1655,15 +1686,16 @@ license: MIT
   description: datetime -> DST offset as timedelta positive east of UTC.
   summary: datetime -> DST offset as timedelta positive east of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FixedOffset.fromutc
   kind: callable
@@ -1678,15 +1710,16 @@ license: MIT
   description: datetime -> string name of time zone.
   summary: datetime -> string name of time zone
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: FixedOffset.utcoffset
   kind: method
@@ -1694,15 +1727,16 @@ license: MIT
   description: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   summary: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LocalTimezone
   kind: class
@@ -1718,15 +1752,16 @@ license: MIT
   description: datetime -> DST offset as timedelta positive east of UTC.
   summary: datetime -> DST offset as timedelta positive east of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LocalTimezone.fromutc
   kind: callable
@@ -1741,15 +1776,16 @@ license: MIT
   description: datetime -> string name of time zone.
   summary: datetime -> string name of time zone
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: LocalTimezone.utcoffset
   kind: method
@@ -1757,15 +1793,16 @@ license: MIT
   description: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   summary: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: USTimeZone
   kind: class
@@ -1773,27 +1810,28 @@ license: MIT
   description: Abstract base class for time zone info objects.
   summary: Abstract base class for time zone info objects
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: hours
-    default: null
-    rest: false
-  - kind: positional
-    name: reprname
-    default: null
-    rest: false
-  - kind: positional
-    name: stdname
-    default: null
-    rest: false
-  - kind: positional
-    name: dstname
-    default: null
-    rest: false
-  - type: USTimeZone
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: hours
+      default: null
+      rest: false
+    - kind: positional
+      name: reprname
+      default: null
+      rest: false
+    - kind: positional
+      name: stdname
+      default: null
+      rest: false
+    - kind: positional
+      name: dstname
+      default: null
+      rest: false
+    - type: USTimeZone
+      kind: return
   inherits_from:
   - <class 'datetime.tzinfo'>
 - name: USTimeZone.dst
@@ -1802,15 +1840,16 @@ license: MIT
   description: datetime -> DST offset as timedelta positive east of UTC.
   summary: datetime -> DST offset as timedelta positive east of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: USTimeZone.fromutc
   kind: callable
@@ -1825,15 +1864,16 @@ license: MIT
   description: datetime -> string name of time zone.
   summary: datetime -> string name of time zone
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: USTimeZone.utcoffset
   kind: method
@@ -1841,15 +1881,16 @@ license: MIT
   description: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   summary: datetime -> timedelta showing offset from UTC, negative values indicating West of UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: Eastern
   kind: const
@@ -1904,19 +1945,20 @@ license: MIT
     timezone definition.
   summary: A timezone that has a variable offset from UTC
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: _inf
-    default: None
-    rest: false
-  - kind: positional
-    name: _tzinfos
-    default: None
-    rest: false
-  - type: DstTzInfo
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: _inf
+      default: None
+      rest: false
+    - kind: positional
+      name: _tzinfos
+      default: None
+      rest: false
+    - type: DstTzInfo
+      kind: return
   inherits_from:
   - <class 'pytz.tzinfo.BaseTzInfo'>
   - <class 'datetime.tzinfo'>
@@ -1954,19 +1996,20 @@ license: MIT
     Ambiguous
   summary: See datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: is_dst
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: is_dst
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: DstTzInfo.fromutc
   kind: method
@@ -1974,15 +2017,16 @@ license: MIT
   description: See datetime.tzinfo.fromutc
   summary: See datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: DstTzInfo.localize
   kind: method
@@ -2047,19 +2091,20 @@ license: MIT
     Non-existent
   summary: Convert naive time to local time
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: is_dst
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: is_dst
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: DstTzInfo.normalize
   kind: method
@@ -2110,15 +2155,16 @@ license: MIT
     '2011-05-06 20:02:03 CEST (+0200)'
   summary: Correct the timezone information on the given datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: DstTzInfo.tzname
   kind: method
@@ -2154,19 +2200,20 @@ license: MIT
     Ambiguous
   summary: See datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: is_dst
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: is_dst
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: DstTzInfo.utcoffset
   kind: method
@@ -2194,19 +2241,20 @@ license: MIT
     Ambiguous
   summary: See datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: is_dst
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: is_dst
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: DstTzInfo.zone
   kind: property
@@ -2238,19 +2286,20 @@ license: MIT
     retain compatibility with DstTzInfo.
   summary: See datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: is_dst
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: is_dst
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: StaticTzInfo.fromutc
   kind: method
@@ -2258,15 +2307,16 @@ license: MIT
   description: See datetime.tzinfo.fromutc
   summary: See datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: StaticTzInfo.localize
   kind: method
@@ -2274,19 +2324,20 @@ license: MIT
   description: Convert naive time to local time
   summary: Convert naive time to local time
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: is_dst
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: is_dst
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: StaticTzInfo.normalize
   kind: method
@@ -2315,19 +2366,20 @@ license: MIT
     '2011-05-07 08:02:03 GMT (+0000)'
   summary: Correct the timezone information on the given datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: is_dst
-    default: 'False'
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: is_dst
+      default: 'False'
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: StaticTzInfo.tzname
   kind: method
@@ -2339,19 +2391,20 @@ license: MIT
     retain compatibility with DstTzInfo.
   summary: See datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: is_dst
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: is_dst
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: StaticTzInfo.utcoffset
   kind: method
@@ -2363,19 +2416,20 @@ license: MIT
     retain compatibility with DstTzInfo.
   summary: See datetime
   signatures:
-  - kind: positional
-    name: self
-    default: null
-    rest: false
-  - kind: positional
-    name: dt
-    default: null
-    rest: false
-  - kind: positional
-    name: is_dst
-    default: None
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: self
+      default: null
+      rest: false
+    - kind: positional
+      name: dt
+      default: null
+      rest: false
+    - kind: positional
+      name: is_dst
+      default: None
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: StaticTzInfo.zone
   kind: property
@@ -2390,15 +2444,16 @@ license: MIT
   description: null
   summary: ''
   signatures:
-  - kind: positional
-    name: zone
-    default: null
-    rest: false
-  - kind: positional
-    name: fp
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: zone
+      default: null
+      rest: false
+    - kind: positional
+      name: fp
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: datetime
   kind: class
@@ -2651,11 +2706,12 @@ license: MIT
   description: Create only one instance of each distinct datetime
   summary: Create only one instance of each distinct datetime
   signatures:
-  - kind: positional
-    name: seconds
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: seconds
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: memorized_timedelta
   kind: function
@@ -2663,11 +2719,12 @@ license: MIT
   description: Create only one instance of each distinct timedelta
   summary: Create only one instance of each distinct timedelta
   signatures:
-  - kind: positional
-    name: seconds
-    default: null
-    rest: false
-  - type: '?'
+  - - kind: positional
+      name: seconds
+      default: null
+      rest: false
+    - type: '?'
+      kind: return
   inherits_from: null
 - name: memorized_ttinfo
   kind: function
@@ -2675,7 +2732,8 @@ license: MIT
   description: Create only one instance of each distinct tuple
   summary: Create only one instance of each distinct tuple
   signatures:
-  - type: '?'
+  - - type: '?'
+      kind: return
   inherits_from: null
 - name: pytz.tzinfo
   kind: module
