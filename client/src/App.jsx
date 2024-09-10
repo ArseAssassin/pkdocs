@@ -1,6 +1,6 @@
 import * as r from 'ramda'
 import { parse, parseAllDocuments } from 'yaml'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, isValidElement } from 'react'
 import { Router, Link, Route, Switch, useLocation } from 'wouter'
 import { useHashLocation } from 'wouter/use-hash-location'
 import Markdown from 'react-markdown'
@@ -116,11 +116,9 @@ function DataTable({ data }) {
         <tr key={ key }>
           <th>{ key }</th>
           <td>{
-            typeof value === 'object'
+            typeof value === 'object' && !isValidElement(value)
               ? <DataTable data={ value } />
-              : key === 'signatures'
-                ? <code>{value}</code>
-                : value
+              : value
           }</td>
         </tr>
       )}
@@ -256,7 +254,7 @@ function ListSymbols({ gen, doc, docs, autofocus }) {
           { it.summary }
         </div>
         { it.signatures && <code className="doc-search__result-signatures">
-          { formatSignature(it.signatures) }
+          { formatSignature(it.signatures[0]) }
         </code> }
       </>}
       placeholder='🔎  Search for docs... (Type /)'/>
@@ -284,7 +282,9 @@ function preformatSymbol(it) {
     r.omit(['description', 'ns', 'signatures']),
     it.signatures
       ? r.mergeLeft({
-        signatures: formatSignature(it.signatures)
+        signatures: it.signatures.map(formatSignature).map((it, idx) =>
+          <code key={ idx }>{ it }</code>
+        )
       })
       : r.identity,
     it.ns
